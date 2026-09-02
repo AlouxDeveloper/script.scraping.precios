@@ -1,0 +1,19 @@
+[project]
+name = "bitek-extract"
+version = "0.1.0"
+description = "Scraping de precios de medicamentos en ecommerce mexicanos"
+requires-python = ">=3.13"
+dependencies = [
+    "selenium",
+    "undetected-chromedriver",
+    "webdriver-manager",
+    "curl_cffi",
+    "beautifulsoup4",
+    "requests",
+    "pandas",
+    "openpyxl",
+    "lxml",
+]
+
+[tool.uv]
+package = false

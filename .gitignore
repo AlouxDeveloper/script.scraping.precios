@@ -1,0 +1,24 @@
+# Entornos virtuales 
+venv/
+venvmac/
+.venv/
+__pycache__/
+*.pyc
+
+# Datos crudos
+salida/
+
+# Artefactos de dbt 
+target/
+dbt_packages/
+logs/
+
+# Credenciales / configuración local
+.env
+credentials*.json
+service-account*.json
+
+# Artefactos de OneDrive/Google Drive
+desktop.ini
+
+
