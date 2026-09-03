@@ -7,7 +7,8 @@ Se ejecuta siempre desde la raíz del repo:
 
 import typer
 
-from precios_load import __version__
+from precios_load import __version__, manifest
+from precios_load.clientes import cliente_bq
 from precios_load.config import (
     FORMATO_ANIO_MES,
     ErrorConfig,
@@ -130,8 +131,11 @@ def bq_setup(ctx: typer.Context) -> None:
 
 @app.command()
 def estado(ctx: typer.Context) -> None:
-    """Resumen del manifest de ingesta."""
-    typer.echo(PENDIENTE.format(issue="ALD-17"))
+    """Resumen del manifest de ingesta. Crea la tabla de control si no existe."""
+    cfg = ctx.obj
+    cliente = cliente_bq(cfg)
+    for linea in manifest.resumen(cliente, cfg):
+        typer.echo(linea)
 
 
 @app.command()

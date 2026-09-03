@@ -17,6 +17,13 @@ dev = [
     "pytest",
 ]
 
+[tool.pytest.ini_options]
+# ADC sin quota project avisa en cada test de integración; es inofensivo para
+# credenciales de usuario y ensucia la salida.
+filterwarnings = [
+    "ignore:Your application has authenticated using end user credentials:UserWarning",
+]
+
 [project.scripts]
 precios-load = "precios_load.cli:app"
 
