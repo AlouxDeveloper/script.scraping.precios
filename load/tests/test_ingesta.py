@@ -51,8 +51,8 @@ def test_ejecutar_sube_archivo_nuevo_y_registra_fila_ok(
         base=base, tabla=tabla_manifest_tmp,
     )
 
-    assert resultado.subidos == (fuente.ruta,)
-    assert resultado.errores == ()
+    assert resultado.procesados == (fuente.ruta,)
+    assert resultado.fallidos == ()
 
     fila = manifest.leer_estado(cliente_bq, cfg_gcp, tabla=tabla_manifest_tmp)[fuente.ruta]
     assert fila.estado == manifest.ESTADO_OK
@@ -80,7 +80,7 @@ def test_ejecutar_dos_veces_la_segunda_salta_sin_escribir(
     )
 
     assert segunda.saltados == (fuente.ruta,)
-    assert segunda.subidos == ()
+    assert segunda.procesados == ()
     fila = manifest.leer_estado(cliente_bq, cfg_gcp, tabla=tabla_manifest_tmp)[fuente.ruta]
     assert fila.version == 1  # no incrementó
 
@@ -103,7 +103,7 @@ def test_dos_rutas_con_el_mismo_md5_producen_dos_filas(
         base=base, tabla=tabla_manifest_tmp,
     )
 
-    assert set(resultado.subidos) == {f1.ruta, f2.ruta}
+    assert set(resultado.procesados) == {f1.ruta, f2.ruta}
     estado = manifest.leer_estado(cliente_bq, cfg_gcp, tabla=tabla_manifest_tmp)
     assert estado[f1.ruta].estado == manifest.ESTADO_VACIO
     assert estado[f2.ruta].estado == manifest.ESTADO_VACIO
@@ -137,8 +137,8 @@ def test_una_subida_fallida_deja_fila_error_y_no_frena_al_resto(
         base=base, tabla=tabla_manifest_tmp,
     )
 
-    assert resultado.subidos == (ok.ruta,)
-    assert [ruta for ruta, _ in resultado.errores] == [mala.ruta]
+    assert resultado.procesados == (ok.ruta,)
+    assert [ruta for ruta, _ in resultado.fallidos] == [mala.ruta]
 
     estado = manifest.leer_estado(cliente_bq, cfg_gcp, tabla=tabla_manifest_tmp)
     assert estado[ok.ruta].estado == manifest.ESTADO_OK
@@ -146,30 +146,61 @@ def test_una_subida_fallida_deja_fila_error_y_no_frena_al_resto(
     assert estado[mala.ruta].uri_raw is None
 
 
-def test_si_bronce_falla_la_fila_queda_en_error_con_raw_subido(
+def test_reconciliacion_fallida_no_deja_fila_en_el_manifest(
     cliente_bq, cliente_gcs, cfg_gcp, base_local, limpiar_raw, tabla_manifest_tmp, monkeypatch
 ):
-    """Raw subió, bronce reventó: fila ERROR, `uri_raw` conservado, sin Parquet."""
+    """Descuadre de conteos: se reporta con ambos números, sin fila en el manifest."""
     contenido = csv_valido(2)
     fuente = fuente_falsa(contenido)
     base = base_local(fuente, contenido)
     limpiar_raw(_uri(cfg_gcp, fuente))
 
-    def boom(*a, **k):
-        raise bronce.ErrorBronce("boom")
+    def descuadre(*a, **k):
+        raise bronce.ErrorReconciliacion(
+            f"{fuente.ruta}: el Parquet tiene 1 filas, el CSV de origen tiene 2"
+        )
 
-    monkeypatch.setattr(ingesta.bronce, "escribir", boom)
+    monkeypatch.setattr(ingesta.bronce, "escribir", descuadre)
 
     resultado = ingesta.ejecutar(
         cliente_bq, cliente_gcs, cfg_gcp, [_entrada(fuente)],
         base=base, tabla=tabla_manifest_tmp,
     )
 
-    assert [ruta for ruta, _ in resultado.errores] == [fuente.ruta]
+    assert resultado.procesados == ()
+    assert [ruta for ruta, _ in resultado.fallidos] == [fuente.ruta]
+    mensaje = resultado.fallidos[0][1]
+    assert "1" in mensaje and "2" in mensaje and fuente.ruta in mensaje
+
+    # Nada en el manifest: la próxima corrida lo reintenta limpio.
+    assert fuente.ruta not in manifest.leer_estado(cliente_bq, cfg_gcp, tabla=tabla_manifest_tmp)
+    # Raw sí quedó subido (es la fuente inmutable).
+    objeto = _uri(cfg_gcp, fuente).removeprefix(f"gs://{cfg_gcp.bucket_raw}/")
+    assert cliente_gcs.bucket(cfg_gcp.bucket_raw).blob(objeto).exists()
+
+
+def test_un_fallo_de_subida_si_deja_fila_error(
+    cliente_bq, cliente_gcs, cfg_gcp, base_local, limpiar_raw, tabla_manifest_tmp, monkeypatch
+):
+    """A diferencia de la reconciliación, un fallo de red se reintenta: fila ERROR."""
+    contenido = csv_valido(2)
+    fuente = fuente_falsa(contenido)
+    base = base_local(fuente, contenido)
+    limpiar_raw(_uri(cfg_gcp, fuente))
+
+    def boom(*a, **k):
+        raise RuntimeError("503 desde GCS")
+
+    monkeypatch.setattr(ingesta.bronce, "escribir", boom)
+
+    ingesta.ejecutar(
+        cliente_bq, cliente_gcs, cfg_gcp, [_entrada(fuente)],
+        base=base, tabla=tabla_manifest_tmp,
+    )
+
     fila = manifest.leer_estado(cliente_bq, cfg_gcp, tabla=tabla_manifest_tmp)[fuente.ruta]
     assert fila.estado == manifest.ESTADO_ERROR
     assert fila.uri_raw == _uri(cfg_gcp, fuente)
-    assert fila.uri_bronce is None and fila.filas_bronce is None
 
 
 def test_una_fila_error_previa_se_reintenta(
@@ -202,7 +233,7 @@ def test_una_fila_error_previa_se_reintenta(
         base=base, tabla=tabla_manifest_tmp,
     )
 
-    assert resultado.subidos == (fuente.ruta,)
+    assert resultado.procesados == (fuente.ruta,)
     fila = manifest.leer_estado(cliente_bq, cfg_gcp, tabla=tabla_manifest_tmp)[fuente.ruta]
     assert fila.estado == manifest.ESTADO_OK
     assert fila.version == 2
@@ -220,7 +251,7 @@ def test_comando_ingesta_pasa_el_plan_filtrado_al_orquestador(
     def fake_ejecutar(cliente_bq, cliente_gcs, config, entradas, base=None, tabla=None):
         visto["rutas"] = [e.fuente.ruta for e in entradas]
         return ingesta.ResultadoIngesta(
-            subidos=tuple(visto["rutas"]), saltados=(), errores=()
+            procesados=tuple(visto["rutas"]), saltados=(), fallidos=()
         )
 
     monkeypatch.setattr(cli, "ejecutar", fake_ejecutar)

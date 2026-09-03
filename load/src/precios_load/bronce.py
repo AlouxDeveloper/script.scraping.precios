@@ -128,8 +128,13 @@ def ensamblar_archivo(
     return pd.DataFrame(registros, columns=list(COLUMNAS_BRONCE))
 
 
-class ErrorBronce(Exception):
-    """El Parquet escrito no cuadra en filas con el CSV de origen."""
+class ErrorReconciliacion(Exception):
+    """El Parquet escrito no cuadra en filas con el CSV de origen.
+
+    Es una pérdida silenciosa de datos, no un fallo transitorio: `ingesta` la
+    reporta con ambos conteos y **no** registra el archivo en el manifest, para
+    que la siguiente corrida vuelva a intentarlo desde cero.
+    """
 
 
 def escribir(
@@ -146,7 +151,7 @@ def escribir(
     sitio en una recarga: el PUT de GCS es atómico, así que nunca convive un
     Parquet a medias con el anterior.
 
-    Lanza `ErrorBronce` si al releer el Parquet el conteo de filas no coincide
+    Lanza `ErrorReconciliacion` si al releer el Parquet el conteo de filas no coincide
     con el que `descubrimiento` midió en el CSV. La verificación ocurre antes de
     subir, así que un desajuste no deja objeto en bronce.
     """
@@ -157,7 +162,7 @@ def escribir(
 
     filas = pq.read_metadata(io.BytesIO(buffer.getvalue())).num_rows
     if filas != fuente.filas:
-        raise ErrorBronce(
+        raise ErrorReconciliacion(
             f"{fuente.ruta}: el Parquet tiene {filas} filas, "
             f"el CSV de origen tiene {fuente.filas}"
         )

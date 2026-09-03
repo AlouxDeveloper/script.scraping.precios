@@ -147,19 +147,19 @@ def ingesta(
         cliente_bq(cfg), cliente_gcs(cfg), cfg, list(plan.entradas)
     )
 
-    for ruta in resultado.subidos:
+    for ruta in resultado.procesados:
         typer.echo(f"→ {ruta}")
     for ruta in resultado.saltados:
         typer.echo(f"· {ruta}  (sin cambios)")
-    for ruta, error in resultado.errores:
+    for ruta, error in resultado.fallidos:
         typer.echo(f"❌ {ruta}: {error}", err=True)
 
     typer.echo(
-        f"\nsubidos {len(resultado.subidos)}  "
+        f"\nprocesados {len(resultado.procesados)}  "
         f"saltados {len(resultado.saltados)}  "
-        f"errores {len(resultado.errores)}"
+        f"fallidos {len(resultado.fallidos)}"
     )
-    if resultado.errores:
+    if resultado.fallidos:
         raise typer.Exit(code=1)
 
 

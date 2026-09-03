@@ -8,13 +8,15 @@ Reglas heredadas de ALD-17:
 
 - El manifest se escribe una sola vez, al terminar. Una corrida interrumpida no
   deja filas y la siguiente la reanuda.
-- Un archivo que falla no frena la corrida: deja fila `ERROR` y se reintenta en
-  la siguiente pasada. Un fallo en bronce cuenta igual, aunque raw ya haya
-  quedado subido.
+- Un archivo que falla no frena la corrida. Hay dos clases de fallo:
+  - **Subida** (red, permisos): deja fila `ERROR`, se reintenta con `version+1`.
+  - **Reconciliación** (el Parquet no cuadra en filas con el CSV): pérdida
+    silenciosa de datos. No deja fila; se reporta con ambos conteos y hay que
+    arreglar el parser antes de que la próxima corrida lo reintente.
 
 Un archivo vacío (solo header) sube a raw como `VACIO` y no genera Parquet, así
-que su fila lleva `uri_bronce` y `filas_bronce` en `None`. La reconciliación
-(ALD-21) se engancha aquí.
+que su fila lleva `uri_bronce` y `filas_bronce` en `None`. La reconciliación de
+conteos vive en `bronce.escribir`; aquí solo se decide qué hacer con su fallo.
 """
 
 from dataclasses import dataclass
@@ -29,16 +31,16 @@ from precios_load.plan import EntradaPlan
 
 @dataclass(frozen=True)
 class ResultadoIngesta:
-    """Qué pasó con cada archivo de la corrida."""
+    """Qué pasó con cada archivo de la corrida.
 
-    subidos: tuple[str, ...]
+    Un archivo `fallido` puede o no haber dejado fila en el manifest: un fallo de
+    subida deja fila `ERROR` (se reintenta), un descuadre de reconciliación no
+    deja nada (hay que arreglar el parser antes de reintentar).
+    """
+
+    procesados: tuple[str, ...]
     saltados: tuple[str, ...]
-    errores: tuple[tuple[str, str], ...]  # (ruta, mensaje)
-
-    @property
-    def filas_registradas(self) -> int:
-        """Filas que se escribieron en el manifest: subidos + errores."""
-        return len(self.subidos) + len(self.errores)
+    fallidos: tuple[tuple[str, str], ...]  # (ruta, mensaje)
 
 
 def ejecutar(
@@ -54,9 +56,9 @@ def ejecutar(
     ingestado_en = datetime.now(UTC)
 
     filas: list[manifest.FilaManifest] = []
-    subidos: list[str] = []
+    procesados: list[str] = []
     saltados: list[str] = []
-    errores: list[tuple[str, str]] = []
+    fallidos: list[tuple[str, str]] = []
 
     for entrada in entradas:
         fuente = entrada.fuente
@@ -79,10 +81,15 @@ def ejecutar(
                     cliente_gcs, config, fuente, base=base, ingestado_en=ingestado_en
                 )
                 estado_fila = manifest.ESTADO_OK
-            subidos.append(fuente.ruta)
+            procesados.append(fuente.ruta)
+        except bronce.ErrorReconciliacion as e:
+            # Pérdida silenciosa de filas: no se registra nada. Que la próxima
+            # corrida lo reintente desde cero, una vez arreglado el parser.
+            fallidos.append((fuente.ruta, str(e)))
+            continue
         except Exception as e:  # noqa: BLE001 - un archivo no puede tumbar la corrida
             estado_fila = manifest.ESTADO_ERROR
-            errores.append((fuente.ruta, str(e)))
+            fallidos.append((fuente.ruta, str(e)))
 
         filas.append(
             manifest.FilaManifest(
@@ -103,4 +110,4 @@ def ejecutar(
         )
 
     manifest.registrar(cliente_bq, config, filas, tabla)
-    return ResultadoIngesta(tuple(subidos), tuple(saltados), tuple(errores))
+    return ResultadoIngesta(tuple(procesados), tuple(saltados), tuple(fallidos))

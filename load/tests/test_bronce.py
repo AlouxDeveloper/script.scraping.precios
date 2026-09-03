@@ -296,7 +296,7 @@ def test_el_parquet_va_comprimido_con_snappy(
     assert md.row_group(0).column(0).compression == "SNAPPY"
 
 
-def test_si_el_conteo_releido_no_cuadra_lanza_error_bronce(
+def test_si_el_conteo_releido_no_cuadra_lanza_error_reconciliacion(
     cliente_gcs, cfg_gcp, base_local, limpiar_bronce, monkeypatch
 ):
     contenido = csv_valido(2)
@@ -307,8 +307,18 @@ def test_si_el_conteo_releido_no_cuadra_lanza_error_bronce(
     real = bronce.a_tabla
     monkeypatch.setattr(bronce, "a_tabla", lambda df: real(df).slice(0, 1))
 
-    with pytest.raises(bronce.ErrorBronce):
+    with pytest.raises(bronce.ErrorReconciliacion) as exc:
         bronce.escribir(cliente_gcs, cfg_gcp, fuente, base=base)
+    assert "1" in str(exc.value) and "2" in str(exc.value) and fuente.ruta in str(exc.value)
+
+
+def test_el_sin_header_de_junio_conserva_sus_4254_filas(datos_reales, por_ruta):
+    """`skip_leading_rows=1` sobre un archivo sin header perdería la primera fila real."""
+    d = por_ruta["2026/06_junio/scraping_detalle_heb.csv"]
+    assert d.sin_header
+
+    tabla = a_tabla(ensamblar_archivo(d, base=datos_reales))
+    assert tabla.num_rows == 4254
 
 
 def test_el_historico_completo_ensambla_1_a_1_con_el_mismo_esquema(datos_reales, declarados):
