@@ -124,6 +124,8 @@ def decidir(
     - Sin registro previo: se sube en `version` 1, salvo que la red de seguridad
       lo desmienta (ver abajo).
     - Registro previo en `ERROR`: se reintenta siempre, aunque el MD5 no cambie.
+    - Registro previo en `OK` de un archivo no vacío pero sin `uri_bronce`: es una
+      fila anterior a la fase bronce (solo raw). Se sube para completar el Parquet.
     - MD5 idéntico al registrado: se salta, sin tocar la red de datos.
     - MD5 distinto: recarga del mes en curso, se sube con `version` incrementada.
 
@@ -145,6 +147,14 @@ def decidir(
             accion=SUBIR,
             version=previa.version + 1,
             motivo="reintento tras error",
+            fila_previa=previa,
+        )
+
+    if previa.estado == ESTADO_OK and previa.uri_bronce is None and not fuente.vacio:
+        return Decision(
+            accion=SUBIR,
+            version=previa.version + 1,
+            motivo="OK sin bronce: completar",
             fila_previa=previa,
         )
 

@@ -4,6 +4,8 @@ Integración real: sube a `gs://<bucket_raw>/tienda=__test__/` y escribe en una
 tabla de manifest desechable. Todo se limpia en el teardown.
 """
 
+import threading
+
 from typer.testing import CliRunner
 
 from tests.conftest import HEADER_SOLO_CSV, csv_valido, fuente_falsa
@@ -13,6 +15,19 @@ from precios_load.cli import app
 from precios_load.plan import SUBE, EntradaPlan
 
 runner = CliRunner()
+
+
+class _GCSNoObjetos:
+    """cliente_gcs de mentira: ningún objeto existe todavía en la capa raw.
+
+    Deja que `manifest.decidir` corra su red de seguridad sin tocar Google Cloud.
+    """
+
+    def bucket(self, _nombre):
+        return self
+
+    def get_blob(self, _objeto):
+        return None
 
 
 def _entrada(fuente, flags=()) -> EntradaPlan:
@@ -237,6 +252,78 @@ def test_una_fila_error_previa_se_reintenta(
     fila = manifest.leer_estado(cliente_bq, cfg_gcp, tabla=tabla_manifest_tmp)[fuente.ruta]
     assert fila.estado == manifest.ESTADO_OK
     assert fila.version == 2
+
+
+# --- Subida en paralelo -----------------------------------------------
+
+
+def test_las_subidas_corren_en_paralelo(cfg_gcp, monkeypatch):
+    """Dos archivos suben a la vez: en secuencial la barrera nunca se completaría."""
+    barrera = threading.Barrier(2, timeout=5)
+
+    monkeypatch.setattr(ingesta.manifest, "leer_estado", lambda *a, **k: {})
+    monkeypatch.setattr(ingesta.manifest, "registrar", lambda *a, **k: None)
+
+    def raw_con_barrera(cliente, config, fuente, base=None):
+        barrera.wait()
+        return f"gs://raw/{fuente.nombre}"
+
+    monkeypatch.setattr(ingesta.raw, "subir", raw_con_barrera)
+    monkeypatch.setattr(
+        ingesta.bronce, "escribir", lambda *a, **k: ("gs://bronce/x.parquet", 1)
+    )
+
+    f1 = fuente_falsa(csv_valido(1), nombre="a.csv")
+    f2 = fuente_falsa(csv_valido(1), nombre="b.csv")
+
+    resultado = ingesta.ejecutar(
+        None, _GCSNoObjetos(), cfg_gcp, [_entrada(f1), _entrada(f2)], trabajadores=2
+    )
+
+    assert set(resultado.procesados) == {f1.ruta, f2.ruta}
+    assert resultado.fallidos == ()
+
+
+def test_conserva_el_orden_de_entrada_con_resultados_mezclados(cfg_gcp, monkeypatch):
+    """El paralelismo no altera el orden: los resultados salen como entraron."""
+    saltado = fuente_falsa(csv_valido(1), nombre="saltado.csv")
+    ok = fuente_falsa(csv_valido(2), nombre="ok.csv")
+    malo = fuente_falsa(csv_valido(2), nombre="malo.csv")
+
+    estado = {
+        saltado.ruta: manifest.FilaManifest(
+            ruta_origen=saltado.ruta,
+            tienda=saltado.tienda,
+            anio_mes=saltado.anio_mes,
+            md5_origen=saltado.md5,
+            estado=manifest.ESTADO_OK,
+            version=1,
+            uri_bronce="gs://bronce/saltado.parquet",
+        )
+    }
+    monkeypatch.setattr(ingesta.manifest, "leer_estado", lambda *a, **k: estado)
+    monkeypatch.setattr(ingesta.manifest, "registrar", lambda *a, **k: None)
+    monkeypatch.setattr(
+        ingesta.raw, "subir", lambda cl, cfg, f, base=None: f"gs://raw/{f.nombre}"
+    )
+
+    def escribir(cliente, config, fuente, base=None, ingestado_en=None):
+        if fuente.nombre == "malo.csv":
+            raise bronce.ErrorReconciliacion(
+                f"{fuente.ruta}: el Parquet tiene 1 filas, el CSV de origen tiene 2"
+            )
+        return f"gs://bronce/{fuente.nombre}", fuente.filas
+
+    monkeypatch.setattr(ingesta.bronce, "escribir", escribir)
+
+    entradas = [_entrada(saltado), _entrada(ok), _entrada(malo)]
+    resultado = ingesta.ejecutar(
+        None, _GCSNoObjetos(), cfg_gcp, entradas, trabajadores=4
+    )
+
+    assert resultado.saltados == (saltado.ruta,)
+    assert resultado.procesados == (ok.ruta,)
+    assert [r for r, _ in resultado.fallidos] == [malo.ruta]
 
 
 # --- El comando `ingesta` ----------------------------------------------

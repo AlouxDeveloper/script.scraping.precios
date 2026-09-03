@@ -174,7 +174,9 @@ def test_decidir_archivo_nuevo_sube_en_version_1():
 
 def test_decidir_md5_sin_cambios_salta_sin_tocar_red():
     fuente = _fuente(md5="igual")
-    estado = {fuente.ruta: _fila(fuente.ruta, "igual", 3)}
+    estado = {
+        fuente.ruta: _fila(fuente.ruta, "igual", 3, uri_bronce="gs://bronce/heb.parquet")
+    }
 
     decision = manifest.decidir(fuente, estado)
 
@@ -202,6 +204,40 @@ def test_decidir_reintenta_una_fila_previa_en_error_aunque_el_md5_no_cambie():
 
     assert decision.accion == manifest.SUBIR
     assert decision.version == 2
+
+
+def test_decidir_ok_sin_bronce_completa_e_incrementa_version():
+    """Fila OK de antes de la fase bronce: raw hecho, Parquet no. Hay que completarla."""
+    fuente = _fuente(md5="igual", filas=100)
+    estado = {
+        fuente.ruta: _fila(fuente.ruta, "igual", 1, uri_raw="gs://raw/heb.csv")
+    }
+    assert estado[fuente.ruta].uri_bronce is None
+
+    decision = manifest.decidir(fuente, estado)
+
+    assert decision.accion == manifest.SUBIR
+    assert decision.version == 2
+    assert "bronce" in decision.motivo
+
+
+def test_decidir_ok_con_bronce_salta():
+    fuente = _fuente(md5="igual")
+    estado = {
+        fuente.ruta: _fila(fuente.ruta, "igual", 1, uri_bronce="gs://bronce/heb.parquet")
+    }
+
+    assert manifest.decidir(fuente, estado).accion == manifest.SALTAR
+
+
+def test_decidir_vacio_sin_bronce_sigue_saltando():
+    """Un archivo vacío nunca tiene Parquet; su fila VACIO no es una a completar."""
+    fuente = _fuente(md5="igual", filas=0)
+    estado = {
+        fuente.ruta: _fila(fuente.ruta, "igual", 1, estado=manifest.ESTADO_VACIO)
+    }
+
+    assert manifest.decidir(fuente, estado).accion == manifest.SALTAR
 
 
 # --- Red de seguridad: manifest vacío pero el objeto ya está en GCS ------
