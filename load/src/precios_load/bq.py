@@ -1,23 +1,20 @@
-"""Setup de BigQuery: la external table de bronce y la tabla nativa de silver.
+"""Setup de BigQuery: la external table BigLake sobre la capa bronce.
 
-`bq-setup` corre DDLs `CREATE OR REPLACE`, idempotentes por construcción:
+Es la frontera de `load/`: `bq-setup` corre un DDL `CREATE OR REPLACE EXTERNAL
+TABLE`, idempotente por construcción, que deja el histórico consultable. Un
+Parquet nuevo en una partición de GCS es visible al instante, sin job de carga.
 
-- `precios_bronce.precios_ext` — external table con hive partitioning. Hace que
-  un Parquet nuevo en GCS sea visible al instante, sin job de carga. Bronce vive
-  en GCS; este dataset solo lo mira.
-- `precios_silver.precios` — copia nativa de bronce (12 columnas, todas las
-  filas), particionada y clusterizada. Sin transformar: limpieza y dimensiones
-  son cosa de dbt.
+Bronce vive en GCS; `precios_bronce` solo lo mira. La limpieza y las capas
+silver/gold son trabajo de dbt sobre `precios_ext`, no de este módulo.
 """
 
 from google.cloud import bigquery
 
 from precios_load.config import ConfigGCP
 
-# Nombres por defecto. Los tests los sustituyen por tablas desechables que
-# apuntan a los mismos datos.
+# Nombre por defecto. Los tests lo sustituyen por una tabla desechable que
+# apunta al mismo prefijo de GCS.
 TABLA_BRONCE_EXT = "precios_ext"
-TABLA_SILVER = "precios"
 
 
 def crear_external_bronce(
@@ -56,55 +53,6 @@ def crear_external_bronce(
           hive_partition_uri_prefix = '{prefijo}',
           require_hive_partition_filter = false
         )
-    """
-    cliente.query(ddl).result()
-    return referencia
-
-
-# Las 12 columnas de bronce que se materializan en silver, verbatim. Sin
-# derivar, sin renombrar: la limpieza y las dimensiones son cosa de dbt.
-COLUMNAS_SILVER = (
-    "tienda",           # slug estable — clave de join al futuro dim_tienda
-    "tienda_raw",       # literal del scraper (número o nombre) — trazabilidad
-    "sku",
-    "producto",
-    "url_producto",
-    "url_imagen",
-    "precio_actual",
-    "precio_oferta",
-    "fecha_captura",
-    "anio_mes",
-    "_archivo_origen",
-    "_ingestado_en",
-)
-
-
-def crear_tabla_silver(
-    cliente: bigquery.Client, config: ConfigGCP, tabla: str | None = None
-) -> str:
-    """Materializa `precios_silver.precios` como copia nativa de bronce.
-
-    Devuelve la referencia completa. `CREATE OR REPLACE ... AS SELECT` la hace
-    idempotente.
-
-    No transforma nada: proyecta 12 de las 26 columnas de `precios_ext`,
-    verbatim, todas las filas. Lo único que se decide aquí es el layout físico
-    (`PARTITION BY` mes de `fecha_captura`, `CLUSTER BY tienda, sku`), que acomoda
-    los datos pero no los cambia. La limpieza, la deduplicación y el catálogo de
-    tiendas son trabajo de dbt, aguas abajo.
-    """
-    referencia = config.tabla_silver(tabla or TABLA_SILVER)
-    fuente = config.tabla_bronce(TABLA_BRONCE_EXT)
-    columnas = ",\n          ".join(COLUMNAS_SILVER)
-
-    ddl = f"""
-        CREATE OR REPLACE TABLE `{referencia}`
-        PARTITION BY DATE_TRUNC(fecha_captura, MONTH)
-        CLUSTER BY tienda, sku
-        AS
-        SELECT
-          {columnas}
-        FROM `{fuente}`
     """
     cliente.query(ddl).result()
     return referencia

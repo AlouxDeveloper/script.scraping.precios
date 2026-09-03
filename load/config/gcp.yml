@@ -13,13 +13,11 @@ bucket_bronce: bronce_precios_bitek
 # Prefijo común dentro de ambos buckets, antes de las particiones hive.
 prefijo: precios
 
-# Datasets de BigQuery. El dataset lleva la capa; la tabla, la entidad.
+# Datasets de BigQuery que usa este módulo. El dataset lleva la capa.
 #   precios_bronce  external table BigLake sobre gs://bronce_precios_bitek
-#   precios_silver  tabla nativa limpia y deduplicada, para analistas
-#   precios_ops     manifest de ingesta y vistas de calidad
-# precios_gold se crea cuando haya marts.
+#   precios_ops     manifest de ingesta
+# precios_silver / precios_gold los crea y llena dbt, no load/.
 dataset_bronce: precios_bronce
-dataset_silver: precios_silver
 dataset_ops: precios_ops
 conexion_biglake: precios_biglake
 

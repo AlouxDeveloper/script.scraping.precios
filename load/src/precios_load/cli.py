@@ -27,10 +27,6 @@ app = typer.Typer(
     add_completion=False,
 )
 
-# Los comandos se implementan en los issues siguientes; el esqueleto ya fija
-# la firma para que el orden de trabajo no tenga que renombrar nada.
-PENDIENTE = "⏳ Comando aún no implementado ({issue})."
-
 
 @app.callback()
 def principal(ctx: typer.Context) -> None:
@@ -166,17 +162,17 @@ def ingesta(
 
 @app.command(name="bq-setup")
 def bq_setup(ctx: typer.Context) -> None:
-    """Crea o reemplaza los objetos de BigQuery: external table de bronce y nativa de silver."""
+    """Crea o reemplaza la external table BigLake con hive partitioning sobre bronce.
+
+    Es la frontera de `load/`: deja el histórico consultable en BigQuery. La
+    limpieza y las capas silver/gold son trabajo de dbt sobre esta tabla.
+    """
     cfg = ctx.obj
     cliente = cliente_bq(cfg)
-
     ext = bq.crear_external_bronce(cliente, cfg)
-    filas_ext = next(iter(cliente.query(f"SELECT COUNT(*) AS n FROM `{ext}`").result()))["n"]
-    typer.echo(f"external bronce  {ext}  ({filas_ext:,} filas)")
-
-    silver = bq.crear_tabla_silver(cliente, cfg)
-    filas_silver = cliente.get_table(silver).num_rows
-    typer.echo(f"nativa silver    {silver}  ({filas_silver:,} filas)")
+    filas = next(iter(cliente.query(f"SELECT COUNT(*) AS n FROM `{ext}`").result()))["n"]
+    typer.echo(f"external table  {ext}")
+    typer.echo(f"filas           {filas:,}")
 
 
 @app.command()
@@ -186,12 +182,6 @@ def estado(ctx: typer.Context) -> None:
     cliente = cliente_bq(cfg)
     for linea in manifest.resumen(cliente, cfg):
         typer.echo(linea)
-
-
-@app.command()
-def verificar(ctx: typer.Context) -> None:
-    """Reconciliación de conteos entre local, GCS y BigQuery."""
-    typer.echo(PENDIENTE.format(issue="ALD-25"))
 
 
 def _validar_mes(nombre: str, valor: str | None) -> None:
