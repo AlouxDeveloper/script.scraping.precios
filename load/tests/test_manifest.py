@@ -193,6 +193,17 @@ def test_decidir_md5_distinto_reprocesa_e_incrementa_version():
     assert decision.fila_previa.md5_origen == "viejo"
 
 
+def test_decidir_reintenta_una_fila_previa_en_error_aunque_el_md5_no_cambie():
+    """Un archivo que falló y no cambió no puede quedarse en SALTAR para siempre."""
+    fuente = _fuente(md5="igual")
+    estado = {fuente.ruta: _fila(fuente.ruta, "igual", 1, estado=manifest.ESTADO_ERROR)}
+
+    decision = manifest.decidir(fuente, estado)
+
+    assert decision.accion == manifest.SUBIR
+    assert decision.version == 2
+
+
 # --- Red de seguridad: manifest vacío pero el objeto ya está en GCS ------
 
 

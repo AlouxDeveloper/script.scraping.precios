@@ -123,6 +123,7 @@ def decidir(
 
     - Sin registro previo: se sube en `version` 1, salvo que la red de seguridad
       lo desmienta (ver abajo).
+    - Registro previo en `ERROR`: se reintenta siempre, aunque el MD5 no cambie.
     - MD5 idéntico al registrado: se salta, sin tocar la red de datos.
     - MD5 distinto: recarga del mes en curso, se sube con `version` incrementada.
 
@@ -138,6 +139,14 @@ def decidir(
         if cliente_gcs is not None and config is not None:
             return _decidir_contra_gcs(fuente, cliente_gcs, config)
         return Decision(accion=SUBIR, version=1)
+
+    if previa.estado == ESTADO_ERROR:
+        return Decision(
+            accion=SUBIR,
+            version=previa.version + 1,
+            motivo="reintento tras error",
+            fila_previa=previa,
+        )
 
     if previa.md5_origen == fuente.md5:
         return Decision(

@@ -74,6 +74,70 @@ def cliente_gcs(cfg_gcp):
     return cliente
 
 
+# Header de los dos archivos "vacíos" de septiembre (solo encabezado, 0 filas).
+HEADER_SOLO_CSV = (
+    b"SKU,URL_PRODUCTO,Producto,Precio_Actual,Precio_Oferta,"
+    b"URL_IMAGEN,Fecha_Hora_Captura,Tienda\n"
+)
+
+
+def fuente_falsa(
+    contenido: bytes,
+    nombre: str | None = None,
+    tienda: str = "__test__",
+    anio_mes: str = "2026-06",
+):
+    """Un `ArchivoFuente` sintético para los tests de raw e ingesta.
+
+    `tienda="__test__"` mantiene los objetos de prueba fuera de las particiones
+    reales de las tiendas en `gs://<bucket_raw>`.
+    """
+    import hashlib
+    from uuid import uuid4
+
+    from precios_load.config import ArchivoDeclarado
+    from precios_load.descubrimiento import ArchivoFuente
+
+    nombre = nombre or f"detalle_{uuid4().hex[:8]}.csv"
+    carpeta = f"{anio_mes[:4]}/{anio_mes[5:]}_mes"
+    ruta = f"{carpeta}/{nombre}"
+    declarado = ArchivoDeclarado(ruta=ruta, tienda=tienda, anio_mes=anio_mes)
+    return ArchivoFuente(
+        ruta=ruta,
+        tienda=tienda,
+        anio_mes=anio_mes,
+        bytes=len(contenido),
+        md5=hashlib.md5(contenido).hexdigest(),
+        filas=0 if contenido.count(b"\n") <= 1 else contenido.count(b"\n") - 1,
+        variante="V4",
+        declarado=declarado,
+    )
+
+
+@pytest.fixture
+def base_local(tmp_path):
+    """Escribe el contenido de un `ArchivoFuente` en un `salida/data` de mentira."""
+
+    def _escribir(fuente, contenido: bytes) -> str:
+        (tmp_path / os.path.dirname(fuente.ruta)).mkdir(parents=True, exist_ok=True)
+        (tmp_path / fuente.ruta).write_bytes(contenido)
+        return str(tmp_path)
+
+    return _escribir
+
+
+@pytest.fixture
+def limpiar_raw(cliente_gcs, cfg_gcp):
+    """Borra de `gs://<bucket_raw>` los objetos cuyas URIs registre el test."""
+    uris: list[str] = []
+    yield uris.append
+    for uri in uris:
+        objeto = uri.removeprefix(f"gs://{cfg_gcp.bucket_raw}/")
+        blob = cliente_gcs.bucket(cfg_gcp.bucket_raw).blob(objeto)
+        if blob.exists():
+            blob.delete()
+
+
 @pytest.fixture
 def tabla_manifest_tmp(cliente_bq, cfg_gcp):
     """Nombre de una tabla de manifest desechable, borrada al terminar el test.

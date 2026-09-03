@@ -8,7 +8,7 @@ Se ejecuta siempre desde la raíz del repo:
 import typer
 
 from precios_load import __version__, manifest
-from precios_load.clientes import cliente_bq
+from precios_load.clientes import cliente_bq, cliente_gcs
 from precios_load.config import (
     FORMATO_ANIO_MES,
     ErrorConfig,
@@ -17,6 +17,7 @@ from precios_load.config import (
 )
 from precios_load.descubrimiento import ErrorDescubrimiento, descubrir
 from precios_load.esquemas import ErrorEsquema
+from precios_load.ingesta import ejecutar
 from precios_load.plan import construir_plan, render
 from precios_load.rutas import raiz_repo
 
@@ -119,8 +120,47 @@ def ingesta(
     tienda: str = typer.Option(None, help="Filtra por slug de tienda."),
     mes: str = typer.Option(None, help="Filtra por mes, formato YYYY-MM."),
 ) -> None:
-    """Sube a raw y bronce, y registra el resultado en el manifest."""
-    typer.echo(PENDIENTE.format(issue="ALD-18 / ALD-20"))
+    """Sube a raw los archivos que cambiaron y registra el resultado en el manifest."""
+    cfg = ctx.obj
+    _validar_mes("--mes", mes)
+
+    # Un --mes posterior al corte de gcp.yml lo amplía: pedir un mes explícito es
+    # una decisión deliberada (así se ingiere el mes en curso en ALD-19).
+    hasta = mes if (mes and mes > cfg.anio_mes_maximo) else None
+
+    try:
+        declarados = cargar_archivos()
+        descubrimiento = descubrir(declarados=declarados, hasta=hasta)
+    except (ErrorConfig, ErrorDescubrimiento, ErrorEsquema) as e:
+        typer.echo(f"❌ {e}", err=True)
+        raise typer.Exit(code=1) from e
+
+    if tienda:
+        _validar_tienda(tienda, declarados)
+
+    plan = construir_plan(descubrimiento, cfg, declarados, tienda=tienda, mes=mes)
+    if not plan.entradas:
+        typer.echo("No hay archivos que ingerir con esos filtros.")
+        return
+
+    resultado = ejecutar(
+        cliente_bq(cfg), cliente_gcs(cfg), cfg, list(plan.entradas)
+    )
+
+    for ruta in resultado.subidos:
+        typer.echo(f"→ {ruta}")
+    for ruta in resultado.saltados:
+        typer.echo(f"· {ruta}  (sin cambios)")
+    for ruta, error in resultado.errores:
+        typer.echo(f"❌ {ruta}: {error}", err=True)
+
+    typer.echo(
+        f"\nsubidos {len(resultado.subidos)}  "
+        f"saltados {len(resultado.saltados)}  "
+        f"errores {len(resultado.errores)}"
+    )
+    if resultado.errores:
+        raise typer.Exit(code=1)
 
 
 @app.command(name="bq-setup")
