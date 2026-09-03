@@ -1,0 +1,170 @@
+"""CLI de la capa de ingesta.
+
+Se ejecuta siempre desde la raíz del repo:
+
+    uv run --project load python -m precios_load.cli plan
+"""
+
+import typer
+
+from precios_load import __version__
+from precios_load.config import (
+    FORMATO_ANIO_MES,
+    ErrorConfig,
+    cargar_archivos,
+    cargar_config,
+)
+from precios_load.descubrimiento import ErrorDescubrimiento, descubrir
+from precios_load.esquemas import ErrorEsquema
+from precios_load.plan import construir_plan, render
+from precios_load.rutas import raiz_repo
+
+app = typer.Typer(
+    help="Ingesta del histórico de precios a Cloud Storage y BigQuery.",
+    no_args_is_help=True,
+    add_completion=False,
+)
+
+# Los comandos se implementan en los issues siguientes; el esqueleto ya fija
+# la firma para que el orden de trabajo no tenga que renombrar nada.
+PENDIENTE = "⏳ Comando aún no implementado ({issue})."
+
+
+@app.callback()
+def principal(ctx: typer.Context) -> None:
+    """Valida la raíz del repo y la configuración antes de cualquier comando."""
+    raiz_repo()
+    try:
+        ctx.obj = cargar_config()
+    except ErrorConfig as e:
+        typer.echo(f"❌ {e}", err=True)
+        raise typer.Exit(code=1) from e
+
+
+@app.command()
+def version() -> None:
+    """Imprime la versión del paquete."""
+    typer.echo(__version__)
+
+
+@app.command()
+def config(ctx: typer.Context) -> None:
+    """Muestra la configuración ya validada y las rutas que se derivan de ella."""
+    cfg = ctx.obj
+    typer.echo(f"project_id        {cfg.project_id}")
+    typer.echo(f"location          {cfg.location}")
+    typer.echo(f"dataset           {cfg.tabla('<tabla>')}")
+    typer.echo(f"conexión BigLake  {cfg.conexion()}")
+    typer.echo(f"datos locales     {cfg.ruta_datos()}")
+    typer.echo(f"ingiere hasta     {cfg.anio_mes_maximo} (inclusive)")
+    typer.echo(f"raw               {cfg.uri_raw('<tienda>', '<anio_mes>', '<archivo>.csv')}")
+    typer.echo(f"bronce            {cfg.uri_bronce('<tienda>', '<anio_mes>', '<archivo>.parquet')}")
+
+
+@app.command()
+def plan(
+    ctx: typer.Context,
+    tienda: str = typer.Option(None, help="Filtra por slug de tienda."),
+    mes: str = typer.Option(None, help="Filtra por mes, formato YYYY-MM."),
+    hasta: str = typer.Option(
+        None, help="Último mes a considerar. Por defecto, anio_mes_maximo de gcp.yml."
+    ),
+    resumen: bool = typer.Option(False, help="Solo los totales, sin el detalle por archivo."),
+) -> None:
+    """Dry-run: qué se subiría y qué se salta. No toca Google Cloud."""
+    cfg = ctx.obj
+
+    for nombre, valor in (("--mes", mes), ("--hasta", hasta)):
+        _validar_mes(nombre, valor)
+
+    try:
+        declarados = cargar_archivos()
+        descubrimiento = descubrir(declarados=declarados, hasta=hasta)
+    except (ErrorConfig, ErrorDescubrimiento, ErrorEsquema) as e:
+        typer.echo(f"❌ {e}", err=True)
+        raise typer.Exit(code=1) from e
+
+    if tienda:
+        _validar_tienda(tienda, declarados)
+
+    if mes and mes > descubrimiento.hasta:
+        typer.echo(
+            f"⚠️  --mes {mes} queda fuera del corte {descubrimiento.hasta}. "
+            f"Añade --hasta {mes} para incluirlo.",
+            err=True,
+        )
+    elif mes and mes not in {d.anio_mes for d in declarados}:
+        typer.echo(f"⚠️  No hay ningún archivo declarado del mes {mes}.", err=True)
+
+    if descubrimiento.sin_declarar:
+        typer.echo(
+            f"⚠️  {len(descubrimiento.sin_declarar)} archivo(s) sin declarar en meses "
+            f"posteriores a {descubrimiento.hasta}, no se ingieren:\n  "
+            + "\n  ".join(descubrimiento.sin_declarar),
+            err=True,
+        )
+
+    for linea in render(
+        construir_plan(descubrimiento, cfg, declarados, tienda=tienda, mes=mes),
+        cfg,
+        resumen=resumen,
+    ):
+        typer.echo(linea)
+
+
+@app.command()
+def ingesta(
+    ctx: typer.Context,
+    tienda: str = typer.Option(None, help="Filtra por slug de tienda."),
+    mes: str = typer.Option(None, help="Filtra por mes, formato YYYY-MM."),
+) -> None:
+    """Sube a raw y bronce, y registra el resultado en el manifest."""
+    typer.echo(PENDIENTE.format(issue="ALD-18 / ALD-20"))
+
+
+@app.command(name="bq-setup")
+def bq_setup(ctx: typer.Context) -> None:
+    """Crea el dataset, la external table BigLake, la tabla nativa y las vistas."""
+    typer.echo(PENDIENTE.format(issue="ALD-23"))
+
+
+@app.command()
+def estado(ctx: typer.Context) -> None:
+    """Resumen del manifest de ingesta."""
+    typer.echo(PENDIENTE.format(issue="ALD-17"))
+
+
+@app.command()
+def verificar(ctx: typer.Context) -> None:
+    """Reconciliación de conteos entre local, GCS y BigQuery."""
+    typer.echo(PENDIENTE.format(issue="ALD-25"))
+
+
+def _validar_mes(nombre: str, valor: str | None) -> None:
+    """Un mes mal escrito rompe la comparación de cadenas en silencio.
+
+    `--hasta 2026-9` deja pasar septiembre, porque `"2026-09" <= "2026-9"`, que
+    es justo lo que el corte tiene que impedir.
+    """
+    if valor is not None and not FORMATO_ANIO_MES.fullmatch(valor):
+        typer.echo(
+            f"❌ {nombre} {valor}: se esperaba el formato YYYY-MM (por ejemplo 2026-08).",
+            err=True,
+        )
+        raise typer.Exit(code=1)
+
+
+def _validar_tienda(tienda: str, declarados) -> None:
+    """Un slug con typo daría un plan vacío indistinguible de 'ya no hay nada'."""
+    slugs = sorted({d.tienda for d in declarados})
+    if tienda not in slugs:
+        typer.echo(
+            f"❌ --tienda {tienda}: no está en archivos.yml.\n"
+            f"   Slugs válidos: {', '.join(slugs)}",
+            err=True,
+        )
+        raise typer.Exit(code=1)
+
+
+if __name__ == "__main__":
+    app()

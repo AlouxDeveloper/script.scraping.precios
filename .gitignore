@@ -3,10 +3,15 @@ venv/
 venvmac/
 .venv/
 __pycache__/
+.pytest_cache/
 *.pyc
+.ruff_cache
 
 # Datos crudos
 salida/
+
+# Claude
+CLAUDE.md
 
 # Artefactos de dbt 
 target/

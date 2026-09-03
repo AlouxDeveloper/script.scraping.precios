@@ -1,0 +1,25 @@
+# Configuración de la infraestructura de Google Cloud.
+
+
+project_id: scenic-firefly-473823-f7
+location: US
+
+# Capa raw: el CSV original, intacto.
+bucket_raw: raw_precios_bitek
+
+# Capa bronce: Parquet tipado, es lo que consulta BigQuery.
+bucket_bronce: bronce_precios_bitek
+
+# Prefijo común dentro de ambos buckets, antes de las particiones hive.
+prefijo: precios
+
+dataset: precios_raw
+conexion_biglake: precios_biglake
+
+# Relativa a la raíz del repo, igual que las rutas de los scrapers.
+ruta_local_datos: ./salida/data
+
+# Último mes que entra en la ingesta, inclusive. El mes en curso se queda
+# fuera: su corrida de scraping aún no ha terminado y sus archivos cambian.
+# Al cerrar un mes se avanza este campo.
+anio_mes_maximo: "2026-08"

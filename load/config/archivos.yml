@@ -1,0 +1,468 @@
+# Inventario declarado del histórico: 139 archivos bajo salida/data/.
+#
+# Esta es la única fuente de verdad de a qué tienda pertenece cada archivo.
+# Los nombres son inconsistentes (scraping_detalle_, scraping_detalles_,
+# productos_, más sufijos como aurrera1, farmalisto3 y fahorro_a), así que el
+# slug NO se deduce por regex: se declara aquí y el contenido del CSV nunca lo
+# sobreescribe.
+#
+# Campos opcionales por archivo:
+#   sin_header          el archivo empieza directo con datos; se listan sus columnas
+#   columnas_descartar  columnas presentes en el CSV que no pasan a bronce
+#   copia_de            es idéntico a otro archivo salvo la columna de fecha;
+#                       se carga igual, marcado con SOSPECHA_COPIA
+#
+# Los slugs de tienda son provisionales: salen de los nombres de archivo. El
+# crosswalk oficial id<->nombre llega con el catálogo Excel como dim_tienda.
+
+archivos:
+
+  # --- 2025-12 ---
+  - ruta: 2025/diciembre/productos_detalle_fesa.csv
+    tienda: fesa
+    anio_mes: 2025-12
+  - ruta: 2025/diciembre/productos_detalles_farmalisto.csv
+    tienda: farmalisto
+    anio_mes: 2025-12
+  - ruta: 2025/diciembre/productos_detalles_gi.csv
+    tienda: gi
+    anio_mes: 2025-12
+  - ruta: 2025/diciembre/productos_detalles_isseg.csv
+    tienda: isseg
+    anio_mes: 2025-12
+
+  # --- 2026-01 ---
+  - ruta: 2026/01_enero/scraping_detalle_chedraui.csv
+    tienda: chedraui
+    anio_mes: 2026-01
+  - ruta: 2026/01_enero/scraping_detalle_farmalisto.csv
+    tienda: farmalisto
+    anio_mes: 2026-01
+  - ruta: 2026/01_enero/scraping_detalle_farmalisto3.csv
+    tienda: farmalisto
+    anio_mes: 2026-01
+  - ruta: 2026/01_enero/scraping_detalle_farmatodo.csv
+    tienda: farmatodo
+    anio_mes: 2026-01
+  - ruta: 2026/01_enero/scraping_detalle_fesa.csv
+    tienda: fesa
+    anio_mes: 2026-01
+  - ruta: 2026/01_enero/scraping_detalle_heb.csv
+    tienda: heb
+    anio_mes: 2026-01
+  - ruta: 2026/01_enero/scraping_detalle_soriana.csv
+    tienda: soriana
+    anio_mes: 2026-01
+  - ruta: 2026/01_enero/scraping_detalle_yza.csv
+    tienda: yza
+    anio_mes: 2026-01
+
+  # --- 2026-02 ---
+  - ruta: 2026/02_febrero/productos_aurrera.csv
+    tienda: aurrera
+    anio_mes: 2026-02
+  - ruta: 2026/02_febrero/productos_walmart.csv
+    tienda: walmart
+    anio_mes: 2026-02
+  - ruta: 2026/02_febrero/scraping_detalle_benavides.csv
+    tienda: benavides
+    anio_mes: 2026-02
+  - ruta: 2026/02_febrero/scraping_detalle_chedraui.csv
+    tienda: chedraui
+    anio_mes: 2026-02
+  - ruta: 2026/02_febrero/scraping_detalle_comer.csv
+    tienda: comer
+    anio_mes: 2026-02
+  - ruta: 2026/02_febrero/scraping_detalle_farmatodo.csv
+    tienda: farmatodo
+    anio_mes: 2026-02
+  - ruta: 2026/02_febrero/scraping_detalle_fesa.csv
+    tienda: fesa
+    anio_mes: 2026-02
+  - ruta: 2026/02_febrero/scraping_detalle_guadalajara.csv
+    tienda: guadalajara
+    anio_mes: 2026-02
+  - ruta: 2026/02_febrero/scraping_detalle_heb.csv
+    tienda: heb
+    anio_mes: 2026-02
+  - ruta: 2026/02_febrero/scraping_detalle_isseg.csv
+    tienda: isseg
+    anio_mes: 2026-02
+  - ruta: 2026/02_febrero/scraping_detalle_klyns.csv
+    tienda: klyns
+    anio_mes: 2026-02
+  - ruta: 2026/02_febrero/scraping_detalle_similares.csv
+    tienda: similares
+    anio_mes: 2026-02
+  - ruta: 2026/02_febrero/scraping_detalle_soriana.csv
+    tienda: soriana
+    anio_mes: 2026-02
+  - ruta: 2026/02_febrero/scraping_detalles_fahorro.csv
+    tienda: fahorro
+    anio_mes: 2026-02
+  - ruta: 2026/02_febrero/scraping_detalles_gi.csv
+    tienda: gi
+    anio_mes: 2026-02
+
+  # --- 2026-03 ---
+  - ruta: 2026/03_marzo/scraping_detalle_aurrera.csv
+    tienda: aurrera
+    anio_mes: 2026-03
+  - ruta: 2026/03_marzo/scraping_detalle_benavides.csv
+    tienda: benavides
+    anio_mes: 2026-03
+  - ruta: 2026/03_marzo/scraping_detalle_chedraui.csv
+    tienda: chedraui
+    anio_mes: 2026-03
+  - ruta: 2026/03_marzo/scraping_detalle_comer.csv
+    tienda: comer
+    anio_mes: 2026-03
+  - ruta: 2026/03_marzo/scraping_detalle_farmalisto.csv
+    tienda: farmalisto
+    anio_mes: 2026-03
+  - ruta: 2026/03_marzo/scraping_detalle_farmatodo.csv
+    tienda: farmatodo
+    anio_mes: 2026-03
+  - ruta: 2026/03_marzo/scraping_detalle_fesa.csv
+    tienda: fesa
+    anio_mes: 2026-03
+  - ruta: 2026/03_marzo/scraping_detalle_guadalajara.csv
+    tienda: guadalajara
+    anio_mes: 2026-03
+  - ruta: 2026/03_marzo/scraping_detalle_heb.csv
+    tienda: heb
+    anio_mes: 2026-03
+  - ruta: 2026/03_marzo/scraping_detalle_isseg.csv
+    tienda: isseg
+    anio_mes: 2026-03
+  - ruta: 2026/03_marzo/scraping_detalle_klyns.csv
+    tienda: klyns
+    anio_mes: 2026-03
+  - ruta: 2026/03_marzo/scraping_detalle_similares.csv
+    tienda: similares
+    anio_mes: 2026-03
+  - ruta: 2026/03_marzo/scraping_detalle_soriana.csv
+    tienda: soriana
+    anio_mes: 2026-03
+    copia_de: 2026/02_febrero/scraping_detalle_soriana.csv
+  - ruta: 2026/03_marzo/scraping_detalle_walmart.csv
+    tienda: walmart
+    anio_mes: 2026-03
+  - ruta: 2026/03_marzo/scraping_detalles_fahorro.csv
+    tienda: fahorro
+    anio_mes: 2026-03
+  - ruta: 2026/03_marzo/scraping_detalles_gi.csv
+    tienda: gi
+    anio_mes: 2026-03
+    copia_de: 2026/02_febrero/scraping_detalles_gi.csv
+  - ruta: 2026/03_marzo/scraping_detalles_sanpablo.csv
+    tienda: sanpablo
+    anio_mes: 2026-03
+
+  # --- 2026-04 ---
+  - ruta: 2026/04_abril/scraping_detalle_aurrera.csv
+    tienda: aurrera
+    anio_mes: 2026-04
+  - ruta: 2026/04_abril/scraping_detalle_benavides.csv
+    tienda: benavides
+    anio_mes: 2026-04
+  - ruta: 2026/04_abril/scraping_detalle_chedraui.csv
+    tienda: chedraui
+    anio_mes: 2026-04
+  - ruta: 2026/04_abril/scraping_detalle_comer.csv
+    tienda: comer
+    anio_mes: 2026-04
+  - ruta: 2026/04_abril/scraping_detalle_farmatodo.csv
+    tienda: farmatodo
+    anio_mes: 2026-04
+  - ruta: 2026/04_abril/scraping_detalle_fesa.csv
+    tienda: fesa
+    anio_mes: 2026-04
+  - ruta: 2026/04_abril/scraping_detalle_guadalajara.csv
+    tienda: guadalajara
+    anio_mes: 2026-04
+  - ruta: 2026/04_abril/scraping_detalle_isseg.csv
+    tienda: isseg
+    anio_mes: 2026-04
+  - ruta: 2026/04_abril/scraping_detalle_klyns.csv
+    tienda: klyns
+    anio_mes: 2026-04
+  - ruta: 2026/04_abril/scraping_detalle_similares.csv
+    tienda: similares
+    anio_mes: 2026-04
+  - ruta: 2026/04_abril/scraping_detalle_soriana.csv
+    tienda: soriana
+    anio_mes: 2026-04
+  - ruta: 2026/04_abril/scraping_detalle_walmart.csv
+    tienda: walmart
+    anio_mes: 2026-04
+  - ruta: 2026/04_abril/scraping_detalles_fahorro.csv
+    tienda: fahorro
+    anio_mes: 2026-04
+  - ruta: 2026/04_abril/scraping_detalles_gi.csv
+    tienda: gi
+    anio_mes: 2026-04
+  - ruta: 2026/04_abril/scraping_detalles_sanpablo.csv
+    tienda: sanpablo
+    anio_mes: 2026-04
+
+  # --- 2026-05 ---
+  - ruta: 2026/05_mayo/scraping_detalle_alsuper.csv
+    tienda: alsuper
+    anio_mes: 2026-05
+  - ruta: 2026/05_mayo/scraping_detalle_aurrera1.csv
+    tienda: aurrera
+    anio_mes: 2026-05
+    copia_de: 2026/03_marzo/scraping_detalle_aurrera.csv
+  - ruta: 2026/05_mayo/scraping_detalle_benavides.csv
+    tienda: benavides
+    anio_mes: 2026-05
+  - ruta: 2026/05_mayo/scraping_detalle_chedraui.csv
+    tienda: chedraui
+    anio_mes: 2026-05
+  - ruta: 2026/05_mayo/scraping_detalle_comer.csv
+    tienda: comer
+    anio_mes: 2026-05
+  - ruta: 2026/05_mayo/scraping_detalle_farmalisto.csv
+    tienda: farmalisto
+    anio_mes: 2026-05
+  - ruta: 2026/05_mayo/scraping_detalle_farmatodo.csv
+    tienda: farmatodo
+    anio_mes: 2026-05
+  - ruta: 2026/05_mayo/scraping_detalle_fesa.csv
+    tienda: fesa
+    anio_mes: 2026-05
+  - ruta: 2026/05_mayo/scraping_detalle_heb.csv
+    tienda: heb
+    anio_mes: 2026-05
+  - ruta: 2026/05_mayo/scraping_detalle_isseg.csv
+    tienda: isseg
+    anio_mes: 2026-05
+  - ruta: 2026/05_mayo/scraping_detalle_klyns.csv
+    tienda: klyns
+    anio_mes: 2026-05
+  - ruta: 2026/05_mayo/scraping_detalle_similares.csv
+    tienda: similares
+    anio_mes: 2026-05
+    copia_de: 2026/04_abril/scraping_detalle_similares.csv
+  - ruta: 2026/05_mayo/scraping_detalle_soriana.csv
+    tienda: soriana
+    anio_mes: 2026-05
+    copia_de: 2026/04_abril/scraping_detalle_soriana.csv
+  - ruta: 2026/05_mayo/scraping_detalle_walmart.csv
+    tienda: walmart
+    anio_mes: 2026-05
+  - ruta: 2026/05_mayo/scraping_detalle_yza.csv
+    tienda: yza
+    anio_mes: 2026-05
+  - ruta: 2026/05_mayo/scraping_detalles_fahorro_a.csv
+    tienda: fahorro
+    anio_mes: 2026-05
+  - ruta: 2026/05_mayo/scraping_detalles_gi.csv
+    tienda: gi
+    anio_mes: 2026-05
+    copia_de: 2026/04_abril/scraping_detalles_gi.csv
+  - ruta: 2026/05_mayo/scraping_detalles_sanpablo.csv
+    tienda: sanpablo
+    anio_mes: 2026-05
+
+  # --- 2026-06 ---
+  - ruta: 2026/06_junio/scraping_detalle_alsuper.csv
+    tienda: alsuper
+    anio_mes: 2026-06
+  - ruta: 2026/06_junio/scraping_detalle_aurrera.csv
+    tienda: aurrera
+    anio_mes: 2026-06
+  - ruta: 2026/06_junio/scraping_detalle_benavides.csv
+    tienda: benavides
+    anio_mes: 2026-06
+  - ruta: 2026/06_junio/scraping_detalle_chedraui.csv
+    tienda: chedraui
+    anio_mes: 2026-06
+  - ruta: 2026/06_junio/scraping_detalle_comer.csv
+    tienda: comer
+    anio_mes: 2026-06
+    copia_de: 2026/05_mayo/scraping_detalle_comer.csv
+  - ruta: 2026/06_junio/scraping_detalle_farmalisto.csv
+    tienda: farmalisto
+    anio_mes: 2026-06
+  - ruta: 2026/06_junio/scraping_detalle_farmatodo.csv
+    tienda: farmatodo
+    anio_mes: 2026-06
+  - ruta: 2026/06_junio/scraping_detalle_fesa.csv
+    tienda: fesa
+    anio_mes: 2026-06
+  - ruta: 2026/06_junio/scraping_detalle_guadalajara.csv
+    tienda: guadalajara
+    anio_mes: 2026-06
+  - ruta: 2026/06_junio/scraping_detalle_heb.csv
+    tienda: heb
+    anio_mes: 2026-06
+    sin_header: true
+    columnas: [SKU, URL_PRODUCTO, Producto, Precio_Actual, Precio_Oferta, URL_IMAGEN, Fecha_Hora_Captura, Tienda]
+  - ruta: 2026/06_junio/scraping_detalle_isseg.csv
+    tienda: isseg
+    anio_mes: 2026-06
+  - ruta: 2026/06_junio/scraping_detalle_klyns.csv
+    tienda: klyns
+    anio_mes: 2026-06
+  - ruta: 2026/06_junio/scraping_detalle_similares.csv
+    tienda: similares
+    anio_mes: 2026-06
+  - ruta: 2026/06_junio/scraping_detalle_soriana.csv
+    tienda: soriana
+    anio_mes: 2026-06
+  - ruta: 2026/06_junio/scraping_detalle_walmart.csv
+    tienda: walmart
+    anio_mes: 2026-06
+  - ruta: 2026/06_junio/scraping_detalle_yza.csv
+    tienda: yza
+    anio_mes: 2026-06
+  - ruta: 2026/06_junio/scraping_detalles_fahorro.csv
+    tienda: fahorro
+    anio_mes: 2026-06
+    # 9ª columna con basura: 1,478 filas con #N/D y 8,145 con un número.
+    columnas_descartar: [NDF]
+  - ruta: 2026/06_junio/scraping_detalles_gi.csv
+    tienda: gi
+    anio_mes: 2026-06
+  - ruta: 2026/06_junio/scraping_detalles_sanpablo.csv
+    tienda: sanpablo
+    anio_mes: 2026-06
+
+  # --- 2026-07 ---
+  - ruta: 2026/07_julio/scraping_detalle_alsuper.csv
+    tienda: alsuper
+    anio_mes: 2026-07
+  - ruta: 2026/07_julio/scraping_detalle_aurrera.csv
+    tienda: aurrera
+    anio_mes: 2026-07
+  - ruta: 2026/07_julio/scraping_detalle_benavides.csv
+    tienda: benavides
+    anio_mes: 2026-07
+  - ruta: 2026/07_julio/scraping_detalle_chedraui.csv
+    tienda: chedraui
+    anio_mes: 2026-07
+  - ruta: 2026/07_julio/scraping_detalle_comer.csv
+    tienda: comer
+    anio_mes: 2026-07
+  - ruta: 2026/07_julio/scraping_detalle_farmalisto.csv
+    tienda: farmalisto
+    anio_mes: 2026-07
+  - ruta: 2026/07_julio/scraping_detalle_farmatodo.csv
+    tienda: farmatodo
+    anio_mes: 2026-07
+  - ruta: 2026/07_julio/scraping_detalle_fesa.csv
+    tienda: fesa
+    anio_mes: 2026-07
+  - ruta: 2026/07_julio/scraping_detalle_guadalajara.csv
+    tienda: guadalajara
+    anio_mes: 2026-07
+  - ruta: 2026/07_julio/scraping_detalle_heb.csv
+    tienda: heb
+    anio_mes: 2026-07
+  - ruta: 2026/07_julio/scraping_detalle_isseg.csv
+    tienda: isseg
+    anio_mes: 2026-07
+  - ruta: 2026/07_julio/scraping_detalle_klyns.csv
+    tienda: klyns
+    anio_mes: 2026-07
+  - ruta: 2026/07_julio/scraping_detalle_similares.csv
+    tienda: similares
+    anio_mes: 2026-07
+  - ruta: 2026/07_julio/scraping_detalle_soriana.csv
+    tienda: soriana
+    anio_mes: 2026-07
+  - ruta: 2026/07_julio/scraping_detalle_walmart.csv
+    tienda: walmart
+    anio_mes: 2026-07
+  - ruta: 2026/07_julio/scraping_detalle_yza.csv
+    tienda: yza
+    anio_mes: 2026-07
+  - ruta: 2026/07_julio/scraping_detalles_fahorro.csv
+    tienda: fahorro
+    anio_mes: 2026-07
+  - ruta: 2026/07_julio/scraping_detalles_gi.csv
+    tienda: gi
+    anio_mes: 2026-07
+  - ruta: 2026/07_julio/scraping_detalles_sanpablo.csv
+    tienda: sanpablo
+    anio_mes: 2026-07
+
+  # --- 2026-08 ---
+  - ruta: 2026/08_agosto/scraping_detalle_alsuper.csv
+    tienda: alsuper
+    anio_mes: 2026-08
+  - ruta: 2026/08_agosto/scraping_detalle_aurrera.csv
+    tienda: aurrera
+    anio_mes: 2026-08
+  - ruta: 2026/08_agosto/scraping_detalle_benavides.csv
+    tienda: benavides
+    anio_mes: 2026-08
+  - ruta: 2026/08_agosto/scraping_detalle_chedraui.csv
+    tienda: chedraui
+    anio_mes: 2026-08
+    copia_de: 2026/05_mayo/scraping_detalle_chedraui.csv
+  - ruta: 2026/08_agosto/scraping_detalle_comer.csv
+    tienda: comer
+    anio_mes: 2026-08
+  - ruta: 2026/08_agosto/scraping_detalle_farmalisto.csv
+    tienda: farmalisto
+    anio_mes: 2026-08
+  - ruta: 2026/08_agosto/scraping_detalle_farmatodo.csv
+    tienda: farmatodo
+    anio_mes: 2026-08
+  - ruta: 2026/08_agosto/scraping_detalle_fesa.csv
+    tienda: fesa
+    anio_mes: 2026-08
+  - ruta: 2026/08_agosto/scraping_detalle_guadalajara.csv
+    tienda: guadalajara
+    anio_mes: 2026-08
+  - ruta: 2026/08_agosto/scraping_detalle_heb.csv
+    tienda: heb
+    anio_mes: 2026-08
+    copia_de: 2026/07_julio/scraping_detalle_heb.csv
+  - ruta: 2026/08_agosto/scraping_detalle_klyns.csv
+    tienda: klyns
+    anio_mes: 2026-08
+  - ruta: 2026/08_agosto/scraping_detalle_similares.csv
+    tienda: similares
+    anio_mes: 2026-08
+  - ruta: 2026/08_agosto/scraping_detalle_soriana.csv
+    tienda: soriana
+    anio_mes: 2026-08
+  - ruta: 2026/08_agosto/scraping_detalle_walmart.csv
+    tienda: walmart
+    anio_mes: 2026-08
+  - ruta: 2026/08_agosto/scraping_detalle_yza.csv
+    tienda: yza
+    anio_mes: 2026-08
+  - ruta: 2026/08_agosto/scraping_detalles_fahorro.csv
+    tienda: fahorro
+    anio_mes: 2026-08
+  - ruta: 2026/08_agosto/scraping_detalles_gi.csv
+    tienda: gi
+    anio_mes: 2026-08
+  - ruta: 2026/08_agosto/scraping_detalles_sanpablo.csv
+    tienda: sanpablo
+    anio_mes: 2026-08
+
+  # --- 2026-09 ---
+  - ruta: 2026/09_septiembre/scraping_detalle_alsuper.csv
+    tienda: alsuper
+    anio_mes: 2026-09
+  - ruta: 2026/09_septiembre/scraping_detalle_benavides.csv
+    tienda: benavides
+    anio_mes: 2026-09
+  - ruta: 2026/09_septiembre/scraping_detalle_chedraui.csv
+    tienda: chedraui
+    anio_mes: 2026-09
+  - ruta: 2026/09_septiembre/scraping_detalle_isseg.csv
+    tienda: isseg
+    anio_mes: 2026-09
+  - ruta: 2026/09_septiembre/scraping_detalles_fahorro.csv
+    tienda: fahorro
+    anio_mes: 2026-09
+  - ruta: 2026/09_septiembre/scraping_detalles_sanpablo.csv
+    tienda: sanpablo
+    anio_mes: 2026-09
