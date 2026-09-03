@@ -196,6 +196,14 @@ def tabla_ext_tmp(cliente_bq, cfg_gcp):
     cliente_bq.delete_table(cfg_gcp.tabla_bronce(nombre), not_found_ok=True)
 
 
+@pytest.fixture
+def tabla_silver_tmp(cliente_bq, cfg_gcp):
+    """Nombre de una tabla nativa de silver desechable, borrada en el teardown."""
+    nombre = f"precios_test_{uuid4().hex[:8]}"
+    yield nombre
+    cliente_bq.delete_table(cfg_gcp.tabla_silver(nombre), not_found_ok=True)
+
+
 def esquema_y_filas(base: str, declarado: ArchivoDeclarado) -> tuple[Esquema, list[list[str]]]:
     """Abre un CSV real y devuelve su esquema y sus filas de datos.
 

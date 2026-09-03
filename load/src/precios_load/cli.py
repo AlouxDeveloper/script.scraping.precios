@@ -166,13 +166,17 @@ def ingesta(
 
 @app.command(name="bq-setup")
 def bq_setup(ctx: typer.Context) -> None:
-    """Crea o reemplaza la external table BigLake con hive partitioning sobre bronce."""
+    """Crea o reemplaza los objetos de BigQuery: external table de bronce y nativa de silver."""
     cfg = ctx.obj
     cliente = cliente_bq(cfg)
-    tabla = bq.crear_external_bronce(cliente, cfg)
-    total = next(iter(cliente.query(f"SELECT COUNT(*) AS n FROM `{tabla}`").result()))["n"]
-    typer.echo(f"external table  {tabla}")
-    typer.echo(f"filas           {total:,}")
+
+    ext = bq.crear_external_bronce(cliente, cfg)
+    filas_ext = next(iter(cliente.query(f"SELECT COUNT(*) AS n FROM `{ext}`").result()))["n"]
+    typer.echo(f"external bronce  {ext}  ({filas_ext:,} filas)")
+
+    silver = bq.crear_tabla_silver(cliente, cfg)
+    filas_silver = cliente.get_table(silver).num_rows
+    typer.echo(f"nativa silver    {silver}  ({filas_silver:,} filas)")
 
 
 @app.command()

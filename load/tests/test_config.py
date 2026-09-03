@@ -13,6 +13,7 @@ bucket_raw: raw_precios_bitek
 bucket_bronce: bronce_precios_bitek
 prefijo: precios
 dataset_bronce: precios_bronce
+dataset_silver: precios_silver
 dataset_ops: precios_ops
 conexion_biglake: precios_biglake
 ruta_local_datos: ./salida/data
@@ -42,6 +43,7 @@ def test_carga_valida(tmp_path, monkeypatch):
     assert config.prefijo_bronce() == "gs://bronce_precios_bitek/precios"
     assert config.conexion() == "proyecto-de-prueba.us.precios_biglake"
     assert config.tabla_bronce("precios_ext") == "proyecto-de-prueba.precios_bronce.precios_ext"
+    assert config.tabla_silver("precios") == "proyecto-de-prueba.precios_silver.precios"
     assert config.tabla_ops("_ingesta_manifest") == "proyecto-de-prueba.precios_ops._ingesta_manifest"
     assert config.anio_mes_maximo == "2026-08"
 

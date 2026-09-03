@@ -15,9 +15,11 @@ prefijo: precios
 
 # Datasets de BigQuery. El dataset lleva la capa; la tabla, la entidad.
 #   precios_bronce  external table BigLake sobre gs://bronce_precios_bitek
+#   precios_silver  tabla nativa limpia y deduplicada, para analistas
 #   precios_ops     manifest de ingesta y vistas de calidad
-# precios_silver / precios_gold se crean cuando haya algo que meter.
+# precios_gold se crea cuando haya marts.
 dataset_bronce: precios_bronce
+dataset_silver: precios_silver
 dataset_ops: precios_ops
 conexion_biglake: precios_biglake
 

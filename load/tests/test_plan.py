@@ -17,6 +17,7 @@ CONFIG = ConfigGCP(
     bucket_bronce="bronce_precios_bitek",
     prefijo="precios",
     dataset_bronce="precios_bronce",
+    dataset_silver="precios_silver",
     dataset_ops="precios_ops",
     conexion_biglake="precios_biglake",
     ruta_local_datos="./salida/data",

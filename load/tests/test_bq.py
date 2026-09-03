@@ -1,8 +1,8 @@
-"""La external table BigLake sobre la capa bronce.
+"""Los objetos de BigQuery: la external table de bronce y la nativa de silver.
 
-Integración real: crea una external table desechable en `precios_bronce`
-apuntando al mismo prefijo de GCS que la de producción, y la borra en el
-teardown. Nunca toca `precios_ext`.
+Integración real: crea tablas desechables (`precios_ext_test_<uuid>`,
+`precios_test_<uuid>`) apuntando a los mismos datos que producción, y las borra
+en el teardown. Nunca toca `precios_ext` ni `precios_silver.precios`.
 """
 
 import io
@@ -15,6 +15,13 @@ from precios_load.bronce import ESQUEMA_BRONCE
 
 # Todo el histórico cargado a bronce hoy (134 archivos, septiembre fuera).
 FILAS_HISTORICO = 987_461
+
+# Las 12 columnas de bronce que se llevan a silver, verbatim y en este orden.
+COLUMNAS_SILVER = [
+    "tienda", "tienda_raw", "sku", "producto", "url_producto", "url_imagen",
+    "precio_actual", "precio_oferta", "fecha_captura", "anio_mes",
+    "_archivo_origen", "_ingestado_en",
+]
 
 
 def _crear(cliente_bq, cfg_gcp, tabla):
@@ -86,3 +93,64 @@ def test_un_parquet_nuevo_aparece_sin_job_de_carga(
 
     where = "WHERE tienda = '__test_ald23__' AND anio_mes = '2099-12'"
     assert _contar(cliente_bq, tabla, where) == 1
+
+
+# --- Tabla nativa de silver ------------------------------------------------
+
+
+def _crear_silver(cliente_bq, cfg_gcp, tabla):
+    return bq.crear_tabla_silver(cliente_bq, cfg_gcp, tabla=tabla)
+
+
+def test_silver_es_copia_de_bronce_particionada_y_clusterizada(
+    cliente_bq, cfg_gcp, tabla_silver_tmp
+):
+    tabla = _crear_silver(cliente_bq, cfg_gcp, tabla_silver_tmp)
+    meta = cliente_bq.get_table(tabla)
+
+    assert meta.num_rows == FILAS_HISTORICO  # todas las filas, sin filtro
+    assert meta.time_partitioning.type_ == "MONTH"
+    assert meta.time_partitioning.field == "fecha_captura"
+    assert meta.clustering_fields == ["tienda", "sku"]
+    assert [c.name for c in meta.schema] == COLUMNAS_SILVER
+
+
+def test_silver_no_transforma_las_columnas_elegidas(cliente_bq, cfg_gcp, tabla_silver_tmp):
+    """Cada columna de silver sale verbatim de precios_ext: sin derivar, sin filtrar."""
+    tabla = _crear_silver(cliente_bq, cfg_gcp, tabla_silver_tmp)
+    ext = cfg_gcp.tabla_bronce("precios_ext")
+    cols = ", ".join(COLUMNAS_SILVER)
+
+    diff = next(iter(cliente_bq.query(f"""
+        SELECT
+          (SELECT COUNT(*) FROM (SELECT {cols} FROM `{tabla}`
+             EXCEPT DISTINCT SELECT {cols} FROM `{ext}`)) solo_silver,
+          (SELECT COUNT(*) FROM (SELECT {cols} FROM `{ext}`
+             EXCEPT DISTINCT SELECT {cols} FROM `{tabla}`)) solo_ext
+    """).result()))
+
+    assert diff["solo_silver"] == 0 and diff["solo_ext"] == 0
+
+
+def test_silver_conserva_el_literal_del_scraper_en_tienda_raw(
+    cliente_bq, cfg_gcp, tabla_silver_tmp
+):
+    """`tienda` es el slug; `tienda_raw` el valor crudo (número o nombre)."""
+    tabla = _crear_silver(cliente_bq, cfg_gcp, tabla_silver_tmp)
+    fila = next(iter(cliente_bq.query(f"""
+        SELECT
+          COUNT(DISTINCT tienda) slugs,
+          COUNTIF(tienda_raw = '12' AND tienda = 'walmart') walmart_numerico
+        FROM `{tabla}`
+    """).result()))
+
+    assert fila["slugs"] == 19
+    assert fila["walmart_numerico"] > 0
+
+
+def test_crear_tabla_silver_es_idempotente(cliente_bq, cfg_gcp, tabla_silver_tmp):
+    tabla = _crear_silver(cliente_bq, cfg_gcp, tabla_silver_tmp)
+    de_nuevo = _crear_silver(cliente_bq, cfg_gcp, tabla_silver_tmp)
+
+    assert tabla == de_nuevo
+    assert cliente_bq.get_table(tabla).num_rows == FILAS_HISTORICO
