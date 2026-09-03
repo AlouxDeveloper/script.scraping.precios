@@ -38,7 +38,8 @@ class ConfigGCP:
     bucket_raw: str
     bucket_bronce: str
     prefijo: str
-    dataset: str
+    dataset_bronce: str
+    dataset_ops: str
     conexion_biglake: str
     ruta_local_datos: str
     anio_mes_maximo: str
@@ -67,9 +68,13 @@ class ConfigGCP:
         """Prefijo que consume el hive partitioning de la external table."""
         return f"gs://{self.bucket_bronce}/{self.prefijo}"
 
-    def tabla(self, nombre: str) -> str:
-        """Referencia completa a una tabla del dataset."""
-        return f"{self.project_id}.{self.dataset}.{nombre}"
+    def tabla_bronce(self, nombre: str) -> str:
+        """Referencia completa a una tabla del dataset de bronce (external tables)."""
+        return f"{self.project_id}.{self.dataset_bronce}.{nombre}"
+
+    def tabla_ops(self, nombre: str) -> str:
+        """Referencia completa a una tabla del dataset de operación (manifest, vistas)."""
+        return f"{self.project_id}.{self.dataset_ops}.{nombre}"
 
     def conexion(self) -> str:
         """Referencia completa a la conexión BigLake."""

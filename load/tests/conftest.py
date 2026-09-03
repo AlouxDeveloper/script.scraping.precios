@@ -54,7 +54,7 @@ def cliente_bq(cfg_gcp):
 
     try:
         cliente = _factory(cfg_gcp)
-        list(cliente.list_tables(cfg_gcp.dataset, max_results=1))
+        list(cliente.list_tables(cfg_gcp.dataset_ops, max_results=1))
     except Exception as e:  # noqa: BLE001 - cualquier fallo de infra es un skip
         pytest.skip(f"BigQuery no disponible: {e}")
     return cliente
@@ -181,7 +181,19 @@ def tabla_manifest_tmp(cliente_bq, cfg_gcp):
     """
     nombre = f"_ingesta_manifest_test_{uuid4().hex[:8]}"
     yield nombre
-    cliente_bq.delete_table(cfg_gcp.tabla(nombre), not_found_ok=True)
+    cliente_bq.delete_table(cfg_gcp.tabla_ops(nombre), not_found_ok=True)
+
+
+@pytest.fixture
+def tabla_ext_tmp(cliente_bq, cfg_gcp):
+    """Nombre de una external table desechable en el dataset de bronce.
+
+    La real (`precios_ext`) apunta al mismo prefijo de GCS, así que se prueba
+    contra una copia con otro nombre y se borra en el teardown.
+    """
+    nombre = f"precios_ext_test_{uuid4().hex[:8]}"
+    yield nombre
+    cliente_bq.delete_table(cfg_gcp.tabla_bronce(nombre), not_found_ok=True)
 
 
 def esquema_y_filas(base: str, declarado: ArchivoDeclarado) -> tuple[Esquema, list[list[str]]]:

@@ -7,7 +7,7 @@ Se ejecuta siempre desde la raíz del repo:
 
 import typer
 
-from precios_load import __version__, manifest
+from precios_load import __version__, bq, manifest
 from precios_load.clientes import cliente_bq, cliente_gcs
 from precios_load.config import (
     FORMATO_ANIO_MES,
@@ -55,7 +55,8 @@ def config(ctx: typer.Context) -> None:
     cfg = ctx.obj
     typer.echo(f"project_id        {cfg.project_id}")
     typer.echo(f"location          {cfg.location}")
-    typer.echo(f"dataset           {cfg.tabla('<tabla>')}")
+    typer.echo(f"dataset bronce    {cfg.tabla_bronce('<tabla>')}")
+    typer.echo(f"dataset ops       {cfg.tabla_ops('<tabla>')}")
     typer.echo(f"conexión BigLake  {cfg.conexion()}")
     typer.echo(f"datos locales     {cfg.ruta_datos()}")
     typer.echo(f"ingiere hasta     {cfg.anio_mes_maximo} (inclusive)")
@@ -165,8 +166,13 @@ def ingesta(
 
 @app.command(name="bq-setup")
 def bq_setup(ctx: typer.Context) -> None:
-    """Crea el dataset, la external table BigLake, la tabla nativa y las vistas."""
-    typer.echo(PENDIENTE.format(issue="ALD-23"))
+    """Crea o reemplaza la external table BigLake con hive partitioning sobre bronce."""
+    cfg = ctx.obj
+    cliente = cliente_bq(cfg)
+    tabla = bq.crear_external_bronce(cliente, cfg)
+    total = next(iter(cliente.query(f"SELECT COUNT(*) AS n FROM `{tabla}`").result()))["n"]
+    typer.echo(f"external table  {tabla}")
+    typer.echo(f"filas           {total:,}")
 
 
 @app.command()

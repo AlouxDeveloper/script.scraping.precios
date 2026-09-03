@@ -63,7 +63,7 @@ def test_crear_tabla_es_idempotente(cliente_bq, cfg_gcp, tabla_manifest_tmp):
 def test_la_tabla_creada_tiene_el_esquema_declarado(cliente_bq, cfg_gcp, tabla_manifest_tmp):
     manifest.crear_tabla(cliente_bq, cfg_gcp, tabla=tabla_manifest_tmp)
 
-    tabla = cliente_bq.get_table(cfg_gcp.tabla(tabla_manifest_tmp))
+    tabla = cliente_bq.get_table(cfg_gcp.tabla_ops(tabla_manifest_tmp))
     assert [(c.name, c.field_type, c.mode) for c in tabla.schema] == [
         (c.name, c.field_type, c.mode) for c in manifest.ESQUEMA_MANIFEST
     ]
@@ -76,7 +76,7 @@ def test_leer_estado_sin_tabla_la_crea_y_devuelve_vacio(cliente_bq, cfg_gcp, tab
     estado = manifest.leer_estado(cliente_bq, cfg_gcp, tabla=tabla_manifest_tmp)
 
     assert estado == {}
-    assert cliente_bq.get_table(cfg_gcp.tabla(tabla_manifest_tmp))  # la creó
+    assert cliente_bq.get_table(cfg_gcp.tabla_ops(tabla_manifest_tmp))  # la creó
 
 
 def test_registrar_y_leer_estado_round_trip(cliente_bq, cfg_gcp, tabla_manifest_tmp):

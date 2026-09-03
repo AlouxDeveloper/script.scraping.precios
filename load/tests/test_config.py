@@ -12,7 +12,8 @@ location: US
 bucket_raw: raw_precios_bitek
 bucket_bronce: bronce_precios_bitek
 prefijo: precios
-dataset: precios_raw
+dataset_bronce: precios_bronce
+dataset_ops: precios_ops
 conexion_biglake: precios_biglake
 ruta_local_datos: ./salida/data
 anio_mes_maximo: "2026-08"
@@ -40,18 +41,19 @@ def test_carga_valida(tmp_path, monkeypatch):
     )
     assert config.prefijo_bronce() == "gs://bronce_precios_bitek/precios"
     assert config.conexion() == "proyecto-de-prueba.us.precios_biglake"
-    assert config.tabla("precios") == "proyecto-de-prueba.precios_raw.precios"
+    assert config.tabla_bronce("precios_ext") == "proyecto-de-prueba.precios_bronce.precios_ext"
+    assert config.tabla_ops("_ingesta_manifest") == "proyecto-de-prueba.precios_ops._ingesta_manifest"
     assert config.anio_mes_maximo == "2026-08"
 
 
 def test_campo_faltante_nombra_el_campo_y_el_archivo(tmp_path, monkeypatch):
-    sin_dataset = YML_VALIDO.replace("dataset: precios_raw\n", "")
+    sin_dataset = YML_VALIDO.replace("dataset_ops: precios_ops\n", "")
     ruta = escribir(tmp_path, sin_dataset, monkeypatch)
 
     with pytest.raises(ErrorConfig) as e:
         cargar_config(ruta)
 
-    assert "dataset" in str(e.value)
+    assert "dataset_ops" in str(e.value)
     assert "gcp.yml" in str(e.value)
 
 

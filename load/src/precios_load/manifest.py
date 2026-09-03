@@ -1,7 +1,7 @@
 """El manifest de ingesta: el estado de idempotencia, en BigQuery.
 
 Qué archivo se subió, con qué MD5, a dónde y con qué resultado. Vive en una
-tabla de control (`precios_raw._ingesta_manifest`) y no en un archivo local:
+tabla de control (`precios_ops._ingesta_manifest`) y no en un archivo local:
 así sobrevive a cambiar de máquina, lo puede consultar cualquiera del equipo y
 queda auditable.
 
@@ -201,7 +201,7 @@ def crear_tabla(
 
     Idempotente: si ya existe se deja intacta, nunca se redefine su esquema.
     """
-    ref = config.tabla(_tabla(tabla))
+    ref = config.tabla_ops(_tabla(tabla))
     try:
         cliente.get_table(ref)
         return False
@@ -229,7 +229,7 @@ def leer_estado(
             SELECT *, ROW_NUMBER() OVER (
                 PARTITION BY ruta_origen ORDER BY version DESC
             ) AS _rn
-            FROM `{config.tabla(tabla)}`
+            FROM `{config.tabla_ops(tabla)}`
         )
         WHERE _rn = 1
     """
@@ -265,7 +265,7 @@ def registrar(
         write_disposition=bigquery.WriteDisposition.WRITE_APPEND,
     )
     cliente.load_table_from_json(
-        registros, config.tabla(tabla), job_config=job_config
+        registros, config.tabla_ops(tabla), job_config=job_config
     ).result()
 
 
@@ -286,7 +286,7 @@ def resumen(
     recargados = sum(1 for f in filas if f.version > 1)
 
     lineas = [
-        f"Manifest de ingesta — {config.tabla(tabla)}",
+        f"Manifest de ingesta — {config.tabla_ops(tabla)}",
         f"  archivos     {len(filas)}",
         "  estados      " + ("  ".join(f"{e} {n}" for e, n in por_estado) or "—"),
         f"  recargados   {recargados}",
