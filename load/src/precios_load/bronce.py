@@ -18,17 +18,27 @@ Dos reglas que no se ven en el esquema:
   fila. Cuando difieren, `desfase_mes = True`.
 """
 
+from __future__ import annotations
+
 import csv
 import hashlib
+import io
 import os
 from datetime import UTC, datetime
+from typing import TYPE_CHECKING
 
 import pandas as pd
 import pyarrow as pa
+import pyarrow.parquet as pq
+from google.cloud import storage
 
-from precios_load.config import ArchivoDeclarado, cargar_config
+from precios_load.clientes import REINTENTO_SUBIDA
+from precios_load.config import ArchivoDeclarado, ConfigGCP, cargar_config
 from precios_load.esquemas import Esquema, detectar
 from precios_load.normalizacion import normalizar_fila
+
+if TYPE_CHECKING:
+    from precios_load.descubrimiento import ArchivoFuente
 
 # Flag de los archivos que `archivos.yml` marca como sospechosos de ser copia
 # de un mes anterior.
@@ -116,6 +126,53 @@ def ensamblar_archivo(
         ]
 
     return pd.DataFrame(registros, columns=list(COLUMNAS_BRONCE))
+
+
+class ErrorBronce(Exception):
+    """El Parquet escrito no cuadra en filas con el CSV de origen."""
+
+
+def escribir(
+    cliente_gcs: storage.Client,
+    config: ConfigGCP,
+    fuente: ArchivoFuente,
+    base: str | None = None,
+    ingestado_en: datetime | None = None,
+) -> tuple[str, int]:
+    """Ensambla el CSV a Parquet tipado y lo sube a la capa bronce.
+
+    Devuelve la URI del objeto y el número de filas escritas. El objeto conserva
+    el nombre del archivo de origen con extensión `.parquet` y se sobrescribe en
+    sitio en una recarga: el PUT de GCS es atómico, así que nunca convive un
+    Parquet a medias con el anterior.
+
+    Lanza `ErrorBronce` si al releer el Parquet el conteo de filas no coincide
+    con el que `descubrimiento` midió en el CSV. La verificación ocurre antes de
+    subir, así que un desajuste no deja objeto en bronce.
+    """
+    tabla = a_tabla(ensamblar_archivo(fuente.declarado, base=base, ingestado_en=ingestado_en))
+
+    buffer = io.BytesIO()
+    pq.write_table(tabla, buffer, compression="snappy")
+
+    filas = pq.read_metadata(io.BytesIO(buffer.getvalue())).num_rows
+    if filas != fuente.filas:
+        raise ErrorBronce(
+            f"{fuente.ruta}: el Parquet tiene {filas} filas, "
+            f"el CSV de origen tiene {fuente.filas}"
+        )
+
+    nombre = os.path.splitext(fuente.nombre)[0] + ".parquet"
+    uri = config.uri_bronce(fuente.tienda, fuente.anio_mes, nombre)
+    objeto = uri.removeprefix(f"gs://{config.bucket_bronce}/")
+
+    blob = cliente_gcs.bucket(config.bucket_bronce).blob(objeto)
+    blob.upload_from_string(
+        buffer.getvalue(),
+        content_type="application/vnd.apache.parquet",
+        retry=REINTENTO_SUBIDA,
+    )
+    return uri, filas
 
 
 def a_tabla(df: pd.DataFrame) -> pa.Table:

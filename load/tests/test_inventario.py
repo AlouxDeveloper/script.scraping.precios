@@ -36,7 +36,7 @@ COPIAS = {
 
 ARCHIVOS_POR_MES = {
     "2025-12": 4, "2026-01": 8, "2026-02": 15, "2026-03": 17, "2026-04": 15,
-    "2026-05": 18, "2026-06": 19, "2026-07": 19, "2026-08": 18, "2026-09": 6,
+    "2026-05": 18, "2026-06": 19, "2026-07": 19, "2026-08": 19,
 }
 
 
@@ -45,9 +45,9 @@ def inventario():
     return cargar_archivos()
 
 
-def test_son_139_archivos_sin_rutas_repetidas(inventario):
-    assert len(inventario) == 139
-    assert len({a.ruta for a in inventario}) == 139
+def test_son_134_archivos_sin_rutas_repetidas(inventario):
+    assert len(inventario) == 134
+    assert len({a.ruta for a in inventario}) == 134
 
 
 def test_las_19_tiendas_declaradas(inventario):

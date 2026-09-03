@@ -422,6 +422,9 @@ archivos:
     tienda: heb
     anio_mes: 2026-08
     copia_de: 2026/07_julio/scraping_detalle_heb.csv
+  - ruta: 2026/08_agosto/scraping_detalle_isseg.csv
+    tienda: isseg
+    anio_mes: 2026-08
   - ruta: 2026/08_agosto/scraping_detalle_klyns.csv
     tienda: klyns
     anio_mes: 2026-08
@@ -448,21 +451,5 @@ archivos:
     anio_mes: 2026-08
 
   # --- 2026-09 ---
-  - ruta: 2026/09_septiembre/scraping_detalle_alsuper.csv
-    tienda: alsuper
-    anio_mes: 2026-09
-  - ruta: 2026/09_septiembre/scraping_detalle_benavides.csv
-    tienda: benavides
-    anio_mes: 2026-09
-  - ruta: 2026/09_septiembre/scraping_detalle_chedraui.csv
-    tienda: chedraui
-    anio_mes: 2026-09
-  - ruta: 2026/09_septiembre/scraping_detalle_isseg.csv
-    tienda: isseg
-    anio_mes: 2026-09
-  - ruta: 2026/09_septiembre/scraping_detalles_fahorro.csv
-    tienda: fahorro
-    anio_mes: 2026-09
-  - ruta: 2026/09_septiembre/scraping_detalles_sanpablo.csv
-    tienda: sanpablo
-    anio_mes: 2026-09
+  # El mes en curso: el scraping aún no ha terminado y sus archivos no están en
+  # disco. Se declaran aquí (con sus 2 casos vacíos) cuando septiembre cierre.

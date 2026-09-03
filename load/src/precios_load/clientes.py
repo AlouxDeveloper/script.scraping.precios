@@ -8,8 +8,14 @@ application-default login`). Aíslan esa decisión para que `manifest`, `raw` y
 """
 
 from google.cloud import bigquery, storage
+from google.cloud.storage.retry import DEFAULT_RETRY
 
 from precios_load.config import ConfigGCP
+
+# Backoff exponencial de la librería (cubre 429/5xx y cortes de conexión), con
+# un techo de tiempo por objeto para que un blip no cuelgue la corrida. Lo
+# comparten las subidas de raw y de bronce.
+REINTENTO_SUBIDA = DEFAULT_RETRY.with_timeout(300.0)
 
 
 def cliente_bq(config: ConfigGCP) -> bigquery.Client:

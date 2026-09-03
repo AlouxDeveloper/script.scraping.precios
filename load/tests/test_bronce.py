@@ -1,15 +1,18 @@
 """El esquema de bronce: 26 columnas idénticas para las 6 variantes de entrada."""
 
 import csv
+import io
 import os
 from datetime import UTC, datetime
 from decimal import Decimal
 
 import pandas as pd
+import pyarrow.parquet as pq
 import pytest
 
-from tests.conftest import esquema_y_filas
+from tests.conftest import csv_valido, esquema_y_filas, fuente_falsa
 
+from precios_load import bronce
 from precios_load.bronce import (
     COLUMNAS_BRONCE,
     ESQUEMA_BRONCE,
@@ -55,7 +58,7 @@ DESFASES = {
     "2026/03_marzo/scraping_detalle_fesa.csv": (5, 7576),
 }
 
-FILAS_TOTAL = 995283
+FILAS_TOTAL = 987461
 
 
 @pytest.fixture
@@ -245,6 +248,67 @@ def test_cada_variante_produce_el_mismo_esquema(variante, ruta, datos_reales, po
 
 
 # --- El histórico completo --------------------------------------------------
+
+
+# --- Escritura del Parquet a gs://bronce ------------------------------------
+
+
+def _uri_bronce(cfg, fuente):
+    nombre = os.path.splitext(fuente.nombre)[0] + ".parquet"
+    return cfg.uri_bronce(fuente.tienda, fuente.anio_mes, nombre)
+
+
+def _leer_de_gcs(cliente_gcs, cfg, uri):
+    objeto = uri.removeprefix(f"gs://{cfg.bucket_bronce}/")
+    return cliente_gcs.bucket(cfg.bucket_bronce).blob(objeto).download_as_bytes()
+
+
+def test_escribir_sube_parquet_con_el_esquema_y_las_filas_del_csv(
+    cliente_gcs, cfg_gcp, base_local, limpiar_bronce
+):
+    contenido = csv_valido(3)
+    fuente = fuente_falsa(contenido)
+    base = base_local(fuente, contenido)
+    uri_esperada = _uri_bronce(cfg_gcp, fuente)
+    limpiar_bronce(uri_esperada)
+
+    uri, filas = bronce.escribir(cliente_gcs, cfg_gcp, fuente, base=base)
+
+    assert uri == uri_esperada
+    assert filas == 3 == fuente.filas
+
+    tabla = pq.read_table(io.BytesIO(_leer_de_gcs(cliente_gcs, cfg_gcp, uri)))
+    assert tabla.schema == ESQUEMA_BRONCE
+    assert tabla.num_rows == 3
+
+
+def test_el_parquet_va_comprimido_con_snappy(
+    cliente_gcs, cfg_gcp, base_local, limpiar_bronce
+):
+    contenido = csv_valido(2)
+    fuente = fuente_falsa(contenido)
+    base = base_local(fuente, contenido)
+    limpiar_bronce(_uri_bronce(cfg_gcp, fuente))
+
+    uri, _ = bronce.escribir(cliente_gcs, cfg_gcp, fuente, base=base)
+
+    md = pq.read_metadata(io.BytesIO(_leer_de_gcs(cliente_gcs, cfg_gcp, uri)))
+    assert md.row_group(0).column(0).compression == "SNAPPY"
+
+
+def test_si_el_conteo_releido_no_cuadra_lanza_error_bronce(
+    cliente_gcs, cfg_gcp, base_local, limpiar_bronce, monkeypatch
+):
+    contenido = csv_valido(2)
+    fuente = fuente_falsa(contenido)
+    base = base_local(fuente, contenido)
+    limpiar_bronce(_uri_bronce(cfg_gcp, fuente))
+
+    real = bronce.a_tabla
+    monkeypatch.setattr(bronce, "a_tabla", lambda df: real(df).slice(0, 1))
+
+    with pytest.raises(bronce.ErrorBronce):
+        bronce.escribir(cliente_gcs, cfg_gcp, fuente, base=base)
 
 
 def test_el_historico_completo_ensambla_1_a_1_con_el_mismo_esquema(datos_reales, declarados):

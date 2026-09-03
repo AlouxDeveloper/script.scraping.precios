@@ -6,9 +6,9 @@ tabla de manifest desechable. Todo se limpia en el teardown.
 
 from typer.testing import CliRunner
 
-from tests.conftest import HEADER_SOLO_CSV, fuente_falsa
+from tests.conftest import HEADER_SOLO_CSV, csv_valido, fuente_falsa
 
-from precios_load import cli, ingesta, manifest
+from precios_load import bronce, cli, ingesta, manifest
 from precios_load.cli import app
 from precios_load.plan import SUBE, EntradaPlan
 
@@ -30,13 +30,21 @@ def _uri(cfg, fuente):
     return cfg.uri_raw(fuente.tienda, fuente.anio_mes, fuente.nombre)
 
 
+def _uri_bronce(cfg, fuente):
+    import os
+
+    nombre = os.path.splitext(fuente.nombre)[0] + ".parquet"
+    return cfg.uri_bronce(fuente.tienda, fuente.anio_mes, nombre)
+
+
 def test_ejecutar_sube_archivo_nuevo_y_registra_fila_ok(
-    cliente_bq, cliente_gcs, cfg_gcp, base_local, limpiar_raw, tabla_manifest_tmp
+    cliente_bq, cliente_gcs, cfg_gcp, base_local, limpiar_raw, limpiar_bronce, tabla_manifest_tmp
 ):
-    contenido = b"sku,precio\n1,9.99\n2,5.00\n"
+    contenido = csv_valido(2)
     fuente = fuente_falsa(contenido)
     base = base_local(fuente, contenido)
     limpiar_raw(_uri(cfg_gcp, fuente))
+    limpiar_bronce(_uri_bronce(cfg_gcp, fuente))
 
     resultado = ingesta.ejecutar(
         cliente_bq, cliente_gcs, cfg_gcp, [_entrada(fuente)],
@@ -51,17 +59,19 @@ def test_ejecutar_sube_archivo_nuevo_y_registra_fila_ok(
     assert fila.uri_raw == _uri(cfg_gcp, fuente)
     assert fila.filas_origen == 2
     assert fila.bytes_origen == len(contenido)
-    assert fila.uri_bronce is None and fila.filas_bronce is None
+    assert fila.uri_bronce == _uri_bronce(cfg_gcp, fuente)
+    assert fila.filas_bronce == 2
     assert fila.version == 1
 
 
 def test_ejecutar_dos_veces_la_segunda_salta_sin_escribir(
-    cliente_bq, cliente_gcs, cfg_gcp, base_local, limpiar_raw, tabla_manifest_tmp
+    cliente_bq, cliente_gcs, cfg_gcp, base_local, limpiar_raw, limpiar_bronce, tabla_manifest_tmp
 ):
-    contenido = b"sku,precio\n1,9.99\n"
+    contenido = csv_valido(1)
     fuente = fuente_falsa(contenido)
     base = base_local(fuente, contenido)
     limpiar_raw(_uri(cfg_gcp, fuente))
+    limpiar_bronce(_uri_bronce(cfg_gcp, fuente))
 
     comun = dict(base=base, tabla=tabla_manifest_tmp)
     ingesta.ejecutar(cliente_bq, cliente_gcs, cfg_gcp, [_entrada(fuente)], **comun)
@@ -97,16 +107,21 @@ def test_dos_rutas_con_el_mismo_md5_producen_dos_filas(
     estado = manifest.leer_estado(cliente_bq, cfg_gcp, tabla=tabla_manifest_tmp)
     assert estado[f1.ruta].estado == manifest.ESTADO_VACIO
     assert estado[f2.ruta].estado == manifest.ESTADO_VACIO
+    # Un archivo vacío no genera Parquet.
+    assert estado[f1.ruta].uri_bronce is None and estado[f1.ruta].filas_bronce is None
+    assert estado[f2.ruta].uri_bronce is None
 
 
 def test_una_subida_fallida_deja_fila_error_y_no_frena_al_resto(
-    cliente_bq, cliente_gcs, cfg_gcp, base_local, limpiar_raw, tabla_manifest_tmp, monkeypatch
+    cliente_bq, cliente_gcs, cfg_gcp, base_local, limpiar_raw, limpiar_bronce,
+    tabla_manifest_tmp, monkeypatch
 ):
-    ok = fuente_falsa(b"a,b\n1,2\n", nombre="ok.csv")
-    mala = fuente_falsa(b"c,d\n3,4\n", nombre="mala.csv")
-    base = base_local(ok, b"a,b\n1,2\n")
-    base_local(mala, b"c,d\n3,4\n")
+    ok = fuente_falsa(csv_valido(1), nombre="ok.csv")
+    mala = fuente_falsa(csv_valido(1), nombre="mala.csv")
+    base = base_local(ok, csv_valido(1))
+    base_local(mala, csv_valido(1))
     limpiar_raw(_uri(cfg_gcp, ok))
+    limpiar_bronce(_uri_bronce(cfg_gcp, ok))
 
     real = ingesta.raw.subir
 
@@ -131,13 +146,40 @@ def test_una_subida_fallida_deja_fila_error_y_no_frena_al_resto(
     assert estado[mala.ruta].uri_raw is None
 
 
-def test_una_fila_error_previa_se_reintenta(
-    cliente_bq, cliente_gcs, cfg_gcp, base_local, limpiar_raw, tabla_manifest_tmp
+def test_si_bronce_falla_la_fila_queda_en_error_con_raw_subido(
+    cliente_bq, cliente_gcs, cfg_gcp, base_local, limpiar_raw, tabla_manifest_tmp, monkeypatch
 ):
-    contenido = b"x,y\n1,2\n"
+    """Raw subió, bronce reventó: fila ERROR, `uri_raw` conservado, sin Parquet."""
+    contenido = csv_valido(2)
     fuente = fuente_falsa(contenido)
     base = base_local(fuente, contenido)
     limpiar_raw(_uri(cfg_gcp, fuente))
+
+    def boom(*a, **k):
+        raise bronce.ErrorBronce("boom")
+
+    monkeypatch.setattr(ingesta.bronce, "escribir", boom)
+
+    resultado = ingesta.ejecutar(
+        cliente_bq, cliente_gcs, cfg_gcp, [_entrada(fuente)],
+        base=base, tabla=tabla_manifest_tmp,
+    )
+
+    assert [ruta for ruta, _ in resultado.errores] == [fuente.ruta]
+    fila = manifest.leer_estado(cliente_bq, cfg_gcp, tabla=tabla_manifest_tmp)[fuente.ruta]
+    assert fila.estado == manifest.ESTADO_ERROR
+    assert fila.uri_raw == _uri(cfg_gcp, fuente)
+    assert fila.uri_bronce is None and fila.filas_bronce is None
+
+
+def test_una_fila_error_previa_se_reintenta(
+    cliente_bq, cliente_gcs, cfg_gcp, base_local, limpiar_raw, limpiar_bronce, tabla_manifest_tmp
+):
+    contenido = csv_valido(1)
+    fuente = fuente_falsa(contenido)
+    base = base_local(fuente, contenido)
+    limpiar_raw(_uri(cfg_gcp, fuente))
+    limpiar_bronce(_uri_bronce(cfg_gcp, fuente))
 
     manifest.registrar(
         cliente_bq,
@@ -185,9 +227,9 @@ def test_comando_ingesta_pasa_el_plan_filtrado_al_orquestador(
     monkeypatch.setattr(cli, "cliente_bq", lambda cfg: None)
     monkeypatch.setattr(cli, "cliente_gcs", lambda cfg: None)
 
-    resultado = runner.invoke(app, ["ingesta", "--tienda", "chedraui", "--mes", "2026-09"])
+    resultado = runner.invoke(app, ["ingesta", "--tienda", "chedraui", "--mes", "2026-08"])
 
     assert resultado.exit_code == 0, resultado.output
     assert visto["rutas"], "no se pasó ninguna entrada"
-    assert all("chedraui" in r and "09_septiembre" in r for r in visto["rutas"])
+    assert all("chedraui" in r and "08_agosto" in r for r in visto["rutas"])
     assert "1" in resultado.stdout  # el resumen menciona algún conteo

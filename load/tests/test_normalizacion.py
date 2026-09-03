@@ -38,8 +38,8 @@ MIXTOS = {
     "2026/08_agosto/scraping_detalle_heb.csv": (4254, 2937),
 }
 
-# Reparto del histórico completo: 150 fechas vacías, el resto parsea.
-TOTAL_OK = 995133
+# Reparto del histórico en disco: 150 fechas vacías, el resto parsea.
+TOTAL_OK = 987311
 TOTAL_FALLO = 150
 
 
@@ -154,8 +154,9 @@ PATRONES_PRECIO = [
 # Centinelas de texto: ausencia de dato, no cero.
 CENTINELAS = ["No disponible", "NO DISPONIBLE", "", "   ", "#N/D", "N/A", "null"]
 
-# Reparto del histórico completo sobre las dos columnas de precio.
-PRECIO_TOTAL_OK = 1944151
+# Reparto del histórico en disco sobre las dos columnas de precio
+# (septiembre pendiente de cierre).
+PRECIO_TOTAL_OK = 1928507
 PRECIO_TOTAL_NULO = 46415
 PRECIO_TOTAL_CERO = 12402
 
@@ -286,11 +287,11 @@ FILA_BUENA = [
     "HEB",
 ]
 
-# Reparto del histórico completo por fila.
-FILAS_TOTAL = 995283
+# Reparto del histórico en disco por fila (septiembre pendiente de cierre).
+FILAS_TOTAL = 987461
 FILAS_SKU_CENTINELA = 7280  # search 5130 + N/A 1564 + vacío 586
 FILAS_VACIAS = 150
-FILAS_SIN_FLAGS = 960573
+FILAS_SIN_FLAGS = 952751
 
 # Cada centinela de SKU con las veces que aparece en el histórico.
 CENTINELAS_SKU_LITERALES = {"search": 5130, "N/A": 1564, "": 586}

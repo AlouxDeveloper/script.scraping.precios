@@ -80,6 +80,18 @@ HEADER_SOLO_CSV = (
     b"URL_IMAGEN,Fecha_Hora_Captura,Tienda\n"
 )
 
+# Una fila de datos válida para ese header (variante V1). La fecha cae en el
+# mes por defecto de `fuente_falsa` (2026-06), así que no marca desfase.
+FILA_CSV = (
+    b"900437,https://tienda.mx/x/p,Cubrebocas,41.90,39.90,"
+    b"https://img/x,2026-06-14 20:31:07,Tienda\n"
+)
+
+
+def csv_valido(n_filas: int = 2) -> bytes:
+    """Un CSV V1 con header y `n_filas` filas de datos, para los tests de bronce."""
+    return HEADER_SOLO_CSV + FILA_CSV * n_filas
+
 
 def fuente_falsa(
     contenido: bytes,
@@ -134,6 +146,28 @@ def limpiar_raw(cliente_gcs, cfg_gcp):
     for uri in uris:
         objeto = uri.removeprefix(f"gs://{cfg_gcp.bucket_raw}/")
         blob = cliente_gcs.bucket(cfg_gcp.bucket_raw).blob(objeto)
+        if blob.exists():
+            blob.delete()
+
+
+@pytest.fixture
+def limpiar_bronce(cliente_gcs, cfg_gcp):
+    """Borra de `gs://<bucket_bronce>` los objetos cuyas URIs registre el test.
+
+    Salta el test si el bucket de bronce no es alcanzable: `cliente_gcs` solo
+    comprueba el de raw.
+    """
+    try:
+        if not cliente_gcs.bucket(cfg_gcp.bucket_bronce).exists():
+            pytest.skip(f"El bucket {cfg_gcp.bucket_bronce} no existe o no es visible")
+    except Exception as e:  # noqa: BLE001
+        pytest.skip(f"Cloud Storage (bronce) no disponible: {e}")
+
+    uris: list[str] = []
+    yield uris.append
+    for uri in uris:
+        objeto = uri.removeprefix(f"gs://{cfg_gcp.bucket_bronce}/")
+        blob = cliente_gcs.bucket(cfg_gcp.bucket_bronce).blob(objeto)
         if blob.exists():
             blob.delete()
 

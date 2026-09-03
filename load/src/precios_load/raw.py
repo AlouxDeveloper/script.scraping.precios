@@ -11,14 +11,10 @@ import base64
 import os
 
 from google.cloud import storage
-from google.cloud.storage.retry import DEFAULT_RETRY
 
+from precios_load.clientes import REINTENTO_SUBIDA
 from precios_load.config import ConfigGCP
 from precios_load.descubrimiento import ArchivoFuente
-
-# El backoff exponencial de la librería (cubre 429/5xx y cortes de conexión),
-# con un techo de tiempo por archivo para que un blip no cuelgue la corrida.
-_REINTENTO = DEFAULT_RETRY.with_timeout(300.0)
 
 
 class ErrorSubidaRaw(Exception):
@@ -45,7 +41,7 @@ def subir(
     objeto = uri.removeprefix(f"gs://{config.bucket_raw}/")
 
     blob = cliente_gcs.bucket(config.bucket_raw).blob(objeto)
-    blob.upload_from_filename(ruta_local, checksum="md5", retry=_REINTENTO)
+    blob.upload_from_filename(ruta_local, checksum="md5", retry=REINTENTO_SUBIDA)
 
     if blob.md5_hash is None:
         blob.reload()
