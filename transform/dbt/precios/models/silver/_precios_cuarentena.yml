@@ -1,0 +1,52 @@
+version: 2
+
+models:
+  - name: precios_cuarentena
+    description: >
+      Filas de `stg_precios` que no pasaron el filtro de `precios`
+      (`motivo_descarte IS NOT NULL OR rn > 1`), con los valores `*_raw`
+      de bronce en vez de los tipados. Particionada por `mes`,
+      clusterizada por `motivo_descarte`.
+    columns:
+      - name: motivo_descarte
+        description: >
+          `SIN_DESCRIPCION`, `SIN_PRECIO` o `DUPLICADO` (este último
+          cuando la fila era válida pero perdió el `rn = 1`).
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ["SIN_DESCRIPCION", "SIN_PRECIO", "DUPLICADO"]
+                quote: true
+      - name: tienda
+        description: Slug de `load/config/archivos.yml`.
+        tests:
+          - not_null
+      - name: mes
+        description: Primer día del ciclo mensual. Columna de partición.
+        tests:
+          - not_null
+      - name: fecha_captura
+        description: Día real de scrapeo, sin hora.
+      - name: url_producto
+        description: Tal cual la escribió el scraper.
+      - name: producto
+        description: Descripción original, sin normalizar.
+      - name: sku_raw
+        description: RAW. Texto del SKU tal cual venía en el CSV.
+      - name: precio_actual_raw
+        description: RAW. Texto del precio de lista, antes de parsear.
+      - name: precio_oferta_raw
+        description: RAW. Texto del precio de oferta, antes de parsear.
+      - name: fecha_captura_raw
+        description: RAW. Texto de la fecha, antes de parsear.
+      - name: tienda_raw
+        description: RAW. Literal de la columna `Tienda` del CSV de origen.
+      - name: calidad_flags
+        description: Lista de motivos de sospecha de la fila, heredada de bronce.
+      - name: _archivo_origen
+        description: Ruta relativa del CSV original.
+      - name: _fila_num
+        description: Índice 1-based dentro de ese CSV.
+      - name: _ingestado_en
+        description: Corrida de ingesta de `load/` que produjo la fila.
