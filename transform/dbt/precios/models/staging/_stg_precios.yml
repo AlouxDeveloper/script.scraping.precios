@@ -1,0 +1,44 @@
+version: 2
+
+models:
+  - name: stg_precios
+    description: >
+      Tipado, derivadas y motivo de descarte sobre `precios_ext`. Conserva
+      todas las filas del histórico; es la base de la que `precios` y
+      `precios_cuarentena` parten el universo sin perder nada.
+    columns:
+      - name: tienda
+        description: PARTICIÓN heredada de bronce.
+        tests:
+          - not_null
+      - name: mes
+        description: >
+          DATE derivado de la partición `anio_mes` (`PARSE_DATE`), no de
+          `fecha_captura`.
+        tests:
+          - not_null
+      - name: nombre_norm
+        description: "`producto` normalizado con la macro `limpiar_texto`."
+      - name: precio_lista
+        description: >
+          `precio_actual` de bronce, o NULL si venía en 0 o no parseó.
+      - name: precio_oferta
+        description: >
+          `precio_oferta` de bronce, o NULL si venía en 0 o no parseó.
+      - name: motivo_descarte
+        description: >
+          NULL si la fila es válida; `SIN_DESCRIPCION` si `producto` es
+          nulo o vacío; `SIN_PRECIO` si no hay precio de lista ni de
+          oferta.
+        tests:
+          - accepted_values:
+              arguments:
+                values: ["SIN_DESCRIPCION", "SIN_PRECIO"]
+                quote: true
+              config:
+                where: "motivo_descarte is not null"
+      - name: rn
+        description: >
+          `ROW_NUMBER` de duplicados exactos por las ocho columnas de
+          negocio, calculado solo sobre filas sin `motivo_descarte`. NULL
+          en las filas descartadas.
