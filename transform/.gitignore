@@ -1,0 +1,5 @@
+# Artefactos de dbt (duplicados en el .gitignore raíz, aquí para que el módulo
+# sea autocontenido si se mueve o se abre por separado).
+target/
+dbt_packages/
+logs/

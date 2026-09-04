@@ -1,0 +1,14 @@
+[project]
+name = "precios-transform"
+version = "0.1.0"
+description = "Modelado dbt sobre precios_bronce.precios_ext (medallion: bronce -> silver -> gold)"
+requires-python = ">=3.13"
+dependencies = [
+    "dbt-core",
+    "dbt-bigquery",
+]
+
+# El módulo no distribuye código Python propio: es un proyecto dbt, así que uv
+# solo gestiona el entorno y no intenta construir un wheel.
+[tool.uv]
+package = false
