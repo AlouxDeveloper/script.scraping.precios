@@ -1,0 +1,21 @@
+# Perfil versionado en el repo: no lleva secretos. La autenticación es el ADC
+# de la máquina (gcloud auth application-default login), igual que en load/.
+#
+# El ADC no debe tener quota_project_id fijado: BigQuery responde 403 con él.
+
+precios:
+  target: dev
+  outputs:
+    dev:
+      type: bigquery
+      method: oauth
+      project: scenic-firefly-473823-f7
+      dataset: precios_silver
+      location: US
+      threads: 4
+      # El histórico son ~140 archivos de un mes; ninguna consulta debería
+      # acercarse a este techo, así que sirve de freno ante un modelo mal
+      # escrito en vez de dejarlo correr indefinidamente.
+      job_execution_timeout_seconds: 300
+      job_retries: 1
+      priority: interactive

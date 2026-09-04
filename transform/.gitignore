@@ -3,3 +3,6 @@
 target/
 dbt_packages/
 logs/
+
+# Identificador anónimo que dbt genera por máquina, no es del proyecto.
+.user.yml

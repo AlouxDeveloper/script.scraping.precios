@@ -1,0 +1,30 @@
+# Proyecto dbt de la capa silver. Lee precios_bronce.precios_ext (la frontera
+# del módulo load/) y materializa todo en el dataset precios_silver.
+
+name: "precios"
+version: "0.1.0"
+config-version: 2
+
+profile: "precios"
+
+model-paths: ["models"]
+macro-paths: ["macros"]
+seed-paths: ["seeds"]
+test-paths: ["tests"]
+analysis-paths: ["analyses"]
+snapshot-paths: ["snapshots"]
+
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+models:
+  precios:
+    # staging es la capa de tipado y limpieza: se recalcula en cada consulta,
+    # así que no cuesta almacenamiento ni necesita refresco.
+    staging:
+      +materialized: view
+    # silver es lo que consume gold y las herramientas de BI: se materializa
+    # para no reprocesar el histórico completo en cada lectura.
+    silver:
+      +materialized: table
