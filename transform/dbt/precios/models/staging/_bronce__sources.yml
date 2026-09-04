@@ -1,0 +1,115 @@
+version: 2
+
+sources:
+  - name: bronce
+    description: >
+      Capa bronce del medallion: Parquet tipado sobre
+      `gs://bronce_precios_bitek`, expuesto como external table BigLake con
+      hive partitioning. Es la frontera del módulo `load/` y el punto de
+      entrada único de la transformación: dbt nunca lee de `raw` ni de los
+      CSV locales.
+
+      El archivo histórico está congelado (dic-2025 a sep-2026), así que la
+      source no declara `freshness`: no hay carga incremental que vigilar.
+      Un bug de parser se corrige regenerando bronce desde raw, o
+      re-derivando aquí a partir de las columnas `*_raw`.
+    database: scenic-firefly-473823-f7
+    schema: precios_bronce
+
+    tables:
+      - name: precios_ext
+        description: >
+          Una fila por fila de CSV del histórico, con el esquema unificado de
+          26 columnas idéntico para las 6 variantes de header de origen.
+          Principio rector de bronce: nunca se pierde el valor original, cada
+          campo derivado convive con su `*_raw`.
+        columns:
+          # --- Partición (hive, sale de la ruta del objeto en GCS) ---
+          - name: tienda
+            description: >
+              PARTICIÓN. Slug estable de `load/config/archivos.yml`
+              (`walmart`, `chedraui`). Sale siempre de la carpeta, nunca del
+              contenido del CSV: la columna de origen alterna nombre e ID
+              numérico según el mes. Es la llave de tienda a usar aguas abajo.
+          - name: anio_mes
+            description: >
+              PARTICIÓN. Mes de la corrida de scraping en formato `YYYY-MM`,
+              tomado de la carpeta de origen. No es necesariamente el mes de
+              `fecha_captura`; ver `desfase_mes`.
+
+          # --- Negocio ---
+          - name: sku
+            description: SKU normalizado. Nulo si el origen traía un centinela.
+          - name: url_producto
+            description: URL del producto, copiada del CSV sin normalizar.
+          - name: producto
+            description: >
+              Descripción del producto tal cual la escribió el scraper, sin
+              normalizar. La limpieza de texto ocurre en staging.
+          - name: url_imagen
+            description: URL de la imagen, copiada del CSV sin normalizar.
+          - name: precio_actual
+            description: Precio de lista parseado. NUMERIC; nulo si el parseo falló.
+          - name: precio_oferta
+            description: >
+              Precio promocional parseado. NUMERIC; nulo si el parseo falló o
+              si el producto no traía oferta.
+          - name: fecha_captura
+            description: >
+              Momento de la captura. TIMESTAMP marcado UTC por convención: el
+              histórico no trae zona horaria en ninguno de sus 6 formatos, así
+              que se conserva la hora de pared que escribió el scraper.
+
+          # --- Valores originales (los cinco `*_raw`) ---
+          - name: sku_raw
+            description: RAW. Texto del SKU tal cual venía en el CSV.
+          - name: precio_actual_raw
+            description: RAW. Texto del precio de lista, antes de parsear.
+          - name: precio_oferta_raw
+            description: RAW. Texto del precio de oferta, antes de parsear.
+          - name: fecha_captura_raw
+            description: RAW. Texto de la fecha, antes de parsear.
+          - name: tienda_raw
+            description: >
+              RAW. Literal de la columna `Tienda` del CSV: 31 valores
+              distintos, unos nombre y otros ID numérico. Solo para auditoría;
+              para agrupar por tienda se usa `tienda`.
+
+          # --- Banderas de calidad ---
+          - name: calidad_flags
+            description: >
+              CALIDAD. Lista de motivos de sospecha de la fila (p. ej.
+              `SOSPECHA_COPIA`). Ojo: el tipo LIST de Parquet llega a BigQuery
+              como STRUCT anidado, así que se accede por
+              `calidad_flags.list[].element`, no como ARRAY plano.
+          - name: precio_parse_ok
+            description: CALIDAD. False si no se pudo parsear ningún precio de la fila.
+          - name: fecha_parse_ok
+            description: CALIDAD. False si `fecha_captura_raw` no correspondió a ningún formato conocido.
+          - name: sku_es_centinela
+            description: >
+              CALIDAD. True si el SKU de origen era un valor centinela
+              (relleno del scraper), no un identificador real.
+          - name: fila_vacia
+            description: CALIDAD. True si la fila no traía dato aprovechable.
+          - name: desfase_mes
+            description: >
+              CALIDAD. True cuando `anio_mes_dato` no coincide con la
+              partición `anio_mes`: la fila se capturó en un mes distinto al
+              de la carpeta que la contiene.
+          - name: anio_mes_dato
+            description: >
+              CALIDAD. Mes `YYYY-MM` derivado de `fecha_captura` de la propia
+              fila, para contrastarlo con la partición.
+
+          # --- Linaje ---
+          - name: _archivo_origen
+            description: LINAJE. Nombre del CSV del que salió la fila.
+          - name: _md5_origen
+            description: LINAJE. MD5 del CSV de origen; detecta recargas del mismo archivo.
+          - name: _variante_schema
+            description: LINAJE. Cuál de las 6 variantes de header tenía el CSV.
+          - name: _fila_num
+            description: LINAJE. Número de fila dentro del CSV de origen.
+          - name: _ingestado_en
+            description: LINAJE. TIMESTAMP en que `load/` escribió el Parquet de bronce.
