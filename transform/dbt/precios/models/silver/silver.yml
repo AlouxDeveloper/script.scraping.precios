@@ -48,7 +48,13 @@ models:
         tests:
           - not_null
       - name: sku
-        description: Nullable; se imputará en una etapa posterior.
+        description: >
+          Siempre presente: aurrera lo imputa desde el código en
+          `url_producto` en staging; la fila que aun así no lo resuelve
+          se descarta a `precios_cuarentena` (`motivo_descarte =
+          'SIN_SKU'`).
+        tests:
+          - not_null
       - name: producto
         description: Descripción original, sin normalizar.
         tests:
@@ -58,7 +64,9 @@ models:
         tests:
           - not_null
       - name: url_imagen
-        description: Nullable.
+        description: "`SIN_IMAGEN` cuando el CSV no traía una."
+        tests:
+          - not_null
       - name: precio_lista
         description: >
           Siempre `> 0`. Si el CSV solo traía un precio, este toma su
@@ -66,27 +74,11 @@ models:
         tests:
           - not_null
       - name: precio_oferta
-        description: NULL si no hay descuento real (`en_oferta = false`).
-      - name: en_oferta
-        description: >
-          `precio_oferta IS NOT NULL AND precio_oferta < precio_lista`
-          sobre los valores originales del CSV.
+        description: "`0` si no hay descuento real."
         tests:
           - not_null
       - name: descuento_pct
         description: "Porcentaje de descuento; `0` cuando no hay oferta."
-        tests:
-          - not_null
-      - name: _archivo_origen
-        description: Ruta relativa del CSV original.
-        tests:
-          - not_null
-      - name: _fila_num
-        description: Índice 1-based dentro de ese CSV.
-        tests:
-          - not_null
-      - name: _ingestado_en
-        description: Corrida de ingesta de `load/` que produjo la fila.
         tests:
           - not_null
     tests:
@@ -108,14 +100,14 @@ models:
             column_name: precio_lista
             expression: "> 0"
       - dbt_utils.expression_is_true:
+          # precio_oferta = 0 cuando no hay oferta; 0 < precio_lista se
+          # cumple siempre porque precio_lista > 0, así que la condición
+          # cubre ambos casos (sin oferta y con oferta real).
           arguments:
-            expression: "precio_oferta is null or precio_oferta < precio_lista"
+            expression: "precio_oferta < precio_lista"
       - dbt_utils.expression_is_true:
           arguments:
             expression: "descuento_pct between 0 and 100"
-      - dbt_utils.expression_is_true:
-          arguments:
-            expression: "en_oferta = (precio_oferta is not null)"
       - dbt_utils.expression_is_true:
           arguments:
             expression: "nombre_norm = lower(nombre_norm)"
@@ -140,13 +132,15 @@ models:
     columns:
       - name: motivo_descarte
         description: >
-          `SIN_DESCRIPCION`, `SIN_PRECIO` o `DUPLICADO` (este último
-          cuando la fila era válida pero perdió el `rn = 1`).
+          `SIN_DESCRIPCION`, `SIN_PRECIO`, `SIN_SKU` (sin identificador
+          y sin regla de imputación aplicable) o `DUPLICADO` (este
+          último cuando la fila era válida pero perdió el `rn = 1`).
         tests:
           - not_null
           - accepted_values:
               arguments:
-                values: ["SIN_DESCRIPCION", "SIN_PRECIO", "DUPLICADO"]
+                values:
+                  ["SIN_DESCRIPCION", "SIN_PRECIO", "SIN_SKU", "DUPLICADO"]
                 quote: true
       - name: tienda
         description: Slug de `load/config/archivos.yml`.

@@ -29,11 +29,11 @@ models:
         description: >
           NULL si la fila es válida; `SIN_DESCRIPCION` si `producto` es
           nulo o vacío; `SIN_PRECIO` si no hay precio de lista ni de
-          oferta.
+          oferta; `SIN_SKU` si tampoco se pudo imputar un identificador.
         tests:
           - accepted_values:
               arguments:
-                values: ["SIN_DESCRIPCION", "SIN_PRECIO"]
+                values: ["SIN_DESCRIPCION", "SIN_PRECIO", "SIN_SKU"]
                 quote: true
               config:
                 where: "motivo_descarte is not null"

@@ -14,7 +14,18 @@ with tipado as (
         -- corrió el 2026-04-01 y derivarlo de la fecha lo colapsaría
         -- contra abril, perdiendo esas observaciones.
         parse_date('%Y-%m', anio_mes) as mes,
-        sku,
+        -- Aurrera escribe el centinela "SEARCH" como sku cuando el
+        -- scraper cae en la página de búsqueda, pero la URL sí trae el
+        -- código real del producto. Verificado contra las filas con sku
+        -- válido de aurrera: coincide en 99.99% (189,126/189,138) de los
+        -- casos, así que es una fuente confiable, no una adivinanza.
+        coalesce(
+            sku,
+            case
+                when tienda = 'aurrera'
+                    then regexp_extract(url_producto, r'/(\d+)(?:\?|$)')
+            end
+        ) as sku,
         url_producto,
         producto,
         {{ limpiar_texto('producto') }} as nombre_norm,
@@ -55,6 +66,9 @@ clasificado as (
         case
             when producto is null or trim(producto) = '' then 'SIN_DESCRIPCION'
             when coalesce(precio_lista, precio_oferta) is null then 'SIN_PRECIO'
+            -- sku ya viene con la imputación de aurrera aplicada (ver
+            -- tipado); lo que llega nulo aquí no tiene regla de rescate.
+            when sku is null then 'SIN_SKU'
             else null
         end as motivo_descarte
     from tipado
