@@ -64,7 +64,6 @@ for i, item in enumerate(barra, 1):
     if url in urls_procesadas:
         continue
 
-    barra.set_postfix(exitosas=monitor.exitos)
     tqdm.write(f"\n🔍 [{i}/{len(lista_productos)}] Procesando: {url}")
 
     driver = None
@@ -74,8 +73,9 @@ for i, item in enumerate(barra, 1):
         options.add_argument("--window-size=1280,1000")
         options.add_argument("--disable-blink-features=AutomationControlled")
 
-        # CORREGIDO: Eliminamos 'version_main=148' para que se autogestione con tu Chrome actual de Windows
-        driver = uc.Chrome(options=options, version_main=150, use_subprocess=True)
+        # Sin version_main: uc detecta la versión del Chrome instalado y baja
+        # el chromedriver que corresponda en vez de forzar una fija.
+        driver = uc.Chrome(options=options, use_subprocess=True)
         wait = WebDriverWait(driver, 15)
 
         driver.get(url)
@@ -170,5 +170,7 @@ for i, item in enumerate(barra, 1):
             driver.quit()
         # Descanso entre ventanas para enfriar peticiones
         time.sleep(2)
+
+    barra.set_postfix(exitosas=monitor.exitos)
 
 print(f"\n📦 Proceso masivo finalizado. Resultados en: {CSV_OUTPUT}")

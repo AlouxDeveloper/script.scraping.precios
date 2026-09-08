@@ -50,7 +50,6 @@ for i, url in enumerate(barra, start=1):
     if url in urls_procesadas:
         continue
 
-    barra.set_postfix(exitosas=monitor.exitos)
     tqdm.write(f"🔎 [{i}/{len(urls_busqueda)}] Procesando: {url}")
 
     driver = None
@@ -161,5 +160,7 @@ for i, url in enumerate(barra, start=1):
         if driver:
             driver.quit()
         time.sleep(1)
+
+    barra.set_postfix(exitosas=monitor.exitos)
 
 print("\n✅ Proceso terminado.")
