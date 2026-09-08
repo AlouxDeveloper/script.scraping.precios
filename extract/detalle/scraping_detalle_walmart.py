@@ -10,12 +10,17 @@ import time
 import csv
 import os
 
-from monitoreo import MonitorFallos, configurar_logger, es_pagina_bloqueada
-
 # === Configuración ===
 INPUT_CSV = "./salida/urls/productos_walmart.csv"
 CSV_OUTPUT = "./salida/data/2026/09_septiembre/scraping_detalle_walmart.csv"
 TIENDA = "12"
+
+# Versión mayor del Chrome instalado en la máquina donde corre el script.
+# undetected_chromedriver 3.5.5 no la detecta bien: baja el chromedriver de
+# la última versión publicada (153) y revienta contra un Chrome 152 con
+# "This version of ChromeDriver only supports Chrome version 153".
+# Al actualizarse Chrome hay que subir este número.
+VERSION_CHROME = 152
 
 ENCABEZADOS = [
     "SKU", "URL_PRODUCTO", "Producto", "Precio_Actual", 
@@ -53,9 +58,6 @@ except Exception as e:
 print(f"📂 Historial: {len(urls_procesadas)} URLs ya se encuentran en el archivo de salida.")
 print(f"🚀 Iniciando captura blindada (Abriendo y cerrando navegador por producto)...")
 
-logger = configurar_logger("walmart")
-monitor = MonitorFallos(tienda="walmart", logger=logger)
-
 # === Bucle de Scraping ===
 barra = tqdm(lista_productos, desc="walmart", unit="url")
 for i, item in enumerate(barra, 1):
@@ -72,17 +74,15 @@ for i, item in enumerate(barra, 1):
         options.add_argument("--window-size=1280,1000")
         options.add_argument("--disable-blink-features=AutomationControlled")
 
-        # Sin version_main: uc detecta la versión del Chrome instalado y baja
-        # el chromedriver que corresponda en vez de forzar una fija.
-        driver = uc.Chrome(options=options, use_subprocess=True)
+        driver = uc.Chrome(
+            options=options,
+            use_subprocess=True,
+            version_main=VERSION_CHROME,
+        )
         wait = WebDriverWait(driver, 25)
 
         # Cargar la URL
         driver.get(url)
-
-        if es_pagina_bloqueada(driver.page_source):
-            monitor.registrar_fallo("bloqueo_detectado")
-            continue
 
         # Pausa dura de control para dar estabilidad a la carga
         time.sleep(4)
@@ -133,18 +133,6 @@ for i, item in enumerate(barra, 1):
             imagen_url = "No disponible"
         tqdm.write(f"   🔬 Imagen capturada: {imagen_url}")
 
-        # Chequeo tardío: el modal de verificación puede aparecer DESPUÉS de
-        # que el producto ya cargó, entre el driver.get() inicial y este
-        # punto. Si ya está encima, la fila que se armó arriba es basura del
-        # bloqueo, no un dato real -- se descarta en vez de guardarla.
-        if es_pagina_bloqueada(driver.page_source):
-            monitor.registrar_fallo("bloqueo_tardio")
-            tqdm.write(
-                "   🔬 Bloqueo detectado DESPUÉS de cargar el producto, "
-                "se descarta la fila."
-            )
-            continue
-
         # 5. Guardado
         fila = {
             "SKU": sku,
@@ -162,14 +150,12 @@ for i, item in enumerate(barra, 1):
             writer.writerow(fila)
 
         urls_procesadas.add(url)
-        monitor.registrar_exito()
         tqdm.write(
             f"   ✅ Guardado: {titulo[:30]}... | "
             f"Actual: ${precio_actual} | Oferta: ${precio_oferta}"
         )
 
     except Exception as e:
-        monitor.registrar_fallo(str(e))
         tqdm.write(f"   ❌ Saltó la ventana {i} por error o bloqueo. Detalle: {e}")
         time.sleep(3)
         
@@ -177,7 +163,5 @@ for i, item in enumerate(barra, 1):
         if driver:
             driver.quit()
         time.sleep(2)
-
-    barra.set_postfix(exitosas=monitor.exitos)
 
 print(f"\n📦 Proceso masivo finalizado. Resultados en: {CSV_OUTPUT}")
