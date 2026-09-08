@@ -95,22 +95,23 @@ for i, item in enumerate(barra, 1):
         time.sleep(2)
 
         sku = url.split('/')[-1].split('?')[0]
-        
+
         try:
             titulo = driver.find_element(By.ID, "main-title").text.strip()
         except:
             titulo = item.get('Nombre', 'Sin nombre')
+        tqdm.write(f"   🔬 Título capturado: {titulo[:60]}")
 
         # === LÓGICA DE PRECIOS BLINDADA PARA WALMART ===
         precio_actual = "0"
         precio_oferta = "0"
-        
+
         try:
             wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, '[data-seo-id="hero-price"]')))
-            
+
             precio_hero_elem = driver.find_element(By.CSS_SELECTOR, '[data-seo-id="hero-price"]')
             precio_detectado = precio_hero_elem.text.replace('$', '').replace(',', '').strip()
-            
+
             try:
                 precio_tachado_elem = driver.find_element(By.CSS_SELECTOR, '[data-seo-id="strike-through-price"]')
                 precio_actual = precio_tachado_elem.text.replace('$', '').replace(',', '').strip()
@@ -122,6 +123,7 @@ for i, item in enumerate(barra, 1):
         except Exception:
             precio_actual = "No disponible"
             precio_oferta = "No disponible"
+        tqdm.write(f"   🔬 Precio capturado: actual={precio_actual} oferta={precio_oferta}")
 
         # 4. IMAGEN BLINDADA
         try:
@@ -129,6 +131,19 @@ for i, item in enumerate(barra, 1):
             imagen_url = contenedor_img.find_element(By.TAG_NAME, "img").get_attribute("src")
         except:
             imagen_url = "No disponible"
+        tqdm.write(f"   🔬 Imagen capturada: {imagen_url}")
+
+        # Chequeo tardío: el modal de verificación puede aparecer DESPUÉS de
+        # que el producto ya cargó, entre el driver.get() inicial y este
+        # punto. Si ya está encima, la fila que se armó arriba es basura del
+        # bloqueo, no un dato real -- se descarta en vez de guardarla.
+        if es_pagina_bloqueada(driver.page_source):
+            monitor.registrar_fallo("bloqueo_tardio")
+            tqdm.write(
+                "   🔬 Bloqueo detectado DESPUÉS de cargar el producto, "
+                "se descarta la fila."
+            )
+            continue
 
         # 5. Guardado
         fila = {
