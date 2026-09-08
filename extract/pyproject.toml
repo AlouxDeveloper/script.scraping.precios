@@ -3,20 +3,47 @@ name = "bitek-extract"
 version = "0.1.0"
 description = "Scraping de precios de medicamentos en ecommerce mexicanos"
 requires-python = ">=3.13"
+# Versiones clavadas al entorno Windows donde los scrapers de walmart y
+# aurrera sí pasan el anti-bot: una diferencia de versión en selenium o
+# undetected-chromedriver cambia el fingerprint que ve PerimeterX, así que
+# el entorno de desarrollo tiene que ser idéntico para que una prueba local
+# signifique algo.
 dependencies = [
-    "selenium",
-    "undetected-chromedriver",
-    "webdriver-manager",
-    "curl_cffi",
-    "beautifulsoup4",
-    "requests",
-    "pandas",
-    "openpyxl",
-    "lxml",
+    "selenium==4.40.0",
+    "undetected-chromedriver==3.5.5",
+    "webdriver-manager==4.0.2",
+    "curl_cffi==0.15.0",
+    "beautifulsoup4==4.14.3",
+    "requests==2.32.5",
+    "urllib3==2.6.3",
+    "certifi==2026.1.4",
+    "charset-normalizer==3.4.4",
+    "idna==3.11",
+    "pandas==3.0.0",
+    "numpy==2.4.2",
+    "openpyxl==3.1.5",
+    "lxml==6.1.1",
+    "python-dotenv==1.2.1",
+    "setuptools==82.0.0",
+    # tqdm no está en el entorno del otro equipo: lo añadimos nosotros para
+    # la barra de progreso, así que no hay versión que replicar.
     "tqdm",
-    "python-dotenv",
-    "setuptools>=84.0.0",
 ]
 
 [tool.uv]
 package = false
+
+# Transitivos que también difieren contra el entorno Windows de referencia.
+# selenium habla CDP/BiDi por websockets y trio, así que se clavan igual que
+# los directos; no son dependencias nuestras, por eso van como constraint.
+constraint-dependencies = [
+    "attrs==25.4.0",
+    "cffi==2.0.0",
+    "importlib_metadata==8.7.1",
+    "packaging==26.0",
+    "soupsieve==2.8.3",
+    "trio==0.32.0",
+    "typing_extensions==4.15.0",
+    "websocket-client==1.9.0",
+    "websockets==15.0.1",
+]
