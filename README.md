@@ -30,6 +30,32 @@ extract/  →  ./salida/data/*.csv  →  load/  →  GCS (raw → bronce)  →  
 Python 3.13+, [`uv`](https://docs.astral.sh/uv/), credenciales de Google Cloud (ADC) para
 `load/` y `transform/`.
 
+## Instalación
+
+Cada módulo (`extract/`, `load/`, `transform/`) es un proyecto `uv` independiente, con su
+propio `pyproject.toml` y entorno virtual. Instala las dependencias de cada uno antes de
+correrlo, siempre desde la raíz del repo:
+
+```bash
+cd extract && uv sync && cd ..
+cd load && uv sync && cd ..
+cd transform && uv sync && cd ..
+```
+
+### Variables de entorno
+
+Copia `.env.example` a `.env` en la raíz del repo y llena los valores reales. `.env` está en
+`.gitignore`, nunca se sube:
+
+```bash
+cp .env.example .env
+```
+
+Usadas hoy:
+
+- `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` — alerta de Telegram que manda
+  `extract/detalle/monitoreo.py` cuando un scraper detecta bloqueo o captcha repetido.
+
 ## Uso
 
 Siempre desde la raíz del repo:

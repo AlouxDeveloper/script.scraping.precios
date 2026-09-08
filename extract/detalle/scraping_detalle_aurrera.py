@@ -4,14 +4,17 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from tqdm import tqdm
 from datetime import datetime
 import time
 import csv
 import os
 
+from monitoreo import MonitorFallos, configurar_logger, es_pagina_bloqueada
+
 # === Configuración ===
-INPUT_CSV = "./salida/urls/productos_aurrera.csv" 
-CSV_OUTPUT = "./salida/data/2026/08_agosto/scraping_detalle_aurrera.csv"
+INPUT_CSV = "./salida/urls/productos_aurrera.csv"
+CSV_OUTPUT = "./salida/data/2026/09_septiembre/scraping_detalle_aurrera.csv"
 TIENDA = "16"
 
 ENCABEZADOS = [
@@ -50,27 +53,36 @@ except Exception as e:
 print(f"📂 Avance detectado: {len(urls_procesadas)} ya procesadas.")
 print(f"🚀 Iniciando captura blindada (Abriendo y cerrando navegador por producto)...")
 
+logger = configurar_logger("aurrera")
+monitor = MonitorFallos(tienda="aurrera", logger=logger)
+
 # === Bucle de Scraping ===
-for i, item in enumerate(lista_productos, 1):
+barra = tqdm(lista_productos, desc="aurrera", unit="url")
+for i, item in enumerate(barra, 1):
     url = item['URL']
-    
+
     if url in urls_procesadas:
         continue
-        
-    print(f"\n🔍 [{i}/{len(lista_productos)}] Procesando: {url}")
-    
+
+    barra.set_postfix(exitosas=monitor.exitos)
+    tqdm.write(f"\n🔍 [{i}/{len(lista_productos)}] Procesando: {url}")
+
     driver = None
     try:
         # Configuración de Navegador en cada ciclo (Se crea desde cero)
         options = uc.ChromeOptions()
         options.add_argument("--window-size=1280,1000")
         options.add_argument("--disable-blink-features=AutomationControlled")
-        
+
         # CORREGIDO: Eliminamos 'version_main=148' para que se autogestione con tu Chrome actual de Windows
         driver = uc.Chrome(options=options, version_main=150, use_subprocess=True)
         wait = WebDriverWait(driver, 15)
 
         driver.get(url)
+
+        if es_pagina_bloqueada(driver.page_source):
+            monitor.registrar_fallo("bloqueo_detectado")
+            continue
 
         # Esperar a que cargue el título (ID único del producto principal)
         wait.until(EC.presence_of_element_located((By.ID, "main-title")))
@@ -141,10 +153,15 @@ for i, item in enumerate(lista_productos, 1):
             writer.writerow(fila)
 
         urls_procesadas.add(url)
-        print(f"   ✅ Guardado: {titulo[:35]}... | Actual: ${precio_normal} | Oferta: ${precio_oferta}")
+        monitor.registrar_exito()
+        tqdm.write(
+            f"   ✅ Guardado: {titulo[:35]}... | "
+            f"Actual: ${precio_normal} | Oferta: ${precio_oferta}"
+        )
 
     except Exception as e:
-        print(f"   ❌ Error en registro {i}: Verifique si hay un bloqueo o Captcha.")
+        monitor.registrar_fallo(str(e))
+        tqdm.write(f"   ❌ Error en registro {i}: Verifique si hay un bloqueo o Captcha.")
         time.sleep(2)
         
     finally:
