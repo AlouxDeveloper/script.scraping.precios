@@ -1,0 +1,65 @@
+version: 2
+
+models:
+  - name: fact_precios
+    description: >
+      Tabla de hechos de precios. Grano `(producto_key, fecha_key)` — un
+      precio por producto y día. Particionada por `fecha_key` (día),
+      clusterizada por `tienda_key` y `producto_key`, sin
+      `require_partition_filter`.
+
+      Dos medidas, nada derivado: `precio_lista` y `precio_oferta`
+      (`descuento_pct` y el precio efectivo se calculan en la capa de
+      consumo). `precio_oferta` es NULL cuando no hay descuento real.
+
+      Colapsa 17,584 filas de exceso de silver (ALD-37) quedándose con el
+      precio de lista más bajo observado cada día.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - producto_key
+              - fecha_key
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "precio_lista > 0"
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "precio_oferta is null or precio_oferta < precio_lista"
+    columns:
+      - name: producto_key
+        description: FK a `dim_producto`. Conserva el nombre de la PK de la dimensión.
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_producto')
+                field: producto_key
+      - name: tienda_key
+        description: >
+          FK a `dim_tienda`. Denormalizada -ya vive dentro de
+          `producto_key`- porque el filtro por tienda es el más frecuente.
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_tienda')
+                field: tienda_key
+      - name: fecha_key
+        description: FK a `dim_fecha`. Columna de partición (grano día).
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_fecha')
+                field: fecha_key
+      - name: precio_lista
+        description: >
+          Precio de lista, NUMERIC, siempre `> 0`. Si silver solo tenía un
+          precio, ese es el de lista.
+        tests:
+          - not_null
+      - name: precio_oferta
+        description: >
+          Precio de oferta, NUMERIC. NULL si no hay descuento real (nunca
+          el centinela `0`). Siempre `< precio_lista` cuando no es NULL.
