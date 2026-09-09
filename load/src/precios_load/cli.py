@@ -5,9 +5,11 @@ Se ejecuta siempre desde la raíz del repo:
     uv run --project load python -m precios_load.cli plan
 """
 
+import os
+
 import typer
 
-from precios_load import __version__, bq, manifest
+from precios_load import __version__, bq, catalogos, manifest
 from precios_load.clientes import cliente_bq, cliente_gcs
 from precios_load.config import (
     FORMATO_ANIO_MES,
@@ -59,7 +61,6 @@ def config(ctx: typer.Context) -> None:
     typer.echo(f"ingiere hasta     {cfg.anio_mes_maximo} (inclusive)")
     typer.echo(f"raw               {cfg.uri_raw('<tienda>', '<anio_mes>', '<archivo>.csv')}")
     typer.echo(f"bronce            {cfg.uri_bronce('<tienda>', '<anio_mes>', '<archivo>.parquet')}")
-    typer.echo(f"raw catálogo      {cfg.uri_raw_catalogo('<catalogo>/<archivo>.xlsx')}")
     typer.echo(f"bronce catálogo   {cfg.uri_bronce_catalogo('<catalogo>/<archivo>.parquet')}")
 
 
@@ -161,6 +162,37 @@ def ingesta(
     )
     if resultado.fallidos:
         raise typer.Exit(code=1)
+
+
+@app.command(name="catalogos")
+def catalogo(ctx: typer.Context) -> None:
+    """Convierte `salida/catalogos/dim_ndf.xlsx` y sube el Parquet a bronce.
+
+    Aldo solo deja el XLSX en `salida/catalogos/`; el comando hace el resto.
+
+    No sube el XLSX a raw ni lleva manifest de idempotencia: un catálogo es un
+    snapshot de reemplazo completo, así que correr el comando dos veces
+    sobrescribe el mismo objeto en bronce y ese es el comportamiento correcto.
+    """
+    cfg = ctx.obj
+    ruta_xlsx = os.path.join(cfg.ruta_catalogos(), catalogos.NOMBRE_XLSX)
+
+    if not os.path.isfile(ruta_xlsx):
+        typer.echo(
+            f"❌ No se encontró el catálogo: {ruta_xlsx}\n"
+            f"   Deja el XLSX del NDF ahí y vuelve a correr el comando.",
+            err=True,
+        )
+        raise typer.Exit(code=1)
+
+    try:
+        uri, filas = catalogos.escribir(cliente_gcs(cfg), cfg, ruta_xlsx)
+    except catalogos.ErrorColumnaDesconocida as e:
+        typer.echo(f"❌ {e}", err=True)
+        raise typer.Exit(code=1) from e
+
+    typer.echo(f"→ {uri}")
+    typer.echo(f"\nfilas {filas:,}")
 
 
 @app.command(name="bq-setup")

@@ -1,13 +1,16 @@
 """El catálogo NDF: XLSX de 23 columnas -> Parquet de 17, todo STRING."""
 
 import os
+from dataclasses import replace
 
 import pandas as pd
 import pyarrow as pa
 import pyarrow.parquet as pq
 import pytest
+from typer.testing import CliRunner
 
 from precios_load import catalogos
+from precios_load.cli import app
 from precios_load.catalogos import (
     COLUMNAS_DESCARTADAS,
     COLUMNAS_NDF,
@@ -103,3 +106,28 @@ def test_columna_faltante_detiene_la_carga(tmp_path):
 
     with pytest.raises(ErrorColumnaDesconocida, match="División"):
         leer_xlsx(ruta)
+
+
+# --- Comando del CLI ------------------------------------------------------
+
+runner = CliRunner()
+
+
+def test_comando_aborta_si_no_hay_xlsx(tmp_path, monkeypatch):
+    """Sin el XLSX, mensaje claro en vez de un stack trace de pandas."""
+    cfg = replace(cargar_config(), ruta_local_catalogos=str(tmp_path))
+    monkeypatch.setattr("precios_load.cli.cargar_config", lambda: cfg)
+
+    resultado = runner.invoke(app, ["catalogos"])
+
+    assert resultado.exit_code == 1
+    assert "No se encontró el catálogo" in resultado.output
+
+
+def test_comando_aborta_fuera_de_la_raiz_del_repo(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+
+    resultado = runner.invoke(app, ["catalogos"])
+
+    assert resultado.exit_code != 0
+    assert "raíz del repo" in resultado.output

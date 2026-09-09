@@ -1,8 +1,15 @@
 """Catálogo NDF: el XLSX de un mes a un Parquet todo-STRING para bronce.
 
 Convierte `salida/catalogos/dim_ndf.xlsx` (una hoja, 23 columnas) en un Parquet
-de 17 columnas renombradas a `snake_case` sin acentos. Se corre a mano cuando
-llega una versión nueva del catálogo; no forma parte de `ingesta`.
+de 17 columnas renombradas a `snake_case` sin acentos. Lo dispara el comando
+`catalogos` del CLI cuando llega una versión nueva del catálogo; no forma parte
+de `ingesta`.
+
+**Sin manifest de idempotencia.** El manifest de `precios_ops._ingesta_manifest`
+existe porque el histórico es append-only y re-subir 139 archivos cuesta. Un
+catálogo es un snapshot de reemplazo completo: correr el comando dos veces
+sobrescribe el mismo objeto en bronce y ese es el comportamiento correcto. Por
+la misma razón el XLSX de origen tampoco se sube a la capa raw.
 
 **Todo el Parquet va en STRING, a propósito.** El origen ya es texto y no hay
 parsers frágiles que auditar. Tipar aquí fijaría interpretaciones que se ven
