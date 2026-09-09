@@ -1,7 +1,8 @@
 # Proyecto dbt de transform/. Lee las external tables de precios_bronce (la
 # frontera del módulo load/) y materializa staging como vistas en
 # precios_silver, silver como tablas en precios_silver y gold como tablas en
-# precios_gold.
+# precios_gold. Los seeds -catálogos curados a mano- también aterrizan en
+# precios_bronce: son dato de entrada, no un modelo de ninguna capa.
 
 name: "precios"
 version: "0.1.0"
@@ -38,12 +39,14 @@ models:
       +materialized: table
       +schema: precios_gold
 
-# El seed tiendas alimenta dim_tienda. column_types no es opcional: sin él dbt
-# infiere el tipo del CSV y tienda_key podría llegar como STRING, lo que
+# El seed tiendas alimenta dim_tienda. Va a precios_bronce -no a precios_gold-
+# porque es dato de entrada curado a mano, no una tabla modelada: dim_tienda
+# lo lee igual que stg_ndf lee ndf_ext. column_types no es opcional: sin él
+# dbt infiere el tipo del CSV y tienda_key podría llegar como STRING, lo que
 # rompería en silencio el test `relationships` de la fact contra la dimensión.
 seeds:
   precios:
-    +schema: precios_gold
+    +schema: precios_bronce
     tiendas:
       +column_types:
         tienda_key: int64

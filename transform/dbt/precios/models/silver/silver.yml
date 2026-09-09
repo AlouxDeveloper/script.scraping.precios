@@ -35,6 +35,15 @@ models:
                   - walmart
                   - yza
                 quote: true
+          # Integridad referencial contra el catálogo. Atrapa que el seed
+          # `tiendas` y lo que ya está en BigQuery se desalineen -una tienda
+          # nueva en `archivos.yml` que nadie agregó al catálogo- haciendo
+          # fallar el build, en vez de dejar un join silencioso a nada aguas
+          # abajo. Misma idea que tendrá `ndf_id` cuando llegue el crosswalk.
+          - relationships:
+              arguments:
+                to: ref('dim_tienda')
+                field: tienda_slug
       - name: mes
         description: Primer día del ciclo mensual. Columna de partición.
         tests:
