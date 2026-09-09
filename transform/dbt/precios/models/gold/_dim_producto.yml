@@ -1,0 +1,93 @@
+version: 2
+
+models:
+  - name: dim_producto
+    description: >
+      Dimensión de producto de tienda (Kimball). Una fila por
+      `(tienda_key, sku)` — la identidad de negocio confirmada en ALD-37.
+      Materializada como tabla, clusterizada por `tienda_key`.
+
+      Es el insumo del entity resolution: el texto del producto vive aquí
+      (una fila por producto), no en `fact_precios`, para que
+      `ML.GENERATE_EMBEDDING` corra sobre ~160 mil filas y no sobre ~925
+      mil. Generar los embeddings es otro issue.
+
+      Todos los atributos son SCD1 (gana la captura más reciente). La
+      desambiguación es determinística: dos builds idénticos producen la
+      misma tabla columna por columna.
+
+      `producto` aquí es el nombre del listing en la tienda. NO es
+      `dim_ndf.producto` (marca comercial del catálogo). El cruce entre las
+      dos es el entity resolution.
+
+      Sin `ndf_id` ni `match_method`: dependen del crosswalk de Knobloch,
+      que no está.
+    tests:
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "fecha_primera_captura <= fecha_ultima_captura"
+    columns:
+      - name: producto_key
+        description: >
+          Llave subrogada. `dbt_utils.generate_surrogate_key(['tienda_key',
+          'sku'])` — hash y no autoincremental porque los modelos son
+          `table` con full refresh y el hash es estable sin estado
+          persistente.
+        tests:
+          - not_null
+          - unique
+      - name: tienda_key
+        description: FK a `dim_tienda`. Conserva el nombre de la PK de la dimensión.
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_tienda')
+                field: tienda_key
+      - name: sku
+        description: >
+          Llave natural del producto en la tienda. Para aurrera puede venir
+          imputado desde `url_producto` (ver `stg_precios`).
+        tests:
+          - not_null
+      - name: producto
+        description: >
+          Nombre del listing en la tienda, sin normalizar. SCD1, captura más
+          reciente. NO es `dim_ndf.producto`.
+        tests:
+          - not_null
+      - name: nombre_norm
+        description: >
+          `producto` normalizado por `limpiar_texto` (sin acentos, dosis y
+          forma como texto plano). SCD1, no versionado: solo ~2% de los
+          combos `(tienda, sku)` tienen más de un valor, y esa variación es
+          por cutovers de parser, no por cambio de identidad.
+        tests:
+          - not_null
+      - name: url_producto_actual
+        description: URL del producto de la captura ganadora. SCD1.
+        tests:
+          - not_null
+      - name: url_imagen_actual
+        description: >
+          Imagen más reciente que NO sea el centinela `SIN_IMAGEN` — no la
+          de la última captura. NULL si el producto nunca trajo imagen real.
+      - name: fecha_primera_captura
+        description: Primer día en que se observó el producto.
+        tests:
+          - not_null
+      - name: fecha_ultima_captura
+        description: >
+          Último día en que se observó. Señal de producto descontinuado si
+          quedó lejos del cierre del histórico.
+        tests:
+          - not_null
+      - name: dias_observados
+        description: >
+          `count(distinct fecha_captura)` del producto. No es el rango entre
+          primera y última: cuenta días con observación real.
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 1
