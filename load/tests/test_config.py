@@ -1,5 +1,6 @@
 """La configuración debe fallar temprano y nombrando el campo que está mal."""
 
+import re
 import textwrap
 
 import pytest
@@ -16,6 +17,8 @@ dataset_bronce: precios_bronce
 dataset_ops: precios_ops
 conexion_biglake: precios_biglake
 ruta_local_datos: ./salida/data
+prefijo_catalogos: catalogos
+ruta_local_catalogos: ./salida/catalogos
 anio_mes_maximo: "2026-08"
 """
 
@@ -40,6 +43,13 @@ def test_carga_valida(tmp_path, monkeypatch):
         "/scraping_detalle_chedraui.csv"
     )
     assert config.prefijo_bronce() == "gs://bronce_precios_bitek/precios"
+    assert config.uri_raw_catalogo("ndf/dim_ndf.xlsx") == (
+        "gs://raw_precios_bitek/catalogos/ndf/dim_ndf.xlsx"
+    )
+    assert config.uri_bronce_catalogo("ndf/dim_ndf.parquet") == (
+        "gs://bronce_precios_bitek/catalogos/ndf/dim_ndf.parquet"
+    )
+    assert config.prefijo_bronce_catalogos() == "gs://bronce_precios_bitek/catalogos"
     assert config.conexion() == "proyecto-de-prueba.us.precios_biglake"
     assert config.tabla_bronce("precios_ext") == "proyecto-de-prueba.precios_bronce.precios_ext"
     assert config.tabla_ops("_ingesta_manifest") == "proyecto-de-prueba.precios_ops._ingesta_manifest"
@@ -110,6 +120,42 @@ def test_archivo_inexistente_falla(tmp_path, monkeypatch):
 
     with pytest.raises(ErrorConfig, match="no_existe.yml"):
         cargar_config("load/config/no_existe.yml")
+
+
+# --- Catálogos -------------------------------------------------------------
+
+
+@pytest.mark.parametrize("campo", ["prefijo_catalogos", "ruta_local_catalogos"])
+def test_campo_de_catalogos_faltante_falla(tmp_path, monkeypatch, campo):
+    sin_campo = re.sub(rf"^{campo}:.*\n", "", YML_VALIDO, flags=re.MULTILINE)
+    ruta = escribir(tmp_path, sin_campo, monkeypatch)
+
+    with pytest.raises(ErrorConfig) as e:
+        cargar_config(ruta)
+
+    assert campo in str(e.value)
+    assert "gcp.yml" in str(e.value)
+
+
+def test_ruta_de_catalogos_absoluta_falla(tmp_path, monkeypatch):
+    absoluta = YML_VALIDO.replace(
+        "ruta_local_catalogos: ./salida/catalogos",
+        "ruta_local_catalogos: /salida/catalogos",
+    )
+    ruta = escribir(tmp_path, absoluta, monkeypatch)
+
+    with pytest.raises(ErrorConfig, match="ruta_local_catalogos"):
+        cargar_config(ruta)
+
+
+def test_los_catalogos_no_caen_bajo_el_prefijo_de_precios(tmp_path, monkeypatch):
+    """`precios_ext` apunta a `<prefijo_bronce>/*`: los catálogos quedan fuera."""
+    ruta = escribir(tmp_path, YML_VALIDO, monkeypatch)
+    config = cargar_config(ruta)
+
+    assert not config.prefijo_bronce_catalogos().startswith(
+        config.prefijo_bronce() + "/"
+    )
 
 
 # --- Corte de mes -----------------------------------------------------------

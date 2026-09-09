@@ -13,6 +13,12 @@ bucket_bronce: bronce_precios_bitek
 # Prefijo común dentro de ambos buckets, antes de las particiones hive.
 prefijo: precios
 
+# Prefijo de los catálogos (NDF y demás) dentro de los mismos buckets. Es
+# hermano de `prefijo`, no un subdirectorio suyo: así la external table de
+# precios (apunta a <prefijo>/*) y la del NDF no se pisan. Un catálogo es un
+# snapshot de reemplazo, sin particiones hive.
+prefijo_catalogos: catalogos
+
 # Datasets de BigQuery que usa este módulo. El dataset lleva la capa.
 #   precios_bronce  external table BigLake sobre gs://bronce_precios_bitek
 #   precios_ops     manifest de ingesta
@@ -21,8 +27,9 @@ dataset_bronce: precios_bronce
 dataset_ops: precios_ops
 conexion_biglake: precios_biglake
 
-# Relativa a la raíz del repo, igual que las rutas de los scrapers.
+# Relativas a la raíz del repo, igual que las rutas de los scrapers.
 ruta_local_datos: ./salida/data
+ruta_local_catalogos: ./salida/catalogos
 
 # Último mes que entra en la ingesta, inclusive. El mes en curso se queda
 # fuera: su corrida de scraping aún no ha terminado y sus archivos cambian.

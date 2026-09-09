@@ -55,9 +55,12 @@ def config(ctx: typer.Context) -> None:
     typer.echo(f"dataset ops       {cfg.tabla_ops('<tabla>')}")
     typer.echo(f"conexión BigLake  {cfg.conexion()}")
     typer.echo(f"datos locales     {cfg.ruta_datos()}")
+    typer.echo(f"catálogos locales {cfg.ruta_catalogos()}")
     typer.echo(f"ingiere hasta     {cfg.anio_mes_maximo} (inclusive)")
     typer.echo(f"raw               {cfg.uri_raw('<tienda>', '<anio_mes>', '<archivo>.csv')}")
     typer.echo(f"bronce            {cfg.uri_bronce('<tienda>', '<anio_mes>', '<archivo>.parquet')}")
+    typer.echo(f"raw catálogo      {cfg.uri_raw_catalogo('<catalogo>/<archivo>.xlsx')}")
+    typer.echo(f"bronce catálogo   {cfg.uri_bronce_catalogo('<catalogo>/<archivo>.parquet')}")
 
 
 @app.command()

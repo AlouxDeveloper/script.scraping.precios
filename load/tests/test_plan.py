@@ -20,6 +20,8 @@ CONFIG = ConfigGCP(
     dataset_ops="precios_ops",
     conexion_biglake="precios_biglake",
     ruta_local_datos="./salida/data",
+    prefijo_catalogos="catalogos",
+    ruta_local_catalogos="./salida/catalogos",
     anio_mes_maximo="2026-08",
 )
 

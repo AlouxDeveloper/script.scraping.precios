@@ -38,10 +38,12 @@ class ConfigGCP:
     bucket_raw: str
     bucket_bronce: str
     prefijo: str
+    prefijo_catalogos: str
     dataset_bronce: str
     dataset_ops: str
     conexion_biglake: str
     ruta_local_datos: str
+    ruta_local_catalogos: str
     anio_mes_maximo: str
 
     # --- Rutas derivadas -------------------------------------------------
@@ -67,6 +69,39 @@ class ConfigGCP:
     def prefijo_bronce(self) -> str:
         """Prefijo que consume el hive partitioning de la external table."""
         return f"gs://{self.bucket_bronce}/{self.prefijo}"
+
+    # --- Catálogos -----------------------------------------------------
+
+    # Los catálogos (NDF y demás) viajan por los mismos buckets que el
+    # histórico de precios pero bajo su propio prefijo, para que su external
+    # table y `precios_ext` no se pisen. Un catálogo es un snapshot de
+    # reemplazo, no una serie temporal: sin particiones hive.
+
+    def ruta_catalogos(self) -> str:
+        """Ruta absoluta a `salida/catalogos`, resuelta desde la raíz del repo."""
+        return os.path.normpath(
+            os.path.join(raiz_repo(), self.ruta_local_catalogos)
+        )
+
+    def uri_raw_catalogo(self, nombre: str) -> str:
+        """URI del catálogo original (xlsx/csv) en la capa raw.
+
+        `nombre` incluye el subdirectorio del catálogo y el archivo, por
+        ejemplo `ndf/dim_ndf.xlsx`.
+        """
+        return f"gs://{self.bucket_raw}/{self.prefijo_catalogos}/{nombre}"
+
+    def uri_bronce_catalogo(self, nombre: str) -> str:
+        """URI del catálogo tipado a STRING en la capa bronce."""
+        return f"gs://{self.bucket_bronce}/{self.prefijo_catalogos}/{nombre}"
+
+    def prefijo_bronce_catalogos(self) -> str:
+        """Prefijo de los catálogos en bronce.
+
+        Hermano de `prefijo_bronce()`, no descendiente: `precios_ext` apunta a
+        `<prefijo_bronce>/*` y no debe alcanzar los catálogos.
+        """
+        return f"gs://{self.bucket_bronce}/{self.prefijo_catalogos}"
 
     def tabla_bronce(self, nombre: str) -> str:
         """Referencia completa a una tabla del dataset de bronce (external tables)."""
@@ -155,7 +190,12 @@ def _validar_valores(config: ConfigGCP, ruta_yml: str) -> None:
             f"se esperaba el formato YYYY-MM (por ejemplo 2026-08)"
         )
 
-    for clave in ("prefijo", "ruta_local_datos"):
+    for clave in (
+        "prefijo",
+        "prefijo_catalogos",
+        "ruta_local_datos",
+        "ruta_local_catalogos",
+    ):
         valor = getattr(config, clave)
         if valor.startswith("/"):
             raise ErrorConfig(
