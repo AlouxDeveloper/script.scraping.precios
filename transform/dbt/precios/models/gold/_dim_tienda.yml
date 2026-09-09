@@ -1,0 +1,87 @@
+version: 2
+
+seeds:
+  - name: tiendas
+    description: >
+      Catálogo propio de tiendas, versionado en el repo. Fuente única de
+      `dim_tienda`.
+
+      REGLA: un `tienda_key` no se reasigna NUNCA. Reciclar el número de una
+      tienda dada de baja para una tienda nueva corrompe en silencio todo el
+      histórico de la fact, y además rompe `producto_key`, que se deriva de
+      él. Dar de baja una tienda es marcarla (columna futura), no liberar su
+      número. Una tienda nueva toma siempre el siguiente `tienda_key` libre.
+
+      Los IDs numéricos de algunos scrapers (`2` Benavides, `12` Walmart,
+      etc.) no son esta llave: catálogo ajeno con huecos, vive en
+      `tienda_raw` de bronce.
+    columns:
+      - name: tienda_key
+        description: >
+          Llave subrogada, INT64 (fijado en `dbt_project.yml`). Asignada 1..19
+          por orden alfabético de slug en la carga inicial. Inmutable.
+        tests:
+          - not_null
+          - unique
+      - name: tienda_slug
+        description: >
+          Slug estable de `load/config/archivos.yml`. Es lo que trae
+          `precios_silver.precios`; el único punto de cruce con el histórico.
+        tests:
+          - not_null
+          - unique
+      - name: tienda_nombre
+        description: Nombre comercial para mostrar en BI.
+        tests:
+          - not_null
+          - unique
+
+models:
+  - name: dim_tienda
+    description: >
+      Dimensión de tiendas (Kimball). `ref('tiendas')` sin transformación:
+      19 filas, una por tienda del proyecto. `tienda_key` es la FK que la
+      fact conservará con el mismo nombre.
+    columns:
+      - name: tienda_key
+        description: Llave subrogada INT64. Inmutable; ver la regla en el seed `tiendas`.
+        tests:
+          - not_null
+          - unique
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 1
+                max_value: 19
+      - name: tienda_slug
+        description: Slug de scraping; llave natural del negocio.
+        tests:
+          - not_null
+          - unique
+          - accepted_values:
+              arguments:
+                values:
+                  - alsuper
+                  - aurrera
+                  - benavides
+                  - chedraui
+                  - comer
+                  - fahorro
+                  - farmalisto
+                  - farmatodo
+                  - fesa
+                  - gi
+                  - guadalajara
+                  - heb
+                  - isseg
+                  - klyns
+                  - sanpablo
+                  - similares
+                  - soriana
+                  - walmart
+                  - yza
+                quote: true
+      - name: tienda_nombre
+        description: Nombre comercial para mostrar.
+        tests:
+          - not_null
+          - unique
