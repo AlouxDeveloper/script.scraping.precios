@@ -94,6 +94,38 @@ def _xlsx_temporal(tmp_path, columnas: list[str]) -> str:
     return ruta
 
 
+def test_renombrado_23_a_17_descarta_las_sales(tmp_path):
+    """Un XLSX con las 23 del origen da las 17 del modelo, sin las seis Cve Sal."""
+    ruta = _xlsx_temporal(tmp_path, list(RENOMBRE) + list(COLUMNAS_DESCARTADAS))
+
+    df = leer_xlsx(ruta)
+
+    assert list(df.columns) == list(COLUMNAS_NDF)
+    assert len(df.columns) == COLUMNAS_ESPERADAS
+    for descartada in COLUMNAS_DESCARTADAS:
+        assert descartada not in df.columns
+
+
+def test_ndf_id_con_cero_a_la_izquierda_sobrevive_el_roundtrip(tmp_path):
+    """El contrato con Knobloch: `00123` no se vuelve `123`, ni `190012` un entero.
+
+    `ndf_id` y `fecha_lanzamiento` parecen numéricos; el Parquet los conserva
+    como texto para que el cero a la izquierda y el `YYYYMM` lleguen intactos.
+    """
+    fila = {c: "x" for c in list(RENOMBRE) + list(COLUMNAS_DESCARTADAS)}
+    fila["NDF"] = "00123"
+    fila["Fecha Lanz"] = "190012"
+    ruta = str(tmp_path / "dim_ndf.xlsx")
+    pd.DataFrame([fila]).to_excel(ruta, sheet_name=HOJA, index=False)
+
+    tabla = pq.read_table(pa.BufferReader(a_parquet(leer_xlsx(ruta))))
+
+    assert tabla.schema.field("ndf_id").type == pa.string()
+    assert tabla.schema.field("fecha_lanzamiento").type == pa.string()
+    assert tabla.column("ndf_id").to_pylist() == ["00123"]
+    assert tabla.column("fecha_lanzamiento").to_pylist() == ["190012"]
+
+
 def test_columna_desconocida_detiene_la_carga(tmp_path):
     ruta = _xlsx_temporal(tmp_path, list(RENOMBRE) + ["Columna Nueva"])
 
