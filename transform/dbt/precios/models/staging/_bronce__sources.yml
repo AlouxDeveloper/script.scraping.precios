@@ -4,15 +4,18 @@ sources:
   - name: bronce
     description: >
       Capa bronce del medallion: Parquet tipado sobre
-      `gs://bronce_precios_bitek`, expuesto como external table BigLake con
-      hive partitioning. Es la frontera del módulo `load/` y el punto de
-      entrada único de la transformación: dbt nunca lee de `raw` ni de los
-      CSV locales.
+      `gs://bronce_precios_bitek`, expuesto como external tables BigLake. Es
+      la frontera del módulo `load/` y el punto de entrada único de la
+      transformación: dbt nunca lee de `raw` ni de los CSV locales.
+
+      `precios_ext` es el histórico con hive partitioning; `ndf_ext` es el
+      catálogo NDF, un único Parquet de reemplazo sin particiones.
 
       El archivo histórico está congelado (dic-2025 a sep-2026), así que la
       source no declara `freshness`: no hay carga incremental que vigilar.
       Un bug de parser se corrige regenerando bronce desde raw, o
-      re-derivando aquí a partir de las columnas `*_raw`.
+      re-derivando aquí a partir de las columnas `*_raw` (precios) o del
+      texto original (catálogo).
     database: scenic-firefly-473823-f7
     schema: precios_bronce
 
@@ -113,3 +116,63 @@ sources:
             description: LINAJE. Número de fila dentro del CSV de origen.
           - name: _ingestado_en
             description: LINAJE. TIMESTAMP en que `load/` escribió el Parquet de bronce.
+
+      - name: ndf_ext
+        description: >
+          Catálogo NDF de medicamentos (corte Farma & No Farma, julio 2026):
+          una fila por `ndf_id`, 17 columnas. `load/catalogos.py` lo escribe
+          desde el XLSX de origen con TODO en STRING a propósito: el tipado
+          vive en `stg_ndf`, donde se lee junto a la regla que lo justifica.
+          Las seis columnas descartadas del origen (`Cve Sal1`..`Cve Sal6`)
+          no se cargan por decisión de alcance.
+        columns:
+          - name: ndf_id
+            description: >
+              Identificador NDF del producto. PK: único en las 180,914 filas.
+              Llega SIN padding (1 a 7 dígitos); se conserva STRING tal cual.
+          - name: fecha_lanzamiento
+            description: >
+              RAW. `YYYYMM` de 6 caracteres como texto. `190012` es el
+              centinela de "sin fecha conocida", no diciembre de 1900.
+          - name: presentacion
+            description: RAW. Presentación comercial. No es única entre `ndf_id` distintos.
+          - name: producto
+            description: RAW. Nombre del producto en el catálogo.
+          - name: descripcion
+            description: RAW. Descripción / complemento del nombre.
+          - name: cve_laboratorio
+            description: RAW. Clave del laboratorio.
+          - name: laboratorio
+            description: RAW. Nombre del laboratorio.
+          - name: corporacion
+            description: RAW. Corporación dueña del laboratorio.
+          - name: cve_mg
+            description: >
+              RAW. Clave; semántica sin confirmar, pendiente de glosario con
+              Knobloch. No se le pone nombre descriptivo para no fijar una
+              interpretación no verificada.
+          - name: cve_genero
+            description: RAW. Clave del género terapéutico.
+          - name: genero
+            description: RAW. Género terapéutico (p. ej. `O.T.C.`).
+          - name: cve_ct
+            description: RAW. Clave; semántica sin confirmar, pendiente de glosario con Knobloch.
+          - name: cve_ff
+            description: >
+              RAW. Clave de forma farmacéutica; semántica sin confirmar,
+              pendiente de glosario con Knobloch.
+          - name: forma_farmaceutica_n3
+            description: >
+              RAW. Forma farmacéutica, nivel 3; semántica sin confirmar,
+              pendiente de glosario con Knobloch.
+          - name: std_fac
+            description: >
+              RAW. Valor numérico en texto; semántica sin confirmar,
+              pendiente de glosario con Knobloch. Única columna del catálogo
+              con nulos (145).
+          - name: molecula
+            description: RAW. Molécula(s) del principio activo, separadas por ` + `.
+          - name: division
+            description: >
+              RAW. `FARMA` / `NO FARMA` y otras divisiones; semántica exacta
+              sin confirmar, pendiente de glosario con Knobloch.

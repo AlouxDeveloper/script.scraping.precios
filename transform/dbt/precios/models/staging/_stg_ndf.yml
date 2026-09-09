@@ -1,0 +1,82 @@
+version: 2
+
+models:
+  - name: stg_ndf
+    description: >
+      Catálogo NDF tipado: `ndf_ext` con `fecha_lanzamiento` a DATE (centinela
+      `190012` → NULL) y `std_fac` a NUMERIC. El resto queda STRING tal como
+      viene de bronce. Una fila por `ndf_id`, 180,914 en total.
+
+      Seis columnas (`cve_mg`, `cve_ct`, `cve_ff`, `forma_farmaceutica_n3`,
+      `std_fac`, `division`) tienen semántica sin confirmar: pendientes de
+      glosario con Knobloch. No se les pone nombre descriptivo para no fijar
+      en el modelo una interpretación que nadie verificó.
+    columns:
+      - name: ndf_id
+        description: >
+          Llave natural del catálogo. STRING SIN padding, tal como llega (1 a
+          7 dígitos). Un crosswalk con ceros a la izquierda hay que
+          normalizarlo antes de joinear contra esta columna — bloqueo abierto
+          del contrato con Knobloch.
+        tests:
+          - not_null
+          - unique
+      - name: fecha_lanzamiento
+        description: >
+          DATE de lanzamiento, derivada del `YYYYMM` de origen. NULL cuando el
+          origen traía el centinela `190012` ("sin fecha conocida"). Sus NULL
+          coinciden con el conteo de `190012` en `ndf_ext`.
+      - name: std_fac
+        description: >
+          NUMERIC. Semántica sin confirmar (pendiente de glosario). Única
+          columna del catálogo con nulos (145).
+      - name: presentacion
+        description: Presentación comercial. No es única entre `ndf_id` distintos.
+        tests:
+          - not_null
+      - name: producto
+        description: Nombre del producto en el catálogo.
+        tests:
+          - not_null
+      - name: descripcion
+        description: Descripción / complemento del nombre.
+      - name: cve_laboratorio
+        description: Clave del laboratorio.
+      - name: laboratorio
+        description: Nombre del laboratorio.
+        tests:
+          - not_null
+      - name: corporacion
+        description: Corporación dueña del laboratorio.
+      - name: cve_mg
+        description: Clave; semántica sin confirmar, pendiente de glosario con Knobloch.
+      - name: cve_genero
+        description: Clave del género terapéutico.
+      - name: genero
+        description: Género terapéutico (p. ej. `O.T.C.`).
+      - name: cve_ct
+        description: Clave; semántica sin confirmar, pendiente de glosario con Knobloch.
+      - name: cve_ff
+        description: >
+          Clave de forma farmacéutica; semántica sin confirmar, pendiente de
+          glosario con Knobloch.
+      - name: forma_farmaceutica_n3
+        description: >
+          Forma farmacéutica, nivel 3; semántica sin confirmar, pendiente de
+          glosario con Knobloch.
+      - name: molecula
+        description: Molécula(s) del principio activo, separadas por ` + `.
+        tests:
+          - not_null
+      - name: division
+        description: >
+          `FARMA` / `NO FARMA` y otras divisiones; semántica exacta sin
+          confirmar, pendiente de glosario con Knobloch.
+        tests:
+          - not_null
+    tests:
+      # No debe quedar ninguna fecha de 1900: el centinela `190012` tiene que
+      # haberse vuelto NULL, no 1900-12-01.
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "fecha_lanzamiento is null or fecha_lanzamiento >= '1901-01-01'"
