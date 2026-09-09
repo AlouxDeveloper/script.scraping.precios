@@ -197,17 +197,19 @@ def catalogo(ctx: typer.Context) -> None:
 
 @app.command(name="bq-setup")
 def bq_setup(ctx: typer.Context) -> None:
-    """Crea o reemplaza la external table BigLake con hive partitioning sobre bronce.
+    """Crea o reemplaza las external tables BigLake sobre la capa bronce.
 
-    Es la frontera de `load/`: deja el histórico consultable en BigQuery. La
-    limpieza y las capas silver/gold son trabajo de dbt sobre esta tabla.
+    Es la frontera de `load/`: deja el histórico (`precios_ext`) y el catálogo
+    NDF (`ndf_ext`) consultables en BigQuery. La limpieza y las capas
+    silver/gold son trabajo de dbt sobre estas tablas.
     """
     cfg = ctx.obj
     cliente = cliente_bq(cfg)
-    ext = bq.crear_external_bronce(cliente, cfg)
-    filas = next(iter(cliente.query(f"SELECT COUNT(*) AS n FROM `{ext}`").result()))["n"]
-    typer.echo(f"external table  {ext}")
-    typer.echo(f"filas           {filas:,}")
+    for crear in (bq.crear_external_bronce, bq.crear_external_ndf):
+        ext = crear(cliente, cfg)
+        filas = next(iter(cliente.query(f"SELECT COUNT(*) AS n FROM `{ext}`").result()))["n"]
+        typer.echo(f"external table  {ext}")
+        typer.echo(f"filas           {filas:,}")
 
 
 @app.command()

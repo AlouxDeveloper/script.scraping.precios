@@ -16,6 +16,9 @@ from precios_load.bronce import ESQUEMA_BRONCE
 # Todo el histórico cargado a bronce hoy (134 archivos, septiembre fuera).
 FILAS_HISTORICO = 987_461
 
+# El catálogo NDF: el corte de julio 2026, verificado en ALD-39.
+FILAS_NDF = 180_914
+
 
 def _crear(cliente_bq, cfg_gcp, tabla):
     return bq.crear_external_bronce(cliente_bq, cfg_gcp, tabla=tabla)
@@ -63,6 +66,37 @@ def test_crear_external_bronce_es_idempotente(cliente_bq, cfg_gcp, tabla_ext_tmp
     de_nuevo = _crear(cliente_bq, cfg_gcp, tabla_ext_tmp)
 
     assert tabla == de_nuevo
+    assert _contar(cliente_bq, tabla) == FILAS_HISTORICO
+
+
+def test_ndf_ext_ve_el_catalogo_completo(cliente_bq, cfg_gcp, tabla_ndf_ext_tmp):
+    tabla = bq.crear_external_ndf(cliente_bq, cfg_gcp, tabla=tabla_ndf_ext_tmp)
+
+    assert _contar(cliente_bq, tabla) == FILAS_NDF
+
+
+def test_ndf_ext_es_idempotente(cliente_bq, cfg_gcp, tabla_ndf_ext_tmp):
+    tabla = bq.crear_external_ndf(cliente_bq, cfg_gcp, tabla=tabla_ndf_ext_tmp)
+    de_nuevo = bq.crear_external_ndf(cliente_bq, cfg_gcp, tabla=tabla_ndf_ext_tmp)
+
+    assert tabla == de_nuevo
+    assert _contar(cliente_bq, tabla) == FILAS_NDF
+
+
+def test_ndf_ext_no_arrastra_filas_de_precios(cliente_bq, cfg_gcp, tabla_ndf_ext_tmp):
+    """Sus `uris` son `catalogos/ndf/*.parquet`: el histórico de precios queda fuera."""
+    tabla = bq.crear_external_ndf(cliente_bq, cfg_gcp, tabla=tabla_ndf_ext_tmp)
+
+    nombres = {c.name for c in cliente_bq.get_table(tabla).schema}
+    assert "ndf_id" in nombres
+    assert "precio_actual" not in nombres
+    assert _contar(cliente_bq, tabla) == FILAS_NDF
+
+
+def test_precios_ext_no_ve_el_catalogo(cliente_bq, cfg_gcp, tabla_ext_tmp):
+    """El Parquet del NDF vive en `catalogos/`, no en `precios/*`: no se cuela."""
+    tabla = _crear(cliente_bq, cfg_gcp, tabla_ext_tmp)
+
     assert _contar(cliente_bq, tabla) == FILAS_HISTORICO
 
 
