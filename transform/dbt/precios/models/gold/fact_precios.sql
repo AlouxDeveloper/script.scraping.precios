@@ -2,8 +2,8 @@
     Tabla de hechos de precios (Kimball). Grano `(producto_key, fecha_key)`:
     un precio observado por producto y día. Grano medido en ALD-37.
 
-    Dos medidas y nada derivado. `descuento_pct` y el precio efectivo se
-    calculan en la capa de consumo, no aquí. `precio_oferta` llega NULL
+    Dos medidas y nada derivado. El porcentaje de descuento y el precio
+    efectivo se calculan en la capa de consumo, no aquí. `precio_oferta` llega NULL
     -no 0- desde silver (ALD-44): con el centinela `0` vigente, cualquier
     `MIN()` o `AVG()` sobre la columna devolvía cero.
 

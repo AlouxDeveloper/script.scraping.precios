@@ -8,9 +8,9 @@ models:
       clusterizada por `tienda_key` y `producto_key`, sin
       `require_partition_filter`.
 
-      Dos medidas, nada derivado: `precio_lista` y `precio_oferta`
-      (`descuento_pct` y el precio efectivo se calculan en la capa de
-      consumo). `precio_oferta` es NULL cuando no hay descuento real.
+      Dos medidas, nada derivado: `precio_lista` y `precio_oferta` (el
+      porcentaje de descuento y el precio efectivo se calculan en la capa
+      de consumo). `precio_oferta` es NULL cuando no hay descuento real.
 
       Colapsa 17,584 filas de exceso de silver (ALD-37) quedándose con el
       precio de lista más bajo observado cada día.

@@ -17,8 +17,8 @@
     El `0` original sigue disponible en `precios_ext` y en
     `precios_cuarentena` para trazabilidad.
 
-    `descuento_pct` y el precio efectivo son derivadas: se calculan en la
-    capa de consumo, no aquí. `url_imagen` sí conserva su relleno
+    El porcentaje de descuento y el precio efectivo son derivadas: se
+    calculan en la capa de consumo, no aquí. `url_imagen` sí conserva su relleno
     `SIN_IMAGEN`: es un valor legítimo de negocio, no un número que
     contamine una agregación.
 #}
