@@ -1,16 +1,26 @@
 {#
-    Tabla limpia de primera etapa: sin duplicados exactos y con las
-    derivadas de precio. Materializada como tabla -no vista- porque gold
-    y BI la consultan repetidamente y no vale la pena reprocesar el
+    Tabla limpia de primera etapa: sin duplicados exactos, con el precio
+    de lista resuelto. Materializada como tabla -no vista- porque gold y
+    BI la consultan repetidamente y no vale la pena reprocesar el
     histórico completo en cada lectura.
 
     Sin columnas de linaje ni `en_oferta`: en silver ya no se usan para
     depurar (eso vive en `precios_cuarentena`) y `en_oferta` es
-    redundante contra `precio_oferta != 0`. `url_imagen` y
-    `precio_oferta` se rellenan con un valor explícito para que el
-    consumidor de BI no tenga que tratar el NULL como caso especial;
-    `sku` no necesita relleno porque `stg_precios` ya descarta a
-    `precios_cuarentena` (motivo `SIN_SKU`) la fila que no lo resuelve.
+    redundante contra `precio_oferta is not null`. `sku` no necesita
+    relleno porque `stg_precios` ya descarta a `precios_cuarentena`
+    (motivo `SIN_SKU`) la fila que no lo resuelve.
+
+    `precio_oferta` es NULL cuando no hay descuento real, NO 0. Un
+    centinela `0` en una columna numérica se cuela en cualquier `MIN()`
+    o `AVG()` de la capa de consumo y de la fact, y el error -precios de
+    oferta reportados como cero- no se nota hasta que lo ve el cliente.
+    El `0` original sigue disponible en `precios_ext` y en
+    `precios_cuarentena` para trazabilidad.
+
+    `descuento_pct` y el precio efectivo son derivadas: se calculan en la
+    capa de consumo, no aquí. `url_imagen` sí conserva su relleno
+    `SIN_IMAGEN`: es un valor legítimo de negocio, no un número que
+    contamine una agregación.
 #}
 {{
     config(
@@ -69,10 +79,5 @@ select
     nombre_norm,
     coalesce(url_imagen, 'SIN_IMAGEN') as url_imagen,
     precio_lista,
-    if(en_oferta, precio_oferta_candidato, 0) as precio_oferta,
-    if(
-        en_oferta,
-        round(safe_divide(precio_lista - precio_oferta_candidato, precio_lista) * 100, 2),
-        0
-    ) as descuento_pct
+    if(en_oferta, precio_oferta_candidato, null) as precio_oferta
 from derivadas

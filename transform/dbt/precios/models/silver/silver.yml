@@ -74,13 +74,10 @@ models:
         tests:
           - not_null
       - name: precio_oferta
-        description: "`0` si no hay descuento real."
-        tests:
-          - not_null
-      - name: descuento_pct
-        description: "Porcentaje de descuento; `0` cuando no hay oferta."
-        tests:
-          - not_null
+        description: >
+          NULL si no hay descuento real. No se rellena con `0`: ese
+          centinela contamina cualquier `MIN()`/`AVG()` aguas abajo. El
+          `0` original vive en `precios_ext` y `precios_cuarentena`.
     tests:
       # La garantía de que no quedó ningún duplicado exacto: la razón de
       # ser de esta tabla.
@@ -100,14 +97,12 @@ models:
             column_name: precio_lista
             expression: "> 0"
       - dbt_utils.expression_is_true:
-          # precio_oferta = 0 cuando no hay oferta; 0 < precio_lista se
-          # cumple siempre porque precio_lista > 0, así que la condición
-          # cubre ambos casos (sin oferta y con oferta real).
+          # Solo evalúa las filas con oferta real: las que no tienen
+          # descuento traen `precio_oferta` NULL y la comparación las
+          # deja pasar sin chequear. Antes, con el centinela `0`, cubría
+          # también esos casos (`0 < precio_lista` siempre cierto).
           arguments:
             expression: "precio_oferta < precio_lista"
-      - dbt_utils.expression_is_true:
-          arguments:
-            expression: "descuento_pct between 0 and 100"
       - dbt_utils.expression_is_true:
           arguments:
             expression: "nombre_norm = lower(nombre_norm)"
