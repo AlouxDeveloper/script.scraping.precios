@@ -1,0 +1,90 @@
+version: 2
+
+models:
+  - name: dim_ndf
+    description: >
+      Dimensión del catálogo NDF (Kimball). `ref('stg_ndf')` sin
+      transformación: 180,914 filas, una por `ndf_id`. Materializada como
+      tabla y clusterizada por `corporacion`.
+
+      Grano producto + presentación, NO marca: `DIGESAN GRAG. 6` y
+      `DIGESAN JBE 15 ML` son dos `ndf_id` distintos. La jerarquía
+      comercial (corporación, laboratorio, marca, molécula) va plana como
+      columnas, no como dimensiones snowflake.
+
+      Choque de nombres deliberado: `producto` aquí es la marca comercial
+      del catálogo NDF; `dim_producto.producto` es el nombre del listing en
+      la tienda. Cosas distintas, dimensiones distintas — el cruce entre
+      ambas es el entity resolution, que está fuera de alcance.
+
+      Seis columnas (`cve_mg`, `cve_ct`, `cve_ff`, `forma_farmaceutica_n3`,
+      `std_fac`, `division`) heredan de `stg_ndf` semántica sin confirmar:
+      pendientes de glosario con Knobloch.
+    tests:
+      - dbt_utils.equal_rowcount:
+          arguments:
+            compare_model: ref('stg_ndf')
+    columns:
+      - name: ndf_id
+        description: >
+          Llave natural del catálogo. STRING SIN padding, tal como llega (1
+          a 7 dígitos). Un crosswalk con ceros a la izquierda hay que
+          normalizarlo antes de joinear contra esta columna — bloqueo
+          abierto del contrato con Knobloch.
+        tests:
+          - not_null
+          - unique
+      - name: fecha_lanzamiento
+        description: >
+          DATE de lanzamiento. NULL cuando el origen traía el centinela
+          `190012` ("sin fecha conocida").
+      - name: std_fac
+        description: NUMERIC. Semántica sin confirmar (glosario). 145 nulos.
+      - name: presentacion
+        description: Presentación comercial en texto libre.
+        tests:
+          - not_null
+      - name: producto
+        description: >
+          Marca comercial del catálogo NDF. NO es `dim_producto.producto`
+          (nombre del listing en la tienda).
+        tests:
+          - not_null
+      - name: descripcion
+        description: Descripción / complemento del nombre de la marca.
+      - name: cve_laboratorio
+        description: Clave del laboratorio.
+      - name: laboratorio
+        description: Nombre del laboratorio.
+        tests:
+          - not_null
+      - name: corporacion
+        description: Corporación dueña del laboratorio. Columna de clustering.
+        tests:
+          - not_null
+      - name: cve_mg
+        description: Clave; semántica sin confirmar, pendiente de glosario con Knobloch.
+      - name: cve_genero
+        description: Clave del género terapéutico.
+      - name: genero
+        description: Género terapéutico (p. ej. `O.T.C.`).
+      - name: cve_ct
+        description: Clave; semántica sin confirmar, pendiente de glosario con Knobloch.
+      - name: cve_ff
+        description: >
+          Clave de forma farmacéutica; semántica sin confirmar, pendiente de
+          glosario con Knobloch.
+      - name: forma_farmaceutica_n3
+        description: >
+          Forma farmacéutica, nivel 3; semántica sin confirmar, pendiente de
+          glosario con Knobloch.
+      - name: molecula
+        description: Molécula(s) del principio activo, separadas por ` + `.
+        tests:
+          - not_null
+      - name: division
+        description: >
+          `FARMA` / `NO FARMA` y otras divisiones; semántica exacta sin
+          confirmar, pendiente de glosario con Knobloch.
+        tests:
+          - not_null
