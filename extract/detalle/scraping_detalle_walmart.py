@@ -23,15 +23,26 @@ TIENDA = "18"
 VERSION_CHROME = 152
 
 ENCABEZADOS = [
-    "SKU", "URL_PRODUCTO", "Producto", "Precio_Actual", 
+    "SKU", "URL_PRODUCTO", "Producto", "Precio_Actual",
     "Precio_Oferta", "URL_IMAGEN", "Fecha_Hora_Captura", "Tienda"
 ]
+
+# CSV aparte para URLs que fallaron (producto dado de baja, bloqueo, timeout).
+# No comparte esquema con CSV_OUTPUT a propósito: así una URL caída nunca se
+# mezcla con los productos capturados con éxito y no hay que migrar el
+# histórico ya guardado si se agrega este control después.
+CSV_ESTADO_URLS = "./salida/data/2026/09_septiembre/scraping_detalle_walmart_fallidas.csv"
+ENCABEZADOS_ESTADO = ["URL_PRODUCTO", "Estatus", "Detalle", "Fecha_Hora_Captura"]
 
 # Asegurar carpetas y archivo de salida
 os.makedirs(os.path.dirname(CSV_OUTPUT) or ".", exist_ok=True)
 if not os.path.exists(CSV_OUTPUT):
     with open(CSV_OUTPUT, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=ENCABEZADOS)
+        writer.writeheader()
+if not os.path.exists(CSV_ESTADO_URLS):
+    with open(CSV_ESTADO_URLS, "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=ENCABEZADOS_ESTADO)
         writer.writeheader()
 
 # === CONTROL DE AVANCE INCREMENTAL ===
@@ -43,6 +54,16 @@ if os.path.exists(CSV_OUTPUT) and os.stat(CSV_OUTPUT).st_size > 0:
             urls_procesadas = set(df_prev["URL_PRODUCTO"].dropna().astype(str).tolist())
     except Exception as e:
         print(f"⚠️ Alerta leyendo avance previo: {e}")
+
+# URLs ya marcadas como caídas/bloqueadas en corridas anteriores: se saltan
+# igual que las exitosas, para no repetir peticiones sin sentido.
+if os.path.exists(CSV_ESTADO_URLS) and os.stat(CSV_ESTADO_URLS).st_size > 0:
+    try:
+        df_fallidas = pd.read_csv(CSV_ESTADO_URLS)
+        if "URL_PRODUCTO" in df_fallidas.columns:
+            urls_procesadas |= set(df_fallidas["URL_PRODUCTO"].dropna().astype(str).tolist())
+    except Exception as e:
+        print(f"⚠️ Alerta leyendo URLs fallidas previas: {e}")
 
 # Manejo de Encoding
 try:
@@ -157,6 +178,14 @@ for i, item in enumerate(barra, 1):
 
     except Exception as e:
         tqdm.write(f"   ❌ Saltó la ventana {i} por error o bloqueo. Detalle: {e}")
+        with open(CSV_ESTADO_URLS, "a", newline="", encoding="utf-8") as f_estado:
+            csv.DictWriter(f_estado, fieldnames=ENCABEZADOS_ESTADO).writerow({
+                "URL_PRODUCTO": url,
+                "Estatus": "ERROR",
+                "Detalle": str(e)[:200],
+                "Fecha_Hora_Captura": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            })
+        urls_procesadas.add(url)
         time.sleep(3)
         
     finally:
