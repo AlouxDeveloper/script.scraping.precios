@@ -7,6 +7,10 @@ de subir un solo byte a Google Cloud.
 Corre sobre el histórico en disco: septiembre aún no ha cerrado, sus archivos
 no están en disco ni declarados. Cuando entre, se re-agregan las 6 entradas
 (con sus 2 casos vacíos) y se reactiva `test_los_dos_archivos_vacios`.
+
+Incluye el backfill de `salida/data/base_price_v.3.csv` (ago-2024..feb-2026,
+41 archivos `historico_detalle_<tienda>.csv`, todos V2): ver el bloque
+correspondiente al inicio de `archivos.yml`.
 """
 
 import pytest
@@ -17,22 +21,28 @@ from precios_load.plan import construir_plan
 
 TODO_EL_HISTORICO = "2026-08"
 
-TOTAL_ARCHIVOS = 134
-TOTAL_FILAS = 987461
-TOTAL_BYTES = 370891023
+TOTAL_ARCHIVOS = 175
+TOTAL_FILAS = 1226064
+TOTAL_BYTES = 444489478
 
 FILAS_POR_MES = {
-    "2025-12": 18773, "2026-01": 25320, "2026-02": 138627, "2026-03": 142103,
-    "2026-04": 130294, "2026-05": 135526, "2026-06": 119023, "2026-07": 143466,
-    "2026-08": 134329,
+    "2024-08": 5122, "2024-09": 4078, "2024-10": 4121, "2024-11": 4042,
+    "2024-12": 4045, "2025-01": 4022, "2025-02": 3799, "2025-03": 4060,
+    "2025-04": 4084, "2025-05": 4949, "2025-06": 4181, "2025-10": 17624,
+    "2025-11": 10067, "2025-12": 55327, "2026-01": 147236, "2026-02": 144566,
+    "2026-03": 142103, "2026-04": 130294, "2026-05": 135526, "2026-06": 119023,
+    "2026-07": 143466, "2026-08": 134329,
 }
 
 ARCHIVOS_POR_MES = {
-    "2025-12": 4, "2026-01": 8, "2026-02": 15, "2026-03": 17, "2026-04": 15,
-    "2026-05": 18, "2026-06": 19, "2026-07": 19, "2026-08": 19,
+    "2024-08": 1, "2024-09": 1, "2024-10": 1, "2024-11": 1, "2024-12": 1,
+    "2025-01": 1, "2025-02": 1, "2025-03": 1, "2025-04": 1, "2025-05": 1,
+    "2025-06": 1, "2025-10": 13, "2025-11": 1, "2025-12": 9, "2026-01": 18,
+    "2026-02": 16, "2026-03": 17, "2026-04": 15, "2026-05": 18, "2026-06": 19,
+    "2026-07": 19, "2026-08": 19,
 }
 
-POR_VARIANTE = {"V1": 89, "V2": 27, "V3": 15, "V4": 1, "V5": 1, "V6": 1}
+POR_VARIANTE = {"V1": 89, "V2": 68, "V3": 15, "V4": 1, "V5": 1, "V6": 1}
 
 TIENDAS = {
     "alsuper", "aurrera", "benavides", "chedraui", "comer", "fahorro",
@@ -51,7 +61,7 @@ DESFASES = {
     "2026/06_junio/scraping_detalle_aurrera.csv": (732, 4822, "2026-06"),
 }
 
-COPIAS = 9
+COPIAS = 11
 
 
 @pytest.fixture(scope="module")
@@ -70,7 +80,7 @@ def flags_de(entrada, prefijo: str) -> str | None:
 # --- Los totales ------------------------------------------------------------
 
 
-def test_los_134_archivos_estan_clasificados(plan):
+def test_los_175_archivos_estan_clasificados(plan):
     assert len(plan.entradas) == TOTAL_ARCHIVOS
     assert plan.faltantes == ()
     assert plan.fuera_de_rango == ()
@@ -123,7 +133,7 @@ def test_los_dos_archivos_vacios(plan):
     assert all(e.accion == "salta" for e in plan.entradas if e.fuente.vacio)
 
 
-def test_los_9_archivos_con_sospecha_de_copia(plan):
+def test_los_11_archivos_con_sospecha_de_copia(plan):
     marcados = [e for e in plan.entradas if flags_de(e, "SOSPECHA_COPIA")]
     assert len(marcados) == COPIAS
     assert all(e.fuente.declarado.copia_de for e in marcados)

@@ -17,6 +17,164 @@
 
 archivos:
 
+  # --- Backfill histórico salida/data/base_price_v.3.csv (ago-2024..nov-2025 según corte por tienda) ---
+  # --- 2024-08 ---
+  - ruta: 2024/08_agosto/historico_detalle_fahorro.csv
+    tienda: fahorro
+    anio_mes: 2024-08
+
+  # --- 2024-09 ---
+  - ruta: 2024/09_septiembre/historico_detalle_fahorro.csv
+    tienda: fahorro
+    anio_mes: 2024-09
+
+  # --- 2024-10 ---
+  - ruta: 2024/10_octubre/historico_detalle_fahorro.csv
+    tienda: fahorro
+    anio_mes: 2024-10
+
+  # --- 2024-11 ---
+  - ruta: 2024/11_noviembre/historico_detalle_fahorro.csv
+    tienda: fahorro
+    anio_mes: 2024-11
+
+  # --- 2024-12 ---
+  - ruta: 2024/12_diciembre/historico_detalle_fahorro.csv
+    tienda: fahorro
+    anio_mes: 2024-12
+
+  # --- 2025-01 ---
+  - ruta: 2025/01_enero/historico_detalle_fahorro.csv
+    tienda: fahorro
+    anio_mes: 2025-01
+
+  # --- 2025-02 ---
+  - ruta: 2025/02_febrero/historico_detalle_fahorro.csv
+    tienda: fahorro
+    anio_mes: 2025-02
+
+  # --- 2025-03 ---
+  - ruta: 2025/03_marzo/historico_detalle_fahorro.csv
+    tienda: fahorro
+    anio_mes: 2025-03
+
+  # --- 2025-04 ---
+  - ruta: 2025/04_abril/historico_detalle_fahorro.csv
+    tienda: fahorro
+    anio_mes: 2025-04
+
+  # --- 2025-05 ---
+  - ruta: 2025/05_mayo/historico_detalle_fahorro.csv
+    tienda: fahorro
+    anio_mes: 2025-05
+
+  # --- 2025-06 ---
+  - ruta: 2025/06_junio/historico_detalle_fahorro.csv
+    tienda: fahorro
+    anio_mes: 2025-06
+
+  # --- 2025-10 ---
+  - ruta: 2025/10_octubre/historico_detalle_alsuper.csv
+    tienda: alsuper
+    anio_mes: 2025-10
+  - ruta: 2025/10_octubre/historico_detalle_aurrera.csv
+    tienda: aurrera
+    anio_mes: 2025-10
+  - ruta: 2025/10_octubre/historico_detalle_benavides.csv
+    tienda: benavides
+    anio_mes: 2025-10
+  - ruta: 2025/10_octubre/historico_detalle_comer.csv
+    tienda: comer
+    anio_mes: 2025-10
+  - ruta: 2025/10_octubre/historico_detalle_fahorro.csv
+    tienda: fahorro
+    anio_mes: 2025-10
+  - ruta: 2025/10_octubre/historico_detalle_farmalisto.csv
+    tienda: farmalisto
+    anio_mes: 2025-10
+  - ruta: 2025/10_octubre/historico_detalle_farmatodo.csv
+    tienda: farmatodo
+    anio_mes: 2025-10
+  - ruta: 2025/10_octubre/historico_detalle_fesa.csv
+    tienda: fesa
+    anio_mes: 2025-10
+  - ruta: 2025/10_octubre/historico_detalle_guadalajara.csv
+    tienda: guadalajara
+    anio_mes: 2025-10
+  - ruta: 2025/10_octubre/historico_detalle_isseg.csv
+    tienda: isseg
+    anio_mes: 2025-10
+  - ruta: 2025/10_octubre/historico_detalle_klyns.csv
+    tienda: klyns
+    anio_mes: 2025-10
+  - ruta: 2025/10_octubre/historico_detalle_soriana.csv
+    tienda: soriana
+    anio_mes: 2025-10
+  - ruta: 2025/10_octubre/historico_detalle_walmart.csv
+    tienda: walmart
+    anio_mes: 2025-10
+
+  # --- 2025-11 ---
+  - ruta: 2025/11_noviembre/historico_detalle_fahorro.csv
+    tienda: fahorro
+    anio_mes: 2025-11
+
+  # --- 2025-12 (backfill) ---
+  - ruta: 2025/12_diciembre/historico_detalle_aurrera.csv
+    tienda: aurrera
+    anio_mes: 2025-12
+  - ruta: 2025/12_diciembre/historico_detalle_benavides.csv
+    tienda: benavides
+    anio_mes: 2025-12
+  - ruta: 2025/12_diciembre/historico_detalle_fahorro.csv
+    tienda: fahorro
+    anio_mes: 2025-12
+    copia_de: 2025/11_noviembre/historico_detalle_fahorro.csv
+  - ruta: 2025/12_diciembre/historico_detalle_guadalajara.csv
+    tienda: guadalajara
+    anio_mes: 2025-12
+  - ruta: 2025/12_diciembre/historico_detalle_sanpablo.csv
+    tienda: sanpablo
+    anio_mes: 2025-12
+
+  # --- 2026-01 (backfill) ---
+  - ruta: 2026/01_enero/historico_detalle_alsuper.csv
+    tienda: alsuper
+    anio_mes: 2026-01
+  - ruta: 2026/01_enero/historico_detalle_aurrera.csv
+    tienda: aurrera
+    anio_mes: 2026-01
+  - ruta: 2026/01_enero/historico_detalle_benavides.csv
+    tienda: benavides
+    anio_mes: 2026-01
+  - ruta: 2026/01_enero/historico_detalle_comer.csv
+    tienda: comer
+    anio_mes: 2026-01
+  - ruta: 2026/01_enero/historico_detalle_fahorro.csv
+    tienda: fahorro
+    anio_mes: 2026-01
+    copia_de: 2025/11_noviembre/historico_detalle_fahorro.csv
+  - ruta: 2026/01_enero/historico_detalle_guadalajara.csv
+    tienda: guadalajara
+    anio_mes: 2026-01
+  - ruta: 2026/01_enero/historico_detalle_klyns.csv
+    tienda: klyns
+    anio_mes: 2026-01
+  - ruta: 2026/01_enero/historico_detalle_sanpablo.csv
+    tienda: sanpablo
+    anio_mes: 2026-01
+  - ruta: 2026/01_enero/historico_detalle_similares.csv
+    tienda: similares
+    anio_mes: 2026-01
+  - ruta: 2026/01_enero/historico_detalle_walmart.csv
+    tienda: walmart
+    anio_mes: 2026-01
+
+  # --- 2026-02 (backfill) ---
+  - ruta: 2026/02_febrero/historico_detalle_sanpablo.csv
+    tienda: sanpablo
+    anio_mes: 2026-02
+
   # --- 2025-12 ---
   - ruta: 2025/diciembre/productos_detalle_fesa.csv
     tienda: fesa

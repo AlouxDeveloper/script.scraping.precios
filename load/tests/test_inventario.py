@@ -21,8 +21,12 @@ TIENDAS = {
 }
 
 # Copias detectadas comparando el contenido de cada archivo ignorando la
-# columna de fecha: son idénticos salvo las fechas.
+# columna de fecha: son idénticos salvo las fechas. Las dos de fahorro
+# vienen del backfill de base_price_v.3.csv (nov/dic-2025 y ene-2026 son el
+# mismo scrape repetido).
 COPIAS = {
+    "2025/12_diciembre/historico_detalle_fahorro.csv": "2025/11_noviembre/historico_detalle_fahorro.csv",
+    "2026/01_enero/historico_detalle_fahorro.csv": "2025/11_noviembre/historico_detalle_fahorro.csv",
     "2026/03_marzo/scraping_detalle_soriana.csv": "2026/02_febrero/scraping_detalle_soriana.csv",
     "2026/03_marzo/scraping_detalles_gi.csv": "2026/02_febrero/scraping_detalles_gi.csv",
     "2026/05_mayo/scraping_detalle_aurrera1.csv": "2026/03_marzo/scraping_detalle_aurrera.csv",
@@ -34,9 +38,14 @@ COPIAS = {
     "2026/08_agosto/scraping_detalle_heb.csv": "2026/07_julio/scraping_detalle_heb.csv",
 }
 
+# Reparto por mes del inventario declarado, incluido el backfill de
+# base_price_v.3.csv (ago-2024..feb-2026).
 ARCHIVOS_POR_MES = {
-    "2025-12": 4, "2026-01": 8, "2026-02": 15, "2026-03": 17, "2026-04": 15,
-    "2026-05": 18, "2026-06": 19, "2026-07": 19, "2026-08": 19,
+    "2024-08": 1, "2024-09": 1, "2024-10": 1, "2024-11": 1, "2024-12": 1,
+    "2025-01": 1, "2025-02": 1, "2025-03": 1, "2025-04": 1, "2025-05": 1,
+    "2025-06": 1, "2025-10": 13, "2025-11": 1, "2025-12": 9, "2026-01": 18,
+    "2026-02": 16, "2026-03": 17, "2026-04": 15, "2026-05": 18, "2026-06": 19,
+    "2026-07": 19, "2026-08": 19,
 }
 
 
@@ -45,9 +54,9 @@ def inventario():
     return cargar_archivos()
 
 
-def test_son_134_archivos_sin_rutas_repetidas(inventario):
-    assert len(inventario) == 134
-    assert len({a.ruta for a in inventario}) == 134
+def test_son_175_archivos_sin_rutas_repetidas(inventario):
+    assert len(inventario) == 175
+    assert len({a.ruta for a in inventario}) == 175
 
 
 def test_las_19_tiendas_declaradas(inventario):

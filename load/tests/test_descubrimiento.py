@@ -22,19 +22,21 @@ FILA = "900437,https://heb.com.mx/x/p,Cubrebocas,41.90,41.90,https://img/1,2026-
 RUTA_HEB = "2026/06_junio/scraping_detalle_heb.csv"
 RUTA_YZA = "2026/06_junio/scraping_detalle_yza.csv"
 
-# Reparto real del histórico en disco. Septiembre aún no ha cerrado: sus
-# archivos no están en disco ni declarados en archivos.yml. Cuando entre, se
+# Reparto real del histórico en disco. Incluye el backfill de
+# salida/data/base_price_v.3.csv (41 archivos historico_detalle_<tienda>.csv,
+# ago-2024..feb-2026, todos V2). Septiembre aún no ha cerrado: sus archivos
+# no están en disco ni declarados en archivos.yml. Cuando entre, se
 # re-agregan las 6 entradas (con sus 2 casos vacíos) y se reactivan los tests
 # marcados con skip "septiembre pendiente de cierre".
-TOTAL_ARCHIVOS = 134
-TOTAL_FILAS = 987461
-POR_VARIANTE = {"V1": 89, "V2": 27, "V3": 15, "V4": 1, "V5": 1, "V6": 1}
+TOTAL_ARCHIVOS = 175
+TOTAL_FILAS = 1226064
+POR_VARIANTE = {"V1": 89, "V2": 68, "V3": 15, "V4": 1, "V5": 1, "V6": 1}
 
 # El corte declarado en gcp.yml. Hoy no deja nada fuera: todo lo declarado es
 # de agosto o antes.
 HASTA = "2026-08"
-ARCHIVOS_HASTA_AGOSTO = 134
-FILAS_HASTA_AGOSTO = 987461
+ARCHIVOS_HASTA_AGOSTO = 175
+FILAS_HASTA_AGOSTO = 1226064
 
 
 def escribir(base, ruta: str, contenido: str) -> str:
@@ -141,7 +143,7 @@ def hasta_agosto(datos_reales):
     return descubrir()
 
 
-def test_descubre_los_134_archivos(historico):
+def test_descubre_los_175_archivos(historico):
     assert len(historico.archivos) == TOTAL_ARCHIVOS
     assert historico.faltantes == ()
     assert len({a.ruta for a in historico.archivos}) == TOTAL_ARCHIVOS

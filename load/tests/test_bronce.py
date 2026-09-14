@@ -58,7 +58,7 @@ DESFASES = {
     "2026/03_marzo/scraping_detalle_fesa.csv": (5, 7576),
 }
 
-FILAS_TOTAL = 987461
+FILAS_TOTAL = 1226064
 
 
 @pytest.fixture
