@@ -10,13 +10,26 @@ import time
 import csv
 import os
 import random
+from tqdm import tqdm
 
 # === Configuración ===
-CSV_INPUT = "./salida/urls/urls_productos_farmalisto.csv" 
+CSV_INPUT = "./salida/urls/urls_productos_farmalisto.csv"
 CSV_OUTPUT = "./salida/data/2026/08_agosto/scraping_detalle_farmalisto.csv"
-COLUMNA_URL = "URL" 
+COLUMNA_URL = "URL"
 TIENDA = "7"
 CSV_HEADERS = ["SKU", "URL_PRODUCTO", "Producto", "Precio_Actual", "Precio_Oferta", "URL_IMAGEN", "Fecha_Hora_Captura", "Tienda"]
+# CSV aparte para URLs que fallaron, para no repetirlas al reanudar.
+CSV_ESTADO_URLS = "./salida/data/2026/08_agosto/scraping_detalle_farmalisto_fallidas.csv"
+
+
+def marcar_fallida(url: str, detalle: str = "") -> None:
+    """Registra una URL que no se pudo procesar en CSV_ESTADO_URLS."""
+    es_nuevo = not os.path.exists(CSV_ESTADO_URLS) or os.stat(CSV_ESTADO_URLS).st_size == 0
+    with open(CSV_ESTADO_URLS, "a", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        if es_nuevo:
+            w.writerow(["URL_PRODUCTO", "Estatus", "Detalle", "Fecha_Hora_Captura"])
+        w.writerow([url, "ERROR", detalle, datetime.now().strftime("%Y-%m-%d %H:%M:%S")])
 
 def limpiar_precio(texto_precio):
     if not texto_precio:
@@ -35,8 +48,13 @@ def main():
     urls_procesadas = set()
     if os.path.exists(CSV_OUTPUT) and os.stat(CSV_OUTPUT).st_size > 0:
         try:
-            urls_procesadas = set(pd.read_csv(CSV_OUTPUT)[COLUMNA_URL].astype(str).tolist())
-        except: 
+            urls_procesadas = set(pd.read_csv(CSV_OUTPUT)["URL_PRODUCTO"].astype(str).tolist())
+        except:
+            pass
+    if os.path.exists(CSV_ESTADO_URLS) and os.stat(CSV_ESTADO_URLS).st_size > 0:
+        try:
+            urls_procesadas |= set(pd.read_csv(CSV_ESTADO_URLS)["URL_PRODUCTO"].astype(str).tolist())
+        except:
             pass
 
     df_input = pd.read_csv(CSV_INPUT)
@@ -61,22 +79,25 @@ def main():
             if os.path.getsize(CSV_OUTPUT) == 0 if os.path.exists(CSV_OUTPUT) else True:
                 w.writeheader()
             
-            for i, row in df_input.iterrows():
+            barra = tqdm(list(df_input.iterrows()), desc="farmalisto", unit="url", initial=len(urls_procesadas))
+            for i, row in barra:
                 url = str(row[COLUMNA_URL]).strip()
-                if url in urls_procesadas or url == "nan": 
+                if url in urls_procesadas or url == "nan":
                     continue
 
                 print(f"🔎 [{i+1}/{len(df_input)}] Navegando a: {url}")
-                
+
                 try:
                     # Navegación directa en la misma ventana abierta
                     driver.get(url)
-                    
+
                     # Espera sutil a que cargue la estructura del título para asegurar el renderizado
                     try:
                         wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "h1.product_title, h1")))
                     except:
                         print("    ⚠️ Tiempo de espera agotado para el título. Saltando...")
+                        marcar_fallida(url, "timeout esperando título")
+                        urls_procesadas.add(url)
                         continue
 
                     # Un pequeño scroll para activar el lazyload de las imágenes e inyectar naturalidad
@@ -158,6 +179,8 @@ def main():
 
                 except Exception as e:
                     print(f"    ❌ Error procesando el producto actual: {e}")
+                    marcar_fallida(url, str(e)[:200])
+                    urls_procesadas.add(url)
                     time.sleep(2)
 
     finally:

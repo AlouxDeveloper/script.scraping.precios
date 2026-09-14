@@ -7,6 +7,7 @@ import time
 import os
 import re
 from typing import Optional, Dict, Any
+from tqdm import tqdm
 
 # === Configuración de Archivos y Rutas ===
 # Archivo CSV de entrada generado en la Fase 1 (URLs de producto)
@@ -14,6 +15,9 @@ CSV_INPUT = "./salida/urls/urls_productos_benavides.csv"
 # Archivo CSV de salida con todos los detalles
 CSV_OUTPUT = "./salida/data/2026/09_septiembre/scraping_detalle_benavides.csv" # RUTA ACTUALIZADA
 TIENDA_NOMBRE = "3"
+# CSV aparte para URLs que fallaron (HTTP distinto de 200, error de red), para
+# no repetirlas en la siguiente reanudación.
+CSV_ESTADO_URLS = "./salida/data/2026/09_septiembre/scraping_detalle_benavides_fallidas.csv"
 
 HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
@@ -124,6 +128,15 @@ def extraer_precio_normal_txt(soup: BeautifulSoup) -> str:
     except:
         return ''
 
+def marcar_fallida(url: str, detalle: str = "") -> None:
+    """Registra una URL que no se pudo procesar en CSV_ESTADO_URLS."""
+    es_nuevo = not os.path.exists(CSV_ESTADO_URLS) or os.stat(CSV_ESTADO_URLS).st_size == 0
+    with open(CSV_ESTADO_URLS, "a", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f)
+        if es_nuevo:
+            writer.writerow(["URL_PRODUCTO", "Estatus", "Detalle", "Fecha_Hora_Captura"])
+        writer.writerow([url, "ERROR", detalle, datetime.now().strftime("%Y-%m-%d %H:%M:%S")])
+
 def extraer_url_imagen(soup: BeautifulSoup) -> str:
     """
     Extrae la URL de la imagen principal del producto.
@@ -194,6 +207,14 @@ def main():
         except Exception as e:
             print(f"⚠️ Error cargando progreso previo, se comenzará desde cero: {e}")
 
+    if os.path.exists(CSV_ESTADO_URLS) and os.stat(CSV_ESTADO_URLS).st_size > 0:
+        try:
+            prev_fallidas = pd.read_csv(CSV_ESTADO_URLS)
+            if "URL_PRODUCTO" in prev_fallidas.columns:
+                procesadas |= set(prev_fallidas["URL_PRODUCTO"].astype(str).tolist())
+        except Exception as e:
+            print(f"⚠️ Error cargando URLs fallidas previas: {e}")
+
     total_productos = len(urls_data)
     es_primera_escritura = not os.path.exists(CSV_OUTPUT) or os.stat(CSV_OUTPUT).st_size == 0
     
@@ -208,11 +229,11 @@ def main():
             writer.writeheader()
 
         # 4. Iterar sobre las URLs de producto
-        for i, data in enumerate(urls_data, 1):
+        barra = tqdm(urls_data, desc="benavides", unit="url", initial=len(procesadas))
+        for i, data in enumerate(barra, 1):
             url_producto = data['URL']
-            
+
             if url_producto in procesadas:
-                print(f"⏩ [{i}/{total_productos}] Saltando URL (ya procesada).")
                 continue
 
             print(f"\n🔎 [{i}/{total_productos}] Extrayendo detalles de: {url_producto}")
@@ -222,6 +243,8 @@ def main():
                 
                 if response.status_code != 200:
                     print(f"⚠️ HTTP {response.status_code} para {url_producto}.")
+                    marcar_fallida(url_producto, f"HTTP {response.status_code}")
+                    procesadas.add(url_producto)
                     time.sleep(1.5)
                     continue
 
@@ -273,6 +296,8 @@ def main():
 
             except Exception as e:
                 print(f"❌ Error inesperado al procesar {url_producto}: {e}")
+                marcar_fallida(url_producto, str(e)[:200])
+                procesadas.add(url_producto)
                 time.sleep(3) # Pausa larga después de un error
 
 if __name__ == "__main__":

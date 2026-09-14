@@ -12,11 +12,40 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait as WW
 from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
+from tqdm import tqdm
 
 # === Configuración ===
 CSV_INPUT    = "./salida/urls/urls_klyns.csv"
 CSV_OUTPUT   = "./salida/data/2026/08_agosto/scraping_detalle_klyns.csv"
 TIENDA       = "14"
+# CSV aparte para URLs que fallaron, para no repetirlas al reanudar.
+CSV_ESTADO_URLS = "./salida/data/2026/08_agosto/scraping_detalle_klyns_fallidas.csv"
+
+
+def marcar_fallida(url: str, detalle: str = "") -> None:
+    """Registra una URL que no se pudo procesar en CSV_ESTADO_URLS."""
+    es_nuevo = not os.path.exists(CSV_ESTADO_URLS) or os.stat(CSV_ESTADO_URLS).st_size == 0
+    with open(CSV_ESTADO_URLS, "a", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        if es_nuevo:
+            w.writerow(["URL_PRODUCTO", "Estatus", "Detalle", "Fecha_Hora_Captura"])
+        w.writerow([url, "ERROR", detalle, datetime.now().strftime("%Y-%m-%d %H:%M:%S")])
+
+
+def cargar_procesados():
+    """Une URLs exitosas (CSV_OUTPUT) y fallidas (CSV_ESTADO_URLS)."""
+    procesados = set()
+    if os.path.exists(CSV_OUTPUT) and os.path.getsize(CSV_OUTPUT) > 0:
+        try:
+            procesados |= set(pd.read_csv(CSV_OUTPUT)["URL_PRODUCTO"].tolist())
+        except:
+            pass
+    if os.path.exists(CSV_ESTADO_URLS) and os.path.getsize(CSV_ESTADO_URLS) > 0:
+        try:
+            procesados |= set(pd.read_csv(CSV_ESTADO_URLS)["URL_PRODUCTO"].tolist())
+        except:
+            pass
+    return procesados
 
 def configurar_driver():
     opts = Options()
@@ -103,23 +132,20 @@ def main():
     os.makedirs(os.path.dirname(CSV_OUTPUT), exist_ok=True)
     
     driver = configurar_driver()
-    
+    barra = tqdm(total=len(df_urls), desc="klyns", unit="url", initial=len(cargar_procesados()))
+
     try:
         idx = 0
         while idx < len(df_urls):
             # Sistema de resume para continuar si falla
-            procesados = set()
-            if os.path.exists(CSV_OUTPUT):
-                try:
-                    df_ex = pd.read_csv(CSV_OUTPUT)
-                    procesados = set(df_ex["URL_PRODUCTO"].tolist())
-                except: pass
+            procesados = cargar_procesados()
 
             row = df_urls.iloc[idx]
             url = row["URL_PRODUCTO"]
 
             if url in procesados:
                 idx += 1
+                barra.update(1)
                 continue
 
             print(f"🔎 [{idx+1}/{len(df_urls)}] {url}")
@@ -143,8 +169,11 @@ def main():
                             "Tienda": TIENDA
                         })
                     print(f"   ✅ Guardado: {datos['SKU']} | ${datos['Precio_Oferta']}")
-                
+                else:
+                    marcar_fallida(url, "sin datos extraídos")
+
                 idx += 1
+                barra.update(1)
                 time.sleep(random.uniform(1.0, 2.5))
 
             except Exception as e:
@@ -157,6 +186,7 @@ def main():
     finally:
         try: driver.quit()
         except: pass
+        barra.close()
         print(f"\n🎯 Scraping de Klyns finalizado.")
 
 if __name__ == "__main__":

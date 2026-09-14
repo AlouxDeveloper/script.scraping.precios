@@ -16,6 +16,8 @@ from monitoreo import MonitorFallos, configurar_logger, es_pagina_bloqueada
 INPUT_CSV = "./salida/urls/productos_aurrera.csv"
 CSV_OUTPUT = "./salida/data/2026/09_septiembre/scraping_detalle_aurrera.csv"
 TIENDA = "2"
+# CSV aparte para URLs que fallaron, para no repetirlas al reanudar.
+CSV_ESTADO_URLS = "./salida/data/2026/09_septiembre/scraping_detalle_aurrera_fallidas.csv"
 
 ENCABEZADOS = [
     "SKU", "URL_PRODUCTO", "Producto", "Precio_Actual", 
@@ -38,6 +40,14 @@ if os.path.exists(CSV_OUTPUT) and os.stat(CSV_OUTPUT).st_size > 0:
             urls_procesadas = set(df_prev["URL_PRODUCTO"].dropna().astype(str).tolist())
     except:
         pass
+
+if os.path.exists(CSV_ESTADO_URLS) and os.stat(CSV_ESTADO_URLS).st_size > 0:
+    try:
+        df_fallidas = pd.read_csv(CSV_ESTADO_URLS)
+        if "URL_PRODUCTO" in df_fallidas.columns:
+            urls_procesadas |= set(df_fallidas["URL_PRODUCTO"].dropna().astype(str).tolist())
+    except Exception as e:
+        print(f"⚠️ Alerta leyendo URLs fallidas previas: {e}")
 
 # Manejo de Encoding para lectura segura
 try:
@@ -162,6 +172,13 @@ for i, item in enumerate(barra, 1):
     except Exception as e:
         monitor.registrar_fallo(str(e))
         tqdm.write(f"   ❌ Error en registro {i}: Verifique si hay un bloqueo o Captcha.")
+        es_nuevo = not os.path.exists(CSV_ESTADO_URLS) or os.stat(CSV_ESTADO_URLS).st_size == 0
+        with open(CSV_ESTADO_URLS, "a", newline="", encoding="utf-8") as f_estado:
+            writer_estado = csv.writer(f_estado)
+            if es_nuevo:
+                writer_estado.writerow(["URL_PRODUCTO", "Estatus", "Detalle", "Fecha_Hora_Captura"])
+            writer_estado.writerow([url, "ERROR", str(e)[:200], datetime.now().strftime("%Y-%m-%d %H:%M:%S")])
+        urls_procesadas.add(url)
         time.sleep(2)
         
     finally:

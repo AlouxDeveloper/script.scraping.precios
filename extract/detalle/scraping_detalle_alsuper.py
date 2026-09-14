@@ -5,6 +5,7 @@ import requests
 import pandas as pd
 import re
 from datetime import datetime
+from tqdm import tqdm
 
 # ========== Configuración ==========
 EXCEL_CATEGORIAS = "./data/urls_categorias_alsuper.xlsx" 
@@ -36,7 +37,7 @@ def main():
         writer = csv.DictWriter(f, fieldnames=CSV_FIELDS)
         writer.writeheader()
 
-        for url_base in lista_urls_api:
+        for url_base in tqdm(lista_urls_api, desc="alsuper", unit="categoria"):
             # Limpieza de parámetros de página previos
             url_limpia = re.sub(r'([?&])page=\d+', r'\1', url_base)
             url_limpia = re.sub(r'([?&])limit=\d+', r'\1', url_limpia).replace('&&', '&').replace('?&', '?').rstrip('&').rstrip('?')

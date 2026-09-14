@@ -7,6 +7,7 @@ from typing import List, Dict, Any, Optional
 import pandas as pd
 from curl_cffi import requests
 from curl_cffi.requests.errors import RequestsError
+from tqdm import tqdm
 
 # === Configuración de Archivos y Rutas ===
 EXCEL_INPUT = "./data/url_catego_isseg.xlsx"
@@ -199,7 +200,7 @@ def main():
     total_productos_extraidos = 0
     es_primera_escritura = not os.path.exists(CSV_OUTPUT) or os.stat(CSV_OUTPUT).st_size == 0
 
-    for i, url_categoria in enumerate(urls_categorias):
+    for i, url_categoria in enumerate(tqdm(urls_categorias, desc="isseg", unit="categoria")):
         print(f"\n--- Procesando Categoría {i + 1} de {len(urls_categorias)} ---")
 
         productos_categoria = extraer_productos_de_categoria_y_guardar(

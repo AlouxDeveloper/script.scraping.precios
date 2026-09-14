@@ -12,12 +12,15 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
+from tqdm import tqdm
 
 # ===== Config =====
 EXCEL_ENTRADA = "./salida/urls/urls_productos_similares.xlsx"
 COLUMNA_URL   = "URL"
 CSV_SALIDA    = "./salida/data/2026/08_agosto/scraping_detalle_similares.csv"
 TIENDA        = "16"
+# CSV aparte para URLs que fallaron, para no repetirlas al reanudar.
+CSV_ESTADO_URLS = "./salida/data/2026/08_agosto/scraping_detalle_similares_fallidas.csv"
 
 TIMEOUT = 15
 ESPERA_INICIAL = (3.5, 5.0)
@@ -48,6 +51,15 @@ def write_row_progress(path: str, row: dict):
         writer.writerow(row)
         f.flush()
         os.fsync(f.fileno())
+
+def marcar_fallida(url: str, detalle: str = "") -> None:
+    """Registra una URL que no se pudo procesar en CSV_ESTADO_URLS."""
+    es_nuevo = not os.path.exists(CSV_ESTADO_URLS) or os.path.getsize(CSV_ESTADO_URLS) == 0
+    with open(CSV_ESTADO_URLS, "a", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        if es_nuevo:
+            w.writerow(["URL_PRODUCTO", "Estatus", "Detalle", "Fecha_Hora_Captura"])
+        w.writerow([url, "ERROR", detalle, datetime.now().strftime("%Y-%m-%d %H:%M:%S")])
 
 def first_text_or_empty(driver, css: str) -> str:
     try:
@@ -104,6 +116,19 @@ def main():
     headers = ["SKU", "URL_Producto", "Producto", "Precio_Normal", "Precio_Oferta", "URL_IMAGEN", "Fecha_Hora_Captura", "Tienda"]
     ensure_csv_header(CSV_SALIDA, headers)
 
+    # Control de avance: éxitos (CSV_SALIDA) + fallidas (CSV_ESTADO_URLS)
+    urls_procesadas = set()
+    if os.path.exists(CSV_SALIDA) and os.path.getsize(CSV_SALIDA) > 0:
+        try:
+            urls_procesadas |= set(pd.read_csv(CSV_SALIDA)["URL_Producto"].dropna().astype(str).tolist())
+        except Exception as e:
+            print(f"⚠️ Alerta leyendo avance previo: {e}")
+    if os.path.exists(CSV_ESTADO_URLS) and os.path.getsize(CSV_ESTADO_URLS) > 0:
+        try:
+            urls_procesadas |= set(pd.read_csv(CSV_ESTADO_URLS)["URL_PRODUCTO"].dropna().astype(str).tolist())
+        except Exception as e:
+            print(f"⚠️ Alerta leyendo URLs fallidas previas: {e}")
+
     chrome_opts = Options()
     chrome_opts.add_argument("--start-maximized")
     chrome_opts.add_argument("--disable-blink-features=AutomationControlled")
@@ -111,7 +136,10 @@ def main():
     wait = WebDriverWait(driver, TIMEOUT)
 
     try:
-        for i, url in enumerate(urls, 1):
+        barra = tqdm(urls, desc="similares", unit="url", initial=len(urls_procesadas))
+        for i, url in enumerate(barra, 1):
+            if url in urls_procesadas:
+                continue
             print(f"\n🔎 [{i}/{len(urls)}] Navegando: {url}")
             try:
                 driver.get(url)
@@ -147,10 +175,13 @@ def main():
                 }
 
                 write_row_progress(CSV_SALIDA, row)
+                urls_procesadas.add(url)
                 print(f"✅ Guardado: {nombre[:30]}... | Imagen detectada: {'Sí' if url_imagen else 'No'}")
 
             except Exception as e:
                 print(f"💥 Error procesando URL: {e}")
+                marcar_fallida(url, str(e)[:200])
+                urls_procesadas.add(url)
 
             time.sleep(random.uniform(*PAUSA_ENTRE_URLS))
 

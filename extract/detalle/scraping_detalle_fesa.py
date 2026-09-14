@@ -12,8 +12,9 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
-from selenium.webdriver.support.ui import WebDriverWait 
-from selenium.webdriver.support import expected_conditions as EC 
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from tqdm import tqdm
 
 # --- Configuraciones de Archivos ---
 CSV_URLS_ENTRADA = './salida/urls/urls_productos_fesa.csv'
@@ -255,15 +256,28 @@ else:
 
         df = pd.read_csv(CSV_URLS_ENTRADA, dtype=str)
         urls_productos = df[COLUMNA_URL_ENTRADA].dropna().unique().tolist()
-        
+
         print(f"\n📂 Archivo de URLs leído. Se procesarán {len(urls_productos)} productos usando Selenium.")
-        
+
+        # Control de avance: toda URL que ya tenga una fila (éxito o vacía por
+        # fallo) en CSV_DETALLE_SALIDA se salta al reanudar.
+        urls_procesadas = set()
+        if os.path.exists(CSV_DETALLE_SALIDA) and os.stat(CSV_DETALLE_SALIDA).st_size > 0:
+            try:
+                urls_procesadas = set(pd.read_csv(CSV_DETALLE_SALIDA)['URL_PRODUCTO'].dropna().astype(str).tolist())
+            except Exception as e:
+                print(f"⚠️ Alerta leyendo avance previo: {e}")
+
         escribir_cabecera = not os.path.exists(CSV_DETALLE_SALIDA)
         productos_procesados = 0
-        
-        for index, url_producto in enumerate(urls_productos, 1):
+
+        barra = tqdm(urls_productos, desc="fesa", unit="url", initial=len(urls_procesadas))
+        for index, url_producto in enumerate(barra, 1):
+            if url_producto in urls_procesadas:
+                continue
+
             print(f"\n--- 🔎 Procesando Producto {index} de {len(urls_productos)}: {url_producto[:80]}... ---")
-            
+
             detalle = extraer_detalles_producto(driver, url_producto)
             
             if detalle and detalle['Producto'] != 'N/A':
@@ -280,8 +294,9 @@ else:
                 escribir_csv_progreso(fila_vacia, escribir_cabecera)
                 escribir_cabecera = False
                 print(f"⚠️ Omisión: Fallo al obtener el detalle del producto en {url_producto}. Se registró una fila vacía.")
-            
-            time.sleep(0.5) 
+
+            urls_procesadas.add(url_producto)
+            time.sleep(0.5)
             
     except Exception as e:
         print(f"\nFATAL: Ocurrió un error en el bucle principal o al leer el CSV: {e}")

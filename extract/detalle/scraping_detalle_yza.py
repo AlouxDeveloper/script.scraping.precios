@@ -6,11 +6,24 @@ import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
+from tqdm import tqdm
 
 # === Configuración ===
 CSV_INPUT    = "./salida/urls/urls_yza.csv"
 CSV_OUTPUT   = "./salida/data/2026/08_agosto/scraping_detalle_yza.csv"
 TIENDA       = "19"
+# CSV aparte para URLs que fallaron, para no repetirlas al reanudar.
+CSV_ESTADO_URLS = "./salida/data/2026/08_agosto/scraping_detalle_yza_fallidas.csv"
+
+
+def marcar_fallida(url: str, detalle: str = "") -> None:
+    """Registra una URL que no se pudo procesar en CSV_ESTADO_URLS."""
+    es_nuevo = not os.path.exists(CSV_ESTADO_URLS) or os.path.getsize(CSV_ESTADO_URLS) == 0
+    with open(CSV_ESTADO_URLS, "a", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        if es_nuevo:
+            w.writerow(["URL_PRODUCTO", "Estatus", "Detalle", "Fecha_Hora_Captura"])
+        w.writerow([url, "ERROR", detalle, datetime.now().strftime("%Y-%m-%d %H:%M:%S")])
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
@@ -47,6 +60,11 @@ def main():
             df_existente = pd.read_csv(CSV_OUTPUT)
             urls_procesadas = set(df_existente["URL_PRODUCTO"].tolist())
         except: pass
+    if os.path.exists(CSV_ESTADO_URLS) and os.path.getsize(CSV_ESTADO_URLS) > 0:
+        try:
+            df_fallidas = pd.read_csv(CSV_ESTADO_URLS)
+            urls_procesadas |= set(df_fallidas["URL_PRODUCTO"].tolist())
+        except: pass
 
     s = requests.Session()
 
@@ -55,14 +73,18 @@ def main():
         if not urls_procesadas:
             writer.writeheader()
 
-        for i, row in df_urls.iterrows():
+        barra = tqdm(list(df_urls.iterrows()), desc="yza", unit="url", initial=len(urls_procesadas))
+        for i, row in barra:
             url = row["URL_PRODUCTO"]
             if url in urls_procesadas: continue
 
             print(f"🔎 [{i+1}/{len(df_urls)}] {url}")
             soup = get_soup(s, url)
-            
-            if not soup: continue
+
+            if not soup:
+                marcar_fallida(url, "sin respuesta HTML")
+                urls_procesadas.add(url)
+                continue
 
             # --- EXTRACCIÓN Y LIMPIEZA DE SKU ---
             sku_final = "N/A"
@@ -102,6 +124,7 @@ def main():
                 "Tienda": TIENDA,
             })
             f.flush()
+            urls_procesadas.add(url)
             print(f"   ✅ SKU Limpio: {sku_final} | ${precio_oferta}")
             
             time.sleep(1.2)

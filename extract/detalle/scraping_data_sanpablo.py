@@ -1,18 +1,22 @@
 import pandas as pd
 # Parche crítico: Usamos el requests camuflado que clona el protocolo TLS del navegador
 from curl_cffi import requests
+import csv
 import time
 import os
 from datetime import datetime
 from typing import Dict, Any, List
+from tqdm import tqdm
 
 # --- Configuración de Archivos y Columnas ---
 CSV_ENTRADA = "./salida/urls/urls_productos_sanpablo.csv"
 CSV_OUTPUT_DETALLES = "./salida/data/2026/09_septiembre/scraping_detalles_sanpablo.csv"
 COLUMNAS_ENTRADA = ["URL", "Producto"]
-COLUMNAS_SALIDA_DETALLES = ["SKU", "URL_PRODUCTO", "PRODUCTO", "PRECIO_ACTUAL", 
+COLUMNAS_SALIDA_DETALLES = ["SKU", "URL_PRODUCTO", "PRODUCTO", "PRECIO_ACTUAL",
                              "PRECIO_OFERTA", "URL_IMAGEN", "FECHA", "TIENDA"]
 TIENDA_NOMBRE = "15"
+# CSV aparte para URLs que fallaron, para no repetirlas al reanudar.
+CSV_ESTADO_URLS = "./salida/data/2026/09_septiembre/scraping_detalles_sanpablo_fallidas.csv"
 
 # --- Configuración de la API ---
 BASE_API_URL_DETALLE = "https://api.farmaciasanpablo.com.mx/rest/v2/fsp/products/{sku}"
@@ -27,6 +31,15 @@ HEADERS = {
     "Referer": "https://www.farmaciasanpablo.com.mx/",
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
 }
+
+def marcar_fallida(url: str, detalle: str = "") -> None:
+    """Registra una URL que no se pudo procesar en CSV_ESTADO_URLS."""
+    es_nuevo = not os.path.exists(CSV_ESTADO_URLS) or os.stat(CSV_ESTADO_URLS).st_size == 0
+    with open(CSV_ESTADO_URLS, "a", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f)
+        if es_nuevo:
+            writer.writerow(["URL_PRODUCTO", "Estatus", "Detalle", "Fecha_Hora_Captura"])
+        writer.writerow([url, "ERROR", detalle, datetime.now().strftime("%Y-%m-%d %H:%M:%S")])
 
 def extraer_sku_de_url(url_producto: str) -> str:
     """Extrae el SKU (código) del producto a partir de su URL."""
@@ -121,6 +134,14 @@ def main():
         except:
             pass
 
+    if os.path.exists(CSV_ESTADO_URLS) and os.stat(CSV_ESTADO_URLS).st_size > 0:
+        try:
+            prev_fallidas = pd.read_csv(CSV_ESTADO_URLS)
+            if "URL_PRODUCTO" in prev_fallidas.columns:
+                procesadas |= set(prev_fallidas["URL_PRODUCTO"].dropna().astype(str).tolist())
+        except:
+            pass
+
     print(f"Se encontraron **{len(urls_productos)}** productos en total.")
     print(f"📂 Historial: {len(procesadas)} ya se encuentran guardadas en el archivo final.")
     
@@ -128,7 +149,7 @@ def main():
     es_primera_escritura = not os.path.exists(CSV_OUTPUT_DETALLES)
     
     # 3. Iterar secuencialmente sobre los productos
-    for i, url_producto in enumerate(urls_productos):
+    for i, url_producto in enumerate(tqdm(urls_productos, desc="sanpablo", unit="url", initial=len(procesadas))):
         if url_producto in procesadas:
             continue
             
@@ -153,10 +174,13 @@ def main():
             
             total_productos_extraidos += 1
             print(f"    💾 SKU {registro_detalle.get('SKU')} guardado con éxito. Total acumulado esta sesión: {total_productos_extraidos}.")
-            es_primera_escritura = False 
-            
+            es_primera_escritura = False
+
             # Pausa táctica corta
             time.sleep(1)
+        else:
+            marcar_fallida(url_producto)
+            procesadas.add(url_producto)
 
     print(f"\n🎉 ¡Proceso finalizado! Sesión terminada con {total_productos_extraidos} nuevos registros guardados en '{CSV_OUTPUT_DETALLES}'.")
 

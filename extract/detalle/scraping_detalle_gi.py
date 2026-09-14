@@ -5,13 +5,26 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
-import csv 
+import csv
 from datetime import datetime
+from tqdm import tqdm
 
 # --- CONFIGURACIÓN ---
 CSV_URLS_PRODUCTOS_ENTRADA = './salida/urls/urls_productos_gi1.csv'
 CSV_DATOS_FINAL_SALIDA = './salida/data/2026/08_agosto/scraping_detalles_gi.csv'
 TIENDA = "10"
+# CSV aparte para URLs que fallaron, para no repetirlas al reanudar.
+CSV_ESTADO_URLS = './salida/data/2026/08_agosto/scraping_detalles_gi_fallidas.csv'
+
+
+def marcar_fallida(url: str, detalle: str = "") -> None:
+    """Registra una URL que no se pudo procesar en CSV_ESTADO_URLS."""
+    es_nuevo = not os.path.exists(CSV_ESTADO_URLS) or os.stat(CSV_ESTADO_URLS).st_size == 0
+    with open(CSV_ESTADO_URLS, "a", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        if es_nuevo:
+            w.writerow(["URL_PRODUCTO", "Estatus", "Detalle", "Fecha_Hora_Captura"])
+        w.writerow([url, "ERROR", detalle, datetime.now().strftime("%Y-%m-%d %H:%M:%S")])
 
 def inicializar_csv_final():
     """Crea la carpeta y el archivo final con cabeceras si no existe."""
@@ -29,14 +42,21 @@ def inicializar_csv_final():
         print(f"✅ Archivo final creado: {CSV_DATOS_FINAL_SALIDA}")
 
 def obtener_ya_procesados():
-    """Para no repetir productos si el script se detiene."""
+    """Para no repetir productos si el script se detiene (éxitos + fallidas)."""
+    procesados = set()
     if os.path.exists(CSV_DATOS_FINAL_SALIDA):
         try:
             df = pd.read_csv(CSV_DATOS_FINAL_SALIDA, usecols=['URL_PRODUCTO'])
-            return set(df['URL_PRODUCTO'].tolist())
+            procesados |= set(df['URL_PRODUCTO'].tolist())
         except:
-            return set()
-    return set()
+            pass
+    if os.path.exists(CSV_ESTADO_URLS):
+        try:
+            df_fallidas = pd.read_csv(CSV_ESTADO_URLS, usecols=['URL_PRODUCTO'])
+            procesados |= set(df_fallidas['URL_PRODUCTO'].tolist())
+        except:
+            pass
+    return procesados
 
 def guardar_datos_producto(datos):
     """Escribe los datos en el CSV final inmediatamente."""
@@ -66,7 +86,8 @@ if __name__ == "__main__":
     driver = webdriver.Chrome(options=options)
 
     try:
-        for i, url in enumerate(lista_urls, 1):
+        barra = tqdm(lista_urls, desc="gi", unit="url", initial=len(urls_procesadas))
+        for i, url in enumerate(barra, 1):
             if url in urls_procesadas:
                 continue
 
@@ -159,6 +180,8 @@ if __name__ == "__main__":
 
             except Exception as e:
                 print(f"   ❌ Error al entrar al producto: {e}")
+                marcar_fallida(url, str(e)[:200])
+                urls_procesadas.add(url)
                 continue
 
     finally:

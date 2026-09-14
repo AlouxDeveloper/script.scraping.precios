@@ -17,6 +17,9 @@ from monitoreo import MonitorFallos, configurar_logger, es_pagina_bloqueada
 EXCEL_PATH = "./data/data_scraping_guadalajara.xlsx"
 CSV_OUTPUT = "./salida/data/2026/09_septiembre/scraping_detalle_guadalajara.csv"
 TIENDA = "11"
+# CSV aparte para URLs que fallaron (bloqueo, error de red o de parseo), para
+# no repetirlas al reanudar.
+CSV_ESTADO_URLS = "./salida/data/2026/09_septiembre/scraping_detalle_guadalajara_fallidas.csv"
 
 os.makedirs(os.path.dirname(CSV_OUTPUT), exist_ok=True)
 
@@ -35,6 +38,25 @@ if os.path.exists(CSV_OUTPUT) and os.stat(CSV_OUTPUT).st_size > 0:
             )
     except Exception as e:
         print(f"⚠️ Alerta leyendo avance previo: {e}")
+
+if os.path.exists(CSV_ESTADO_URLS) and os.stat(CSV_ESTADO_URLS).st_size > 0:
+    try:
+        df_fallidas = pd.read_csv(CSV_ESTADO_URLS)
+        if "URL_PRODUCTO" in df_fallidas.columns:
+            urls_procesadas |= set(df_fallidas["URL_PRODUCTO"].dropna().astype(str).tolist())
+    except Exception as e:
+        print(f"⚠️ Alerta leyendo URLs fallidas previas: {e}")
+
+
+def marcar_fallida(url: str, detalle: str = "") -> None:
+    """Registra una URL que no se pudo procesar en CSV_ESTADO_URLS."""
+    es_nuevo = not os.path.exists(CSV_ESTADO_URLS) or os.stat(CSV_ESTADO_URLS).st_size == 0
+    with open(CSV_ESTADO_URLS, "a", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f)
+        if es_nuevo:
+            writer.writerow(["URL_PRODUCTO", "Estatus", "Detalle", "Fecha_Hora_Captura"])
+        writer.writerow([url, "ERROR", detalle, datetime.now().strftime("%Y-%m-%d %H:%M:%S")])
+
 
 print(f"📂 Historial: {len(urls_procesadas)} URLs ya se encuentran en el archivo de salida.")
 
@@ -68,6 +90,8 @@ for i, url in enumerate(barra, start=1):
 
         if es_pagina_bloqueada(driver.page_source):
             monitor.registrar_fallo("bloqueo_detectado")
+            marcar_fallida(url, "bloqueo_detectado")
+            urls_procesadas.add(url)
             continue
 
         try:
@@ -152,10 +176,14 @@ for i, url in enumerate(barra, start=1):
         except Exception as e:
             monitor.registrar_fallo(str(e))
             tqdm.write(f"⚠️ Error al extraer datos de la página: {url} | Detalle: {e}")
+            marcar_fallida(url, str(e)[:200])
+            urls_procesadas.add(url)
 
     except Exception as e:
         monitor.registrar_fallo(str(e))
         tqdm.write(f"❌ Error de conexión/driver: {e}")
+        marcar_fallida(url, str(e)[:200])
+        urls_procesadas.add(url)
     
     finally:
         if driver:
