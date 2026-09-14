@@ -17,8 +17,10 @@ models:
           `fecha_captura`.
         tests:
           - not_null
-      - name: nombre_norm
-        description: "`producto` normalizado con la macro `limpiar_texto`."
+      - name: descripcion
+        description: >
+          `producto` normalizado con la macro `limpiar_texto` y en
+          mayúsculas.
       - name: precio_lista
         description: >
           `precio_actual` de bronce, o NULL si venía en 0 o no parseó.

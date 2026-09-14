@@ -56,12 +56,13 @@ models:
           reciente. NO es `dim_ndf.producto`.
         tests:
           - not_null
-      - name: nombre_norm
+      - name: descripcion
         description: >
           `producto` normalizado por `limpiar_texto` (sin acentos, dosis y
-          forma como texto plano). SCD1, no versionado: solo ~2% de los
-          combos `(tienda, sku)` tienen más de un valor, y esa variación es
-          por cutovers de parser, no por cambio de identidad.
+          forma como texto plano) y en mayúsculas. SCD1, no versionado:
+          solo ~2% de los combos `(tienda, sku)` tienen más de un valor, y
+          esa variación es por cutovers de parser, no por cambio de
+          identidad.
         tests:
           - not_null
       - name: url_producto_actual

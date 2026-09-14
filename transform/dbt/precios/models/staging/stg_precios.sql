@@ -28,7 +28,7 @@ with tipado as (
         ) as sku,
         url_producto,
         producto,
-        {{ limpiar_texto('producto') }} as nombre_norm,
+        upper({{ limpiar_texto('producto') }}) as descripcion,
         -- Walmart escribe el literal "No disponible" cuando no hay imagen.
         nullif(nullif(trim(url_imagen), ''), 'No disponible') as url_imagen,
         -- El "0.00" que el scraper escribe al fallar el parseo se trata

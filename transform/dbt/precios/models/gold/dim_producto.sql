@@ -20,10 +20,12 @@
     añaden las demás columnas como desempate final para cerrar los empates
     que quedan (mismo día, misma URL, texto distinto — re-scrapeos).
 
-    `nombre_norm` es SCD1 y no versionado: solo ~2% de los combos
-    `(tienda, sku)` tienen más de un `nombre_norm`, y esa variación está
+    `descripcion` es SCD1 y no versionado: solo ~2% de los combos
+    `(tienda, sku)` tienen más de una `descripcion`, y esa variación está
     concentrada en cutovers de parser por tienda en fechas puntuales, no en
-    productos que cambiaron de identidad.
+    productos que cambiaron de identidad. Es `producto` normalizado (sin
+    acentos, vía `limpiar_texto`) y en mayúsculas -insumo del entity
+    resolution contra `dim_ndf`, no un campo de exhibición.
 
     `url_imagen_actual` es la imagen más reciente que NO sea el centinela
     `SIN_IMAGEN`, no la de la última captura: si no, un producto con imagen
@@ -46,7 +48,7 @@ with precios as (
         tienda,
         sku,
         producto,
-        nombre_norm,
+        descripcion,
         url_producto,
         url_imagen,
         fecha_captura
@@ -60,7 +62,7 @@ atributos_actuales as (
         tienda,
         sku,
         producto,
-        nombre_norm,
+        descripcion,
         url_producto,
         row_number() over (
             partition by tienda, sku
@@ -68,7 +70,7 @@ atributos_actuales as (
                 fecha_captura desc,
                 url_producto asc,
                 producto asc,
-                nombre_norm asc
+                descripcion asc
         ) as rn
     from precios
 
@@ -111,7 +113,7 @@ ensamblado as (
         atributos_actuales.tienda,
         atributos_actuales.sku,
         atributos_actuales.producto,
-        atributos_actuales.nombre_norm,
+        atributos_actuales.descripcion,
         atributos_actuales.url_producto as url_producto_actual,
         imagen_actual.url_imagen_actual,
         observaciones.fecha_primera_captura,
@@ -137,7 +139,7 @@ select
     dim_tienda.tienda_key,
     ensamblado.sku,
     ensamblado.producto,
-    ensamblado.nombre_norm,
+    ensamblado.descripcion,
     ensamblado.url_producto_actual,
     ensamblado.url_imagen_actual,
     ensamblado.fecha_primera_captura,

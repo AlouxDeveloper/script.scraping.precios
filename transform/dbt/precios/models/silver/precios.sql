@@ -43,7 +43,7 @@ with base as (
         url_producto,
         sku,
         producto,
-        nombre_norm,
+        descripcion,
         url_imagen,
         -- si solo llegó un precio, ese es el de lista: sin dos precios no
         -- hay oferta verificable.
@@ -76,7 +76,7 @@ select
     url_producto,
     sku,
     producto,
-    nombre_norm,
+    descripcion,
     coalesce(url_imagen, 'SIN_IMAGEN') as url_imagen,
     precio_lista,
     if(en_oferta, precio_oferta_candidato, null) as precio_oferta

@@ -68,8 +68,10 @@ models:
         description: Descripción original, sin normalizar.
         tests:
           - not_null
-      - name: nombre_norm
-        description: Descripción normalizada con la macro `limpiar_texto`.
+      - name: descripcion
+        description: >
+          Descripción normalizada con la macro `limpiar_texto`, en
+          mayúsculas.
         tests:
           - not_null
       - name: url_imagen
@@ -114,10 +116,10 @@ models:
             expression: "precio_oferta < precio_lista"
       - dbt_utils.expression_is_true:
           arguments:
-            expression: "nombre_norm = lower(nombre_norm)"
+            expression: "descripcion = upper(descripcion)"
       - dbt_utils.expression_is_true:
           arguments:
-            expression: "trim(nombre_norm) != ''"
+            expression: "trim(descripcion) != ''"
       # San pablo marzo lo viola legítimamente: la corrida se hizo el 1
       # de abril y fecha_captura quedó fuera del mes de la partición. Por
       # eso avisa, no rompe el build.
