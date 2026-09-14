@@ -208,6 +208,18 @@ def tabla_ndf_ext_tmp(cliente_bq, cfg_gcp):
     cliente_bq.delete_table(cfg_gcp.tabla_bronce(nombre), not_found_ok=True)
 
 
+@pytest.fixture
+def tabla_puente_aportador_ext_tmp(cliente_bq, cfg_gcp):
+    """Nombre de una external table desechable para el puente aportador.
+
+    Apunta al mismo Parquet que `puente_aportador_ext` de producción; se
+    prueba con otro nombre y se borra en el teardown.
+    """
+    nombre = f"puente_aportador_ext_test_{uuid4().hex[:8]}"
+    yield nombre
+    cliente_bq.delete_table(cfg_gcp.tabla_bronce(nombre), not_found_ok=True)
+
+
 def esquema_y_filas(base: str, declarado: ArchivoDeclarado) -> tuple[Esquema, list[list[str]]]:
     """Abre un CSV real y devuelve su esquema y sus filas de datos.
 

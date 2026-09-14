@@ -15,11 +15,18 @@ seeds:
       Los IDs numéricos de algunos scrapers (`2` Benavides, `12` Walmart,
       etc.) no son esta llave: catálogo ajeno con huecos, vive en
       `tienda_raw` de bronce.
+
+      `farmacon` (20) y `farmesp` (21) no son tiendas que `extract/`
+      scrapee: son aportadores del crosswalk `puente_aportador_ext` sin
+      tienda equivalente en el histórico. Se agregaron al seed para que
+      `dim_puente_aportador` tenga dónde resolver esas filas sin
+      descartarlas.
     columns:
       - name: tienda_key
         description: >
           Llave subrogada, INT64 (fijado en `dbt_project.yml`). Asignada 1..19
-          por orden alfabético de slug en la carga inicial. Inmutable.
+          por orden alfabético de slug en la carga inicial; 20 y 21 se
+          agregaron después para `farmacon`/`farmesp`. Inmutable.
         tests:
           - not_null
           - unique
@@ -27,6 +34,8 @@ seeds:
         description: >
           Slug estable de `load/config/archivos.yml`. Es lo que trae
           `precios_silver.precios`; el único punto de cruce con el histórico.
+          `farmacon`/`farmesp` no vienen de `archivos.yml` — son slugs
+          propios para las 2 tiendas sin scraping (ver arriba).
         tests:
           - not_null
           - unique
@@ -35,13 +44,19 @@ seeds:
         tests:
           - not_null
           - unique
+      - name: aportador_clave
+        description: >
+          Clave del aportador en `puente_aportador_ext` (`N0` soriana, `89`
+          chedraui, etc.). NULL para `fesa`/`similares`/`yza`: no tienen
+          aportador en el corte actual del crosswalk.
 
 models:
   - name: dim_tienda
     description: >
       Dimensión de tiendas (Kimball). `ref('tiendas')` sin transformación:
-      19 filas, una por tienda del proyecto. `tienda_key` es la FK que la
-      fact conservará con el mismo nombre.
+      21 filas — 19 tiendas del proyecto más `farmacon`/`farmesp`, dos
+      aportadores del crosswalk sin tienda scrapeada. `tienda_key` es la FK
+      que la fact conservará con el mismo nombre.
     columns:
       - name: tienda_key
         description: Llave subrogada INT64. Inmutable; ver la regla en el seed `tiendas`.
@@ -51,9 +66,12 @@ models:
           - dbt_utils.accepted_range:
               arguments:
                 min_value: 1
-                max_value: 19
+                max_value: 21
       - name: tienda_slug
-        description: Slug de scraping; llave natural del negocio.
+        description: >
+          Slug de scraping; llave natural del negocio. `farmacon`/`farmesp`
+          no scrapean, son slugs propios del crosswalk (ver descripción del
+          seed `tiendas`).
         tests:
           - not_null
           - unique
@@ -66,8 +84,10 @@ models:
                   - chedraui
                   - comer
                   - fahorro
+                  - farmacon
                   - farmalisto
                   - farmatodo
+                  - farmesp
                   - fesa
                   - gi
                   - guadalajara
@@ -85,3 +105,7 @@ models:
         tests:
           - not_null
           - unique
+      - name: aportador_clave
+        description: >
+          Clave del aportador en `puente_aportador_ext`. NULL para
+          `fesa`/`similares`/`yza`.

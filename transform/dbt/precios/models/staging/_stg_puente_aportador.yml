@@ -1,0 +1,48 @@
+version: 2
+
+models:
+  - name: stg_puente_aportador
+    description: >
+      Puente aportador tipado: `puente_aportador_ext` con `sku` derivado de
+      `correlativo` (sin padding) y `bandera` descartada. El resto queda
+      STRING tal como viene de bronce. 952,605 filas, una por producto
+      reportado por cada aportador.
+
+      **`sku` NO coincide con `dim_producto.sku`, validado.** Match por sku
+      distinto: soriana 0%, chedraui 4%, walmart 6%, klyns 11%, benavides
+      14%. `correlativo` trae códigos de 10-13 dígitos (parecen EAN/UPC del
+      aportador), los scrapers escriben skus de 6-8 dígitos — identificadores
+      de sistemas distintos, no el mismo dato con distinto padding. Un join
+      `sku = sku` contra `dim_producto` no sirve; el entity resolution real
+      necesita matching por texto (`producto`/`descripcion` vs
+      `dim_ndf`/`dim_producto.descripcion`).
+    columns:
+      - name: aportador_clave
+        description: >
+          Clave del aportador. Se traduce a `tienda_key` en
+          `dim_puente_aportador` vía `dim_tienda.aportador_clave`.
+        tests:
+          - not_null
+      - name: aportador
+        description: >
+          Nombre del aportador, ya traducido en bronce. NULL si la clave no
+          estaba en `CVE_APORTADOR_NOMBRE.xlsx` al momento del corte.
+      - name: sku
+        description: >
+          `correlativo` sin ceros a la izquierda. NO coincide con
+          `dim_producto.sku` — ver la nota de validación arriba (parece un
+          identificador propio del aportador, no el sku de tienda). NULL en
+          las 5 filas centinela (`correlativo = '000000000000000'`); se
+          excluyen en `dim_puente_aportador`, no aquí.
+      - name: ndf_id
+        description: >
+          Llave del catálogo NDF, sin padding (mismo criterio que
+          `dim_ndf.ndf_id`). Validado: quitar el padding aquí recupera
+          102,446 filas que el join perdía en silencio (~48%% -> ~59%% de
+          match contra `dim_ndf`) — era el bloqueo que documenta `stg_ndf`,
+          resuelto de este lado. `8989898` es el centinela de "sin ndf_id
+          conocido" del aportador (no empieza en cero, sobrevive intacto).
+      - name: producto
+        description: Nombre del producto según el aportador.
+      - name: descripcion
+        description: Descripción / complemento del nombre.

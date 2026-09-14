@@ -19,6 +19,9 @@ FILAS_HISTORICO = 987_461
 # El catálogo NDF: el corte de julio 2026, verificado en ALD-39.
 FILAS_NDF = 180_914
 
+# El puente aportador: el corte 260910, verificado a mano sobre el TXT real.
+FILAS_PUENTE_APORTADOR = 952_605
+
 
 def _crear(cliente_bq, cfg_gcp, tabla):
     return bq.crear_external_bronce(cliente_bq, cfg_gcp, tabla=tabla)
@@ -91,6 +94,44 @@ def test_ndf_ext_no_arrastra_filas_de_precios(cliente_bq, cfg_gcp, tabla_ndf_ext
     assert "ndf_id" in nombres
     assert "precio_actual" not in nombres
     assert _contar(cliente_bq, tabla) == FILAS_NDF
+
+
+def test_puente_aportador_ext_ve_el_catalogo_completo(
+    cliente_bq, cfg_gcp, tabla_puente_aportador_ext_tmp
+):
+    tabla = bq.crear_external_puente_aportador(
+        cliente_bq, cfg_gcp, tabla=tabla_puente_aportador_ext_tmp
+    )
+
+    assert _contar(cliente_bq, tabla) == FILAS_PUENTE_APORTADOR
+
+
+def test_puente_aportador_ext_es_idempotente(
+    cliente_bq, cfg_gcp, tabla_puente_aportador_ext_tmp
+):
+    tabla = bq.crear_external_puente_aportador(
+        cliente_bq, cfg_gcp, tabla=tabla_puente_aportador_ext_tmp
+    )
+    de_nuevo = bq.crear_external_puente_aportador(
+        cliente_bq, cfg_gcp, tabla=tabla_puente_aportador_ext_tmp
+    )
+
+    assert tabla == de_nuevo
+    assert _contar(cliente_bq, tabla) == FILAS_PUENTE_APORTADOR
+
+
+def test_puente_aportador_ext_no_arrastra_filas_de_precios(
+    cliente_bq, cfg_gcp, tabla_puente_aportador_ext_tmp
+):
+    """Sus `uris` son `catalogos/puente_aportador/*.parquet`: el histórico queda fuera."""
+    tabla = bq.crear_external_puente_aportador(
+        cliente_bq, cfg_gcp, tabla=tabla_puente_aportador_ext_tmp
+    )
+
+    nombres = {c.name for c in cliente_bq.get_table(tabla).schema}
+    assert "correlativo" in nombres
+    assert "precio_actual" not in nombres
+    assert _contar(cliente_bq, tabla) == FILAS_PUENTE_APORTADOR
 
 
 def test_precios_ext_no_ve_el_catalogo(cliente_bq, cfg_gcp, tabla_ext_tmp):

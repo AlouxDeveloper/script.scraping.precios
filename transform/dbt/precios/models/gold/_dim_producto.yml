@@ -20,8 +20,12 @@ models:
       `dim_ndf.producto` (marca comercial del catálogo). El cruce entre las
       dos es el entity resolution.
 
-      Sin `ndf_id` ni `match_method`: dependen del crosswalk de Knobloch,
-      que no está.
+      `ndf_id`/`match_method`: primera pasada del entity resolution vía
+      `dim_puente_aportador` (crosswalk de Knobloch), method `aportadores`.
+      Cubre ~25%% de las filas (61 mil de 240 mil) porque su `sku` no
+      coincide con el de la mayoría de las tiendas (match 0-35%% según
+      tienda, ver `stg_puente_aportador`). El resto queda sin `ndf_id` a la
+      espera de la pasada por texto (embeddings), no implementada todavía.
     tests:
       - dbt_utils.expression_is_true:
           arguments:
@@ -50,6 +54,27 @@ models:
           imputado desde `url_producto` (ver `stg_precios`).
         tests:
           - not_null
+      - name: ndf_id
+        description: >
+          FK a `dim_ndf`, asignado solo cuando `match_method = 'aportadores'`.
+          NULL en el resto — no hay match, no un `0` ni cadena vacía.
+        tests:
+          - relationships:
+              arguments:
+                to: ref('dim_ndf')
+                field: ndf_id
+      - name: match_method
+        description: >
+          Cómo se resolvió `ndf_id`. Hoy solo existe `'aportadores'` (sku
+          exacto y sin ambigüedad contra `dim_puente_aportador`); NULL
+          cuando no hay match. Valores futuros (matching por texto) se
+          agregan aquí, no se reemplaza este.
+        tests:
+          - accepted_values:
+              arguments:
+                values:
+                  - aportadores
+                quote: true
       - name: producto
         description: >
           Nombre del listing en la tienda, sin normalizar. SCD1, captura más

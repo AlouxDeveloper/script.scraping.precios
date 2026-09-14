@@ -1,9 +1,9 @@
 """Setup de BigQuery: las external tables BigLake sobre la capa bronce.
 
 Es la frontera de `load/`: `bq-setup` corre DDLs `CREATE OR REPLACE EXTERNAL
-TABLE`, idempotentes por construcción, que dejan el histórico (`precios_ext`) y
-el catálogo NDF (`ndf_ext`) consultables. Un Parquet nuevo en GCS es visible al
-instante, sin job de carga.
+TABLE`, idempotentes por construcción, que dejan el histórico (`precios_ext`),
+el catálogo NDF (`ndf_ext`) y el puente aportador (`puente_aportador_ext`)
+consultables. Un Parquet nuevo en GCS es visible al instante, sin job de carga.
 
 Bronce vive en GCS; `precios_bronce` solo lo mira. La limpieza y las capas
 silver/gold son trabajo de dbt sobre estas tablas, no de este módulo.
@@ -17,11 +17,13 @@ from precios_load.config import ConfigGCP
 # apuntan al mismo prefijo de GCS.
 TABLA_BRONCE_EXT = "precios_ext"
 TABLA_NDF_EXT = "ndf_ext"
+TABLA_PUENTE_APORTADOR_EXT = "puente_aportador_ext"
 
-# El catálogo NDF vive en un subdirectorio propio del prefijo de catálogos. El
-# glob es explícito (`*.parquet`) porque aquí no hay particiones hive que
+# Los catálogos viven en subdirectorios propios del prefijo de catálogos. El
+# glob es explícito (`*.parquet`) porque ahí no hay particiones hive que
 # delimiten el conjunto, a diferencia de precios.
 GLOB_NDF = "ndf/*.parquet"
+GLOB_PUENTE_APORTADOR = "puente_aportador/*.parquet"
 
 
 def crear_external_bronce(
@@ -81,6 +83,31 @@ def crear_external_ndf(
     """
     referencia = config.tabla_bronce(tabla or TABLA_NDF_EXT)
     uris = f"{config.prefijo_bronce_catalogos()}/{GLOB_NDF}"
+
+    ddl = f"""
+        CREATE OR REPLACE EXTERNAL TABLE `{referencia}`
+        WITH CONNECTION `{config.conexion()}`
+        OPTIONS (
+          format = 'PARQUET',
+          uris = ['{uris}']
+        )
+    """
+    cliente.query(ddl).result()
+    return referencia
+
+
+def crear_external_puente_aportador(
+    cliente: bigquery.Client, config: ConfigGCP, tabla: str | None = None
+) -> str:
+    """Crea o reemplaza la external table sobre el Parquet del puente aportador.
+
+    Mismo criterio que `crear_external_ndf`: sin hive partitioning, un
+    catálogo es un solo archivo de reemplazo. Sus `uris`
+    (`<prefijo_catalogos>/puente_aportador/*.parquet`) son un prefijo hermano
+    de `ndf/` y de `precios_ext`, no se solapan.
+    """
+    referencia = config.tabla_bronce(tabla or TABLA_PUENTE_APORTADOR_EXT)
+    uris = f"{config.prefijo_bronce_catalogos()}/{GLOB_PUENTE_APORTADOR}"
 
     ddl = f"""
         CREATE OR REPLACE EXTERNAL TABLE `{referencia}`

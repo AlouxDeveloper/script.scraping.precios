@@ -14,8 +14,10 @@ construye las capas silver y gold sobre BigQuery.
 | silver | `precios_silver` | tabla | Universo depurado. `precios` (filas válidas, sin duplicados exactos) y `precios_cuarentena` (lo descartado, con su `motivo_descarte`). Particionadas por `mes`. |
 | gold | `precios_gold` | tabla | Star schema: `fact_precios` y sus dimensiones. |
 
-El seed `tiendas` (catálogo propio de 19 tiendas) aterriza en `precios_bronce`: es
-dato de entrada curado a mano, no un modelo de capa.
+El seed `tiendas` (catálogo propio de 21 filas: 19 tiendas scrapeadas más
+`farmacon`/`farmesp`, dos aportadores del crosswalk sin tienda equivalente)
+aterriza en `precios_bronce`: es dato de entrada curado a mano, no un modelo
+de capa.
 
 ## Star schema (gold)
 
@@ -23,17 +25,30 @@ dato de entrada curado a mano, no un modelo de capa.
 precio de oferta por producto y día. Se construye contra `silver.precios` en este
 orden:
 
-1. `dim_tienda` — 19 filas, viene del seed `tiendas`.
+1. `dim_tienda` — 21 filas, viene del seed `tiendas`.
 2. `dim_fecha` — una fila por día natural del histórico observado, con
    `dbt_utils.date_spine` entre el `min` y el `max` de `fecha_captura`.
-3. `dim_producto` — grano `(tienda_key, sku)`, ~160 mil productos. Es el insumo
+3. `dim_producto` — grano `(tienda_key, sku)`, ~240 mil productos. Es el insumo
    del entity resolution: el texto del producto vive aquí, no en la fact.
+   Lleva `ndf_id`/`match_method` parciales — ver abajo.
 4. `fact_precios` — dedup incluido: colapsa las ~17 mil filas de exceso de silver
    quedándose con el precio de lista más bajo observado cada día.
 
 `dim_ndf` se construye por su cuenta desde el catálogo NDF (`stg_ndf`), sin tocar
-`silver.precios`. El cruce entre `dim_producto` y `dim_ndf` (asignar `ndf_id` a
-cada producto de tienda) es el entity resolution, todavía pendiente.
+`silver.precios`. `dim_puente_aportador` es el crosswalk tienda-sku-ndf de
+Knobloch (grano `tienda_key`, `sku`, `ndf_id`), también aparte de
+`silver.precios`. Su `sku` **no coincide** con la mayoría de las tiendas (match
+0-35% según tienda, ver `stg_puente_aportador`): parece un identificador propio
+del aportador (EAN/UPC), no el mismo dato con otro formato.
+
+**Primera pasada del entity resolution, ya en `dim_producto`.** Donde
+`(tienda_key, sku)` mapea a exactamente un `ndf_id` real (existe en `dim_ndf`,
+sin ambigüedad), `dim_producto.ndf_id` queda asignado con
+`match_method = 'aportadores'` — 61 mil de 240 mil filas (~25%). El resto
+queda `ndf_id`/`match_method` NULL a la espera de una segunda pasada por
+texto (embeddings contra `dim_ndf`), todavía no implementada. `match_method`
+está pensado para acumular más de un valor a medida que se agreguen más
+métodos, no para reemplazarse.
 
 ## Decisiones que el lector nuevo debe conocer
 

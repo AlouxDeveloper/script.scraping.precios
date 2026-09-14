@@ -8,8 +8,9 @@ sources:
       la frontera del módulo `load/` y el punto de entrada único de la
       transformación: dbt nunca lee de `raw` ni de los CSV locales.
 
-      `precios_ext` es el histórico con hive partitioning; `ndf_ext` es el
-      catálogo NDF, un único Parquet de reemplazo sin particiones.
+      `precios_ext` es el histórico con hive partitioning; `ndf_ext` y
+      `puente_aportador_ext` son catálogos, cada uno un único Parquet de
+      reemplazo sin particiones.
 
       El archivo histórico está congelado (dic-2025 a sep-2026), así que la
       source no declara `freshness`: no hay carga incremental que vigilar.
@@ -176,3 +177,41 @@ sources:
             description: >
               RAW. `FARMA` / `NO FARMA` y otras divisiones; semántica exacta
               sin confirmar, pendiente de glosario con Knobloch.
+
+      - name: puente_aportador_ext
+        description: >
+          Crosswalk tienda-sku-ndf de Knobloch (corte 260910): una fila por
+          producto reportado por cada aportador, 952,605 en total.
+          `load/puente_aportador.py` lo escribe desde el TXT+XLSX de origen
+          con TODO en STRING a propósito, mismo criterio que `ndf_ext`. Es el
+          insumo pendiente que documenta `entity_resolution/`; el tipado y el
+          descarte de `bandera` viven en `stg_puente_aportador`.
+        columns:
+          - name: aportador_clave
+            description: >
+              RAW. Clave del aportador que reportó la fila (2 caracteres,
+              p. ej. `N0`, `89`). Se traduce a `tienda_key` vía la columna
+              `aportador_clave` del seed `dim_tienda`.
+          - name: aportador
+            description: >
+              RAW. Nombre del aportador, traducido de `aportador_clave` con
+              `CVE_APORTADOR_NOMBRE.xlsx`. NULL si la clave no estaba en ese
+              XLSX al momento del corte.
+          - name: bandera
+            description: >
+              RAW. No se usa en el modelo de matching; se descarta en
+              `stg_puente_aportador`, no aquí.
+          - name: correlativo
+            description: >
+              RAW. El sku real de la tienda, con padding de ceros a la
+              izquierda (15 caracteres). Se limpia a `sku` en
+              `stg_puente_aportador`.
+          - name: ndf_id
+            description: >
+              RAW. Llave del catálogo NDF (`dim_ndf.ndf_id`). Semántica del
+              padding sin confirmar todavía contra el NDF real — validar
+              antes de confiar en el join.
+          - name: producto
+            description: RAW. Nombre del producto según el aportador.
+          - name: descripcion
+            description: RAW. Descripción / complemento del nombre.

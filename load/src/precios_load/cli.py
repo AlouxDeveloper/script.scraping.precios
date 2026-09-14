@@ -9,7 +9,7 @@ import os
 
 import typer
 
-from precios_load import __version__, bq, catalogos, manifest
+from precios_load import __version__, bq, catalogos, manifest, puente_aportador
 from precios_load.clientes import cliente_bq, cliente_gcs
 from precios_load.config import (
     FORMATO_ANIO_MES,
@@ -195,17 +195,59 @@ def catalogo(ctx: typer.Context) -> None:
     typer.echo(f"\nfilas {filas:,}")
 
 
+@app.command(name="catalogos-puente")
+def catalogo_puente(ctx: typer.Context) -> None:
+    """Convierte el TXT del puente aportador y sube el Parquet a bronce.
+
+    Aldo deja `puente_aportador.txt` (el corte, renombrado sin la fecha) y
+    `CVE_APORTADOR_NOMBRE.xlsx` en `salida/catalogos/`; el comando hace el
+    resto. Mismo criterio que `catalogos` (NDF): sin manifest, un catálogo es
+    un snapshot de reemplazo completo.
+    """
+    cfg = ctx.obj
+    ruta_txt = os.path.join(cfg.ruta_catalogos(), puente_aportador.NOMBRE_TXT)
+    ruta_xlsx = os.path.join(
+        cfg.ruta_catalogos(), puente_aportador.NOMBRE_XLSX_APORTADORES
+    )
+
+    faltantes_archivo = [r for r in (ruta_txt, ruta_xlsx) if not os.path.isfile(r)]
+    if faltantes_archivo:
+        typer.echo(
+            "❌ No se encontró: " + ", ".join(faltantes_archivo) + "\n"
+            "   Deja el TXT del puente y el XLSX de aportadores ahí y vuelve "
+            "a correr el comando.",
+            err=True,
+        )
+        raise typer.Exit(code=1)
+
+    uri, filas, faltantes = puente_aportador.escribir(cliente_gcs(cfg), cfg)
+
+    typer.echo(f"→ {uri}")
+    typer.echo(f"\nfilas {filas:,}")
+    if faltantes:
+        typer.echo(
+            f"⚠️  {len(faltantes)} clave(s) de aportador sin traducción: "
+            + ", ".join(faltantes),
+            err=True,
+        )
+
+
 @app.command(name="bq-setup")
 def bq_setup(ctx: typer.Context) -> None:
     """Crea o reemplaza las external tables BigLake sobre la capa bronce.
 
-    Es la frontera de `load/`: deja el histórico (`precios_ext`) y el catálogo
-    NDF (`ndf_ext`) consultables en BigQuery. La limpieza y las capas
-    silver/gold son trabajo de dbt sobre estas tablas.
+    Es la frontera de `load/`: deja el histórico (`precios_ext`), el catálogo
+    NDF (`ndf_ext`) y el puente aportador (`puente_aportador_ext`) consultables
+    en BigQuery. La limpieza y las capas silver/gold son trabajo de dbt sobre
+    estas tablas.
     """
     cfg = ctx.obj
     cliente = cliente_bq(cfg)
-    for crear in (bq.crear_external_bronce, bq.crear_external_ndf):
+    for crear in (
+        bq.crear_external_bronce,
+        bq.crear_external_ndf,
+        bq.crear_external_puente_aportador,
+    ):
         ext = crear(cliente, cfg)
         filas = next(iter(cliente.query(f"SELECT COUNT(*) AS n FROM `{ext}`").result()))["n"]
         typer.echo(f"external table  {ext}")
