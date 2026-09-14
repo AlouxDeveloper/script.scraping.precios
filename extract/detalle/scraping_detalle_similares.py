@@ -17,7 +17,7 @@ from selenium.common.exceptions import TimeoutException, NoSuchElementException
 EXCEL_ENTRADA = "./salida/urls/urls_productos_similares.xlsx"
 COLUMNA_URL   = "URL"
 CSV_SALIDA    = "./salida/data/2026/08_agosto/scraping_detalle_similares.csv"
-TIENDA        = "Farmacias Similares"
+TIENDA        = "16"
 
 TIMEOUT = 15
 ESPERA_INICIAL = (3.5, 5.0)

@@ -10,7 +10,7 @@ from datetime import datetime
 # === Configuración ===
 CSV_INPUT    = "./salida/urls/urls_yza.csv"
 CSV_OUTPUT   = "./salida/data/2026/08_agosto/scraping_detalle_yza.csv"
-TIENDA       = "Farmacias Yza"
+TIENDA       = "19"
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",

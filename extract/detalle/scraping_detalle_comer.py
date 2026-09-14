@@ -15,7 +15,7 @@ from selenium.webdriver.support import expected_conditions as EC
 # ========== Configuración ==========
 CSV_INPUT  = "./salida/urls/urls_lacomer.csv"
 CSV_OUTPUT = "./salida/data/2026/08_agosto/scraping_detalle_comer.csv"
-TIENDA     = "La Comer"
+TIENDA     = "5"
 
 FIELDNAMES = [
     "SKU", "URL_PRODUCTO", "Producto", "Precio_Actual", 

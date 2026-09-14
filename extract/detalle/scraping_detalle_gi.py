@@ -11,7 +11,7 @@ from datetime import datetime
 # --- CONFIGURACIÓN ---
 CSV_URLS_PRODUCTOS_ENTRADA = './salida/urls/urls_productos_gi1.csv'
 CSV_DATOS_FINAL_SALIDA = './salida/data/2026/08_agosto/scraping_detalles_gi.csv'
-TIENDA = "Farmacias Gi"
+TIENDA = "10"
 
 def inicializar_csv_final():
     """Crea la carpeta y el archivo final con cabeceras si no existe."""

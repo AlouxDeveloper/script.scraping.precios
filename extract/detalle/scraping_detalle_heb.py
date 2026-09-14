@@ -16,7 +16,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 # === Configuración ===
 CSV_INPUT    = "./salida/urls/urls_scraping_heb.csv"
 CSV_OUTPUT   = "./salida/data/2026/08_agosto/scraping_detalle_heb.csv"
-TIENDA       = "HEB"
+TIENDA       = "12"
 
 def configurar_driver():
     print("🌐 Iniciando nueva sesión del navegador...")

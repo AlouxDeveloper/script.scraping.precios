@@ -13,7 +13,7 @@ import os
 # === Configuración ===
 INPUT_CSV = "./salida/urls/productos_walmart.csv"
 CSV_OUTPUT = "./salida/data/2026/09_septiembre/scraping_detalle_walmart.csv"
-TIENDA = "12"
+TIENDA = "18"
 
 # Versión mayor del Chrome instalado en la máquina donde corre el script.
 # undetected_chromedriver 3.5.5 no la detecta bien: baja el chromedriver de
@@ -59,7 +59,7 @@ print(f"📂 Historial: {len(urls_procesadas)} URLs ya se encuentran en el archi
 print(f"🚀 Iniciando captura blindada (Abriendo y cerrando navegador por producto)...")
 
 # === Bucle de Scraping ===
-barra = tqdm(lista_productos, desc="walmart", unit="url")
+barra = tqdm(lista_productos, desc="walmart", unit="url", initial=len(urls_procesadas))
 for i, item in enumerate(barra, 1):
     url = item['URL']
 

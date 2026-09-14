@@ -16,7 +16,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 # === Configuración ===
 CSV_INPUT    = "./salida/urls/urls_farmatodo.csv"
 CSV_OUTPUT   = "./salida/data/2026/08_agosto/scraping_detalle_farmatodo.csv"
-TIENDA       = "Farmatodo"
+TIENDA       = "8"
 
 def configurar_driver():
     opts = Options()

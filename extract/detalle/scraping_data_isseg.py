@@ -12,7 +12,7 @@ from curl_cffi.requests.errors import RequestsError
 EXCEL_INPUT = "./data/url_catego_isseg.xlsx"
 CSV_OUTPUT = "./salida/data/2026/09_septiembre/scraping_detalle_isseg.csv"
 NOMBRE_COLUMNA_URL_ENTRADA = "Url"
-TIENDA_NOMBRE = "17"
+TIENDA_NOMBRE = "13"
 
 BASE_URL_PRODUCTO = "https://farmaciasisseg.com.mx/producto/"
 

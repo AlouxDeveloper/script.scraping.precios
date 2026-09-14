@@ -15,7 +15,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 # ========== Configuración ==========
 CSV_INPUT  = "./salida/urls/urls_soriana.csv"
 CSV_OUTPUT = "./salida/data/2026/08_agosto/scraping_detalle_soriana.csv"
-TIENDA     = "Soriana"
+TIENDA     = "17"
 
 FIELDNAMES = [
     "SKU", "URL_PRODUCTO", "Producto", "Precio_Actual", 

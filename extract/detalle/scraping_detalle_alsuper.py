@@ -10,7 +10,7 @@ from datetime import datetime
 EXCEL_CATEGORIAS = "./data/urls_categorias_alsuper.xlsx" 
 COLUMNA_EXCEL = "URL_CATEGORIA" 
 CSV_OUTPUT = "./salida/data/2026/09_septiembre/scraping_detalle_alsuper.csv"
-TIENDA = "22"
+TIENDA = "1"
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",

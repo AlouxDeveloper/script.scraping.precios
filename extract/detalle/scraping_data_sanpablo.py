@@ -12,7 +12,7 @@ CSV_OUTPUT_DETALLES = "./salida/data/2026/09_septiembre/scraping_detalles_sanpab
 COLUMNAS_ENTRADA = ["URL", "Producto"]
 COLUMNAS_SALIDA_DETALLES = ["SKU", "URL_PRODUCTO", "PRODUCTO", "PRECIO_ACTUAL", 
                              "PRECIO_OFERTA", "URL_IMAGEN", "FECHA", "TIENDA"]
-TIENDA_NOMBRE = "Farmacias San Pablo"
+TIENDA_NOMBRE = "15"
 
 # --- Configuración de la API ---
 BASE_API_URL_DETALLE = "https://api.farmaciasanpablo.com.mx/rest/v2/fsp/products/{sku}"

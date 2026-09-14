@@ -14,7 +14,7 @@ from selenium.webdriver.chrome.service import Service
 # === Configuración ===
 CSV_INPUT = "./salida/urls/urls_farmacia_chedraui.csv"
 CSV_OUTPUT = "./salida/data/2026/09_septiembre/scraping_detalle_chedraui.csv"
-TIENDA = "Chedraui"
+TIENDA = "4"
 
 # Encabezados solicitados
 FIELDNAMES = [

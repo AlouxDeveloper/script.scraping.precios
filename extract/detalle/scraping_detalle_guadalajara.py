@@ -16,6 +16,7 @@ from monitoreo import MonitorFallos, configurar_logger, es_pagina_bloqueada
 # === Configuración ===
 EXCEL_PATH = "./data/data_scraping_guadalajara.xlsx"
 CSV_OUTPUT = "./salida/data/2026/09_septiembre/scraping_detalle_guadalajara.csv"
+TIENDA = "11"
 
 os.makedirs(os.path.dirname(CSV_OUTPUT), exist_ok=True)
 
@@ -41,7 +42,7 @@ logger = configurar_logger("guadalajara")
 monitor = MonitorFallos(tienda="guadalajara", logger=logger)
 
 # === Bucle de Scraping (Se mantiene idéntico) ===
-barra = tqdm(urls_busqueda, desc="guadalajara", unit="url")
+barra = tqdm(urls_busqueda, desc="guadalajara", unit="url", initial=len(urls_procesadas))
 for i, url in enumerate(barra, start=1):
     if not url.startswith("http"):
         tqdm.write(f"⚠️ [{i}/{len(urls_busqueda)}] URL no válida: {url}")
@@ -130,7 +131,7 @@ for i, url in enumerate(barra, start=1):
                 "Precio_Oferta": precio_actual,
                 "URL_IMAGEN": url_imagen,
                 "Fecha_Hora_Captura": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                "Tienda": "1",
+                "Tienda": TIENDA,
             }
 
             # Guardar en CSV inmediatamente (append mode)

@@ -13,7 +13,7 @@ from typing import Optional, Dict, Any
 CSV_INPUT = "./salida/urls/urls_productos_benavides.csv"
 # Archivo CSV de salida con todos los detalles
 CSV_OUTPUT = "./salida/data/2026/09_septiembre/scraping_detalle_benavides.csv" # RUTA ACTUALIZADA
-TIENDA_NOMBRE = "2"
+TIENDA_NOMBRE = "3"
 
 HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',

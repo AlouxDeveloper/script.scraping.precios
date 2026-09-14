@@ -15,7 +15,7 @@ import random
 CSV_INPUT = "./salida/urls/urls_productos_farmalisto.csv" 
 CSV_OUTPUT = "./salida/data/2026/08_agosto/scraping_detalle_farmalisto.csv"
 COLUMNA_URL = "URL" 
-TIENDA = "Farmalisto"
+TIENDA = "7"
 CSV_HEADERS = ["SKU", "URL_PRODUCTO", "Producto", "Precio_Actual", "Precio_Oferta", "URL_IMAGEN", "Fecha_Hora_Captura", "Tienda"]
 
 def limpiar_precio(texto_precio):

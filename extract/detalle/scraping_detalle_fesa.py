@@ -16,9 +16,10 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC 
 
 # --- Configuraciones de Archivos ---
-CSV_URLS_ENTRADA = './salida/urls/urls_productos_fesa.csv' 
-CSV_DETALLE_SALIDA = './salida/data/2026/08_agosto/scraping_detalle_fesa.csv' 
-COLUMNA_URL_ENTRADA = 'URL' 
+CSV_URLS_ENTRADA = './salida/urls/urls_productos_fesa.csv'
+CSV_DETALLE_SALIDA = './salida/data/2026/08_agosto/scraping_detalle_fesa.csv'
+COLUMNA_URL_ENTRADA = 'URL'
+TIENDA = "9"
 
 # 🚨 ENCABEZADOS SOLICITADOS PARA EL ARCHIVO DE SALIDA 🚨
 NOMBRES_COLUMNAS = [
@@ -226,7 +227,7 @@ def extraer_detalles_producto(driver, url_producto: str):
             'Precio_Oferta': precio_oferta_salida, # <-- Precio Especial/Bajo
             'URL_IMAGEN': url_imagen,
             'Fecha_Hora_Captura': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-            'Tienda': "5"
+            'Tienda': TIENDA
         }
 
     except Exception as e:
@@ -275,7 +276,7 @@ else:
                 fila_vacia = {col: '' for col in NOMBRES_COLUMNAS}
                 fila_vacia['URL_PRODUCTO'] = url_producto
                 fila_vacia['Fecha_Hora_Captura'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                fila_vacia['Tienda'] = 'Farmacias FESA'
+                fila_vacia['Tienda'] = TIENDA
                 escribir_csv_progreso(fila_vacia, escribir_cabecera)
                 escribir_cabecera = False
                 print(f"⚠️ Omisión: Fallo al obtener el detalle del producto en {url_producto}. Se registró una fila vacía.")

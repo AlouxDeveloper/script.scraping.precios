@@ -15,7 +15,7 @@ from monitoreo import MonitorFallos, configurar_logger, es_pagina_bloqueada
 # === Configuración ===
 INPUT_CSV = "./salida/urls/productos_aurrera.csv"
 CSV_OUTPUT = "./salida/data/2026/09_septiembre/scraping_detalle_aurrera.csv"
-TIENDA = "16"
+TIENDA = "2"
 
 ENCABEZADOS = [
     "SKU", "URL_PRODUCTO", "Producto", "Precio_Actual", 
@@ -57,7 +57,7 @@ logger = configurar_logger("aurrera")
 monitor = MonitorFallos(tienda="aurrera", logger=logger)
 
 # === Bucle de Scraping ===
-barra = tqdm(lista_productos, desc="aurrera", unit="url")
+barra = tqdm(lista_productos, desc="aurrera", unit="url", initial=len(urls_procesadas))
 for i, item in enumerate(barra, 1):
     url = item['URL']
 

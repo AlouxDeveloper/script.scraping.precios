@@ -18,7 +18,7 @@ os.makedirs(os.path.dirname(CSV_OUTPUT_PATH), exist_ok=True)
 
 # --- CONFIGURACIÓN GENERAL ---
 URL_BASE = "https://www.fahorro.com"
-TIENDA = "3"
+TIENDA = "6"
 
 HEADERS = {
     'User-Agent': 'Mozilla/50 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
