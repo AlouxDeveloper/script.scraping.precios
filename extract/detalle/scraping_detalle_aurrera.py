@@ -1,13 +1,25 @@
+from datetime import datetime
+import csv
+import os
+import ssl
+import time
+
+import certifi
 import pandas as pd
 import undetected_chromedriver as uc
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from datetime import datetime
-import time
-import csv
-import os
+
+# Algunas PC (Windows con almacén de certificados incompleto) tiran
+# "CERTIFICATE_VERIFY_FAILED: unable to get local issuer certificate" al
+# bajar el chromedriver, porque el contexto SSL por defecto de Python usa
+# el truststore del sistema en vez del bundle de certifi. Se fuerza aquí
+# para toda la corrida, antes de que uc intente descargar nada.
+ssl._create_default_https_context = lambda: ssl.create_default_context(
+    cafile=certifi.where()
+)
 
 # === Configuración ===
 INPUT_CSV = "./salida/urls/productos_aurrera.csv"
