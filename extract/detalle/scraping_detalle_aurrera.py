@@ -4,13 +4,10 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from tqdm import tqdm
 from datetime import datetime
 import time
 import csv
 import os
-
-from monitoreo import MonitorFallos, configurar_logger, es_pagina_bloqueada
 
 # === Configuración ===
 INPUT_CSV = "./salida/urls/productos_aurrera.csv"
@@ -18,6 +15,10 @@ CSV_OUTPUT = "./salida/data/2026/09_septiembre/scraping_detalle_aurrera.csv"
 TIENDA = "2"
 # CSV aparte para URLs que fallaron, para no repetirlas al reanudar.
 CSV_ESTADO_URLS = "./salida/data/2026/09_septiembre/scraping_detalle_aurrera_fallidas.csv"
+# Version mayor del Chrome instalado (chrome://settings/help). uc descarga el
+# chromedriver que declares aqui; si Chrome se autoactualiza sin avisar,
+# ajusta este numero en vez de tocar el resto del script.
+CHROME_VERSION_MAIN = 152
 
 ENCABEZADOS = [
     "SKU", "URL_PRODUCTO", "Producto", "Precio_Actual", 
@@ -63,18 +64,14 @@ except Exception as e:
 print(f"📂 Avance detectado: {len(urls_procesadas)} ya procesadas.")
 print(f"🚀 Iniciando captura blindada (Abriendo y cerrando navegador por producto)...")
 
-logger = configurar_logger("aurrera")
-monitor = MonitorFallos(tienda="aurrera", logger=logger)
-
 # === Bucle de Scraping ===
-barra = tqdm(lista_productos, desc="aurrera", unit="url", initial=len(urls_procesadas))
-for i, item in enumerate(barra, 1):
+for i, item in enumerate(lista_productos, 1):
     url = item['URL']
 
     if url in urls_procesadas:
         continue
 
-    tqdm.write(f"\n🔍 [{i}/{len(lista_productos)}] Procesando: {url}")
+    print(f"\n🔍 [{i}/{len(lista_productos)}] Procesando: {url}")
 
     driver = None
     try:
@@ -83,16 +80,17 @@ for i, item in enumerate(barra, 1):
         options.add_argument("--window-size=1280,1000")
         options.add_argument("--disable-blink-features=AutomationControlled")
 
-        # Sin version_main: uc detecta la versión del Chrome instalado y baja
-        # el chromedriver que corresponda en vez de forzar una fija.
-        driver = uc.Chrome(options=options, use_subprocess=True)
+        # version_main fija: el autodetect de uc bajo un chromedriver de una
+        # version mayor a la instalada (153 vs Chrome 152 real) y tumbaba
+        # cada sesion con "session not created". Se fija a mano y se ajusta
+        # aqui cuando Chrome se actualice.
+        driver = uc.Chrome(
+            options=options, use_subprocess=True,
+            version_main=CHROME_VERSION_MAIN,
+        )
         wait = WebDriverWait(driver, 15)
 
         driver.get(url)
-
-        if es_pagina_bloqueada(driver.page_source):
-            monitor.registrar_fallo("bloqueo_detectado")
-            continue
 
         # Esperar a que cargue el título (ID único del producto principal)
         wait.until(EC.presence_of_element_located((By.ID, "main-title")))
@@ -163,15 +161,10 @@ for i, item in enumerate(barra, 1):
             writer.writerow(fila)
 
         urls_procesadas.add(url)
-        monitor.registrar_exito()
-        tqdm.write(
-            f"   ✅ Guardado: {titulo[:35]}... | "
-            f"Actual: ${precio_normal} | Oferta: ${precio_oferta}"
-        )
+        print(f"   ✅ Guardado: {titulo[:35]}... | Actual: ${precio_normal} | Oferta: ${precio_oferta}")
 
     except Exception as e:
-        monitor.registrar_fallo(str(e))
-        tqdm.write(f"   ❌ Error en registro {i}: Verifique si hay un bloqueo o Captcha.")
+        print(f"   ❌ Error en registro {i}: Verifique si hay un bloqueo o Captcha.")
         es_nuevo = not os.path.exists(CSV_ESTADO_URLS) or os.stat(CSV_ESTADO_URLS).st_size == 0
         with open(CSV_ESTADO_URLS, "a", newline="", encoding="utf-8") as f_estado:
             writer_estado = csv.writer(f_estado)
@@ -187,7 +180,5 @@ for i, item in enumerate(barra, 1):
             driver.quit()
         # Descanso entre ventanas para enfriar peticiones
         time.sleep(2)
-
-    barra.set_postfix(exitosas=monitor.exitos)
 
 print(f"\n📦 Proceso masivo finalizado. Resultados en: {CSV_OUTPUT}")
