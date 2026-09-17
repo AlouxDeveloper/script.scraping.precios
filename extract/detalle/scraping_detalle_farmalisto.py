@@ -14,12 +14,12 @@ from tqdm import tqdm
 
 # === Configuración ===
 CSV_INPUT = "./salida/urls/urls_productos_farmalisto.csv"
-CSV_OUTPUT = "./salida/data/2026/08_agosto/scraping_detalle_farmalisto.csv"
+CSV_OUTPUT = "./salida/data/2026/09_septiembre/scraping_detalle_farmalisto.csv"
 COLUMNA_URL = "URL"
 TIENDA = "7"
 CSV_HEADERS = ["SKU", "URL_PRODUCTO", "Producto", "Precio_Actual", "Precio_Oferta", "URL_IMAGEN", "Fecha_Hora_Captura", "Tienda"]
 # CSV aparte para URLs que fallaron, para no repetirlas al reanudar.
-CSV_ESTADO_URLS = "./salida/data/2026/08_agosto/scraping_detalle_farmalisto_fallidas.csv"
+CSV_ESTADO_URLS = "./salida/data/2026/09_septiembre/scraping_detalle_farmalisto_fallidas.csv"
 # Version de Chrome que se declara en el User-Agent; ajusta aqui si cambia.
 CHROME_VERSION = 153
 

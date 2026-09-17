@@ -30,7 +30,7 @@ CSV_ESTADO_URLS = "./salida/data/2026/09_septiembre/scraping_detalle_aurrera_fal
 # Version mayor del Chrome instalado (chrome://settings/help). uc descarga el
 # chromedriver que declares aqui; si Chrome se autoactualiza sin avisar,
 # ajusta este numero en vez de tocar el resto del script.
-CHROME_VERSION_MAIN = 152
+CHROME_VERSION_MAIN = 153
 
 ENCABEZADOS = [
     "SKU", "URL_PRODUCTO", "Producto", "Precio_Actual", 

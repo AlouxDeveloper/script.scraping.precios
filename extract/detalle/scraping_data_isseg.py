@@ -10,7 +10,7 @@ from curl_cffi.requests.errors import RequestsError
 from tqdm import tqdm
 
 # === Configuración de Archivos y Rutas ===
-EXCEL_INPUT = "./data/url_catego_isseg.xlsx"
+EXCEL_INPUT = "./salida/urls/url_catego_isseg.xlsx"
 CSV_OUTPUT = "./salida/data/2026/09_septiembre/scraping_detalle_isseg.csv"
 NOMBRE_COLUMNA_URL_ENTRADA = "Url"
 TIENDA_NOMBRE = "13"
@@ -20,7 +20,7 @@ BASE_URL_PRODUCTO = "https://farmaciasisseg.com.mx/producto/"
 # Version de Chrome que se declara en el User-Agent y en Sec-Ch-Ua; ajusta
 # aqui si cambia (no toca el impersonate="chrome120" del Session, que es un
 # perfil TLS fijo de curl_cffi, no un numero libre).
-CHROME_VERSION = 128
+CHROME_VERSION = 153
 
 # Cabeceras completas que espera el backend/WAF de ISSEG
 HEADERS = {

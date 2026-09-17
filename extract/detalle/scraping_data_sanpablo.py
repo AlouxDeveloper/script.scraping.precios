@@ -18,7 +18,7 @@ TIENDA_NOMBRE = "15"
 # CSV aparte para URLs que fallaron, para no repetirlas al reanudar.
 CSV_ESTADO_URLS = "./salida/data/2026/09_septiembre/scraping_detalles_sanpablo_fallidas.csv"
 # Version de Chrome que se declara en el User-Agent; ajusta aqui si cambia.
-CHROME_VERSION = 124
+CHROME_VERSION = 153
 
 # --- Configuración de la API ---
 BASE_API_URL_DETALLE = "https://api.farmaciasanpablo.com.mx/rest/v2/fsp/products/{sku}"

@@ -17,10 +17,10 @@ from tqdm import tqdm
 # ===== Config =====
 EXCEL_ENTRADA = "./salida/urls/urls_productos_similares.xlsx"
 COLUMNA_URL   = "URL"
-CSV_SALIDA    = "./salida/data/2026/08_agosto/scraping_detalle_similares.csv"
+CSV_SALIDA    = "./salida/data/2026/09_septiembre/scraping_detalle_similares.csv"
 TIENDA        = "16"
 # CSV aparte para URLs que fallaron, para no repetirlas al reanudar.
-CSV_ESTADO_URLS = "./salida/data/2026/08_agosto/scraping_detalle_similares_fallidas.csv"
+CSV_ESTADO_URLS = "./salida/data/2026/09_septiembre/scraping_detalle_similares_fallidas.csv"
 
 TIMEOUT = 15
 ESPERA_INICIAL = (3.5, 5.0)

@@ -10,10 +10,10 @@ from tqdm import tqdm
 
 # === Configuración ===
 CSV_INPUT    = "./salida/urls/urls_yza.csv"
-CSV_OUTPUT   = "./salida/data/2026/08_agosto/scraping_detalle_yza.csv"
+CSV_OUTPUT   = "./salida/data/2026/09_septiembre/scraping_detalle_yza.csv"
 TIENDA       = "19"
 # CSV aparte para URLs que fallaron, para no repetirlas al reanudar.
-CSV_ESTADO_URLS = "./salida/data/2026/08_agosto/scraping_detalle_yza_fallidas.csv"
+CSV_ESTADO_URLS = "./salida/data/2026/09_septiembre/scraping_detalle_yza_fallidas.csv"
 
 
 def marcar_fallida(url: str, detalle: str = "") -> None:
@@ -26,7 +26,7 @@ def marcar_fallida(url: str, detalle: str = "") -> None:
         w.writerow([url, "ERROR", detalle, datetime.now().strftime("%Y-%m-%d %H:%M:%S")])
 
 # Version de Chrome que se declara en el User-Agent; ajusta aqui si cambia.
-CHROME_VERSION = 120
+CHROME_VERSION = 153
 
 HEADERS = {
     "User-Agent": f"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{CHROME_VERSION}.0.0.0 Safari/537.36",

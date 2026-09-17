@@ -19,7 +19,7 @@ TIENDA = "4"
 # CSV aparte para URLs que fallaron, para no repetirlas al reanudar.
 CSV_ESTADO_URLS = "./salida/data/2026/09_septiembre/scraping_detalle_chedraui_fallidas.csv"
 # Version de Chrome que se declara en el User-Agent; ajusta aqui si cambia.
-CHROME_VERSION = 120
+CHROME_VERSION = 153
 
 # Encabezados solicitados
 FIELDNAMES = [

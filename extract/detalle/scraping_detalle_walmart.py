@@ -20,7 +20,7 @@ TIENDA = "18"
 # la última versión publicada (153) y revienta contra un Chrome 152 con
 # "This version of ChromeDriver only supports Chrome version 153".
 # Al actualizarse Chrome hay que subir este número.
-VERSION_CHROME = 152
+VERSION_CHROME = 153
 
 ENCABEZADOS = [
     "SKU", "URL_PRODUCTO", "Producto", "Precio_Actual",
