@@ -19,6 +19,8 @@ CSV_OUTPUT = "./salida/data/2026/08_agosto/scraping_detalle_soriana.csv"
 TIENDA     = "17"
 # CSV aparte para URLs que fallaron, para no repetirlas al reanudar.
 CSV_ESTADO_URLS = "./salida/data/2026/08_agosto/scraping_detalle_soriana_fallidas.csv"
+# Version de Chrome que se declara en el User-Agent; ajusta aqui si cambia.
+CHROME_VERSION = 120
 
 
 def marcar_fallida(url: str, detalle: str = "") -> None:
@@ -78,7 +80,7 @@ def configurar_driver():
     opts = Options()
     opts.add_argument("--headless=new") 
     opts.add_argument("--window-size=1920,1080")
-    opts.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+    opts.add_argument(f"user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{CHROME_VERSION}.0.0.0 Safari/537.36")
     service = Service(ChromeDriverManager().install())
     return webdriver.Chrome(service=service, options=opts)
 

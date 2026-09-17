@@ -17,18 +17,23 @@ TIENDA_NOMBRE = "13"
 
 BASE_URL_PRODUCTO = "https://farmaciasisseg.com.mx/producto/"
 
+# Version de Chrome que se declara en el User-Agent y en Sec-Ch-Ua; ajusta
+# aqui si cambia (no toca el impersonate="chrome120" del Session, que es un
+# perfil TLS fijo de curl_cffi, no un numero libre).
+CHROME_VERSION = 128
+
 # Cabeceras completas que espera el backend/WAF de ISSEG
 HEADERS = {
     "User-Agent": (
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
         "AppleWebKit/537.36 (KHTML, like Gecko) "
-        "Chrome/128.0.0.0 Safari/537.36"
+        f"Chrome/{CHROME_VERSION}.0.0.0 Safari/537.36"
     ),
     "Accept": "application/json, text/plain, */*",
     "Accept-Language": "es-419,es;q=0.9,en;q=0.8",
     "Origin": "https://farmaciasisseg.com.mx",
     "Referer": "https://farmaciasisseg.com.mx/",
-    "Sec-Ch-Ua": '"Chromium";v="128", "Not;A=Brand";v="24", "Google Chrome";v="128"',
+    "Sec-Ch-Ua": f'"Chromium";v="{CHROME_VERSION}", "Not;A=Brand";v="24", "Google Chrome";v="{CHROME_VERSION}"',
     "Sec-Ch-Ua-Mobile": "?0",
     "Sec-Ch-Ua-Platform": '"macOS"',
     "Sec-Fetch-Dest": "empty",

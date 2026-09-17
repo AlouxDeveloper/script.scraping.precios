@@ -20,6 +20,8 @@ TIENDA = "7"
 CSV_HEADERS = ["SKU", "URL_PRODUCTO", "Producto", "Precio_Actual", "Precio_Oferta", "URL_IMAGEN", "Fecha_Hora_Captura", "Tienda"]
 # CSV aparte para URLs que fallaron, para no repetirlas al reanudar.
 CSV_ESTADO_URLS = "./salida/data/2026/08_agosto/scraping_detalle_farmalisto_fallidas.csv"
+# Version de Chrome que se declara en el User-Agent; ajusta aqui si cambia.
+CHROME_VERSION = 124
 
 
 def marcar_fallida(url: str, detalle: str = "") -> None:
@@ -67,7 +69,7 @@ def main():
     options = Options()
     options.add_argument("--start-maximized")
     options.add_argument("--log-level=3")
-    options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
+    options.add_argument(f"user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{CHROME_VERSION}.0.0.0 Safari/537.36")
     
     service = Service()
     driver = webdriver.Chrome(service=service, options=options)

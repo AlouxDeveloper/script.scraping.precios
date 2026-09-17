@@ -19,6 +19,8 @@ CSV_OUTPUT = "./salida/data/2026/08_agosto/scraping_detalle_comer.csv"
 TIENDA     = "5"
 # CSV aparte para URLs que fallaron, para no repetirlas al reanudar.
 CSV_ESTADO_URLS = "./salida/data/2026/08_agosto/scraping_detalle_comer_fallidas.csv"
+# Version de Chrome que se declara en el User-Agent; ajusta aqui si cambia.
+CHROME_VERSION = 120
 
 
 def marcar_fallida(url: str, detalle: str = "") -> None:
@@ -41,7 +43,7 @@ def configurar_driver():
     opts.add_argument("--disable-blink-features=AutomationControlled")
     opts.add_experimental_option("excludeSwitches", ["enable-automation"])
     opts.add_experimental_option('useAutomationExtension', False)
-    opts.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+    opts.add_argument(f"user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{CHROME_VERSION}.0.0.0 Safari/537.36")
     
     # Selenium 4 gestiona el driver nativamente sin requerir ChromeDriverManager
     driver = webdriver.Chrome(options=opts)

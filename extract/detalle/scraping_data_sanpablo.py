@@ -17,6 +17,8 @@ COLUMNAS_SALIDA_DETALLES = ["SKU", "URL_PRODUCTO", "PRODUCTO", "PRECIO_ACTUAL",
 TIENDA_NOMBRE = "15"
 # CSV aparte para URLs que fallaron, para no repetirlas al reanudar.
 CSV_ESTADO_URLS = "./salida/data/2026/09_septiembre/scraping_detalles_sanpablo_fallidas.csv"
+# Version de Chrome que se declara en el User-Agent; ajusta aqui si cambia.
+CHROME_VERSION = 124
 
 # --- Configuración de la API ---
 BASE_API_URL_DETALLE = "https://api.farmaciasanpablo.com.mx/rest/v2/fsp/products/{sku}"
@@ -29,7 +31,7 @@ HEADERS = {
     "Accept-Language": "es-MX,es;q=0.9",
     "Origin": "https://www.farmaciasanpablo.com.mx",
     "Referer": "https://www.farmaciasanpablo.com.mx/",
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+    "User-Agent": f"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{CHROME_VERSION}.0.0.0 Safari/537.36",
 }
 
 def marcar_fallida(url: str, detalle: str = "") -> None:

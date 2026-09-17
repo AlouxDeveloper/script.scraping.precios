@@ -25,8 +25,11 @@ def marcar_fallida(url: str, detalle: str = "") -> None:
             w.writerow(["URL_PRODUCTO", "Estatus", "Detalle", "Fecha_Hora_Captura"])
         w.writerow([url, "ERROR", detalle, datetime.now().strftime("%Y-%m-%d %H:%M:%S")])
 
+# Version de Chrome que se declara en el User-Agent; ajusta aqui si cambia.
+CHROME_VERSION = 120
+
 HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "User-Agent": f"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{CHROME_VERSION}.0.0.0 Safari/537.36",
     "Accept-Language": "es-MX,es;q=0.9",
     "Referer": "https://www.yza.mx/",
 }

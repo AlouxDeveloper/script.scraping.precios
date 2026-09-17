@@ -18,10 +18,12 @@ CSV_OUTPUT = "./salida/data/2026/09_septiembre/scraping_detalle_chedraui.csv"
 TIENDA = "4"
 # CSV aparte para URLs que fallaron, para no repetirlas al reanudar.
 CSV_ESTADO_URLS = "./salida/data/2026/09_septiembre/scraping_detalle_chedraui_fallidas.csv"
+# Version de Chrome que se declara en el User-Agent; ajusta aqui si cambia.
+CHROME_VERSION = 120
 
 # Encabezados solicitados
 FIELDNAMES = [
-    "SKU", "URL_PRODUCTO", "Producto", "Precio_Actual", 
+    "SKU", "URL_PRODUCTO", "Producto", "Precio_Actual",
     "Precio_Oferta", "URL_IMAGEN", "Fecha_Hora_Captura", "Tienda"
 ]
 
@@ -29,7 +31,7 @@ FIELDNAMES = [
 options = Options()
 options.add_argument("--headless=new")
 options.add_argument("--window-size=1920,1080")
-options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+options.add_argument(f"user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{CHROME_VERSION}.0.0.0 Safari/537.36")
 service = Service(ChromeDriverManager().install())
 driver = webdriver.Chrome(service=service, options=options)
 

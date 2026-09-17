@@ -18,9 +18,11 @@ TIENDA_NOMBRE = "3"
 # CSV aparte para URLs que fallaron (HTTP distinto de 200, error de red), para
 # no repetirlas en la siguiente reanudación.
 CSV_ESTADO_URLS = "./salida/data/2026/09_septiembre/scraping_detalle_benavides_fallidas.csv"
+# Version de Chrome que se declara en el User-Agent; ajusta aqui si cambia.
+CHROME_VERSION = 124
 
 HEADERS = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+    'User-Agent': f'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{CHROME_VERSION}.0.0.0 Safari/537.36',
     'Accept-Language': 'es-ES,es;q=0.9',
     'Accept-Encoding': 'gzip, deflate, br',
     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',

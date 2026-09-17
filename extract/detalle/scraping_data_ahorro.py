@@ -23,9 +23,11 @@ os.makedirs(os.path.dirname(CSV_OUTPUT_PATH), exist_ok=True)
 # --- CONFIGURACIÓN GENERAL ---
 URL_BASE = "https://www.fahorro.com"
 TIENDA = "6"
+# Version de Chrome que se declara en el User-Agent; ajusta aqui si cambia.
+CHROME_VERSION = 120
 
 HEADERS = {
-    'User-Agent': 'Mozilla/50 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+    'User-Agent': f'Mozilla/50 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{CHROME_VERSION}.0.0.0 Safari/537.36',
     'Accept': 'text/html',
     'Accept-Language': 'es-ES,es;q=0.8,en-US;q=0.5,en;q=0.3',
 }
