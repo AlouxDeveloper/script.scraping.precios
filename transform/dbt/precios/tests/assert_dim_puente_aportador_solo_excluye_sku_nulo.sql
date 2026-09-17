@@ -2,9 +2,10 @@
     Falla si `dim_puente_aportador` pierde filas por algo que no sea lo
     documentado: el centinela `sku` NULL (5 filas) y los duplicados
     literales que repiten exactamente `(tienda_key, sku, ndf_id)` (642
-    pares). El join contra `dim_tienda` no debería perder nada -las 2
-    tiendas sin scraping ya están en el seed-, así que cualquier diferencia
-    extra sería una pérdida silenciosa del join o del dedup.
+    pares). El join contra `dim_tienda` no debería perder nada -todo
+    `aportador_clave` del crosswalk tiene su fila en el seed, incluidos
+    `fesa`/`yza`-, así que cualquier diferencia extra sería una pérdida
+    silenciosa del join o del dedup.
 #}
 with resuelto as (
 

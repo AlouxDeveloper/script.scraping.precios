@@ -22,10 +22,12 @@ models:
 
       `ndf_id`/`match_method`: primera pasada del entity resolution vía
       `dim_puente_aportador` (crosswalk de Knobloch), method `aportadores`.
-      Cubre ~25%% de las filas (61 mil de 240 mil) porque su `sku` no
+      Cubre ~25%% de las filas (61,085 de 240,400) porque su `sku` no
       coincide con el de la mayoría de las tiendas (match 0-35%% según
       tienda, ver `stg_puente_aportador`). El resto queda sin `ndf_id` a la
       espera de la pasada por texto (embeddings), no implementada todavía.
+      El alta de `aportador_clave` real en `fesa`/`yza` (260917, ver
+      `dim_tienda`) no movió el total: mismo patrón 0%% de sku sin match.
     tests:
       - dbt_utils.expression_is_true:
           arguments:

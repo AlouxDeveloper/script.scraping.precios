@@ -40,9 +40,14 @@
     puente NO es el mismo identificador que escriben los scrapers para la
     mayoría de las tiendas (match 0-35% según tienda, ver
     `stg_puente_aportador`); por eso esta pasada cubre ~25% de `dim_producto`
-    (61 mil de 240 mil), no más. `match_method = 'aportadores'` marca ese
+    (61,085 de 240,400), no más. `match_method = 'aportadores'` marca ese
     origen; el resto queda NULL a la espera de la pasada por texto
     (embeddings contra `dim_ndf`, todavía no implementada).
+
+    `fesa`/`yza` recibieron `aportador_clave` real en `dim_tienda` (260917,
+    baja de `farmacon`/`farmesp` como tiendas propias) pero eso no movió el
+    total: mismo patrón 0% que soriana (`fesa` 0/6,963, `yza` 1/4,655) —
+    el sku del aportador tampoco coincide con el de esas dos tiendas.
 #}
 {{
     config(

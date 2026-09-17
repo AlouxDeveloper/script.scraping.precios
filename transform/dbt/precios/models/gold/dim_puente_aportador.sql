@@ -15,8 +15,9 @@
     `dim_ndf`), no de este modelo.
 
     `stg_puente_aportador` inner join `dim_tienda` por `aportador_clave`:
-    las 2 tiendas del crosswalk sin scraping (`farmacon`, `farmesp`) ya
-    están en el seed, así que ese join no pierde filas. Se filtran las filas
+    `fesa` y `yza` traen su `aportador_clave` real (`P1`/`A8`, confirmado
+    por Knobloch como la misma tienda con otro nombre en el crosswalk), así
+    que ese join no pierde filas suyas. Se filtran las filas
     con `sku` NULL (el centinela `correlativo = '000000000000000'`, 5 filas)
     y se dedupean 642 pares de filas que repetían exactamente el mismo
     `(tienda_key, sku, ndf_id)` -duplicados literales de origen, no

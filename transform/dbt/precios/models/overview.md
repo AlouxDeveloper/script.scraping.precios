@@ -14,8 +14,7 @@ construye las capas silver y gold sobre BigQuery.
 | silver | `precios_silver` | tabla | Universo depurado. `precios` (filas válidas, sin duplicados exactos) y `precios_cuarentena` (lo descartado, con su `motivo_descarte`). Particionadas por `mes`. |
 | gold | `precios_gold` | tabla | Star schema: `fact_precios` y sus dimensiones. |
 
-El seed `tiendas` (catálogo propio de 21 filas: 19 tiendas scrapeadas más
-`farmacon`/`farmesp`, dos aportadores del crosswalk sin tienda equivalente)
+El seed `tiendas` (catálogo propio de 19 filas, una por tienda scrapeada)
 aterriza en `precios_bronce`: es dato de entrada curado a mano, no un modelo
 de capa.
 
@@ -25,7 +24,7 @@ de capa.
 precio de oferta por producto y día. Se construye contra `silver.precios` en este
 orden:
 
-1. `dim_tienda` — 21 filas, viene del seed `tiendas`.
+1. `dim_tienda` — 19 filas, viene del seed `tiendas`.
 2. `dim_fecha` — una fila por día natural del histórico observado, con
    `dbt_utils.date_spine` entre el `min` y el `max` de `fecha_captura`.
 3. `dim_producto` — grano `(tienda_key, sku)`, ~240 mil productos. Es el insumo
@@ -44,11 +43,13 @@ del aportador (EAN/UPC), no el mismo dato con otro formato.
 **Primera pasada del entity resolution, ya en `dim_producto`.** Donde
 `(tienda_key, sku)` mapea a exactamente un `ndf_id` real (existe en `dim_ndf`,
 sin ambigüedad), `dim_producto.ndf_id` queda asignado con
-`match_method = 'aportadores'` — 61 mil de 240 mil filas (~25%). El resto
-queda `ndf_id`/`match_method` NULL a la espera de una segunda pasada por
-texto (embeddings contra `dim_ndf`), todavía no implementada. `match_method`
-está pensado para acumular más de un valor a medida que se agreguen más
-métodos, no para reemplazarse.
+`match_method = 'aportadores'` — 61,085 de 240,400 filas (~25%; el alta del
+`aportador_clave` real de `fesa`/`yza` no movió el total, mismo patrón 0%
+de sku sin match que otras tiendas). El resto queda `ndf_id`/`match_method`
+NULL a la espera de una segunda pasada por texto (embeddings contra
+`dim_ndf`), todavía no implementada. `match_method` está pensado para
+acumular más de un valor a medida que se agreguen más métodos, no para
+reemplazarse.
 
 ## Decisiones que el lector nuevo debe conocer
 

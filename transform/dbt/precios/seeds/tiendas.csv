@@ -7,7 +7,7 @@ tienda_key,tienda_slug,tienda_nombre,aportador_clave
 6,fahorro,Farmacias del Ahorro,S1
 7,farmalisto,Farmalisto,I4
 8,farmatodo,Farmatodo,O5
-9,fesa,Farmacias FESA,
+9,fesa,Farmacias FESA,P1
 10,gi,Farmacias GI,M4
 11,guadalajara,Farmacias Guadalajara,22
 12,heb,H-E-B,R8
@@ -17,6 +17,4 @@ tienda_key,tienda_slug,tienda_nombre,aportador_clave
 16,similares,Farmacias Similares,
 17,soriana,Soriana,N0
 18,walmart,Walmart,D0
-19,yza,Farmacias YZA,
-20,farmacon,Farmacon,A8
-21,farmesp,Farmacias Especializadas,P1
+19,yza,Farmacias YZA,A8
