@@ -8,7 +8,7 @@ from datetime import datetime
 from tqdm import tqdm
 
 # ========== Configuración ==========
-EXCEL_CATEGORIAS = "./data/urls_categorias_alsuper.xlsx" 
+EXCEL_CATEGORIAS = "./salida/urls/urls_categorias_alsuper.xlsx" 
 COLUMNA_EXCEL = "URL_CATEGORIA" 
 CSV_OUTPUT = "./salida/data/2026/09_septiembre/scraping_detalle_alsuper.csv"
 TIENDA = "1"

@@ -21,7 +21,7 @@ CSV_HEADERS = ["SKU", "URL_PRODUCTO", "Producto", "Precio_Actual", "Precio_Ofert
 # CSV aparte para URLs que fallaron, para no repetirlas al reanudar.
 CSV_ESTADO_URLS = "./salida/data/2026/08_agosto/scraping_detalle_farmalisto_fallidas.csv"
 # Version de Chrome que se declara en el User-Agent; ajusta aqui si cambia.
-CHROME_VERSION = 124
+CHROME_VERSION = 153
 
 
 def marcar_fallida(url: str, detalle: str = "") -> None:

@@ -20,6 +20,8 @@ CSV_OUTPUT   = "./salida/data/2026/08_agosto/scraping_detalle_heb.csv"
 TIENDA       = "12"
 # CSV aparte para URLs que fallaron, para no repetirlas al reanudar.
 CSV_ESTADO_URLS = "./salida/data/2026/08_agosto/scraping_detalle_heb_fallidas.csv"
+# Version de Chrome que se declara en el User-Agent; ajusta aqui si cambia.
+CHROME_VERSION = 153
 
 
 def marcar_fallida(url: str, detalle: str = "") -> None:
@@ -53,7 +55,8 @@ def configurar_driver():
     opts.add_argument("--start-maximized")
     opts.add_argument("--disable-blink-features=AutomationControlled")
     # En Mac, a veces ayuda desactivar la aceleración de hardware para evitar crashes
-    opts.add_argument("--disable-gpu") 
+    opts.add_argument("--disable-gpu")
+    opts.add_argument(f"user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{CHROME_VERSION}.0.0.0 Safari/537.36")
     service = Service(ChromeDriverManager().install())
     driver = webdriver.Chrome(service=service, options=opts)
     driver.set_page_load_timeout(30) # Evita que se quede colgado infinitamente
