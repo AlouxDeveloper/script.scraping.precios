@@ -38,6 +38,13 @@ models:
     gold:
       +materialized: table
       +schema: precios_gold
+    # ml: infraestructura del entity resolution vectorial (banco de
+    # embeddings, vectores del catálogo NDF, vistas de calibración). Va en su
+    # propio dataset y no en precios_gold porque gold se reconstruye entero en
+    # cada build y los embeddings son llamadas a la API ya pagadas: la
+    # frontera tiene que ser física, no una convención que alguien olvida.
+    ml:
+      +schema: precios_ml
 
 # El seed tiendas alimenta dim_tienda. Va a precios_bronce -no a precios_gold-
 # porque es dato de entrada curado a mano, no una tabla modelada: dim_tienda
