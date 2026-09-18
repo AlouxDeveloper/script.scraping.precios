@@ -6,9 +6,13 @@ requires-python = ">=3.13"
 dependencies = [
     "dbt-core",
     "dbt-bigquery",
+    # Dependencia explícita: entity_resolution/ consulta BigQuery directo
+    # (sin pasar por dbt), y dbt-bigquery la trae transitiva pero no
+    # conviene depender de eso sin declararlo.
+    "google-cloud-bigquery",
 ]
 
-# El módulo no distribuye código Python propio: es un proyecto dbt, así que uv
-# solo gestiona el entorno y no intenta construir un wheel.
+# El módulo no distribuye wheel propio (es un proyecto dbt + scripts sueltos
+# de entity_resolution/), así que uv solo gestiona el entorno.
 [tool.uv]
 package = false

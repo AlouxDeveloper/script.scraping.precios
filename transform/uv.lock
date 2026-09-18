@@ -1346,12 +1346,14 @@ source = { virtual = "." }
 dependencies = [
     { name = "dbt-bigquery" },
     { name = "dbt-core" },
+    { name = "google-cloud-bigquery" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "dbt-bigquery" },
     { name = "dbt-core" },
+    { name = "google-cloud-bigquery" },
 ]
 
 [[package]]
