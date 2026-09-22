@@ -1,0 +1,25 @@
+version: 2
+
+models:
+  - name: int_texto_er
+    description: >
+      Texto del catálogo NDF listo para vectorizar, parametrizado por
+      `var('variante_ndf', 'v1')` (ver `macros/texto_er_ndf.sql` y ALD-64).
+      `hash_texto` es la llave del banco de embeddings `emb_texto` en
+      `precios_ml` -no de esta tabla.
+    columns:
+      - name: ndf_id
+        description: FK a `dim_ndf`, grano de esta vista.
+        tests:
+          - not_null
+          - unique
+      - name: texto
+        description: Texto compuesto por la variante activa. Nunca vacío.
+        tests:
+          - not_null
+      - name: hash_texto
+        description: >
+          `dbt_utils.generate_surrogate_key` sobre `texto`. Cambia si
+          cambia `variante_ndf` -es la señal de que el parámetro llegó.
+        tests:
+          - not_null
