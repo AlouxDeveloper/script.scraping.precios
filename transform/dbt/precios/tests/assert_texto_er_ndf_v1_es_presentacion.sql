@@ -6,10 +6,10 @@
 #}
 
 select
-    int_texto_er.ndf_id,
-    int_texto_er.texto,
+    int_texto_er_ndf.ndf_id,
+    int_texto_er_ndf.texto,
     dim_ndf.presentacion
-from {{ ref('int_texto_er') }} as int_texto_er
+from {{ ref('int_texto_er_ndf') }} as int_texto_er_ndf
 inner join {{ ref('dim_ndf') }} as dim_ndf
-    on dim_ndf.ndf_id = int_texto_er.ndf_id
-where int_texto_er.texto is distinct from dim_ndf.presentacion
+    on dim_ndf.ndf_id = int_texto_er_ndf.ndf_id
+where int_texto_er_ndf.texto is distinct from dim_ndf.presentacion

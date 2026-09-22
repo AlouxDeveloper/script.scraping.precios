@@ -5,7 +5,8 @@ models:
     description: >
       Texto de tienda listo para vectorizar, parametrizado por
       `var('variante_tienda', 't1')` (ver `macros/texto_er_tienda.sql` y
-      ALD-85). Gemelo de `int_texto_er` del lado catálogo.
+      ALD-85). Gemelo de `int_texto_er_ndf` del lado catálogo. Alimenta la
+      vista combinada `int_texto_er` (ALD-61).
     columns:
       - name: producto_key
         description: FK a `dim_producto`, grano de esta vista.
@@ -18,7 +19,7 @@ models:
           - not_null
       - name: hash_texto
         description: >
-          `dbt_utils.generate_surrogate_key` sobre `texto`. Cambia si
-          cambia `variante_tienda`.
+          `hash_texto_embedding` sobre `texto` -misma llave que usa
+          `int_texto_er`. Cambia si cambia `variante_tienda`.
         tests:
           - not_null

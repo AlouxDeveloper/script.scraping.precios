@@ -3,23 +3,31 @@ version: 2
 models:
   - name: int_texto_er
     description: >
-      Texto del catálogo NDF listo para vectorizar, parametrizado por
-      `var('variante_ndf', 'v1')` (ver `macros/texto_er_ndf.sql` y ALD-64).
-      `hash_texto` es la llave del banco de embeddings `emb_texto` en
-      `precios_ml` -no de esta tabla.
+      Lista de trabajo del banco de embeddings `emb_texto` (ver ALD-61):
+      unión deduplicada de `int_texto_er_ndf` e `int_texto_er_tienda`,
+      grano `texto_hash`. El universo es completo, no el recorte Sanfer.
     columns:
-      - name: ndf_id
-        description: FK a `dim_ndf`, grano de esta vista.
+      - name: texto_hash
+        description: >
+          `hash_texto_embedding` sobre `texto` -incluye modelo, dimensión
+          y task_type, no solo el texto. Llave del banco de embeddings.
         tests:
           - not_null
           - unique
       - name: texto
-        description: Texto compuesto por la variante activa. Nunca vacío.
+        description: Texto a vectorizar. Nunca vacío.
         tests:
           - not_null
-      - name: hash_texto
+      - name: origen
         description: >
-          `dbt_utils.generate_surrogate_key` sobre `texto`. Cambia si
-          cambia `variante_ndf` -es la señal de que el parámetro llegó.
+          De qué lado vino el texto. `min(origen)` en el caso raro de que
+          el mismo texto exacto aparezca en ambos lados -ver el comentario
+          del modelo.
         tests:
           - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - ndf
+                  - producto
+                quote: true
