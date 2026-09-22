@@ -9,8 +9,9 @@ models:
 
       Es el insumo del entity resolution: el texto del producto vive aquí
       (una fila por producto), no en `fact_precios`, para que
-      `ML.GENERATE_EMBEDDING` corra sobre ~160 mil filas y no sobre ~925
-      mil. Generar los embeddings es otro issue.
+      `AI.GENERATE_EMBEDDING` corra sobre ~240 mil filas y no sobre ~1.1
+      millones (conteo real, ver ALD-80). Generar los embeddings es otro
+      issue.
 
       Todos los atributos son SCD1 (gana la captura más reciente). La
       desambiguación es determinística: dos builds idénticos producen la
