@@ -10,9 +10,10 @@ construye las capas silver y gold sobre BigQuery.
 
 | Capa | Dataset | Materialización | Qué es |
 | --- | --- | --- | --- |
-| staging | `precios_silver` | vista | Tipado y limpieza 1:1 con la source. `stg_precios`, `stg_ndf`. |
+| staging | `precios_silver` | vista | Tipado y limpieza 1:1 con la source. `stg_precios`, `stg_ndf`, `stg_puente_aportador`. |
 | silver | `precios_silver` | tabla | Universo depurado. `precios` (filas válidas, sin duplicados exactos) y `precios_cuarentena` (lo descartado, con su `motivo_descarte`). Particionadas por `mes`. |
 | gold | `precios_gold` | tabla | Star schema: `fact_precios` y sus dimensiones. |
+| ml | `precios_ml` | — | Entity resolution vectorial: el banco de embeddings y los modelos de búsqueda. Dataset y conexión BigLake a Vertex AI ya provisionados; sin modelos todavía. Va en su propio dataset porque gold se reconstruye entera en cada build y los embeddings son llamadas a la API ya pagadas: la frontera tiene que ser física, no una convención. |
 
 El seed `tiendas` (catálogo propio de 19 filas, una por tienda scrapeada)
 aterriza en `precios_bronce`: es dato de entrada curado a mano, no un modelo
@@ -50,6 +51,19 @@ NULL a la espera de una segunda pasada por texto (embeddings contra
 `dim_ndf`), todavía no implementada. `match_method` está pensado para
 acumular más de un valor a medida que se agreguen más métodos, no para
 reemplazarse.
+
+**Cómo va a llegar el resto.** El plan ataca primero el recorte del
+laboratorio Sanfer (`upper(laboratorio) = 'SANFER'`, ~1,400 `ndf_id`) y
+después el catálogo completo, con la misma infraestructura. La dirección
+de la búsqueda cambia entre las dos fases y no es un detalle: con una base
+de 1,400 vectores —el 0.8% del catálogo— el vecino más cercano de
+cualquier producto es un artefacto del recorte, así que se busca
+NDF→producto; con el catálogo entero el vecino más cercano vuelve a
+significar algo y se invierte a producto→NDF top-1. Los umbrales de
+aceptación son **por tienda**, no uno global: `presentacion` está
+homologada, pero `descripcion` varía mucho de estilo entre tiendas
+—walmart escribe largo, sanpablo corto— y la misma distancia coseno no
+significa lo mismo en las dos.
 
 ## Decisiones que el lector nuevo debe conocer
 

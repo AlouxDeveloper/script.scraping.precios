@@ -4,9 +4,12 @@
     `url_producto` no sirve como llave — cambia más seguido que el sku.
 
     Esta es la tabla que habilita el entity resolution con embeddings: el
-    texto del producto vive aquí, una fila por producto (~160 mil), no en
-    la fact (~925 mil). `ML.GENERATE_EMBEDDING` correrá sobre esta tabla.
-    Generar los embeddings no es parte de este modelo.
+    texto del producto vive aquí, una fila por producto (~240 mil), no en
+    la fact (~1.1 millones). `AI.GENERATE_EMBEDDING` correrá sobre esta
+    tabla —la función se renombró, antes era `ML.GENERATE_EMBEDDING`—, pero
+    generar los embeddings no es parte de este modelo: viven en el dataset
+    `precios_ml`, llaveados por el hash del texto, para que un full refresh
+    de gold no los vuelva a pagar.
 
     `producto_key` es un hash y no un entero autoincremental porque todos
     los modelos son `table` con full refresh: el hash mantiene la llave
