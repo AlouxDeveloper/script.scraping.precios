@@ -1,0 +1,50 @@
+version: 2
+
+models:
+  - name: emb_texto
+    description: >
+      Banco de embeddings (ALD-62). Incremental, llaveado por `texto_hash`
+      -sobrevive a un `--full-refresh` de gold porque no depende de
+      `producto_key` ni `ndf_id`. Se llena por lotes desde `int_texto_er`
+      contra `AI.GENERATE_EMBEDDING` (modelo remoto `emb_gemini`, ver
+      `entity_resolution/sql/03_modelo_emb_gemini.sql`).
+    tests:
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "array_length(embedding) = 768"
+    columns:
+      - name: texto_hash
+        description: Llave del banco -`hash_texto_embedding` sobre `texto`.
+        tests:
+          - not_null
+          - unique
+      - name: texto
+        description: Texto vectorizado, tal como llegó de `int_texto_er`.
+        tests:
+          - not_null
+      - name: modelo
+        description: Modelo remoto usado (`var('modelo_embedding')`).
+        tests:
+          - not_null
+      - name: dimension
+        description: Dimensión pedida a la API (`var('dimension_embedding')`).
+        tests:
+          - not_null
+      - name: task_type
+        description: task_type pedido a la API (`var('task_type_embedding')`).
+        tests:
+          - not_null
+      - name: embedding
+        description: >
+          Vector generado. `AI.GENERATE_EMBEDDING` devuelve `embedding` NULL
+          cuando `status` trae un error de la API; el modelo filtra
+          `where status = ''` antes del merge, así que este `not_null` es
+          la prueba de que ninguna fila con error de la API entró al banco
+          -las que fallan quedan pendientes y se reintentan en la próxima
+          corrida por lotes, no se pierden.
+        tests:
+          - not_null
+      - name: generado_en
+        description: Timestamp de la corrida que generó (o regeneró) el vector.
+        tests:
+          - not_null
