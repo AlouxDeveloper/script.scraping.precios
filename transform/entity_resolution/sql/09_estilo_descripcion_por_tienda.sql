@@ -18,7 +18,15 @@ with normalizado as (
     select
         dim_tienda.tienda_slug,
         p.descripcion as descripcion_norm,
-        trim(regexp_replace(
+        -- upper() al final: descripcion_norm (dim_producto.descripcion) ya
+        -- viene en mayusculas de produccion. Sin este upper() la
+        -- comparacion de tokens es case-sensitive entre mayusculas y
+        -- minusculas y casi ningun token de palabra cruza -solo los
+        -- numeros, que no tienen case- inflando artificialmente el
+        -- "estilo distinto" que este script mide. Bug real de la primera
+        -- corrida (2026-09-22), corregido el mismo dia tras detectarlo en
+        -- ALD-85.
+        upper(trim(regexp_replace(
             regexp_replace(
                 regexp_replace(
                     regexp_replace(
@@ -33,7 +41,7 @@ with normalizado as (
                 r'qzpuntodecimalqz', '.'
             ),
             r' +', ' '
-        )) as presentacion_norm
+        ))) as presentacion_norm
     from `scenic-firefly-473823-f7.precios_gold.dim_producto` as p
     inner join `scenic-firefly-473823-f7.precios_gold.dim_ndf` as n
         on n.ndf_id = p.ndf_id

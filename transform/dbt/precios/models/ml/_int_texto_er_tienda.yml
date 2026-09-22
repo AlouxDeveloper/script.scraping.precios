@@ -1,0 +1,24 @@
+version: 2
+
+models:
+  - name: int_texto_er_tienda
+    description: >
+      Texto de tienda listo para vectorizar, parametrizado por
+      `var('variante_tienda', 't1')` (ver `macros/texto_er_tienda.sql` y
+      ALD-85). Gemelo de `int_texto_er` del lado catálogo.
+    columns:
+      - name: producto_key
+        description: FK a `dim_producto`, grano de esta vista.
+        tests:
+          - not_null
+          - unique
+      - name: texto
+        description: Texto compuesto por la variante activa. Nunca vacío.
+        tests:
+          - not_null
+      - name: hash_texto
+        description: >
+          `dbt_utils.generate_surrogate_key` sobre `texto`. Cambia si
+          cambia `variante_tienda`.
+        tests:
+          - not_null

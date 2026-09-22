@@ -44,13 +44,18 @@ with pares as (
 
     select
         p.descripcion as descripcion_tienda,
-        limpiar_texto_sql(n.presentacion) as v1,
-        limpiar_texto_sql(
+        -- upper() en las tres: limpiar_texto_sql devuelve minusculas y
+        -- descripcion_tienda ya viene en mayusculas de produccion. Sin
+        -- esto la comparacion de tokens es case-sensitive y casi ningun
+        -- token de palabra cruza -bug real de la primera corrida
+        -- (2026-09-22), encontrado y corregido el mismo dia en ALD-85.
+        upper(limpiar_texto_sql(n.presentacion)) as v1,
+        upper(limpiar_texto_sql(
             n.producto || ' ' || n.descripcion || ' ' || n.laboratorio
-        ) as v2,
-        limpiar_texto_sql(
+        )) as v2,
+        upper(limpiar_texto_sql(
             n.presentacion || ' ' || n.forma_farmaceutica_n3 || ' ' || n.molecula
-        ) as v3
+        )) as v3
     from `scenic-firefly-473823-f7.precios_gold.dim_producto` as p
     inner join `scenic-firefly-473823-f7.precios_gold.dim_ndf` as n
         on n.ndf_id = p.ndf_id
