@@ -126,6 +126,52 @@ vars:
   tau_bajo_a: 0.055
   tau_bajo_b: 0.055
 
+  # ALD-89: recalibración sobre el universo completo (`rev_er_metricas_catalogo`,
+  # `int_candidatos_producto`) -los de arriba siguen siendo los de la fase
+  # Sanfer, `int_match_ndf` no se tocó todavía (eso es ALD-90). Objetivo de
+  # precisión 0.95 medido SOLO contra la verdad FARMA del crosswalk (`NOT
+  # es_no_farma`): contra el universo mixto la precisión nunca cruza 0.95
+  # -techo real 0.923 en cualquier `umbral`, bucket A- porque con 180,914
+  # candidatos posibles el vecino más cercano de un producto NO FARMA con
+  # frecuencia es un NDF real, no un artefacto del recorte. Esa caída de
+  # precisión en NO FARMA (0.73-0.80 contra 0.95-0.97 en FARMA, medido en
+  # `rev_er_metricas_catalogo` con `es_no_farma`) ES la limitación de
+  # negativos que pide el issue: no hay forma barata de medir "este
+  # producto no debería matchear con nada del catálogo completo", solo el
+  # proxy de categoría. Corrida de referencia 2026-09-22.
+  #
+  # tau_alto: mismo objetivo 0.95 que la fase Sanfer, mismo bucket (ALD-84).
+  # Bucket A: n=2,624 positivos FARMA aceptados en 0.022 (precisión 0.9619;
+  # 0.024 ya cae a 0.9494, se toma el valor conservador). Baja 56% frente a
+  # Sanfer (0.05 -> 0.022): la base pasó de 1,400 a 180,914 candidatos, así
+  # que cualquier producto tiene un vecino mucho más cercano por pura
+  # densidad, sin que eso signifique un mejor match.
+  tau_alto_a_catalogo: 0.022
+  # Bucket B: n=30 positivos FARMA en 0.018 (precisión 0.9333, NO cruza
+  # 0.95 -muestra insuficiente para confirmarlo con confianza, avisado
+  # explícitamente, ver `rev_er_metricas_catalogo`). Baja 55% frente a
+  # Sanfer (0.04 -> 0.018), misma dirección que el bucket A.
+  tau_alto_b_catalogo: 0.018
+
+  # tau_bajo: IGUAL a tau_alto en los dos buckets, a diferencia de Sanfer
+  # (que tenía holgura hasta 0.055). Con la base completa, el mínimo
+  # posible de banda gris -aun sin ensanchar tau_bajo más allá de tau_alto,
+  # solo lo que falla guarda/margen/reciprocidad dentro de la zona de
+  # aceptación- ya es 2,573 filas (1,845 A + 728 B), por encima del
+  # presupuesto de ~2,000 de Sanfer. Ensanchar 0.004 más en bucket B lo
+  # sube a 2,881 solo, así que no hay margen para dar holgura sin disparar
+  # aún más la carga de revisión manual.
+  tau_bajo_a_catalogo: 0.022
+  tau_bajo_b_catalogo: 0.018
+
+  # delta_min: se verificó, no se asumió -el mismo 0.008 de Sanfer sigue
+  # siendo el punto de rendimientos decrecientes sobre la verdad FARMA de
+  # esta fase: atrapa 56% de los "confiados pero equivocados" (57 de 102)
+  # al costo de solo 4.0% de los aciertos reales (101 de 2,552) -mejor
+  # relación que el 10.7% de Sanfer, no peor-; subir a 0.01 solo atrapa 7
+  # más al costo de 78 aciertos adicionales, dominado. No se duplica como
+  # var nueva porque el valor no cambió -sigue siendo `delta_min` arriba.
+
 # El seed tiendas alimenta dim_tienda. Va a precios_bronce -no a precios_gold-
 # porque es dato de entrada curado a mano, no una tabla modelada: dim_tienda
 # lo lee igual que stg_ndf lee ndf_ext. column_types no es opcional: sin él

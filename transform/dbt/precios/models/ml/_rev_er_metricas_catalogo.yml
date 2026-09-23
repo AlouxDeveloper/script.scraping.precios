@@ -1,0 +1,142 @@
+version: 2
+
+models:
+  - name: rev_er_metricas_catalogo
+    description: >
+      Curva de precisión/cobertura de la fase catálogo completo (ALD-89),
+      gemela de `rev_er_metricas` (ALD-66) sobre `int_candidatos_producto`
+      en vez de `int_candidatos_ndf`. Grano `(variante_ndf, variante_tienda,
+      tienda_key, umbral, guardas_activas, es_no_farma)`. `es_no_farma`
+      reemplaza a `es_positivo_sanfer`: con el catálogo completo cualquier
+      laboratorio es un match válido, así que el contraste ya no es de
+      laboratorio sino de división del `ndf_id` verdadero -el sanity check
+      de que el método no confunde categorías, no una medición de
+      negativos (ver el docstring del modelo para la limitación completa).
+
+      Corrida de referencia 2026-09-22 (`NOT es_no_farma`, guardas activas):
+      precisión 0.95 cruza en tau_alto=0.022 (bucket A, n=2,624) y 0.018
+      (bucket B, n=30, muestra chica). `delta_min=0.008` aguantó sin
+      cambios. `tau_bajo` se fijó igual a `tau_alto` -ensanchar más no es
+      sostenible con la densidad del catálogo completo, ver vars en
+      `dbt_project.yml`.
+    tests:
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "n_aceptado + n_rechazado + n_banda_gris = n_calibracion"
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - variante_ndf
+              - variante_tienda
+              - tienda_key
+              - umbral
+              - guardas_activas
+              - es_no_farma
+    columns:
+      - name: variante_ndf
+        description: >
+          `var('variante_ndf', 'v1')` al momento de correr esta vista.
+          Constante, no calculada -ver `texto_er_ndf.sql`.
+        tests:
+          - not_null
+      - name: variante_tienda
+        description: >
+          `var('variante_tienda', 't1')` al momento de correr esta vista.
+          Constante, no calculada -ver `texto_er_tienda.sql`.
+        tests:
+          - not_null
+      - name: tienda_key
+        description: FK a `dim_tienda`.
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_tienda')
+                field: tienda_key
+      - name: umbral
+        description: >
+          Corte de distancia coseno evaluado, en pasos de 0.005 desde 0
+          hasta el máximo observado en `int_candidatos_producto`.
+        tests:
+          - not_null
+      - name: guardas_activas
+        description: >
+          `true`/`false`: si `pasa_guardas` puede bajar un candidato de
+          `aceptado` a `banda_gris`. En `false` nunca hay `banda_gris`.
+        tests:
+          - not_null
+      - name: es_no_farma
+        description: >
+          División del `ndf_id_verdadero` (la verdad del crosswalk, no del
+          candidato) -`true` para el contraste de categoría, `false` para
+          la verdad farmacéutica que sí calibra los umbrales.
+        tests:
+          - not_null
+      - name: n_calibracion
+        description: >
+          Tamaño de este corte de calibración (tienda × es_no_farma).
+          Constante dentro del corte, se repite en cada fila de
+          `umbral`/`guardas_activas` a propósito -es el denominador de
+          `cobertura`.
+        tests:
+          - not_null
+      - name: n_aceptado
+        description: Filas en bucket `aceptado` a este umbral/guardas.
+        tests:
+          - not_null
+      - name: n_rechazado
+        description: >
+          Filas en bucket `rechazado`: sin candidato o `distancia >
+          umbral`.
+        tests:
+          - not_null
+      - name: n_banda_gris
+        description: >
+          Filas que la distancia aceptaría pero una guarda activa
+          rechaza -van a revisión manual, no a rechazo automático.
+        tests:
+          - not_null
+      - name: cobertura
+        description: >
+          `n_aceptado / n_calibracion`: qué porcentaje de este corte
+          recibe asignación a ese umbral.
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                max_value: 1
+                inclusive: true
+      - name: recall_at_k
+        description: >
+          Fracción de este corte cuyo `ndf_id` verdadero aparece en
+          cualquier posición de sus candidatos. NO depende de
+          `umbral`/`guardas_activas`. `NULL` si el corte está vacío (0/0).
+        tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                max_value: 1
+                inclusive: true
+      - name: precision_at_1
+        description: >
+          Fracción de este corte cuyo candidato más cercano (rank 1, sin
+          umbral) es el `ndf_id` verdadero. Línea base; tampoco depende de
+          `umbral`/`guardas_activas`.
+        tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                max_value: 1
+                inclusive: true
+      - name: precision
+        description: >
+          De las filas en bucket `aceptado`, qué fracción es correcta -la
+          métrica que sí varía con `umbral`/`guardas_activas`. `NULL` si
+          no hay aceptados a ese umbral (0/0, no 0).
+        tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                max_value: 1
+                inclusive: true
