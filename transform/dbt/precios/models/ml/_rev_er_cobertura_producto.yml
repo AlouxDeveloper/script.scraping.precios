@@ -1,0 +1,41 @@
+version: 2
+
+models:
+  - name: rev_er_cobertura_producto
+    description: >
+      Cobertura por producto del catálogo completo (ALD-90). Grano
+      `producto_key`, gemela de `rev_er_cobertura_ndf` -mismos métodos,
+      ver su docstring/yml.
+    columns:
+      - name: producto_key
+        description: FK a `dim_producto`, grano de esta tabla.
+        tests:
+          - not_null
+          - unique
+          - relationships:
+              arguments:
+                to: ref('dim_producto')
+                field: producto_key
+      - name: tienda_key
+        description: FK a `dim_tienda`, para el desglose por tienda.
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_tienda')
+                field: tienda_key
+      - name: metodo
+        description: >
+          `aportadores` o `vectorial`. `NULL` si `producto_key` no tiene
+          `ndf_id` por ningún método.
+        tests:
+          - accepted_values:
+              arguments:
+                values:
+                  - aportadores
+                  - vectorial
+                quote: true
+      - name: tiene_match
+        description: "`metodo is not null`, en columna aparte para agregar directo."
+        tests:
+          - not_null

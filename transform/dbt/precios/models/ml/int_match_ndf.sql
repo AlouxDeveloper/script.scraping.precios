@@ -1,11 +1,22 @@
 {#
-    Decisión por producto de la fase Sanfer (ALD-73), colapsando los
-    candidatos de `int_candidatos_ndf` (búsqueda NDF→producto). Grano
-    `producto_key`, universo completo de `producto_candidato_sanfer`
-    (240,400 filas) -no solo los que aparecieron como candidatos de algún
-    NDF-: para la mayor parte del universo la respuesta correcta es que
-    no hay `ndf_id` de Sanfer, y `sin_match` lo dice explícito en vez de
-    desaparecer la fila.
+    Decisión por producto, ahora sobre el catálogo completo (ALD-90),
+    colapsando los candidatos de `int_candidatos_producto` (búsqueda
+    producto→NDF, ALD-88). Grano `producto_key`, universo completo de
+    `dim_producto` (240,400 filas) -no solo los que aparecieron como
+    candidatos de algún NDF-: para la mayor parte del universo la
+    respuesta correcta es que no hay `ndf_id`, y `sin_match` lo dice
+    explícito en vez de desaparecer la fila.
+
+    **Este modelo reemplaza en el repo a la versión de la fase Sanfer**
+    (ALD-73): mismo grano y misma mecánica de decisión, se reusa tal cual
+    como se planeó desde ALD-72/ALD-88, solo cambian los `ref()` (de
+    `int_candidatos_ndf`/`producto_candidato_sanfer` a
+    `int_candidatos_producto`/`dim_producto`) y los `vars` de umbral (de
+    `tau_alto_a/b`/`tau_bajo_a/b` a los `_catalogo`, recalibrados en
+    ALD-89). Nada más consume este modelo todavía -`dim_producto` no
+    recibe su tercera fuente de `ndf_id` hasta ALD-75-, así que reescribir
+    en el lugar no rompe nada río abajo. Los números de la corrida Sanfer
+    quedan archivados en el cierre de ALD-73, no en este archivo.
 
     **Las guardas de magnitud se aplican antes de rankear, no después**
     (`guarda_magnitudes`, ALD-69/ALD-73): si el candidato más cercano
@@ -16,7 +27,7 @@
 
     **Respaldo cuando NINGÚN candidato sobrevive la guarda**
     (`mejor_bruto`): se reporta igual el mejor candidato bruto de
-    `int_candidatos_ndf` (su `rank_desde_producto = 1` original, con su
+    `int_candidatos_producto` (su `rank_desde_producto = 1` original, con su
     propia distancia/margen/reciprocidad, ya calculados ahí -no se
     recalculan), marcado `guarda_ok = false`. Es lo que permite que la
     decisión mande esa fila a `cuarentena` en vez de perderla en
@@ -26,7 +37,7 @@
 
     `margen`: distancia del segundo candidato menos la del primero, ENTRE
     LOS QUE SOBREVIVEN LA GUARDA (o, en el respaldo, entre los candidatos
-    brutos -mismo campo que ya trae `int_candidatos_ndf`). `NULL` si el
+    brutos -mismo campo que ya trae `int_candidatos_producto`). `NULL` si el
     producto solo tiene un candidato en su grupo -no hay "segundo" contra
     qué medir la soledad de la respuesta-, y por diseño eso nunca cumple
     `margen >= delta_min`: sin un segundo candidato no se puede confirmar
@@ -34,14 +45,15 @@
     `vectorial` aunque la distancia sea excelente.
 
     `es_reciproco`/`guarda_ok` se cargan del candidato elegido tal cual
-    los computó `int_candidatos_ndf` -`es_reciproco` es una propiedad del
-    par `(producto_key, ndf_id)` sobre el candidato universo completo, no
-    cambia por filtrar magnitudes, así que no hace falta recalcularla.
+    los computó `int_candidatos_producto` -`es_reciproco` es una propiedad
+    del par `(producto_key, ndf_id)` sobre el candidato universo completo,
+    no cambia por filtrar magnitudes, así que no hace falta recalcularla.
 
     **Umbrales por bucket** (`bucket_tienda`, ALD-84), no globales ni por
-    tienda individual -`vars` de ALD-68 (`tau_alto_a/b`, `tau_bajo_a/b`,
-    `delta_min`, este último sí global: verificado en ALD-68 que la resta
-    cancela el sesgo de estilo de tienda).
+    tienda individual -`vars` de ALD-89 (`tau_alto_a/b_catalogo`,
+    `tau_bajo_a/b_catalogo`, `delta_min`, este último sin sufijo porque el
+    valor de ALD-68 se verificó y aguantó sin cambios sobre el catálogo
+    completo).
 
     **Regla de decisión** (en este orden; la primera que aplica gana):
 
@@ -68,7 +80,7 @@ with candidatos as (
         c.margen as margen_bruto,
         {{ guarda_magnitudes('c.atributos_producto', 'c.atributos_ndf') }}
             as guarda_ok
-    from {{ ref('int_candidatos_ndf') }} as c
+    from {{ ref('int_candidatos_producto') }} as c
 
 ),
 
@@ -100,7 +112,7 @@ mejor_guardado as (
 ),
 
 -- Respaldo: el mejor candidato SIN filtrar por guarda, ya calculado por
--- int_candidatos_ndf. Solo se usa cuando mejor_guardado no tiene fila
+-- int_candidatos_producto. Solo se usa cuando mejor_guardado no tiene fila
 -- para ese producto (ninguna magnitud sobrevivió).
 mejor_bruto as (
 
@@ -117,9 +129,9 @@ mejor_bruto as (
 ),
 
 -- mejor_bruto ya cubre todo producto_key con al menos un candidato -es
--- rank_desde_producto = 1 de int_candidatos_ndf, que existe para todos
--- ellos-, así que ancla el join: mejor_guardado es un subconjunto suyo,
--- nunca trae un producto_key que bruto no tenga.
+-- rank_desde_producto = 1 de int_candidatos_producto, que existe para
+-- todos ellos-, así que ancla el join: mejor_guardado es un subconjunto
+-- suyo, nunca trae un producto_key que bruto no tenga.
 mejor_candidato as (
 
     select
@@ -138,11 +150,11 @@ mejor_candidato as (
 universo as (
 
     select
-        producto_candidato_sanfer.producto_key,
+        dim_producto.producto_key,
         {{ bucket_tienda('dim_tienda.tienda_slug') }} as bucket
-    from {{ ref('producto_candidato_sanfer') }} as producto_candidato_sanfer
+    from {{ ref('dim_producto') }} as dim_producto
     inner join {{ ref('dim_tienda') }} as dim_tienda
-        on dim_tienda.tienda_key = producto_candidato_sanfer.tienda_key
+        on dim_tienda.tienda_key = dim_producto.tienda_key
 
 ),
 
@@ -166,15 +178,15 @@ decidido as (
             when mejor_candidato.ndf_id is null then 'sin_match'
             when mejor_candidato.distancia > (
                 case
-                    when universo.bucket = 'A' then {{ var('tau_bajo_a') }}
-                    else {{ var('tau_bajo_b') }}
+                    when universo.bucket = 'A' then {{ var('tau_bajo_a_catalogo') }}
+                    else {{ var('tau_bajo_b_catalogo') }}
                 end
             ) then 'sin_match'
             when
                 mejor_candidato.distancia <= (
                     case
-                        when universo.bucket = 'A' then {{ var('tau_alto_a') }}
-                        else {{ var('tau_alto_b') }}
+                        when universo.bucket = 'A' then {{ var('tau_alto_a_catalogo') }}
+                        else {{ var('tau_alto_b_catalogo') }}
                     end
                 )
                 and mejor_candidato.margen >= {{ var('delta_min') }}
