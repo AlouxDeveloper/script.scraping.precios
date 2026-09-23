@@ -1,0 +1,167 @@
+version: 2
+
+models:
+  - name: rev_er_metricas
+    description: >
+      Curva de precisión/cobertura del entity resolution vectorial, fase
+      Sanfer (ALD-66). Vista operativa de revisión -es la que se lee meses
+      después para entender por qué los umbrales son los que son, no un
+      insumo de otro modelo-. Grano `(variante_ndf, variante_tienda,
+      tienda_key, umbral, guardas_activas)`. El universo detrás de cada
+      fila es `producto_split_aportadores` con `split = 'calibracion'`
+      -holdout no se toca aquí, se mide una sola vez, al final de la
+      fase-. `variante_ndf`/`variante_tienda` son la etiqueta de qué
+      corrida de `int_candidatos_ndf` representa esta tabla hoy (v1/t1,
+      la única que existe); no son una dimensión calculada -ver el
+      docstring del modelo para cómo comparar variantes futuras.
+    tests:
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "n_aceptado + n_rechazado + n_banda_gris = n_calibracion"
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - variante_ndf
+              - variante_tienda
+              - tienda_key
+              - umbral
+              - guardas_activas
+    columns:
+      - name: variante_ndf
+        description: >
+          `var('variante_ndf', 'v1')` al momento de correr esta vista.
+          Constante, no calculada -ver `texto_er_ndf.sql`.
+        tests:
+          - not_null
+      - name: variante_tienda
+        description: >
+          `var('variante_tienda', 't1')` al momento de correr esta vista.
+          Constante, no calculada -ver `texto_er_tienda.sql`.
+        tests:
+          - not_null
+      - name: tienda_key
+        description: FK a `dim_tienda`.
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_tienda')
+                field: tienda_key
+      - name: umbral
+        description: >
+          Corte de distancia coseno evaluado, en pasos de 0.005 desde 0
+          hasta el máximo observado en `int_candidatos_ndf` -no es un
+          valor fijo, se deriva de la corrida actual.
+        tests:
+          - not_null
+      - name: guardas_activas
+        description: >
+          `true`/`false`: si `pasa_guardas` (reciprocidad + magnitudes,
+          ver `macros/pasa_guardas.sql`) puede bajar un candidato de
+          `aceptado` a `banda_gris`. En `false` nunca hay `banda_gris`.
+        tests:
+          - not_null
+      - name: n_calibracion
+        description: >
+          Tamaño del universo de calibración de esta tienda (positivos +
+          negativos). Constante dentro de la tienda, se repite en cada
+          fila de `umbral`/`guardas_activas` a propósito -es el
+          denominador de `cobertura`.
+        tests:
+          - not_null
+      - name: n_aceptado
+        description: Filas en bucket `aceptado` a este umbral/guardas.
+        tests:
+          - not_null
+      - name: n_rechazado
+        description: >
+          Filas en bucket `rechazado`: sin candidato o `distancia >
+          umbral`.
+        tests:
+          - not_null
+      - name: n_banda_gris
+        description: >
+          Filas que la distancia aceptaría pero una guarda activa
+          rechaza -van a revisión manual, no a rechazo automático.
+        tests:
+          - not_null
+      - name: cobertura
+        description: >
+          `n_aceptado / n_calibracion`, sobre TODO el universo (positivos
+          y negativos): qué porcentaje del set recibe asignación a ese
+          umbral.
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                max_value: 1
+                inclusive: true
+      - name: cobertura_ndf
+        description: >
+          De los `ndf_id` de `emb_ndf_sanfer` (1,389 hoy), cuántos tienen
+          al menos un candidato `aceptado` en esta tienda -sin distinguir
+          si ese candidato es correcto, es cobertura de asignación, no de
+          acierto. Denominador calculado, no los 734 "alcanzables" de
+          ALD-82 -esa tabla vive fuera del grafo de dbt.
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                max_value: 1
+                inclusive: true
+      - name: recall_at_k
+        description: >
+          De los positivos (verdad Sanfer conocida), a cuántos el
+          `ndf_id` correcto les aparece en cualquier posición de sus
+          candidatos. NO depende de `umbral`/`guardas_activas` -se repite
+          igual en las filas de esa tienda-; es el techo del método y se
+          mira antes que cualquier otra métrica de esta vista. `NULL` si
+          la tienda no tiene ningún positivo en calibración (0/0, ej.
+          `yza` con `n_calibracion = 1` y esa fila negativa) -no fingir
+          un techo donde no hay nada que medir.
+        tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                max_value: 1
+                inclusive: true
+      - name: precision_at_1
+        description: >
+          De los positivos, a cuántos su candidato más cercano (rank 1,
+          sin aplicar ningún umbral) es el `ndf_id` correcto. Línea base;
+          tampoco depende de `umbral`/`guardas_activas`. Mismo caso `NULL`
+          que `recall_at_k` cuando la tienda no tiene positivos.
+        tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                max_value: 1
+                inclusive: true
+      - name: precision
+        description: >
+          De los positivos en bucket `aceptado`, qué fracción es correcta
+          -la métrica que sí varía con `umbral`/`guardas_activas` y la
+          que se optimiza. `NULL` si no hay positivos aceptados a ese
+          umbral (0/0, no 0 -no fingir precisión donde no hubo decisión).
+        tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                max_value: 1
+                inclusive: true
+      - name: fp_negativos
+        description: >
+          De los negativos (verdad de otro laboratorio), qué fracción
+          cae en `aceptado` -recibiría un `ndf_id` de Sanfer que no le
+          toca. Contraparte de `precision`: esta no se puede inflar
+          subiendo el umbral. `NULL` si la tienda no tiene ningún
+          negativo en calibración -mismo caso borde que `recall_at_k`,
+          no observado hoy pero posible en una tienda chica.
+        tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                max_value: 1
+                inclusive: true
