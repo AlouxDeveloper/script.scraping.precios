@@ -1,0 +1,23 @@
+version: 2
+
+models:
+  - name: producto_candidato_sanfer
+    description: >
+      Universo candidato de la búsqueda vectorial NDF→producto de la fase
+      Sanfer (ALD-87). El prefiltro por marca se descartó en ALD-83 (recall
+      93.51%, bajo el corte de 0.95): hoy es `dim_producto` completo, sin
+      recorte.
+    columns:
+      - name: producto_key
+        description: FK a `dim_producto`, grano de esta vista.
+        tests:
+          - not_null
+          - unique
+      - name: tienda_key
+        description: FK a `dim_tienda`.
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_tienda')
+                field: tienda_key
