@@ -1,0 +1,18 @@
+version: 2
+
+models:
+  - name: emb_ndf_sanfer
+    description: >
+      Recorte Sanfer de `emb_ndf` (ALD-72), lado de consulta de
+      `VECTOR_SEARCH` en `int_candidatos_ndf`. `view`: no es base indexada,
+      solo filtra `emb_ndf` por `laboratorio = 'SANFER'`.
+    columns:
+      - name: ndf_id
+        description: FK a `dim_ndf`, grano de esta vista.
+        tests:
+          - not_null
+          - unique
+      - name: embedding
+        description: Vector heredado de `emb_ndf`.
+        tests:
+          - not_null

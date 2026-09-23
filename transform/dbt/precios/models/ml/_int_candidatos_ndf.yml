@@ -1,0 +1,100 @@
+version: 2
+
+models:
+  - name: int_candidatos_ndf
+    description: >
+      Búsqueda vectorial NDF→producto de la fase Sanfer (ALD-72):
+      `VECTOR_SEARCH` sobre `emb_producto` (base, indexada) con
+      `emb_ndf_sanfer` (~1,400) como consulta, `top_k => 50`, coseno. Grano
+      `(producto_key, ndf_id)`, agnóstico a la dirección -la fase del
+      catálogo completo reusa este modelo invirtiendo qué tabla es base y
+      cuál es consulta-.
+
+      Corrida de referencia 2026-09-22: 69,450 filas (1,389 `ndf_id` × 50,
+      sin huecos), 24,317 `producto_key` distintos candidateados, 2.6 GiB
+      procesados en 15.1 s. `distancia` en [0, 0.165]. `indexUsageMode =
+      FULLY_USED`, sin `indexUnusedReason` en el job. Cobertura por tienda
+      -`ndf_id` con al menos un candidato de esa tienda-: de 303/1,389
+      (`sanpablo`, la más baja) a 1,375/1,389 (`fahorro`), ninguna en cero.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - producto_key
+              - ndf_id
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "not es_reciproco or (rank_desde_ndf = 1 and rank_desde_producto = 1)"
+    columns:
+      - name: ndf_id
+        description: FK a `dim_ndf` (recorte Sanfer), lado consulta.
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_ndf')
+                field: ndf_id
+      - name: producto_key
+        description: FK a `dim_producto`, lado base.
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_producto')
+                field: producto_key
+      - name: tienda_key
+        description: >
+          FK a `dim_tienda`, heredado del producto -evita un join extra
+          para rankear `rank_desde_ndf` por tienda.
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_tienda')
+                field: tienda_key
+      - name: distancia
+        description: Distancia coseno de `VECTOR_SEARCH`. Rango [0, 2].
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                max_value: 2
+                inclusive: true
+      - name: atributos_producto
+        description: >
+          `extraer_atributos` sobre `dim_producto.descripcion` (ya
+          normalizada por `limpiar_texto` desde `stg_precios`).
+        tests:
+          - not_null
+      - name: atributos_ndf
+        description: >
+          `extraer_atributos` sobre `dim_ndf.presentacion`, normalizada
+          aquí mismo con `limpiar_texto` -mismo tratamiento que el lado
+          tienda antes de comparar magnitudes.
+        tests:
+          - not_null
+      - name: rank_desde_ndf
+        description: >
+          `row_number()` particionado por `(ndf_id, tienda_key)`: el mejor
+          candidato de cada tienda para ese NDF. Mide cobertura.
+        tests:
+          - not_null
+      - name: rank_desde_producto
+        description: >
+          `row_number()` particionado por `producto_key`: el mejor NDF
+          para ese producto. Mide precisión.
+        tests:
+          - not_null
+      - name: margen
+        description: >
+          Solo en la fila `rank_desde_producto = 1`: distancia del segundo
+          candidato del producto menos la del primero. NULL en el resto y
+          también NULL si el producto no tiene segundo candidato -no hay
+          "segundo mejor" que reportar.
+      - name: es_reciproco
+        description: >
+          `rank_desde_ndf = 1` y `rank_desde_producto = 1` a la vez -el
+          producto y el NDF se eligen mutuamente como mejor candidato.
+        tests:
+          - not_null
