@@ -46,6 +46,86 @@ models:
     ml:
       +schema: precios_ml
 
+# ALD-68: umbrales de la fase Sanfer, calibrados sobre `rev_er_metricas`
+# (ALD-66) y el split de calibración de `producto_split_aportadores`
+# (ALD-65). Por BUCKET de estilo de tienda (ALD-84), no por tienda
+# individual ni global -la medición vectorial completa de variantes de
+# texto (ALD-67) se decidió no correrla; estos números son sobre v1/t1,
+# los defaults vigentes.
+#
+# Cobertura proyectada del recorte Sanfer con estos valores (aceptado =
+# distancia <= tau_alto[bucket] AND margen >= delta_min AND pasa_guardas,
+# medido sobre los 24,043 `producto_key` de `int_candidatos_ndf`, no solo
+# el split de calibración): 382 de 1,389 `ndf_id` con al menos un producto
+# aceptado (27.5%; 52.0% contra el denominador "alcanzable" de 734,
+# ALD-82), contra la línea base de 281 (20.2% / 38.3%) que ya cubre el
+# crosswalk de aportadores por sí solo -101 `ndf_id` nuevos que el
+# crosswalk no tenía. Corrida de referencia 2026-09-22.
+vars:
+  # Bucket A (alto solape léxico, ALD-84): gi, klyns, isseg, aurrera, heb,
+  # farmatodo, guadalajara, benavides, walmart. Cualquier tienda que NO
+  # esté en esta lista cae en bucket B por default -incluye las 6 tiendas
+  # sin ningún par en el crosswalk (fesa, similares, fahorro, soriana,
+  # alsuper, farmalisto) y yza (n=1, no calibrable sola): ante la duda, el
+  # escenario más exigente (bucket con umbral más estricto), no al revés.
+  bucket_tienda_a:
+    - gi
+    - klyns
+    - isseg
+    - aurrera
+    - heb
+    - farmatodo
+    - guadalajara
+    - benavides
+    - walmart
+
+  # tau_alto: distancia coseno máxima para autoaceptar, por bucket. El
+  # punto donde la precisión de ese bucket cruza el objetivo de 0.95
+  # (mismo corte que ALD-58/ALD-83), medido sobre los positivos Sanfer del
+  # split de calibración con guardas activas (reciprocidad + magnitudes,
+  # `macros/pasa_guardas.sql`).
+  #
+  # Bucket A: n=526 positivos. Precisión 0.9500 en 0.05 (300 aceptados,
+  # cobertura de positivos 57.0%); el punto vecino 0.055 sube a 0.9514 por
+  # ruido de muestra (29 aceptados más, no una tendencia real -0.06 vuelve
+  # a caer a 0.9402 y ya no se recupera) -se toma el valor conservador.
+  tau_alto_a: 0.05
+  # Bucket B: n=180 positivos, mucho menos denso -intervalo de confianza
+  # más ancho, avisado, no ignorado-. Precisión 0.9767 en 0.04 (43
+  # aceptados, cobertura de positivos 23.9%); en 0.045 cae a 0.9474 y seguía
+  # bajando monótono de ahí en adelante, así que 0.04 es el cruce real, no
+  # ruido de muestra pequeña.
+  tau_alto_b: 0.04
+
+  # delta_min: margen mínimo entre el primer y segundo candidato del mismo
+  # producto, GLOBAL -no por bucket-, verificado y no asumido: entre los
+  # positivos que ya pasan tau_alto+guardas, los "confiados pero
+  # equivocados" (bucket A, n=15) tienen margen mediano 0.0076 contra
+  # 0.0259 de los aciertos (n=285) -más de 3x más chico-, confirmando que
+  # la resta sí cancela el sesgo de estilo de tienda, como esperaba el
+  # issue. 0.008 es el punto de rendimientos decrecientes del sweep global
+  # (A+B combinados): atrapa 9 de 16 "confiados pero equivocados" (56%) al
+  # costo de mandar 35 de 327 aciertos reales a banda gris (10.7%); subir a
+  # 0.01 no atrapa ni uno más y ya cuesta 6 aciertos adicionales -domina
+  # 0.008 sobre 0.01, así que no se usa ese punto redondo.
+  delta_min: 0.008
+
+  # tau_bajo: distancia a partir de la cual se rechaza sin más, por
+  # bucket. El presupuesto de revisión manual acota este valor, no al
+  # revés: se sube desde tau_alto hasta que la banda gris total (candidatos
+  # que no llegan a aceptado por distancia, margen o guardas, pero siguen
+  # por debajo de tau_bajo) se acerca a ~2,000 filas, proyectada sobre el
+  # universo COMPLETO de `int_candidatos_ndf` (24,043 `producto_key` con
+  # algún vecino Sanfer en su top-50), no solo el split de calibración -en
+  # producción no se sabe de antemano cuáles son positivos.
+  #
+  # 0.055 para los dos buckets (coincidencia, no una restricción del
+  # diseño: se buscaron por separado): banda gris 995 (A) + 1,006 (B) =
+  # 2,001 filas, aceptado 710 (A) + 618 (B) = 1,328, rechazado el resto
+  # (20,714).
+  tau_bajo_a: 0.055
+  tau_bajo_b: 0.055
+
 # El seed tiendas alimenta dim_tienda. Va a precios_bronce -no a precios_gold-
 # porque es dato de entrada curado a mano, no una tabla modelada: dim_tienda
 # lo lee igual que stg_ndf lee ndf_ext. column_types no es opcional: sin él

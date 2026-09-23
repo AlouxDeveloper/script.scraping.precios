@@ -29,6 +29,14 @@
     Lista de relleno deliberadamente corta -"ojo con no pasarse": recortar
     de más tira tokens que sí distinguen dos presentaciones de la misma
     marca. Se mide t2 contra t1, no se adopta por parecer más limpio.
+
+    ALD-67 cerró la comparación sin correr el barrido vectorial completo:
+    el solapamiento léxico de ALD-85 salió mixto (t2 sube en tiendas
+    verbosas, baja en tiendas ya concisas), no lo bastante a favor de t2
+    como para justificar re-embeber las 240,400 filas de `dim_producto`
+    solo para confirmarlo con `rev_er_metricas`. Si la dispersión de
+    umbrales entre tiendas resulta alta ahí, esa es la señal concreta
+    para reabrir esta comparación con embeddings reales.
 #}
 {% macro texto_er_tienda(columna) %}
     {%- set variante = var('variante_tienda', 't1') -%}

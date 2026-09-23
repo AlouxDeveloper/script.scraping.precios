@@ -15,6 +15,13 @@
 
     Este default **solo cambia si la medición lo contradice** -no por
     preferencia de quien edite este archivo después.
+
+    ALD-67 cerró la comparación sin correr el barrido vectorial completo:
+    el solapamiento léxico de ALD-64 ya era contundente (`v1` gana claro,
+    `v2`/`v3` empeoran) y no justificó el costo de embeber el catálogo
+    completo dos veces más solo para confirmarlo con `rev_er_metricas`.
+    Sigue siendo la mejor evidencia disponible, no la medición vectorial
+    original que pedía el issue.
 #}
 {% macro texto_er_ndf() %}
     {%- set variante = var('variante_ndf', 'v1') -%}
