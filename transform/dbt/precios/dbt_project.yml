@@ -46,28 +46,16 @@ models:
     ml:
       +schema: precios_ml
 
-# ALD-68: umbrales de la fase Sanfer, calibrados sobre `rev_er_metricas`
-# (ALD-66) y el split de calibración de `producto_split_aportadores`
-# (ALD-65). Por BUCKET de estilo de tienda (ALD-84), no por tienda
-# individual ni global -la medición vectorial completa de variantes de
-# texto (ALD-67) se decidió no correrla; estos números son sobre v1/t1,
-# los defaults vigentes.
-#
-# Cobertura proyectada del recorte Sanfer con estos valores (aceptado =
-# distancia <= tau_alto[bucket] AND margen >= delta_min AND pasa_guardas,
-# medido sobre los 24,043 `producto_key` de `int_candidatos_ndf`, no solo
-# el split de calibración): 382 de 1,389 `ndf_id` con al menos un producto
-# aceptado (27.5%; 52.0% contra el denominador "alcanzable" de 734,
-# ALD-82), contra la línea base de 281 (20.2% / 38.3%) que ya cubre el
-# crosswalk de aportadores por sí solo -101 `ndf_id` nuevos que el
-# crosswalk no tenía. Corrida de referencia 2026-09-22.
+# Umbrales del entity resolution vectorial. Los valores de las fases
+# anteriores (por bucket, ALD-68 Sanfer y ALD-89 catálogo) quedan en el
+# historial de git y en el cierre de sus issues; la regla vigente es la de
+# ALD-93, ver el docstring de `int_match_ndf`.
 vars:
   # Bucket A (alto solape léxico, ALD-84): gi, klyns, isseg, aurrera, heb,
   # farmatodo, guadalajara, benavides, walmart. Cualquier tienda que NO
-  # esté en esta lista cae en bucket B por default -incluye las 6 tiendas
-  # sin ningún par en el crosswalk (fesa, similares, fahorro, soriana,
-  # alsuper, farmalisto) y yza (n=1, no calibrable sola): ante la duda, el
-  # escenario más exigente (bucket con umbral más estricto), no al revés.
+  # esté en esta lista cae en bucket B por default. Ya no decide umbrales:
+  # solo lo usan las vistas de calibración `rev_er_metricas*` para
+  # desglosar sus métricas.
   bucket_tienda_a:
     - gi
     - klyns
@@ -79,98 +67,24 @@ vars:
     - benavides
     - walmart
 
-  # tau_alto: distancia coseno máxima para autoaceptar, por bucket. El
-  # punto donde la precisión de ese bucket cruza el objetivo de 0.95
-  # (mismo corte que ALD-58/ALD-83), medido sobre los positivos Sanfer del
-  # split de calibración con guardas activas (reciprocidad + magnitudes,
-  # `macros/pasa_guardas.sql`).
-  #
-  # Bucket A: n=526 positivos. Precisión 0.9500 en 0.05 (300 aceptados,
-  # cobertura de positivos 57.0%); el punto vecino 0.055 sube a 0.9514 por
-  # ruido de muestra (29 aceptados más, no una tendencia real -0.06 vuelve
-  # a caer a 0.9402 y ya no se recupera) -se toma el valor conservador.
-  tau_alto_a: 0.05
-  # Bucket B: n=180 positivos, mucho menos denso -intervalo de confianza
-  # más ancho, avisado, no ignorado-. Precisión 0.9767 en 0.04 (43
-  # aceptados, cobertura de positivos 23.9%); en 0.045 cae a 0.9474 y seguía
-  # bajando monótono de ahí en adelante, así que 0.04 es el cruce real, no
-  # ruido de muestra pequeña.
-  tau_alto_b: 0.04
-
-  # delta_min: margen mínimo entre el primer y segundo candidato del mismo
-  # producto, GLOBAL -no por bucket-, verificado y no asumido: entre los
-  # positivos que ya pasan tau_alto+guardas, los "confiados pero
-  # equivocados" (bucket A, n=15) tienen margen mediano 0.0076 contra
-  # 0.0259 de los aciertos (n=285) -más de 3x más chico-, confirmando que
-  # la resta sí cancela el sesgo de estilo de tienda, como esperaba el
-  # issue. 0.008 es el punto de rendimientos decrecientes del sweep global
-  # (A+B combinados): atrapa 9 de 16 "confiados pero equivocados" (56%) al
-  # costo de mandar 35 de 327 aciertos reales a banda gris (10.7%); subir a
-  # 0.01 no atrapa ni uno más y ya cuesta 6 aciertos adicionales -domina
-  # 0.008 sobre 0.01, así que no se usa ese punto redondo.
+  # delta_min: margen mínimo entre el primer y segundo candidato de un
+  # producto, global. Es el único filtro además de la marca que se gana su
+  # lugar en el diagnóstico de ALD-93 (+10.7 pp de precisión en d<=0.04);
+  # su calibración original (ALD-68, verificada otra vez en ALD-89) sigue
+  # vigente.
   delta_min: 0.008
 
-  # tau_bajo: distancia a partir de la cual se rechaza sin más, por
-  # bucket. El presupuesto de revisión manual acota este valor, no al
-  # revés: se sube desde tau_alto hasta que la banda gris total (candidatos
-  # que no llegan a aceptado por distancia, margen o guardas, pero siguen
-  # por debajo de tau_bajo) se acerca a ~2,000 filas, proyectada sobre el
-  # universo COMPLETO de `int_candidatos_ndf` (24,043 `producto_key` con
-  # algún vecino Sanfer en su top-50), no solo el split de calibración -en
-  # producción no se sabe de antemano cuáles son positivos.
+  # tau por división del NDF (ALD-93): distancia coseno máxima para
+  # considerar un candidato cuya marca aparece en la descripción. Medido
+  # sobre el split de calibración con marca + margen, sin guarda, vectores
+  # v1 (2026-09-24). Objetivo de precisión 0.95 FARMA / 0.85 NO FARMA.
+  # Se recalibran en la tarea 38 sin tocar la lógica del modelo.
   #
-  # 0.055 para los dos buckets (coincidencia, no una restricción del
-  # diseño: se buscaron por separado): banda gris 995 (A) + 1,006 (B) =
-  # 2,001 filas, aceptado 710 (A) + 618 (B) = 1,328, rechazado el resto
-  # (20,714).
-  tau_bajo_a: 0.055
-  tau_bajo_b: 0.055
-
-  # ALD-89: recalibración sobre el universo completo (`rev_er_metricas_catalogo`,
-  # `int_candidatos_producto`) -los de arriba siguen siendo los de la fase
-  # Sanfer, `int_match_ndf` no se tocó todavía (eso es ALD-90). Objetivo de
-  # precisión 0.95 medido SOLO contra la verdad FARMA del crosswalk (`NOT
-  # es_no_farma`): contra el universo mixto la precisión nunca cruza 0.95
-  # -techo real 0.923 en cualquier `umbral`, bucket A- porque con 180,914
-  # candidatos posibles el vecino más cercano de un producto NO FARMA con
-  # frecuencia es un NDF real, no un artefacto del recorte. Esa caída de
-  # precisión en NO FARMA (0.73-0.80 contra 0.95-0.97 en FARMA, medido en
-  # `rev_er_metricas_catalogo` con `es_no_farma`) ES la limitación de
-  # negativos que pide el issue: no hay forma barata de medir "este
-  # producto no debería matchear con nada del catálogo completo", solo el
-  # proxy de categoría. Corrida de referencia 2026-09-22.
-  #
-  # tau_alto: mismo objetivo 0.95 que la fase Sanfer, mismo bucket (ALD-84).
-  # Bucket A: n=2,624 positivos FARMA aceptados en 0.022 (precisión 0.9619;
-  # 0.024 ya cae a 0.9494, se toma el valor conservador). Baja 56% frente a
-  # Sanfer (0.05 -> 0.022): la base pasó de 1,400 a 180,914 candidatos, así
-  # que cualquier producto tiene un vecino mucho más cercano por pura
-  # densidad, sin que eso signifique un mejor match.
-  tau_alto_a_catalogo: 0.022
-  # Bucket B: n=30 positivos FARMA en 0.018 (precisión 0.9333, NO cruza
-  # 0.95 -muestra insuficiente para confirmarlo con confianza, avisado
-  # explícitamente, ver `rev_er_metricas_catalogo`). Baja 55% frente a
-  # Sanfer (0.04 -> 0.018), misma dirección que el bucket A.
-  tau_alto_b_catalogo: 0.018
-
-  # tau_bajo: IGUAL a tau_alto en los dos buckets, a diferencia de Sanfer
-  # (que tenía holgura hasta 0.055). Con la base completa, el mínimo
-  # posible de banda gris -aun sin ensanchar tau_bajo más allá de tau_alto,
-  # solo lo que falla guarda/margen/reciprocidad dentro de la zona de
-  # aceptación- ya es 2,573 filas (1,845 A + 728 B), por encima del
-  # presupuesto de ~2,000 de Sanfer. Ensanchar 0.004 más en bucket B lo
-  # sube a 2,881 solo, así que no hay margen para dar holgura sin disparar
-  # aún más la carga de revisión manual.
-  tau_bajo_a_catalogo: 0.022
-  tau_bajo_b_catalogo: 0.018
-
-  # delta_min: se verificó, no se asumió -el mismo 0.008 de Sanfer sigue
-  # siendo el punto de rendimientos decrecientes sobre la verdad FARMA de
-  # esta fase: atrapa 56% de los "confiados pero equivocados" (57 de 102)
-  # al costo de solo 4.0% de los aciertos reales (101 de 2,552) -mejor
-  # relación que el 10.7% de Sanfer, no peor-; subir a 0.01 solo atrapa 7
-  # más al costo de 78 aciertos adicionales, dominado. No se duplica como
-  # var nueva porque el valor no cambió -sigue siendo `delta_min` arriba.
+  # FARMA: 0.9533 en 0.08 (12,680 aceptados en calibración). 0.10 todavía
+  # da 0.9501, pero pegado al objetivo por solo 158 aceptados más.
+  tau_farma: 0.08
+  # NO FARMA: 0.8556 en 0.035 (2,473 aceptados); 0.04 ya cae a 0.8347.
+  tau_no_farma: 0.035
 
 # El seed tiendas alimenta dim_tienda. Va a precios_bronce -no a precios_gold-
 # porque es dato de entrada curado a mano, no una tabla modelada: dim_tienda

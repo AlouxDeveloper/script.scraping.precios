@@ -1,71 +1,56 @@
 {#
-    Decisión por producto, ahora sobre el catálogo completo (ALD-90),
-    colapsando los candidatos de `int_candidatos_producto` (búsqueda
-    producto→NDF, ALD-88). Grano `producto_key`, universo completo de
-    `dim_producto` (240,400 filas) -no solo los que aparecieron como
-    candidatos de algún NDF-: para la mayor parte del universo la
-    respuesta correcta es que no hay `ndf_id`, y `sin_match` lo dice
-    explícito en vez de desaparecer la fila.
+    Decisión por producto sobre el catálogo completo: colapsa el candidato
+    rank 1 de `int_candidatos_producto` (búsqueda producto→NDF) en una fila
+    por `producto_key`, universo completo de `dim_producto` (240,400
+    filas). Para la mayor parte del universo la respuesta correcta es que
+    no hay `ndf_id`, y `sin_match` lo dice explícito en vez de desaparecer
+    la fila.
 
-    **Este modelo reemplaza en el repo a la versión de la fase Sanfer**
-    (ALD-73): mismo grano y misma mecánica de decisión, se reusa tal cual
-    como se planeó desde ALD-72/ALD-88, solo cambian los `ref()` (de
-    `int_candidatos_ndf`/`producto_candidato_sanfer` a
-    `int_candidatos_producto`/`dim_producto`) y los `vars` de umbral (de
-    `tau_alto_a/b`/`tau_bajo_a/b` a los `_catalogo`, recalibrados en
-    ALD-89). Nada más consume este modelo todavía -`dim_producto` no
-    recibe su tercera fuente de `ndf_id` hasta ALD-75-, así que reescribir
-    en el lugar no rompe nada río abajo. Los números de la corrida Sanfer
-    quedan archivados en el cierre de ALD-73, no en este archivo.
+    **Regla vigente: marca + margen por división (ALD-93).** Reemplaza la
+    de umbrales por bucket de estilo de tienda (ALD-89/90). El diagnóstico
+    del 2026-09-23 midió que, de los productos del crosswalk cuyo NDF
+    correcto sale en rank 1, la regla anterior aceptaba 1 de cada 6: `tau`
+    (0.022) se llevaba el 96% de las pérdidas. La señal que sí separa
+    aciertos de errores es que la marca del NDF aparezca en la
+    descripción de la tienda; sin ella la precisión ronda 0.5.
 
-    **Las guardas de magnitud se aplican antes de rankear, no después**
-    (`guarda_magnitudes`, ALD-69/ALD-73): si el candidato más cercano
-    declara 500 mg contra los 750 mg del producto, se descarta esa fila
-    entera y se rankea de nuevo entre los que sí sobreviven -el segundo
-    candidato pasa a ser la respuesta, con su propia distancia y su
-    propio margen, no la distancia ni el margen del primero.
+    En este orden; la primera que aplica gana:
 
-    **Respaldo cuando NINGÚN candidato sobrevive la guarda**
-    (`mejor_bruto`): se reporta igual el mejor candidato bruto de
-    `int_candidatos_producto` (su `rank_desde_producto = 1` original, con su
-    propia distancia/margen/reciprocidad, ya calculados ahí -no se
-    recalculan), marcado `guarda_ok = false`. Es lo que permite que la
-    decisión mande esa fila a `cuarentena` en vez de perderla en
-    `sin_match`: la tabla de decisión del issue incluye "falla la guarda"
-    como motivo de cuarentena, no de descarte -hay un candidato real, solo
-    que su magnitud no cuadra, y eso lo revisa una persona, no se ignora.
+    1. `sin_match` si no hay candidato, si la distancia supera el `tau` de
+       la división del NDF (`tau_farma` / `tau_no_farma`) o si alguna
+       palabra de la marca no aparece en la descripción.
+    2. `vectorial` si además `margen >= delta_min` y la guarda de
+       magnitudes pasa.
+    3. `cuarentena` en otro caso: la marca y la distancia cuadran, pero
+       falla el margen o la guarda. Es la banda gris que revisa el
+       método 3, no un rechazo.
 
-    `margen`: distancia del segundo candidato menos la del primero, ENTRE
-    LOS QUE SOBREVIVEN LA GUARDA (o, en el respaldo, entre los candidatos
-    brutos -mismo campo que ya trae `int_candidatos_producto`). `NULL` si el
-    producto solo tiene un candidato en su grupo -no hay "segundo" contra
-    qué medir la soledad de la respuesta-, y por diseño eso nunca cumple
-    `margen >= delta_min`: sin un segundo candidato no se puede confirmar
-    qué tan sola está la respuesta, así que cae a `cuarentena` en vez de
-    `vectorial` aunque la distancia sea excelente.
+    Decisiones medidas sobre el split de calibración, que no conviene
+    re-derivar:
 
-    `es_reciproco`/`guarda_ok` se cargan del candidato elegido tal cual
-    los computó `int_candidatos_producto` -`es_reciproco` es una propiedad
-    del par `(producto_key, ndf_id)` sobre el candidato universo completo,
-    no cambia por filtrar magnitudes, así que no hace falta recalcularla.
+    - **Marca por palabra, todas las palabras.** `marca_norm` es
+      `dim_ndf.producto` pasado por `limpiar_texto` y partido en palabras;
+      exigir solo la primera sube el volumen 6% pero baja FARMA de 0.953 a
+      0.942.
+    - **Sin reciprocidad.** Contradice la relación N:1 (una tienda con dos
+      listings del mismo producto obliga a que uno falle) y compra +0.65 pp
+      de precisión a cambio de -7.4% de volumen.
+    - **La guarda ya no re-rankea.** Antes descartaba candidatos antes de
+      elegir y el segundo pasaba a ser la respuesta; ahora el candidato es
+      siempre el rank 1 y la guarda solo decide entre `vectorial` y
+      `cuarentena`. Con la marca presente sí separa: en FARMA lo que la
+      falla acierta 0.899 contra 0.961 de lo que la pasa.
+    - **Genéricos fuera.** El catálogo nombra los genéricos como
+      `PARACETAMOL GI ALL` (molécula + GI + laboratorio) y la tienda nunca
+      escribe el laboratorio, así que la marca no aparece y caen a
+      `sin_match`. La alternativa molécula + dosis + piezas exactas mide
+      0.13 de precisión (0.39 con margen): el issue la condicionaba a 0.95
+      y no se activa. Elegir el laboratorio correcto es trabajo del
+      método 3.
 
-    **Umbrales por bucket** (`bucket_tienda`, ALD-84), no globales ni por
-    tienda individual -`vars` de ALD-89 (`tau_alto_a/b_catalogo`,
-    `tau_bajo_a/b_catalogo`, `delta_min`, este último sin sufijo porque el
-    valor de ALD-68 se verificó y aguantó sin cambios sobre el catálogo
-    completo).
-
-    **Regla de decisión** (en este orden; la primera que aplica gana):
-
-    1. `sin_match` si no hay ningún candidato -ni guardado ni bruto- para
-       el producto, o si el mejor candidato (bruto) queda por encima de
-       `tau_bajo[bucket]`.
-    2. `vectorial` si el candidato elegido pasa la guarda, es recíproco,
-       su distancia es `<= tau_alto[bucket]` y su margen es
-       `>= delta_min`.
-    3. `cuarentena` en cualquier otro caso dentro de `tau_bajo[bucket]`
-       -falla el margen, la guarda o la reciprocidad, pero la distancia
-       todavía es lo bastante buena para valer una revisión manual.
+    `margen` es el que ya calcula `int_candidatos_producto` (distancia del
+    segundo candidato menos la del primero). `NULL` si no hay segundo, y
+    por diseño eso nunca cumple `margen >= delta_min`: cae a `cuarentena`.
 #}
 {{ config(materialized='table') }}
 
@@ -75,129 +60,69 @@ with candidatos as (
         c.producto_key,
         c.ndf_id,
         c.distancia,
-        c.es_reciproco,
-        c.rank_desde_producto,
-        c.margen as margen_bruto,
+        c.margen,
+        dim_ndf.division,
+        split({{ limpiar_texto('dim_ndf.producto') }}, ' ') as marca_norm,
+        split({{ limpiar_texto('dim_producto.descripcion') }}, ' ')
+            as descripcion_norm,
         {{ guarda_magnitudes('c.atributos_producto', 'c.atributos_ndf') }}
             as guarda_ok
     from {{ ref('int_candidatos_producto') }} as c
+    inner join {{ ref('dim_ndf') }} as dim_ndf
+        on dim_ndf.ndf_id = c.ndf_id
+    inner join {{ ref('dim_producto') }} as dim_producto
+        on dim_producto.producto_key = c.producto_key
+    where c.rank_desde_producto = 1
 
 ),
 
-rankeado_guardado as (
+evaluado as (
 
     select
         producto_key,
         ndf_id,
         distancia,
-        es_reciproco,
-        true as guarda_ok,
-        row_number() over (
-            partition by producto_key order by distancia
-        ) as rn,
-        lead(distancia) over (
-            partition by producto_key order by distancia
-        ) - distancia as margen
+        margen,
+        guarda_ok,
+        not exists (
+            select 1
+            from unnest(marca_norm) as palabra
+            where palabra not in unnest(descripcion_norm)
+        ) as marca_ok,
+        distancia <= (
+            case
+                when division = 'FARMA' then {{ var('tau_farma') }}
+                else {{ var('tau_no_farma') }}
+            end
+        ) as distancia_ok
     from candidatos
-    where guarda_ok
 
 ),
 
-mejor_guardado as (
-
-    select producto_key, ndf_id, distancia, margen, es_reciproco, guarda_ok
-    from rankeado_guardado
-    where rn = 1
-
-),
-
--- Respaldo: el mejor candidato SIN filtrar por guarda, ya calculado por
--- int_candidatos_producto. Solo se usa cuando mejor_guardado no tiene fila
--- para ese producto (ninguna magnitud sobrevivió).
-mejor_bruto as (
-
-    select
-        producto_key,
-        ndf_id,
-        distancia,
-        margen_bruto as margen,
-        es_reciproco,
-        guarda_ok
-    from candidatos
-    where rank_desde_producto = 1
-
-),
-
--- mejor_bruto ya cubre todo producto_key con al menos un candidato -es
--- rank_desde_producto = 1 de int_candidatos_producto, que existe para
--- todos ellos-, así que ancla el join: mejor_guardado es un subconjunto
--- suyo, nunca trae un producto_key que bruto no tenga.
-mejor_candidato as (
-
-    select
-        bruto.producto_key,
-        coalesce(guardado.ndf_id, bruto.ndf_id) as ndf_id,
-        coalesce(guardado.distancia, bruto.distancia) as distancia,
-        coalesce(guardado.margen, bruto.margen) as margen,
-        coalesce(guardado.es_reciproco, bruto.es_reciproco) as es_reciproco,
-        coalesce(guardado.guarda_ok, bruto.guarda_ok) as guarda_ok
-    from mejor_bruto as bruto
-    left join mejor_guardado as guardado
-        on guardado.producto_key = bruto.producto_key
-
-),
-
-universo as (
-
-    select
-        dim_producto.producto_key,
-        {{ bucket_tienda('dim_tienda.tienda_slug') }} as bucket
-    from {{ ref('dim_producto') }} as dim_producto
-    inner join {{ ref('dim_tienda') }} as dim_tienda
-        on dim_tienda.tienda_key = dim_producto.tienda_key
-
-),
-
--- decision se calcula aparte del select final -no en línea- para poder
--- anular ndf_id/distancia/margen/guarda_ok/es_reciproco cuando el
--- resultado es sin_match sin repetir el case completo cinco veces: ndf_id
--- es NULL exactamente cuando decision = 'sin_match', el test que pide el
--- issue, y esto lo garantiza por construcción en vez de depender de que
--- las dos expresiones nunca se desincronicen.
+-- decision se calcula aparte del select final para poder anular las
+-- columnas del candidato cuando es sin_match sin repetir el case: ndf_id
+-- es NULL exactamente cuando decision = 'sin_match' por construcción.
 decidido as (
 
     select
-        universo.producto_key,
-        universo.bucket,
-        mejor_candidato.ndf_id,
-        mejor_candidato.distancia,
-        mejor_candidato.margen,
-        mejor_candidato.guarda_ok,
-        mejor_candidato.es_reciproco,
+        dim_producto.producto_key,
+        evaluado.ndf_id,
+        evaluado.distancia,
+        evaluado.margen,
+        evaluado.guarda_ok,
+        evaluado.marca_ok,
         case
-            when mejor_candidato.ndf_id is null then 'sin_match'
-            when mejor_candidato.distancia > (
-                case
-                    when universo.bucket = 'A' then {{ var('tau_bajo_a_catalogo') }}
-                    else {{ var('tau_bajo_b_catalogo') }}
-                end
-            ) then 'sin_match'
-            when
-                mejor_candidato.distancia <= (
-                    case
-                        when universo.bucket = 'A' then {{ var('tau_alto_a_catalogo') }}
-                        else {{ var('tau_alto_b_catalogo') }}
-                    end
-                )
-                and mejor_candidato.margen >= {{ var('delta_min') }}
-                and mejor_candidato.guarda_ok
-                and mejor_candidato.es_reciproco
+            when evaluado.ndf_id is null then 'sin_match'
+            when not (evaluado.distancia_ok and evaluado.marca_ok)
+                then 'sin_match'
+            when evaluado.margen >= {{ var('delta_min') }}
+                and evaluado.guarda_ok
                 then 'vectorial'
             else 'cuarentena'
         end as decision
-    from universo
-    left join mejor_candidato
-        on mejor_candidato.producto_key = universo.producto_key
+    from {{ ref('dim_producto') }} as dim_producto
+    left join evaluado
+        on evaluado.producto_key = dim_producto.producto_key
 
 )
 
@@ -207,6 +132,6 @@ select
     case when decision != 'sin_match' then distancia end as distancia,
     case when decision != 'sin_match' then margen end as margen,
     case when decision != 'sin_match' then guarda_ok end as guarda_ok,
-    case when decision != 'sin_match' then es_reciproco end as es_reciproco,
+    case when decision != 'sin_match' then marca_ok end as marca_ok,
     decision
 from decidido
