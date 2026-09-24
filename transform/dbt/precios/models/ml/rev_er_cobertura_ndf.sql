@@ -34,7 +34,7 @@
 with metodo_aportadores as (
 
     select distinct ndf_id
-    from {{ ref('dim_producto') }}
+    from {{ ref('int_producto') }}
     where match_method = 'aportadores'
 
 ),
@@ -42,7 +42,7 @@ with metodo_aportadores as (
 metodo_ean as (
 
     select distinct ndf_id
-    from {{ ref('dim_producto') }}
+    from {{ ref('int_producto') }}
     where match_method = 'ean_cruzado'
 
 ),

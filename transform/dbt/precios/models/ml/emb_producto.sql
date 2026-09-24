@@ -28,7 +28,7 @@ select
     p.producto_key,
     p.tienda_key,
     b.embedding
-from {{ ref('dim_producto') }} as p
+from {{ ref('int_producto') }} as p
 inner join {{ ref('int_texto_er_tienda') }} as x
     on x.producto_key = p.producto_key
 left join {{ ref('emb_texto') }} as b

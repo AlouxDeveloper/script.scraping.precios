@@ -17,4 +17,4 @@ select
     producto_key,
     {{ texto_er_tienda('descripcion') }} as texto,
     {{ hash_texto_embedding(texto_er_tienda('descripcion')) }} as hash_texto
-from {{ ref('dim_producto') }}
+from {{ ref('int_producto') }}

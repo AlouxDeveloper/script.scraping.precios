@@ -1,0 +1,30 @@
+version: 2
+
+models:
+  - name: int_producto
+    description: >
+      `dim_producto` antes de la pasada vectorial: mismo grano
+      `(tienda_key, sku)`, mismas columnas salvo `ndf_distancia`, con
+      `ndf_id` solo de `aportadores` y `ean_cruzado`. Existe para cortar el
+      ciclo entre la dimensión y el entity resolution vectorial, que lee
+      de aquí (ver el docstring del modelo). La documentación de cada
+      columna está en `dim_producto`.
+    columns:
+      - name: producto_key
+        tests:
+          - not_null
+          - unique
+      - name: ndf_id
+        tests:
+          - relationships:
+              arguments:
+                to: ref('dim_ndf')
+                field: ndf_id
+      - name: match_method
+        tests:
+          - accepted_values:
+              arguments:
+                values:
+                  - aportadores
+                  - ean_cruzado
+                quote: true

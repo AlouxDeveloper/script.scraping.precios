@@ -42,5 +42,5 @@ select
         when mod(abs(farm_fingerprint(producto_key)), 2) = 0 then 'calibracion'
         else 'holdout'
     end as split
-from {{ ref('dim_producto') }}
+from {{ ref('int_producto') }}
 where match_method = 'aportadores'

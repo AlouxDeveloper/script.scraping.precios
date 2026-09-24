@@ -40,7 +40,7 @@ models:
           - not_null
           - relationships:
               arguments:
-                to: ref('dim_producto')
+                to: ref('int_producto')
                 field: producto_key
       - name: tienda_key
         description: >

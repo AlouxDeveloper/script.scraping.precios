@@ -20,4 +20,4 @@
 select
     producto_key,
     tienda_key
-from {{ ref('dim_producto') }}
+from {{ ref('int_producto') }}

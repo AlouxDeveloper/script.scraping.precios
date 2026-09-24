@@ -81,7 +81,7 @@ universo as (
         dim_producto.ndf_id as ndf_id_verdadero,
         upper(dim_ndf.division) = 'NO FARMA' as es_no_farma
     from {{ ref('producto_split_aportadores') }} as split
-    inner join {{ ref('dim_producto') }} as dim_producto
+    inner join {{ ref('int_producto') }} as dim_producto
         on dim_producto.producto_key = split.producto_key
     inner join {{ ref('dim_ndf') }} as dim_ndf
         on dim_ndf.ndf_id = dim_producto.ndf_id

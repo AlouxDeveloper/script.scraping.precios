@@ -22,6 +22,6 @@ select
     end as metodo,
     dim_producto.match_method is not null
         or int_match_ndf.decision = 'vectorial' as tiene_match
-from {{ ref('dim_producto') }} as dim_producto
+from {{ ref('int_producto') }} as dim_producto
 left join {{ ref('int_match_ndf') }} as int_match_ndf
     on int_match_ndf.producto_key = dim_producto.producto_key

@@ -72,7 +72,7 @@ with candidatos as (
     from {{ ref('int_candidatos_producto') }} as c
     inner join {{ ref('dim_ndf') }} as dim_ndf
         on dim_ndf.ndf_id = c.ndf_id
-    inner join {{ ref('dim_producto') }} as dim_producto
+    inner join {{ ref('int_producto') }} as dim_producto
         on dim_producto.producto_key = c.producto_key
     inner join {{ ref('dim_tienda') }} as dim_tienda
         on dim_tienda.tienda_key = dim_producto.tienda_key
@@ -134,7 +134,7 @@ decidido as (
                 then 'vectorial'
             else 'cuarentena'
         end as decision
-    from {{ ref('dim_producto') }} as dim_producto
+    from {{ ref('int_producto') }} as dim_producto
     left join evaluado
         on evaluado.producto_key = dim_producto.producto_key
 

@@ -56,7 +56,7 @@ atributos_producto as (
     select
         producto_key,
         {{ extraer_atributos('descripcion') }} as atributos_producto
-    from {{ ref('dim_producto') }}
+    from {{ ref('int_producto') }}
 
 ),
 

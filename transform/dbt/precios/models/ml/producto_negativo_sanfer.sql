@@ -46,7 +46,7 @@ with match_conocido as (
         dim_producto.tienda_key,
         dim_ndf.laboratorio,
         dim_ndf.division
-    from {{ ref('dim_producto') }} as dim_producto
+    from {{ ref('int_producto') }} as dim_producto
     inner join {{ ref('dim_ndf') }} as dim_ndf
         on dim_producto.ndf_id = dim_ndf.ndf_id
     where dim_producto.match_method = 'aportadores'

@@ -1,0 +1,75 @@
+version: 2
+
+models:
+  - name: ndf_cuarentena
+    description: >
+      Productos sin `ndf_id` que `int_match_ndf` dejó en `cuarentena`, con
+      sus 10 candidatos de la búsqueda vectorial y los dos textos lado a
+      lado. Grano `(producto_key, rank_candidato)`. Entrada del método 3;
+      `tests/assert_dim_producto_reconcilia_cuarentena.sql` garantiza que
+      junto con `sin_match` cubre todo producto sin `ndf_id`.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - producto_key
+              - rank_candidato
+    columns:
+      - name: producto_key
+        description: FK a `dim_producto`.
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_producto')
+                field: producto_key
+      - name: tienda_key
+        description: FK a `dim_tienda`, para repartir la revisión por tienda.
+        tests:
+          - not_null
+      - name: motivo
+        description: >
+          Por qué no pasó a `vectorial`, en este orden: `margen` (el
+          segundo candidato está a menos de `delta_min`, o no hay segundo),
+          `guarda` (las magnitudes no cuadran) o `estrato_forzado` (la
+          tienda/división está en `cuarentena_forzada`). Igual en las 10
+          filas del producto.
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - margen
+                  - guarda
+                  - estrato_forzado
+                quote: true
+      - name: rank_candidato
+        description: 1 a 10, orden por distancia desde el producto.
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 1
+                max_value: 10
+      - name: descripcion
+        description: "`dim_producto.descripcion`, repetida en cada candidato."
+        tests:
+          - not_null
+      - name: ndf_id
+        description: Candidato. FK a `dim_ndf`.
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_ndf')
+                field: ndf_id
+      - name: ndf_producto
+        description: Marca comercial del candidato (`dim_ndf.producto`).
+      - name: ndf_presentacion
+        description: Presentación del candidato (`dim_ndf.presentacion`).
+      - name: ndf_division
+        description: FARMA o NO FARMA; define el tau que aplicó.
+      - name: distancia
+        description: Distancia coseno producto→candidato.
+        tests:
+          - not_null

@@ -7,11 +7,11 @@ models:
       `(tienda_key, sku)` — la identidad de negocio confirmada en ALD-37.
       Materializada como tabla, clusterizada por `tienda_key`.
 
-      Es el insumo del entity resolution: el texto del producto vive aquí
-      (una fila por producto), no en `fact_precios`, para que
-      `AI.GENERATE_EMBEDDING` corra sobre ~240 mil filas y no sobre ~1.1
-      millones (conteo real, ver ALD-80). Generar los embeddings es otro
-      issue.
+      El texto del producto vive aquí (una fila por producto), no en
+      `fact_precios`, para que `AI.GENERATE_EMBEDDING` corra sobre ~240 mil
+      filas y no sobre ~1.1 millones (conteo real, ver ALD-80). Los
+      embeddings se calculan sobre `int_producto`, la misma tabla sin la
+      pasada vectorial, para no cerrar un ciclo en el DAG.
 
       Todos los atributos son SCD1 (gana la captura más reciente). La
       desambiguación es determinística: dos builds idénticos producen la
@@ -21,26 +21,26 @@ models:
       `dim_ndf.producto` (marca comercial del catálogo). El cruce entre las
       dos es el entity resolution.
 
-      `ndf_id`/`match_method`: dos métodos que se acumulan. Primero
-      `aportadores`, vía `dim_puente_aportador` (crosswalk de Knobloch).
-      Después `ean_cruzado`, para lo que el primero no tocó: el EAN del
-      producto (8+ dígitos, o 12 dígitos contra el EAN-13 sin dígito
-      verificador) coincide con un producto del crosswalk de OTRA tienda
-      con un único `ndf_id` (precisión medida 99.4%%; recupera FESA, YZA,
-      Walmart, Aurrera y Comer).
-      `aportadores` cubre ~35%% de las filas (83,510 de 240,400) y `ean_cruzado` suma 13,040 más (40.2%% en total): el cruce compara el
-      `sku_cruce` de esta dimensión (columna temporal a 15 dígitos, sin
-      ceros a la izquierda antes de rellenar, no expuesta; los sku que aun así
-      exceden 15 caracteres no participan) contra el
-      `sku` del puente. Soriana, fesa, alsuper y similares siguen en 0%%
-      porque su sku en el puente es otro identificador. El resto queda sin `ndf_id` a la
-      espera de la pasada por texto (embeddings), no implementada todavía.
-      El alta de `aportador_clave` real en `fesa`/`yza` (260917, ver
-      `dim_tienda`) no movió el total: siguen sin match por sku.
+      `ndf_id`/`match_method`: tres métodos que se acumulan, con precedencia
+      `aportadores` → `ean_cruzado` → `vectorial`. Los dos primeros son
+      cruces por código y se arman en `int_producto`: `aportadores` vía
+      `dim_puente_aportador` (crosswalk de Knobloch, sku exacto de la misma
+      tienda) y `ean_cruzado` para lo que el primero no tocó (EAN igual al
+      de un producto del crosswalk de OTRA tienda, precisión medida
+      99.4%%). `vectorial` llena solo lo que los dos dejaron vacío, con la
+      decisión `vectorial` de `int_match_ndf` (búsqueda por embeddings
+      contra `dim_ndf`, precisión ~0.96 FARMA / ~0.85 NO FARMA). Lo que
+      queda en `cuarentena` no recibe `ndf_id` y pasa a `ndf_cuarentena`
+      para el método 3.
     tests:
       - dbt_utils.expression_is_true:
           arguments:
             expression: "fecha_primera_captura <= fecha_ultima_captura"
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: >-
+              (ndf_distancia is not null)
+              = coalesce(match_method = 'vectorial', false)
     columns:
       - name: producto_key
         description: >
@@ -69,8 +69,7 @@ models:
           - not_null
       - name: ndf_id
         description: >
-          FK a `dim_ndf`, asignado solo cuando `match_method` es
-          `aportadores` o `ean_cruzado`.
+          FK a `dim_ndf`, asignado cuando `match_method` no es NULL.
           NULL en el resto — no hay match, no un `0` ni cadena vacía.
         tests:
           - relationships:
@@ -79,18 +78,29 @@ models:
                 field: ndf_id
       - name: match_method
         description: >
-          Cómo se resolvió `ndf_id`. Hoy existen `'aportadores'` (sku
-          exacto y sin ambigüedad contra el puente de su tienda) y
-          `'ean_cruzado'` (EAN igual al de otra tienda en el puente, solo
-          si `aportadores` no tocó el producto); NULL cuando no hay match. Valores futuros (matching por texto) se
-          agregan aquí, no se reemplaza este.
+          Cómo se resolvió `ndf_id`: `'aportadores'` (sku exacto y sin
+          ambigüedad contra el puente de su tienda), `'ean_cruzado'` (EAN
+          igual al de otra tienda en el puente) o `'vectorial'` (embeddings,
+          solo si los dos anteriores no asignaron); NULL cuando no hay
+          match. Un método nuevo agrega un valor, no reemplaza a otro.
         tests:
           - accepted_values:
               arguments:
                 values:
                   - aportadores
                   - ean_cruzado
+                  - vectorial
                 quote: true
+      - name: ndf_distancia
+        description: >
+          Distancia coseno entre el producto y su NDF vectorial. NULL
+          cuando `match_method` no es `vectorial`: los cruces por código no
+          son una aproximación y no tienen distancia.
+        tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                max_value: 2
       - name: producto
         description: >
           Nombre del listing en la tienda, sin normalizar. SCD1, captura más
