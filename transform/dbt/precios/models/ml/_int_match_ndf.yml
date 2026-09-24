@@ -71,8 +71,9 @@ models:
       - name: decision
         description: >
           `vectorial` (marca, distancia <= tau de la división, margen >=
-          delta_min y guarda OK), `cuarentena` (marca y distancia cuadran,
-          pero falla el margen o la guarda) o `sin_match` (sin candidato,
+          delta_min, guarda OK y tienda/división fuera de
+          `cuarentena_forzada`), `cuarentena` (marca y distancia cuadran,
+          pero falla alguna de las otras) o `sin_match` (sin candidato,
           sin marca o fuera del tau).
         tests:
           - not_null

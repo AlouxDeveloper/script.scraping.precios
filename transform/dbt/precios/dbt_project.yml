@@ -97,6 +97,21 @@ vars:
   # Pegado al objetivo: 0.035 da 0.8618 con 3,211 si hace falta margen.
   tau_no_farma: 0.04
 
+  # Combinaciones tienda/división que nunca se aceptan en automático: su
+  # `vectorial` pasa a `cuarentena` (ALD-96). Auditoría de 208 huérfanos
+  # (`transform/entity_resolution/auditar_huerfanos.py`, 2026-09-24): el
+  # límite superior del IC de Wilson de estas cuatro quedó más de 5 pp abajo
+  # del objetivo. Sus errores no son de distancia -la marca del NDF es una
+  # palabra genérica (`ZINC`, `VITAMINA E`) o coincide el producto pero
+  # cambia la cantidad o la talla-, así que bajar su tau no los corregiría.
+  # Suman 87 productos; el resto de los huérfanos da ~0.98 FARMA / ~0.94
+  # NO FARMA ponderado por tamaño de estrato.
+  cuarentena_forzada:
+    - {tienda: walmart, division: FARMA}      # 4/8 correctos
+    - {tienda: aurrera, division: FARMA}      # 5/8
+    - {tienda: similares, division: FARMA}    # 5/8
+    - {tienda: fahorro, division: NO FARMA}   # 2/8, talla de medias Daonsa
+
 # El seed tiendas alimenta dim_tienda. Va a precios_bronce -no a precios_gold-
 # porque es dato de entrada curado a mano, no una tabla modelada: dim_tienda
 # lo lee igual que stg_ndf lee ndf_ext. column_types no es opcional: sin él

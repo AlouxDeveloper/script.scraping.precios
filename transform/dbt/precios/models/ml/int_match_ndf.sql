@@ -19,10 +19,11 @@
     1. `sin_match` si no hay candidato, si la distancia supera el `tau` de
        la división del NDF (`tau_farma` / `tau_no_farma`) o si alguna
        palabra de la marca no aparece en la descripción.
-    2. `vectorial` si además `margen >= delta_min` y la guarda de
-       magnitudes pasa.
+    2. `vectorial` si además `margen >= delta_min`, la guarda de
+       magnitudes pasa y la combinación tienda/división no está en
+       `cuarentena_forzada` (ALD-96, ver el comentario del var).
     3. `cuarentena` en otro caso: la marca y la distancia cuadran, pero
-       falla el margen o la guarda. Es la banda gris que revisa el
+       falla el margen, la guarda o la tienda está en cuarentena forzada. Es la banda gris que revisa el
        método 3, no un rechazo.
 
     Decisiones medidas sobre el split de calibración, que no conviene
@@ -62,6 +63,7 @@ with candidatos as (
         c.distancia,
         c.margen,
         dim_ndf.division,
+        dim_tienda.tienda_slug,
         split({{ limpiar_texto('dim_ndf.producto') }}, ' ') as marca_norm,
         split({{ limpiar_texto('dim_producto.descripcion') }}, ' ')
             as descripcion_norm,
@@ -72,6 +74,8 @@ with candidatos as (
         on dim_ndf.ndf_id = c.ndf_id
     inner join {{ ref('dim_producto') }} as dim_producto
         on dim_producto.producto_key = c.producto_key
+    inner join {{ ref('dim_tienda') }} as dim_tienda
+        on dim_tienda.tienda_key = dim_producto.tienda_key
     where c.rank_desde_producto = 1
 
 ),
@@ -94,7 +98,16 @@ evaluado as (
                 when division = 'FARMA' then {{ var('tau_farma') }}
                 else {{ var('tau_no_farma') }}
             end
-        ) as distancia_ok
+        ) as distancia_ok,
+        (
+            false
+            {%- for estrato in var('cuarentena_forzada', []) %}
+            or (
+                tienda_slug = '{{ estrato.tienda }}'
+                and division = '{{ estrato.division }}'
+            )
+            {%- endfor %}
+        ) as es_cuarentena_forzada
     from candidatos
 
 ),
@@ -117,6 +130,7 @@ decidido as (
                 then 'sin_match'
             when evaluado.margen >= {{ var('delta_min') }}
                 and evaluado.guarda_ok
+                and not evaluado.es_cuarentena_forzada
                 then 'vectorial'
             else 'cuarentena'
         end as decision
