@@ -3,12 +3,13 @@
     resolution: `dim_producto.ndf_id`/`match_method='aportadores'` consume
     esta tabla (solo candidatos únicos y con `ndf_id` real, ver
     `dim_producto.sql`), pero esta tabla en sí no decide nada — solo deja el
-    crosswalk limpio con `tienda_key` resuelto. `sku` NO coincide con
-    `dim_producto.sku` para la mayoría de las tiendas (match 0-35% según
-    tienda, ver `stg_puente_aportador`): por eso solo resuelve ~25% de
-    `dim_producto`, no más. El resto sigue pendiente de una pasada por texto.
+    crosswalk limpio con `tienda_key` resuelto. `sku` vive a 15
+    dígitos (`stg_puente_aportador`) y `dim_producto` lo cruza contra su
+    `sku_cruce`, también a 15: con eso esa pasada resuelve ~35% de
+    `dim_producto` (83,510 de 240,400). El resto sigue pendiente de una
+    pasada por texto.
 
-    Grano `(tienda_key, sku, ndf_id)`, NO `(tienda_key, sku)`: 71 combos de
+    Grano `(tienda_key, sku, ndf_id)`, NO `(tienda_key, sku)`: 278 combos de
     `(tienda_key, sku)` en el corte 260910 traen más de un `ndf_id`
     candidato — ambigüedad real del aportador, no un bug del join. Resolver
     cuál es el correcto es trabajo del entity resolution (embeddings contra
@@ -18,8 +19,8 @@
     `fesa` y `yza` traen su `aportador_clave` real (`P1`/`A8`, confirmado
     por Knobloch como la misma tienda con otro nombre en el crosswalk), así
     que ese join no pierde filas suyas. Se filtran las filas
-    con `sku` NULL (el centinela `correlativo = '000000000000000'`, 5 filas)
-    y se dedupean 642 pares de filas que repetían exactamente el mismo
+    con `sku` NULL (el centinela `correlativo = '000000000000000'` o vacío, 6
+    filas) y se dedupean 2,196 pares de filas que repetían exactamente el mismo
     `(tienda_key, sku, ndf_id)` -duplicados literales de origen, no
     candidatos distintos- con `row_number()`; `producto`/`descripcion` no
     entran al desempate porque son solo contexto de auditoría, no identidad.

@@ -26,13 +26,14 @@ models:
                 field: tienda_key
       - name: metodo
         description: >
-          `aportadores` o `vectorial`. `NULL` si `producto_key` no tiene
+          `aportadores`, `ean_cruzado` o `vectorial`. `NULL` si `producto_key` no tiene
           `ndf_id` por ningún método.
         tests:
           - accepted_values:
               arguments:
                 values:
                   - aportadores
+                  - ean_cruzado
                   - vectorial
                 quote: true
       - name: tiene_match

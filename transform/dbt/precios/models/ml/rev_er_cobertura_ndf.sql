@@ -3,11 +3,14 @@
     la fase: de los 180,914 `ndf_id`, cuáles reciben al menos un producto
     de tienda y por qué método. Grano `ndf_id`.
 
-    Dos métodos reales hoy -`match_method` está pensado para acumular, no
+    Tres métodos reales hoy -`match_method` está pensado para acumular, no
     para reemplazarse (ver `dim_producto.sql`)-:
 
     - `aportadores`: `dim_producto.match_method = 'aportadores'` ya
       resuelto, el crosswalk de Knobloch (~25% de `dim_producto`).
+    - `ean_cruzado`: `dim_producto.match_method = 'ean_cruzado'`, el EAN del
+      producto coincide con el de otra tienda en el crosswalk (ver
+      `dim_producto.sql`). Va después de `aportadores` en la prioridad.
     - `vectorial`: `int_match_ndf.decision = 'vectorial'` (ALD-90),
       solo cuenta si ese `producto_key` NO tenía ya un `ndf_id` de
       aportadores -aportadores es la fuente confirmada, no se pisa-.
@@ -36,6 +39,14 @@ with metodo_aportadores as (
 
 ),
 
+metodo_ean as (
+
+    select distinct ndf_id
+    from {{ ref('dim_producto') }}
+    where match_method = 'ean_cruzado'
+
+),
+
 metodo_vectorial as (
 
     -- distinct: un mismo ndf_id puede llegar por vectorial desde varias
@@ -53,12 +64,16 @@ select
     dim_ndf.division,
     case
         when metodo_aportadores.ndf_id is not null then 'aportadores'
+        when metodo_ean.ndf_id is not null then 'ean_cruzado'
         when metodo_vectorial.ndf_id is not null then 'vectorial'
     end as metodo,
     metodo_aportadores.ndf_id is not null
+        or metodo_ean.ndf_id is not null
         or metodo_vectorial.ndf_id is not null as tiene_match
 from {{ ref('dim_ndf') }} as dim_ndf
 left join metodo_aportadores
     on metodo_aportadores.ndf_id = dim_ndf.ndf_id
+left join metodo_ean
+    on metodo_ean.ndf_id = dim_ndf.ndf_id
 left join metodo_vectorial
     on metodo_vectorial.ndf_id = dim_ndf.ndf_id

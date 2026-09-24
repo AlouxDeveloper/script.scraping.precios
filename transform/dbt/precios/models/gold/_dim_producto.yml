@@ -21,14 +21,22 @@ models:
       `dim_ndf.producto` (marca comercial del catálogo). El cruce entre las
       dos es el entity resolution.
 
-      `ndf_id`/`match_method`: primera pasada del entity resolution vía
-      `dim_puente_aportador` (crosswalk de Knobloch), method `aportadores`.
-      Cubre ~25%% de las filas (61,085 de 240,400) porque su `sku` no
-      coincide con el de la mayoría de las tiendas (match 0-35%% según
-      tienda, ver `stg_puente_aportador`). El resto queda sin `ndf_id` a la
+      `ndf_id`/`match_method`: dos métodos que se acumulan. Primero
+      `aportadores`, vía `dim_puente_aportador` (crosswalk de Knobloch).
+      Después `ean_cruzado`, para lo que el primero no tocó: el EAN del
+      producto (8+ dígitos, o 12 dígitos contra el EAN-13 sin dígito
+      verificador) coincide con un producto del crosswalk de OTRA tienda
+      con un único `ndf_id` (precisión medida 99.4%%; recupera FESA, YZA,
+      Walmart, Aurrera y Comer).
+      `aportadores` cubre ~35%% de las filas (83,510 de 240,400) y `ean_cruzado` suma 13,040 más (40.2%% en total): el cruce compara el
+      `sku_cruce` de esta dimensión (columna temporal a 15 dígitos, sin
+      ceros a la izquierda antes de rellenar, no expuesta; los sku que aun así
+      exceden 15 caracteres no participan) contra el
+      `sku` del puente. Soriana, fesa, alsuper y similares siguen en 0%%
+      porque su sku en el puente es otro identificador. El resto queda sin `ndf_id` a la
       espera de la pasada por texto (embeddings), no implementada todavía.
       El alta de `aportador_clave` real en `fesa`/`yza` (260917, ver
-      `dim_tienda`) no movió el total: mismo patrón 0%% de sku sin match.
+      `dim_tienda`) no movió el total: siguen sin match por sku.
     tests:
       - dbt_utils.expression_is_true:
           arguments:
@@ -53,13 +61,16 @@ models:
                 field: tienda_key
       - name: sku
         description: >
-          Llave natural del producto en la tienda. Para aurrera puede venir
-          imputado desde `url_producto` (ver `stg_precios`).
+          Llave natural del producto en la tienda, tal como la extrae el
+          scraper (sin relleno de ceros; para el cruce con el puente se usa
+          `sku_cruce`, temporal). Para aurrera puede venir imputado desde
+          `url_producto` (ver `stg_precios`).
         tests:
           - not_null
       - name: ndf_id
         description: >
-          FK a `dim_ndf`, asignado solo cuando `match_method = 'aportadores'`.
+          FK a `dim_ndf`, asignado solo cuando `match_method` es
+          `aportadores` o `ean_cruzado`.
           NULL en el resto — no hay match, no un `0` ni cadena vacía.
         tests:
           - relationships:
@@ -68,15 +79,17 @@ models:
                 field: ndf_id
       - name: match_method
         description: >
-          Cómo se resolvió `ndf_id`. Hoy solo existe `'aportadores'` (sku
-          exacto y sin ambigüedad contra `dim_puente_aportador`); NULL
-          cuando no hay match. Valores futuros (matching por texto) se
+          Cómo se resolvió `ndf_id`. Hoy existen `'aportadores'` (sku
+          exacto y sin ambigüedad contra el puente de su tienda) y
+          `'ean_cruzado'` (EAN igual al de otra tienda en el puente, solo
+          si `aportadores` no tocó el producto); NULL cuando no hay match. Valores futuros (matching por texto) se
           agregan aquí, no se reemplaza este.
         tests:
           - accepted_values:
               arguments:
                 values:
                   - aportadores
+                  - ean_cruzado
                 quote: true
       - name: producto
         description: >

@@ -37,20 +37,28 @@ orden:
 `dim_ndf` se construye por su cuenta desde el catálogo NDF (`stg_ndf`), sin tocar
 `silver.precios`. `dim_puente_aportador` es el crosswalk tienda-sku-ndf de
 Knobloch (grano `tienda_key`, `sku`, `ndf_id`), también aparte de
-`silver.precios`. Su `sku` **no coincide** con la mayoría de las tiendas (match
-0-35% según tienda, ver `stg_puente_aportador`): parece un identificador propio
-del aportador (EAN/UPC), no el mismo dato con otro formato.
+`silver.precios`. Su `sku` va a 15 dígitos (`trim` + relleno con
+ceros: Ahorro y Farmalisto lo traen relleno con espacios) y se cruza contra
+`dim_producto.sku_cruce`, una columna temporal también a 15 dígitos (se le quitan antes
+los ceros a la izquierda: San Pablo escribe su sku con relleno a 18).
 
 **Primera pasada del entity resolution, ya en `dim_producto`.** Donde
-`(tienda_key, sku)` mapea a exactamente un `ndf_id` real (existe en `dim_ndf`,
+`(tienda_key, sku_cruce)` mapea a exactamente un `ndf_id` real (existe en `dim_ndf`,
 sin ambigüedad), `dim_producto.ndf_id` queda asignado con
-`match_method = 'aportadores'` — 61,085 de 240,400 filas (~25%; el alta del
-`aportador_clave` real de `fesa`/`yza` no movió el total, mismo patrón 0%
-de sku sin match que otras tiendas). El resto queda `ndf_id`/`match_method`
-NULL a la espera de una segunda pasada por texto (embeddings contra
-`dim_ndf`), todavía no implementada. `match_method` está pensado para
-acumular más de un valor a medida que se agreguen más métodos, no para
-reemplazarse.
+`match_method = 'aportadores'` — 83,510 de 240,400 filas (~35%; antes ~25%: el
+`trim` del sku subió Ahorro de 0 a 93%). Soriana, fesa, alsuper y similares
+siguen en 0%: su sku en el puente es otro identificador.
+
+**Segunda pasada, `match_method = 'ean_cruzado'`.** Para lo que `aportadores`
+no tocó: el sku (8+ dígitos, o 12 contra el EAN-13 sin dígito verificador)
+coincide con un producto del crosswalk de otra tienda con un único `ndf_id`.
+Suma 13,040 productos (fesa, yza, aurrera, walmart, comer) y deja la
+cobertura en 96,550 de 240,400 (~40%). Precisión medida 99.4% (test
+`assert_dim_producto_ean_precision`). Lo que sigue sin match (soriana,
+alsuper, similares, marketplace no farmacéutico) queda `ndf_id`/`match_method`
+NULL a la espera de los métodos de texto (embeddings contra `dim_ndf`),
+todavía no implementados. `match_method` acumula valores a medida que se
+agregan métodos, no se reemplaza.
 
 **Cómo va a llegar el resto.** El plan ataca primero el recorte del
 laboratorio Sanfer (`upper(laboratorio) = 'SANFER'`, ~1,400 `ndf_id`) y

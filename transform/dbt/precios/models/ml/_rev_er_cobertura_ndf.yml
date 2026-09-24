@@ -4,7 +4,7 @@ models:
   - name: rev_er_cobertura_ndf
     description: >
       Cobertura por NDF del catálogo completo (ALD-90). Grano `ndf_id`.
-      `metodo` es `aportadores`, `vectorial` o `NULL` (sin match aún);
+      `metodo` es `aportadores`, `ean_cruzado`, `vectorial` o `NULL` (sin match aún);
       `manual` (ALD-74) no existe todavía. No incluye alcanzabilidad -ver
       el docstring del modelo para dónde vive esa partición del
       denominador.
@@ -26,7 +26,8 @@ models:
         description: De `dim_ndf` (`FARMA`/`NO FARMA`).
       - name: metodo
         description: >
-          `aportadores` (crosswalk de Knobloch) o `vectorial`
+          `aportadores` (crosswalk de Knobloch), `ean_cruzado` (EAN igual
+          al de otra tienda en el crosswalk) o `vectorial`
           (`int_match_ndf.decision = 'vectorial'`, solo si ningún
           producto de ese `ndf_id` ya llegó por aportadores). `NULL` si
           ninguno de los dos métodos le asignó un producto.
@@ -35,6 +36,7 @@ models:
               arguments:
                 values:
                   - aportadores
+                  - ean_cruzado
                   - vectorial
                 quote: true
       - name: tiene_match

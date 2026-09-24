@@ -16,7 +16,8 @@ select
     dim_producto.producto_key,
     dim_producto.tienda_key,
     case
-        when dim_producto.match_method = 'aportadores' then 'aportadores'
+        when dim_producto.match_method in ('aportadores', 'ean_cruzado')
+            then dim_producto.match_method
         when int_match_ndf.decision = 'vectorial' then 'vectorial'
     end as metodo,
     dim_producto.match_method is not null

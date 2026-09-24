@@ -3,22 +3,22 @@
     qué del origen se conserva. Bronce lo guarda todo en STRING a propósito;
     el tipado vive en dbt, junto a la regla que lo justifica.
 
-    - `sku`: `correlativo` sin el padding de ceros a la izquierda (15
-      caracteres en origen). Mismo criterio que la imputación de sku de
-      aurrera en `stg_precios`: derivada aquí, documentada aquí.
-      `correlativo = '000000000000000'` es un centinela de "sin sku
-      conocido" (5 filas en el corte 260910, todas con `ndf_id = '8989898'`,
-      otro centinela del aportador): `sku` queda NULL, no cadena vacía.
+    - `sku`: `correlativo` normalizado a 15 dígitos: `trim` y `lpad` con
+      ceros. El origen lo rellena de dos formas según el aportador: con
+      ceros (`000000000000001`) o con espacios (`S1` y `I4`, p. ej.
+      `           6929`). Antes solo se quitaban ceros a la izquierda, así
+      que el relleno de espacios sobrevivía y ningún sku de Ahorro ni de
+      Farmalisto cruzaba con `dim_producto` (0% de cobertura); con `trim`
+      el cruce de Ahorro pasó a ~93%. Se deja a 15 dígitos y no sin ceros
+      porque `dim_producto` calcula su `sku_cruce` con la misma forma; ver
+      ahí el porqué. `lpad` trunca lo que excede el largo destino y el
+      máximo en origen es 15, así que no recorta nada (lo vigila un test
+      de largo en el yml).
 
-      **Validado y NO coincide con `dim_producto.sku`.** El % de coincidencia
-      por sku distinto (soriana 0%, chedraui 4%, walmart 6%, klyns 11%,
-      benavides 14%) descarta un join directo `sku = sku`: `correlativo`
-      trae códigos de 10 a 13 dígitos (parecen EAN/UPC del aportador) contra
-      los 6-8 dígitos que escriben los scrapers como sku de tienda —
-      sistemas de identificación distintos, no el mismo dato con formato
-      distinto. El entity resolution real (`entity_resolution/`) va a
-      necesitar matching por texto (`producto`/`descripcion` vs
-      `dim_producto.descripcion`), no un join por sku.
+      `correlativo = '000000000000000'` es un centinela de "sin sku
+      conocido" (6 filas en el corte 260910; las que traen `ndf_id` lo tienen en
+      `'8989898'`, otro centinela del aportador): `sku` queda NULL, no 15 ceros.
+
     - `bandera`: se lee pero no se usa en el modelo de matching; se descarta
       aquí, no en bronce, para no perder el dato original de la fuente.
     - `ndf_id`: sin padding, mismo criterio que `sku`. **Validado:** contra
@@ -32,10 +32,10 @@ select
     aportador_clave,
     aportador,
 
-    -- `nullif` cubre el caso borde de un `correlativo`/`ndf_id` de puros
-    -- ceros: sin esto, `regexp_replace` devolvería cadena vacía en vez de
-    -- NULL.
-    nullif(regexp_replace(correlativo, r'^0+', ''), '') as sku,
+    -- `nullif` convierte en NULL el centinela de puros ceros (o un
+    -- `correlativo` vacío, que `lpad` también rellena a 15 ceros). En
+    -- `ndf_id` evita que `regexp_replace` devuelva cadena vacía.
+    nullif(lpad(trim(correlativo), 15, '0'), '000000000000000') as sku,
     nullif(regexp_replace(ndf_id, r'^0+', ''), '') as ndf_id,
 
     producto,

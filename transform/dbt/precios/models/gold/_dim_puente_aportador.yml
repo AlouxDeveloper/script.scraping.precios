@@ -4,7 +4,7 @@ models:
   - name: dim_puente_aportador
     description: >
       Crosswalk tienda-sku-ndf (Kimball: dimensión-puente), grano
-      `(tienda_key, sku, ndf_id)` — NO `(tienda_key, sku)`: 71 combos de
+      `(tienda_key, sku, ndf_id)` — NO `(tienda_key, sku)`: 278 combos de
       `(tienda_key, sku)` traen más de un `ndf_id` candidato, ambigüedad
       real del aportador que el entity resolution tiene que resolver, no
       este modelo. `stg_puente_aportador` inner join `dim_tienda`
@@ -12,17 +12,20 @@ models:
 
       Insumo de la primera pasada del entity resolution:
       `dim_producto.ndf_id`/`match_method='aportadores'` la consume (solo
-      candidatos con `ndf_id` real y sin ambigüedad). **`sku` NO coincide
-      con `dim_producto.sku` para la mayoría de las tiendas** (validado:
-      match 0-35%% según tienda, ver `stg_puente_aportador`) — por eso esa
-      pasada cubre ~25%% de `dim_producto`, no más; el resto sigue
-      pendiente de matching por texto.
+      candidatos con `ndf_id` real y sin ambigüedad). `sku` está a 15
+      dígitos y se cruza contra `dim_producto.sku_cruce` (columna temporal,
+      no expuesta) — esa pasada cubre ~35%% de `dim_producto` (83,510 de
+      240,400); el resto sigue pendiente de matching por texto.
 
-      Menos filas que `stg_puente_aportador`: se filtran las 5 del
-      centinela `sku` NULL y se dedupean 642 pares que repetían
+      Menos filas que `stg_puente_aportador`: se filtran las 6 del
+      centinela `sku` NULL y se dedupean 2,196 pares que repetían
       exactamente el mismo `(tienda_key, sku, ndf_id)` (ver
       `assert_dim_puente_aportador_solo_excluye_sku_nulo`).
     tests:
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "length(sku) = 15"
+            where: "sku is not null"
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
@@ -40,11 +43,11 @@ models:
                 field: tienda_key
       - name: sku
         description: >
-          Identificador del producto según el aportador (10-13 dígitos,
-          parece EAN/UPC propio). NO coincide con `dim_producto.sku` (match
-          0-14%% validado, ver `stg_puente_aportador`) — no sirve para un
-          join directo. NO es único por sí solo ni junto con `tienda_key`:
-          ver el grano en la descripción del modelo.
+          Identificador del producto según el aportador, normalizado a 15
+          dígitos (`trim` + relleno con ceros a la izquierda). Se cruza
+          contra `dim_producto.sku_cruce` (también a 15), no contra
+          `dim_producto.sku`. NO es único por sí solo ni junto con
+          `tienda_key`: ver el grano en la descripción del modelo.
         tests:
           - not_null
       - name: ndf_id
