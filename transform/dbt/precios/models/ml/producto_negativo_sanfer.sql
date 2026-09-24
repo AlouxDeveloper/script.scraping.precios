@@ -42,14 +42,14 @@
 with match_conocido as (
 
     select
-        dim_producto.producto_key,
-        dim_producto.tienda_key,
+        int_producto.producto_key,
+        int_producto.tienda_key,
         dim_ndf.laboratorio,
         dim_ndf.division
-    from {{ ref('int_producto') }} as dim_producto
+    from {{ ref('int_producto') }} as int_producto
     inner join {{ ref('dim_ndf') }} as dim_ndf
-        on dim_producto.ndf_id = dim_ndf.ndf_id
-    where dim_producto.match_method = 'aportadores'
+        on int_producto.ndf_id = dim_ndf.ndf_id
+    where int_producto.match_method = 'aportadores'
 
 )
 

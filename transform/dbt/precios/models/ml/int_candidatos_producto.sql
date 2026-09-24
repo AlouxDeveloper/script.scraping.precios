@@ -14,16 +14,14 @@
     (`emb_producto`, consulta) lo busca él mismo.
 
     `top_k => 10`, no 50 ni 1: el margen contra el segundo candidato
-    necesita al menos dos: las guardas de magnitud pueden descartar al
-    primero y entonces el segundo pasa a ser la respuesta, y
-    `recall_at_10` (`rev_er_metricas`, reusado en una fase futura) es la
-    métrica que dice si el método tiene techo -ninguna de las tres existe
-    con `top_k => 1`.
+    necesita al menos dos, `recall_at_10` (`rev_er_metricas_catalogo`) es
+    la métrica que dice si el método tiene techo (85.13% con v4), y los 10
+    son la lista de la que elige el método 3 en `ndf_cuarentena` -ninguna
+    de las tres existe con `top_k => 1`.
 
     Mismo grano `(producto_key, ndf_id)` que `int_candidatos_ndf`, agnóstico
-    a la dirección por diseño (ver su propio docstring): `int_match_ndf` se
-    reusa tal cual una vez que esta fase recalibre sus umbrales (ALD-89),
-    sin reescribir la lógica de decisión.
+    a la dirección por diseño (ver su propio docstring). `int_match_ndf`
+    toma solo el rank 1.
 
     Corrida de referencia 2026-09-22: 2,404,000 filas (240,400 producto_key
     × 10, sin huecos, ver `assert_int_candidatos_producto_top_k.sql`).

@@ -1,10 +1,15 @@
 {#
     Decisión por producto sobre el catálogo completo: colapsa el candidato
     rank 1 de `int_candidatos_producto` (búsqueda producto→NDF) en una fila
-    por `producto_key`, universo completo de `dim_producto` (240,400
+    por `producto_key`, universo completo de `int_producto` (240,400
     filas). Para la mayor parte del universo la respuesta correcta es que
     no hay `ndf_id`, y `sin_match` lo dice explícito en vez de desaparecer
     la fila.
+
+    Decide para todos los productos, también los que ya tienen crosswalk:
+    así la calibración compara contra la verdad conocida. `dim_producto`
+    solo toma `vectorial` donde el crosswalk y el EAN no asignaron nada, y
+    `ndf_cuarentena` solo la `cuarentena` de esos mismos productos.
 
     **Regla vigente: marca + margen por división (ALD-93).** Reemplaza la
     de umbrales por bucket de estilo de tienda (ALD-89/90). El diagnóstico
@@ -65,17 +70,17 @@ with candidatos as (
         dim_ndf.division,
         dim_tienda.tienda_slug,
         split({{ limpiar_texto('dim_ndf.producto') }}, ' ') as marca_norm,
-        split({{ limpiar_texto('dim_producto.descripcion') }}, ' ')
+        split({{ limpiar_texto('int_producto.descripcion') }}, ' ')
             as descripcion_norm,
         {{ guarda_magnitudes('c.atributos_producto', 'c.atributos_ndf') }}
             as guarda_ok
     from {{ ref('int_candidatos_producto') }} as c
     inner join {{ ref('dim_ndf') }} as dim_ndf
         on dim_ndf.ndf_id = c.ndf_id
-    inner join {{ ref('int_producto') }} as dim_producto
-        on dim_producto.producto_key = c.producto_key
+    inner join {{ ref('int_producto') }} as int_producto
+        on int_producto.producto_key = c.producto_key
     inner join {{ ref('dim_tienda') }} as dim_tienda
-        on dim_tienda.tienda_key = dim_producto.tienda_key
+        on dim_tienda.tienda_key = int_producto.tienda_key
     where c.rank_desde_producto = 1
 
 ),
@@ -118,7 +123,7 @@ evaluado as (
 decidido as (
 
     select
-        dim_producto.producto_key,
+        int_producto.producto_key,
         evaluado.ndf_id,
         evaluado.distancia,
         evaluado.margen,
@@ -134,9 +139,9 @@ decidido as (
                 then 'vectorial'
             else 'cuarentena'
         end as decision
-    from {{ ref('int_producto') }} as dim_producto
+    from {{ ref('int_producto') }} as int_producto
     left join evaluado
-        on evaluado.producto_key = dim_producto.producto_key
+        on evaluado.producto_key = int_producto.producto_key
 
 )
 

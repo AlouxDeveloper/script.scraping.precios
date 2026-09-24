@@ -13,15 +13,15 @@
 {{ config(materialized='view') }}
 
 select
-    dim_producto.producto_key,
-    dim_producto.tienda_key,
+    int_producto.producto_key,
+    int_producto.tienda_key,
     case
-        when dim_producto.match_method in ('aportadores', 'ean_cruzado')
-            then dim_producto.match_method
+        when int_producto.match_method in ('aportadores', 'ean_cruzado')
+            then int_producto.match_method
         when int_match_ndf.decision = 'vectorial' then 'vectorial'
     end as metodo,
-    dim_producto.match_method is not null
+    int_producto.match_method is not null
         or int_match_ndf.decision = 'vectorial' as tiene_match
-from {{ ref('int_producto') }} as dim_producto
+from {{ ref('int_producto') }} as int_producto
 left join {{ ref('int_match_ndf') }} as int_match_ndf
-    on int_match_ndf.producto_key = dim_producto.producto_key
+    on int_match_ndf.producto_key = int_producto.producto_key

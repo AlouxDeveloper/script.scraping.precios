@@ -7,13 +7,16 @@
     para reemplazarse (ver `dim_producto.sql`)-:
 
     - `aportadores`: `dim_producto.match_method = 'aportadores'` ya
-      resuelto, el crosswalk de Knobloch (~25% de `dim_producto`).
+      resuelto, el crosswalk de Knobloch (~35% de `dim_producto`).
     - `ean_cruzado`: `dim_producto.match_method = 'ean_cruzado'`, el EAN del
       producto coincide con el de otra tienda en el crosswalk (ver
       `dim_producto.sql`). Va después de `aportadores` en la prioridad.
     - `vectorial`: `int_match_ndf.decision = 'vectorial'` (ALD-90),
       solo cuenta si ese `producto_key` NO tenía ya un `ndf_id` de
       aportadores -aportadores es la fuente confirmada, no se pisa-.
+      Desde ALD-97 es lo mismo que `dim_producto.match_method =
+      'vectorial'`; esta vista lo recalcula desde `int_producto` porque
+      es anterior y sus números de cierre se leyeron así.
 
     `manual` (ALD-74, seed `er_manual.csv`) todavía no existe -esta vista
     no tiene esa columna, no un valor `NULL` disfrazado de método real; se

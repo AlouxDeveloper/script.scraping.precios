@@ -115,13 +115,13 @@ universo as (
     select
         split.producto_key,
         split.tienda_key,
-        dim_producto.ndf_id as ndf_id_verdadero,
+        int_producto.ndf_id as ndf_id_verdadero,
         upper(dim_ndf.laboratorio) = 'SANFER' as es_positivo_sanfer
     from {{ ref('producto_split_aportadores') }} as split
-    inner join {{ ref('int_producto') }} as dim_producto
-        on dim_producto.producto_key = split.producto_key
+    inner join {{ ref('int_producto') }} as int_producto
+        on int_producto.producto_key = split.producto_key
     inner join {{ ref('dim_ndf') }} as dim_ndf
-        on dim_ndf.ndf_id = dim_producto.ndf_id
+        on dim_ndf.ndf_id = int_producto.ndf_id
     where split.split = 'calibracion'
 
 ),

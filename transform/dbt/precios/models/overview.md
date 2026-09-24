@@ -11,9 +11,9 @@ construye las capas silver y gold sobre BigQuery.
 | Capa | Dataset | Materialización | Qué es |
 | --- | --- | --- | --- |
 | staging | `precios_silver` | vista | Tipado y limpieza 1:1 con la source. `stg_precios`, `stg_ndf`, `stg_puente_aportador`. |
-| silver | `precios_silver` | tabla | Universo depurado. `precios` (filas válidas, sin duplicados exactos) y `precios_cuarentena` (lo descartado, con su `motivo_descarte`). Particionadas por `mes`. |
+| silver | `precios_silver` | tabla | Universo depurado. `precios` (filas válidas, sin duplicados exactos) y `precios_cuarentena` (lo descartado, con su `motivo_descarte`), particionadas por `mes`. Además `int_producto` (producto con los cruces por código, entrada del entity resolution) y `ndf_cuarentena` (la banda gris del vectorial, entrada del método 3). |
 | gold | `precios_gold` | tabla | Star schema: `fact_precios` y sus dimensiones. |
-| ml | `precios_ml` | — | Entity resolution vectorial: el banco de embeddings y los modelos de búsqueda. Dataset y conexión BigLake a Vertex AI ya provisionados; sin modelos todavía. Va en su propio dataset porque gold se reconstruye entera en cada build y los embeddings son llamadas a la API ya pagadas: la frontera tiene que ser física, no una convención. |
+| ml | `precios_ml` | tabla / vista / incremental | Entity resolution vectorial: texto a vectorizar, banco de embeddings, búsqueda, decisión y vistas de calibración (`rev_`). Va en su propio dataset porque gold se reconstruye entera en cada build y los embeddings son llamadas a la API ya pagadas: la frontera tiene que ser física, no una convención. |
 
 El seed `tiendas` (catálogo propio de 19 filas, una por tienda scrapeada)
 aterriza en `precios_bronce`: es dato de entrada curado a mano, no un modelo
@@ -28,9 +28,11 @@ orden:
 1. `dim_tienda` — 19 filas, viene del seed `tiendas`.
 2. `dim_fecha` — una fila por día natural del histórico observado, con
    `dbt_utils.date_spine` entre el `min` y el `max` de `fecha_captura`.
-3. `dim_producto` — grano `(tienda_key, sku)`, ~240 mil productos. Es el insumo
-   del entity resolution: el texto del producto vive aquí, no en la fact.
-   Lleva `ndf_id`/`match_method` parciales — ver abajo.
+3. `dim_producto` — grano `(tienda_key, sku)`, ~240 mil productos. El texto
+   del producto vive aquí, no en la fact. Lleva el `ndf_id` que haya
+   encontrado el entity resolution y el `match_method` que lo encontró — ver
+   abajo. Se arma sobre `int_producto` (silver), que es la misma tabla sin la
+   pasada vectorial.
 4. `fact_precios` — dedup incluido: colapsa las ~17 mil filas de exceso de silver
    quedándose con el precio de lista más bajo observado cada día.
 
@@ -42,36 +44,91 @@ ceros: Ahorro y Farmalisto lo traen relleno con espacios) y se cruza contra
 `dim_producto.sku_cruce`, una columna temporal también a 15 dígitos (se le quitan antes
 los ceros a la izquierda: San Pablo escribe su sku con relleno a 18).
 
-**Primera pasada del entity resolution, ya en `dim_producto`.** Donde
-`(tienda_key, sku_cruce)` mapea a exactamente un `ndf_id` real (existe en `dim_ndf`,
-sin ambigüedad), `dim_producto.ndf_id` queda asignado con
-`match_method = 'aportadores'` — 83,510 de 240,400 filas (~35%; antes ~25%: el
-`trim` del sku subió Ahorro de 0 a 93%). Soriana, fesa, alsuper y similares
-siguen en 0%: su sku en el puente es otro identificador.
+## Por qué un producto tiene `ndf_id` y otro no
 
-**Segunda pasada, `match_method = 'ean_cruzado'`.** Para lo que `aportadores`
-no tocó: el sku (8+ dígitos, o 12 contra el EAN-13 sin dígito verificador)
-coincide con un producto del crosswalk de otra tienda con un único `ndf_id`.
-Suma 13,040 productos (fesa, yza, aurrera, walmart, comer) y deja la
-cobertura en 96,550 de 240,400 (~40%). Precisión medida 99.4% (test
-`assert_dim_producto_ean_precision`). Lo que sigue sin match (soriana,
-alsuper, similares, marketplace no farmacéutico) queda `ndf_id`/`match_method`
-NULL a la espera de los métodos de texto (embeddings contra `dim_ndf`),
-todavía no implementados. `match_method` acumula valores a medida que se
-agregan métodos, no se reemplaza.
+El entity resolution asigna a cada producto de tienda su presentación del
+catálogo NDF. Tres métodos, en este orden de precedencia; uno posterior
+solo llena lo que los anteriores dejaron vacío y nunca pisa una
+asignación (`match_method` dice cuál fue):
 
-**Cómo va a llegar el resto.** El plan ataca primero el recorte del
-laboratorio Sanfer (`upper(laboratorio) = 'SANFER'`, ~1,400 `ndf_id`) y
-después el catálogo completo, con la misma infraestructura. La dirección
-de la búsqueda cambia entre las dos fases y no es un detalle: con una base
-de 1,400 vectores —el 0.8% del catálogo— el vecino más cercano de
-cualquier producto es un artefacto del recorte, así que se busca
-NDF→producto; con el catálogo entero el vecino más cercano vuelve a
-significar algo y se invierte a producto→NDF top-1. Los umbrales de
-aceptación son **por tienda**, no uno global: `presentacion` está
-homologada, pero `descripcion` varía mucho de estilo entre tiendas
-—walmart escribe largo, sanpablo corto— y la misma distancia coseno no
-significa lo mismo en las dos.
+| `match_method` | Cómo | Precisión | Productos | NDF nuevos |
+| --- | --- | --- | --- | --- |
+| `aportadores` | El sku del producto está en el crosswalk de Knobloch de su tienda con un solo `ndf_id`. | 0.990 (auditoría manual) | 83,510 | 26,000 |
+| `ean_cruzado` | El sku es un código de barras (8+ dígitos) que otra tienda sí tiene en el crosswalk, con un solo `ndf_id`. | 0.994 (`assert_dim_producto_ean_precision`) | 13,040 | 1,098 |
+| `vectorial` | El texto del producto y el de la presentación NDF están cerca en el espacio de embeddings y la marca coincide (regla abajo). | ~0.96 FARMA, ~0.85 NO FARMA (calibración); ~0.98 / ~0.94 en tiendas sin crosswalk | 6,107 | 845 |
+| NULL | Ninguno lo resolvió. | — | 137,743 | — |
+
+Corte 2026-09-24: 102,657 de 240,400 productos con `ndf_id` (42.7%; 86.9%
+sin el marketplace de walmart y aurrera) y 27,943 de 180,914 NDF con al
+menos un producto (15.5%). Las dos métricas se leen así, por método, en
+`dim_producto`.
+
+**Los cruces por código** (`int_producto`). El sku del puente va a 15
+dígitos (`trim` + relleno: Ahorro y Farmalisto lo traen con espacios) y se
+compara contra `sku_cruce`, una columna temporal de `int_producto` también a 15
+dígitos (sin ceros a la izquierda antes de rellenar: San Pablo escribe su
+sku a 18). Un sku con dos `ndf_id` en el puente es ambiguo y no se asigna.
+El EAN exige 8+ dígitos porque por debajo los códigos son internos de cada
+tienda y colisionan (precisión 0-17%). Soriana, alsuper y similares no
+tienen código común con el crosswalk: solo les llega el vectorial.
+
+**El vectorial, de punta a punta** (`precios_ml`):
+
+1. **Texto.** Del lado tienda, `dim_producto.descripcion` tal cual
+   (`int_texto_er_tienda`). Del lado catálogo, `presentacion` con sus
+   abreviaturas expandidas (`TABL` → `TABLETAS`, seed `abreviaturas_ndf`,
+   `int_ndf_presentacion_expandida`): es la variante `v4` del var
+   `variante_ndf`. `int_texto_er` junta los dos lados sin duplicar textos.
+2. **Banco.** `emb_texto` guarda un vector (Gemini, 768 dimensiones) por
+   hash del texto, incremental. Un rebuild de gold no vuelve a pagar la
+   API; **nunca se corre con `--full-refresh`**. Tiene los vectores de `v1`
+   y `v4` (452,556).
+3. **Vectores por entidad.** `emb_producto` (240,400) y `emb_ndf`
+   (180,914), cada uno con un índice `TREE_AH` creado fuera de dbt
+   (`entity_resolution/sql/`). Tras reconstruir una de estas tablas el
+   índice tarda ~10 min en volver a cubrir el 100%; la búsqueda no debe
+   correr antes o cae a fuerza bruta.
+4. **Búsqueda.** `int_candidatos_producto`: cada producto busca sus 10 NDF
+   más cercanos (distancia coseno). El NDF correcto está entre los 10 en
+   el 85.13% de los productos con verdad conocida.
+5. **Decisión.** `int_match_ndf` toma el candidato 1 y decide:
+   - `sin_match` si alguna palabra de la marca del NDF no aparece en la
+     descripción, o si la distancia supera `tau_farma` (0.10) /
+     `tau_no_farma` (0.04) según la división del NDF;
+   - `vectorial` si además el segundo candidato queda al menos `delta_min`
+     (0.008) más lejos, las magnitudes (dosis, volumen, piezas) cuadran y
+     la tienda/división no está en `cuarentena_forzada`;
+   - `cuarentena` en otro caso.
+6. **Gold.** `dim_producto` toma `vectorial` con su `ndf_distancia`.
+   `ndf_cuarentena` (silver) guarda los 2,916 productos en `cuarentena` con
+   sus 10 candidatos y los dos textos lado a lado; ahí entra el método 3
+   (un LLM elige uno de los 10 o ninguno). El test
+   `assert_dim_producto_reconcilia_cuarentena` asegura que todo producto
+   sin `ndf_id` está en `ndf_cuarentena` o fue `sin_match`.
+
+**Por qué esa regla.** La marca es la señal que separa aciertos de
+errores: sin ella la precisión ronda 0.5, con ella la distancia puede
+aflojarse sin perder precisión. Los umbrales y su porqué están en
+`dbt_project.yml` y en el docstring de `int_match_ndf`; se calibraron
+sobre la mitad de los productos con crosswalk (`producto_split_aportadores`,
+la otra mitad es holdout intocado) con las vistas `rev_er_metricas*`, y se
+auditaron a mano 208 productos de tiendas sin crosswalk
+(`entity_resolution/auditar_huerfanos.py`). Los genéricos (`PARACETAMOL GI
+ALL`) no pasan la regla porque la tienda no escribe el laboratorio: son
+trabajo del método 3.
+
+**Qué hay en los 134,827 `sin_match`.** ~112 mil ni tienen la marca de su
+candidato ni están cerca de él: en su mayoría no existen en el catálogo
+NDF (marketplace no farmacéutico de walmart y aurrera, abarrotes). 17,938
+tienen la marca pero están lejos y 4,809 están cerca sin la marca: junto
+con la cuarentena, ~25,600 productos son el universo del método 3.
+
+**Volver a `v1`.** Cambiar `variante_ndf: v1` en `dbt_project.yml`. Sus
+vectores siguen en el banco, así que no se paga la API, pero hay que
+reconstruir `emb_ndf`, esperar a que su índice vuelva al 100%, y luego
+`int_candidatos_producto`, `int_match_ndf`, `dim_producto` y
+`ndf_cuarentena`. Los `tau` vigentes están calibrados para `v4`: con `v1`
+hay que recalibrarlos (los de `v1` sin guarda eran 0.08 / 0.035).
 
 ## Decisiones que el lector nuevo debe conocer
 

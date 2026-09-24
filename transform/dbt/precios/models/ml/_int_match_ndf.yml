@@ -5,7 +5,7 @@ models:
     description: >
       Decisión por producto sobre el catálogo completo: toma el candidato
       rank 1 de `int_candidatos_producto` y lo resuelve en una fila por
-      `producto_key`, universo completo de `dim_producto` (240,400 filas).
+      `producto_key`, universo completo de `int_producto` (240,400 filas).
       Regla de ALD-93: la marca del NDF aparece palabra por palabra en la
       descripción, la distancia queda dentro del `tau` de la división del
       NDF (`tau_farma` / `tau_no_farma`), y para `vectorial` además
