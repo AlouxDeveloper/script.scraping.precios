@@ -51,6 +51,11 @@ models:
 # historial de git y en el cierre de sus issues; la regla vigente es la de
 # ALD-93, ver el docstring de `int_match_ndf`.
 vars:
+  # Texto del catálogo que se vectoriza (`macros/texto_er_ndf.sql`). v4 =
+  # presentación sin abreviaturas (ALD-94). Volver a v1 cambia los hashes
+  # a los de la generación anterior, que siguen en el banco `emb_texto`.
+  variante_ndf: v4
+
   # Bucket A (alto solape léxico, ALD-84): gi, klyns, isseg, aurrera, heb,
   # farmatodo, guadalajara, benavides, walmart. Cualquier tienda que NO
   # esté en esta lista cae en bucket B por default. Ya no decide umbrales:

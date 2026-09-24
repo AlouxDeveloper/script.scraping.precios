@@ -5,7 +5,7 @@ models:
     description: >
       Texto del catálogo NDF listo para vectorizar, grano `ndf_id`,
       parametrizado por `var('variante_ndf', 'v1')` (ver
-      `macros/texto_er_ndf.sql` y ALD-64). Alimenta la vista combinada
+      `macros/texto_er_ndf.sql` y ALD-64; la activa es `v4`, ALD-94). Alimenta la vista combinada
       `int_texto_er` (ALD-61), que es la que consume el banco de
       embeddings `emb_texto`.
     columns:

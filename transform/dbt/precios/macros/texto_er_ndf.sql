@@ -22,6 +22,11 @@
     completo dos veces más solo para confirmarlo con `rev_er_metricas`.
     Sigue siendo la mejor evidencia disponible, no la medición vectorial
     original que pedía el issue.
+
+    `v4` (ALD-94) es `presentacion` con las abreviaturas del catálogo
+    expandidas (`TABL` -> `TABLETAS`), de `int_ndf_presentacion_expandida`.
+    Es la variante activa en `dbt_project.yml`; volver a `v1` reutiliza
+    sus vectores del banco sin volver a pagar la API.
 #}
 {% macro texto_er_ndf() %}
     {%- set variante = var('variante_ndf', 'v1') -%}
@@ -39,10 +44,12 @@
         -- Knobloch -si v3 gana, hay que confirmar su significado antes de
         -- fijarla, no asumirlo por el nombre de la columna.
         presentacion || ' ' || forma_farmaceutica_n3 || ' ' || molecula
+    {%- elif variante == 'v4' -%}
+        presentacion_expandida
     {%- else -%}
         {{ exceptions.raise_compiler_error(
             "texto_er_ndf: variante_ndf desconocida '" ~ variante
-            ~ "'. Usa v1, v2 o v3."
+            ~ "'. Usa v1, v2, v3 o v4."
         ) }}
     {%- endif -%}
 {% endmacro %}

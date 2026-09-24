@@ -1,0 +1,54 @@
+version: 2
+
+seeds:
+  - name: abreviaturas_ndf
+    description: >
+      Abreviaturas del catálogo NDF y su palabra completa (ALD-94). Sacado
+      de los datos: tokens de `dim_ndf.presentacion` con 800 apariciones o
+      más que faltan del lado tienda en al menos el 80% de los pares
+      verdaderos del crosswalk (70 candidatos, 2026-09-24). Revisado a
+      mano: se excluyeron los que no son abreviaturas (`GI`, `LOREAL`,
+      `POLVO`, `HOJA`, `SAN`, `HIDRA`) y los ambiguos sin una lectura
+      clara (`LAB`, `MED`, `ET`, `MASC`, `COL`, `SOL`, `ELAST`, `CAP`, `GR`,
+      `AC`). Las expansiones van en mayúsculas y sin acentos, el mismo
+      estilo del catálogo.
+    columns:
+      - name: abreviatura
+        description: Token tal como lo escribe el catálogo, en mayúsculas.
+        tests:
+          - not_null
+          - unique
+      - name: expansion
+        description: Palabra completa que la reemplaza.
+        tests:
+          - not_null
+
+models:
+  - name: int_ndf_presentacion_expandida
+    description: >
+      `dim_ndf.presentacion` con las abreviaturas de `abreviaturas_ndf`
+      expandidas, insumo de la variante `v4` de `texto_er_ndf`. `dim_ndf`
+      no se toca: conserva la presentación original.
+    tests:
+      - dbt_utils.equal_rowcount:
+          arguments:
+            compare_model: ref('dim_ndf')
+    columns:
+      - name: ndf_id
+        description: Llave natural del catálogo, grano de esta tabla.
+        tests:
+          - not_null
+          - unique
+          - relationships:
+              arguments:
+                to: ref('dim_ndf')
+                field: ndf_id
+      - name: presentacion
+        description: Presentación original, idéntica a `dim_ndf.presentacion`.
+      - name: presentacion_expandida
+        description: >
+          La misma presentación con cada abreviatura completa reemplazada;
+          lo que no es abreviatura (números, unidades, puntuación) queda
+          igual.
+        tests:
+          - not_null
