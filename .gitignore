@@ -11,7 +11,7 @@ __pycache__/
 salida/
 
 # Claude
-CLAUDE.md
+CLAUDE.local.md
 
 # Artefactos de dbt 
 target/
