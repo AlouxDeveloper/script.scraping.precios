@@ -79,17 +79,23 @@ vars:
   # vigente.
   delta_min: 0.008
 
-  # tau por división del NDF (ALD-93): distancia coseno máxima para
-  # considerar un candidato cuya marca aparece en la descripción. Medido
-  # sobre el split de calibración con marca + margen, sin guarda, vectores
-  # v1 (2026-09-24). Objetivo de precisión 0.95 FARMA / 0.85 NO FARMA.
-  # Se recalibran en la tarea 38 sin tocar la lógica del modelo.
+  # tau por división del NDF: distancia coseno máxima para considerar un
+  # candidato cuya marca aparece en la descripción. Recalibrados en ALD-95
+  # sobre el texto ganador (v4) con la regla completa de `int_match_ndf`
+  # (marca + margen + guarda), split de calibración, corrida 2026-09-24.
+  # Objetivo de precisión 0.95 FARMA / 0.85 NO FARMA. Los de ALD-93 (0.08 /
+  # 0.035) eran de v1 y sin guarda: la escala de distancias cambia con el
+  # texto, así que no se reutilizan.
   #
-  # FARMA: 0.9533 en 0.08 (12,680 aceptados en calibración). 0.10 todavía
-  # da 0.9501, pero pegado al objetivo por solo 158 aceptados más.
-  tau_farma: 0.08
-  # NO FARMA: 0.8556 en 0.035 (2,473 aceptados); 0.04 ya cae a 0.8347.
-  tau_no_farma: 0.035
+  # FARMA: con la regla completa la precisión nunca cruza 0.95 hacia abajo
+  # (0.9593 en 0.15, el extremo del barrido): la marca y la guarda hacen el
+  # trabajo. Se toma 0.10, donde la curva se satura (11,117 correctos, 0.9599;
+  # de 0.10 a 0.15 solo se suman 6), en vez de abrir la puerta a distancias
+  # que la calibración casi no ve.
+  tau_farma: 0.10
+  # NO FARMA: 0.8521 en 0.04 (3,778 correctos); 0.045 ya cae a 0.8475.
+  # Pegado al objetivo: 0.035 da 0.8618 con 3,211 si hace falta margen.
+  tau_no_farma: 0.04
 
 # El seed tiendas alimenta dim_tienda. Va a precios_bronce -no a precios_gold-
 # porque es dato de entrada curado a mano, no una tabla modelada: dim_tienda
