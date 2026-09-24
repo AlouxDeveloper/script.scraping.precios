@@ -34,10 +34,12 @@
     Decisiones medidas sobre el split de calibración, que no conviene
     re-derivar:
 
-    - **Marca por palabra, todas las palabras.** `marca_norm` es
-      `dim_ndf.producto` pasado por `limpiar_texto` y partido en palabras;
-      exigir solo la primera sube el volumen 6% pero baja FARMA de 0.953 a
-      0.942.
+    Las señales del candidato vienen de `int_candidato_evaluado` y la
+    regla de `macros/decision_vectorial.sql`, compartidas con la vista de
+    calibración `rev_er_calibracion`.
+
+    - **Marca por palabra, todas las palabras** (ver
+      `int_candidato_evaluado`).
     - **Sin reciprocidad.** Contradice la relación N:1 (una tienda con dos
       listings del mismo producto obliga a que uno falle) y compra +0.65 pp
       de precisión a cambio de -7.4% de volumen.
@@ -60,32 +62,10 @@
 #}
 {{ config(materialized='table') }}
 
-with candidatos as (
-
-    select
-        c.producto_key,
-        c.ndf_id,
-        c.distancia,
-        c.margen,
-        dim_ndf.division,
-        dim_tienda.tienda_slug,
-        split({{ limpiar_texto('dim_ndf.producto') }}, ' ') as marca_norm,
-        split({{ limpiar_texto('int_producto.descripcion') }}, ' ')
-            as descripcion_norm,
-        {{ guarda_magnitudes('c.atributos_producto', 'c.atributos_ndf') }}
-            as guarda_ok
-    from {{ ref('int_candidatos_producto') }} as c
-    inner join {{ ref('dim_ndf') }} as dim_ndf
-        on dim_ndf.ndf_id = c.ndf_id
-    inner join {{ ref('int_producto') }} as int_producto
-        on int_producto.producto_key = c.producto_key
-    inner join {{ ref('dim_tienda') }} as dim_tienda
-        on dim_tienda.tienda_key = int_producto.tienda_key
-    where c.rank_desde_producto = 1
-
-),
-
-evaluado as (
+-- La regla se aplica sobre `int_candidato_evaluado` a solas: junto a
+-- `int_producto` sus columnas (`ndf_id`) serían ambiguas. Un producto sin
+-- candidato no está ahí y queda `sin_match` en el join.
+with decidido as (
 
     select
         producto_key,
@@ -93,64 +73,26 @@ evaluado as (
         distancia,
         margen,
         guarda_ok,
-        not exists (
-            select 1
-            from unnest(marca_norm) as palabra
-            where palabra not in unnest(descripcion_norm)
-        ) as marca_ok,
-        distancia <= (
-            case
-                when division = 'FARMA' then {{ var('tau_farma') }}
-                else {{ var('tau_no_farma') }}
-            end
-        ) as distancia_ok,
-        (
-            false
-            {%- for estrato in var('cuarentena_forzada', []) %}
-            or (
-                tienda_slug = '{{ estrato.tienda }}'
-                and division = '{{ estrato.division }}'
-            )
-            {%- endfor %}
-        ) as es_cuarentena_forzada
-    from candidatos
-
-),
-
--- decision se calcula aparte del select final para poder anular las
--- columnas del candidato cuando es sin_match sin repetir el case: ndf_id
--- es NULL exactamente cuando decision = 'sin_match' por construcción.
-decidido as (
-
-    select
-        int_producto.producto_key,
-        evaluado.ndf_id,
-        evaluado.distancia,
-        evaluado.margen,
-        evaluado.guarda_ok,
-        evaluado.marca_ok,
-        case
-            when evaluado.ndf_id is null then 'sin_match'
-            when not (evaluado.distancia_ok and evaluado.marca_ok)
-                then 'sin_match'
-            when evaluado.margen >= {{ var('delta_min') }}
-                and evaluado.guarda_ok
-                and not evaluado.es_cuarentena_forzada
-                then 'vectorial'
-            else 'cuarentena'
-        end as decision
-    from {{ ref('int_producto') }} as int_producto
-    left join evaluado
-        on evaluado.producto_key = int_producto.producto_key
+        marca_ok,
+        {{ decision_vectorial(var('tau_farma'), var('tau_no_farma')) }}
+            as decision
+    from {{ ref('int_candidato_evaluado') }}
 
 )
 
+-- Las columnas del candidato se anulan en sin_match: ndf_id es NULL
+-- exactamente cuando decision = 'sin_match', por construcción.
 select
-    producto_key,
-    case when decision != 'sin_match' then ndf_id end as ndf_id,
-    case when decision != 'sin_match' then distancia end as distancia,
-    case when decision != 'sin_match' then margen end as margen,
-    case when decision != 'sin_match' then guarda_ok end as guarda_ok,
-    case when decision != 'sin_match' then marca_ok end as marca_ok,
-    decision
-from decidido
+    int_producto.producto_key,
+    if(decidido.decision != 'sin_match', decidido.ndf_id, null) as ndf_id,
+    if(decidido.decision != 'sin_match', decidido.distancia, null)
+        as distancia,
+    if(decidido.decision != 'sin_match', decidido.margen, null) as margen,
+    if(decidido.decision != 'sin_match', decidido.guarda_ok, null)
+        as guarda_ok,
+    if(decidido.decision != 'sin_match', decidido.marca_ok, null)
+        as marca_ok,
+    coalesce(decidido.decision, 'sin_match') as decision
+from {{ ref('int_producto') }} as int_producto
+left join decidido
+    on decidido.producto_key = int_producto.producto_key

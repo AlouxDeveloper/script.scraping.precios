@@ -61,7 +61,10 @@ asignación (`match_method` dice cuál fue):
 Corte 2026-09-24: 102,657 de 240,400 productos con `ndf_id` (42.7%; 86.9%
 sin el marketplace de walmart y aurrera) y 27,943 de 180,914 NDF con al
 menos un producto (15.5%). Las dos métricas se leen así, por método, en
-`dim_producto`.
+`dim_producto`. El conteo `vectorial` varía unas decenas entre
+reconstrucciones del índice: `TREE_AH` es búsqueda aproximada y un índice
+nuevo parte el espacio distinto (tras recrearlo en ALD-99 quedó en 6,075
+productos y 27,934 NDF en total, -0.5%).
 
 **Los cruces por código** (`int_producto`). El sku del puente va a 15
 dígitos (`trim` + relleno: Ahorro y Farmalisto lo traen con espacios) y se
@@ -84,12 +87,16 @@ tienen código común con el crosswalk: solo les llega el vectorial.
    API; **nunca se corre con `--full-refresh`**. Tiene los vectores de `v1`
    y `v4` (452,556).
 3. **Vectores por entidad.** `emb_producto` (240,400) y `emb_ndf`
-   (180,914), cada uno con un índice `TREE_AH` creado fuera de dbt
-   (`entity_resolution/sql/`). Tras reconstruir una de estas tablas el
-   índice tarda ~10 min en volver a cubrir el 100%; la búsqueda no debe
-   correr antes o cae a fuerza bruta.
+   (180,914), incrementales con `merge` por llave: una carga nueva solo
+   inserta o actualiza lo que cambió de texto, sin recrear la tabla.
+   `emb_ndf`, la base de la búsqueda, lleva un índice `TREE_AH` que su
+   `post_hook` crea si no existe. Si la tabla se recrea (`--full-refresh`),
+   el índice cae a 0% de cobertura y tarda ~10 min en volver; mientras tanto la búsqueda es por
+   fuerza bruta. Los tests `assert_emb_*_cobertura` fallan si algún
+   producto o NDF no tiene el vector de su texto vigente.
 4. **Búsqueda.** `int_candidatos_producto`: cada producto busca sus 10 NDF
-   más cercanos (distancia coseno). El NDF correcto está entre los 10 en
+   más cercanos (distancia coseno). Antes de buscar emite un warning si
+   el índice de `emb_ndf` no cubre el 100%. El NDF correcto está entre los 10 en
    el 85.13% de los productos con verdad conocida.
 5. **Decisión.** `int_match_ndf` toma el candidato 1 y decide:
    - `sin_match` si alguna palabra de la marca del NDF no aparece en la
@@ -111,7 +118,7 @@ errores: sin ella la precisión ronda 0.5, con ella la distancia puede
 aflojarse sin perder precisión. Los umbrales y su porqué están en
 `dbt_project.yml` y en el docstring de `int_match_ndf`; se calibraron
 sobre la mitad de los productos con crosswalk (`producto_split_aportadores`,
-la otra mitad es holdout intocado) con las vistas `rev_er_metricas*`, y se
+la otra mitad es holdout intocado) con la vista `rev_er_calibracion`, y se
 auditaron a mano 208 productos de tiendas sin crosswalk
 (`entity_resolution/auditar_huerfanos.py`). Los genéricos (`PARACETAMOL GI
 ALL`) no pasan la regla porque la tienda no escribe el laboratorio: son
@@ -124,11 +131,34 @@ tienen la marca pero están lejos y 4,809 están cerca sin la marca: junto
 con la cuarentena, ~25,600 productos son el universo del método 3.
 
 **Volver a `v1`.** Cambiar `variante_ndf: v1` en `dbt_project.yml`. Sus
-vectores siguen en el banco, así que no se paga la API, pero hay que
-reconstruir `emb_ndf`, esperar a que su índice vuelva al 100%, y luego
-`int_candidatos_producto`, `int_match_ndf`, `dim_producto` y
-`ndf_cuarentena`. Los `tau` vigentes están calibrados para `v4`: con `v1`
+vectores siguen en el banco, así que no se paga la API. `dbt run --select
+emb_ndf` actualiza por `merge` las 180,914 filas (todos los hashes
+cambian); esperar a que su índice vuelva al 100% y luego construir
+`int_candidatos_producto+` y `ndf_cuarentena`. Los `tau` vigentes están calibrados para `v4`: con `v1`
 hay que recalibrarlos (los de `v1` sin guarda eran 0.08 / 0.035).
+
+## Carga de un mes nuevo
+
+Todo lo de dbt corre con un solo `dbt build`; los pasos fuera de dbt son
+los de `load/`. En orden:
+
+1. `load/`: `cli.py ingesta` (CSV del mes a raw y bronce) y, si cambió el
+   catálogo NDF o el crosswalk, `cli.py catalogos` / `catalogos-puente`.
+   Las external tables ven los archivos nuevos al instante.
+2. `dbt build`. En el orden del DAG: silver y `int_producto` suman los
+   productos nuevos con sus cruces por código; `emb_texto` embebe los
+   textos que el banco no tiene (hasta `lote_embeddings`, 50,000 por
+   corrida); `emb_producto`/`emb_ndf` entran por `merge`;
+   `int_candidatos_producto` busca, `int_match_ndf` decide y
+   `dim_producto` / `ndf_cuarentena` reciben el resultado. Un NDF nuevo
+   pasa por el seed de abreviaturas sin tocar nada; una tienda nueva no
+   necesita configuración (solo `cuarentena_forzada` nombra tiendas).
+3. Si fallan `assert_emb_*_cobertura`, el banco quedó a medias (más de
+   50,000 textos nuevos): repetir `dbt build` hasta que pasen.
+4. Si `int_candidatos_producto` avisa que el índice de `emb_ndf` está en
+   0% o no existe, esperar ~10 min y volver a construir
+   `int_candidatos_producto+`. Con unos miles de filas sin indexar no hace
+   falta.
 
 ## Decisiones que el lector nuevo debe conocer
 

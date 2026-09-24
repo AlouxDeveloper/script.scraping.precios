@@ -1,5 +1,7 @@
--- Indice vectorial real sobre emb_ndf (ALD-70). Gemelo de
--- 12_indice_emb_producto.sql. TREE_AH y no IVF: el lote real de consulta
+-- Indice vectorial real sobre emb_ndf (ALD-70), la base de la busqueda
+-- producto->NDF. Es el unico indice vectorial: el de emb_producto servia a
+-- la busqueda NDF->producto de la fase Sanfer y se quito en ALD-99.
+-- TREE_AH y no IVF: el lote real de consulta
 -- (producto->NDF en la fase catalogo completo) trae cientos de miles de
 -- vectores de golpe, el caso que Google documenta para TreeAH; IVF esta
 -- pensado para lotes chicos y para afinar con num_lists, que no aplica
@@ -7,13 +9,14 @@
 --
 -- Va el catalogo completo (180,914, ~1.1 GB), no el recorte Sanfer
 -- (~1,400, 8.6 MB) -bajo el minimo de 10 MB que exige TREE_AH, el indice
--- se deshabilitaria solo (BASE_TABLE_TOO_SMALL). Por eso la fase Sanfer
--- no usa esta tabla como base (usa emb_producto, ALD-71); esta es la base
--- de la fase del catalogo completo.
+-- se deshabilitaria solo (BASE_TABLE_TOO_SMALL).
 --
--- Se corre a mano, una vez, despues de `dbt run --select emb_ndf`:
+-- Desde ALD-99 ya no es un paso manual: el post_hook de `emb_ndf`
+-- (macros/indice_vectorial.sql) crea el indice con IF NOT EXISTS en cada
+-- run. Este script queda como referencia y para forzar una reconstruccion
+-- (CREATE OR REPLACE). A mano:
 --   bq query --use_legacy_sql=false \
---     < transform/entity_resolution/sql/13_indice_emb_ndf.sql
+--     < transform/entity_resolution/sql/indice_emb_ndf.sql
 --
 -- La construccion es asincrona: el DDL solo la registra. Pollear con la
 -- query de status hasta index_status = 'ACTIVE' y coverage_percentage = 100

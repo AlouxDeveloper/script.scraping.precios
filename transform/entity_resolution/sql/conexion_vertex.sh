@@ -3,11 +3,11 @@
 #
 # BigQuery no llama por su cuenta a un modelo de embeddings: necesita una
 # conexión CLOUD_RESOURCE que le dé una identidad con permiso sobre Vertex AI.
-# El modelo remoto emb_gemini (03_modelo_emb_gemini.sql) se declara contra esta
+# El modelo remoto emb_gemini (modelo_emb_gemini.sql) se declara contra esta
 # conexión y AI.GENERATE_EMBEDDING la usa en cada llamada.
 #
 # Se corre a mano una sola vez, desde la raíz del repo:
-#   bash transform/entity_resolution/sql/02_conexion_vertex.sh
+#   bash transform/entity_resolution/sql/conexion_vertex.sh
 #
 # La conexión va en US, la misma multi-región que los datasets y los buckets:
 # una conexión regional no puede usarse desde un dataset multi-región.

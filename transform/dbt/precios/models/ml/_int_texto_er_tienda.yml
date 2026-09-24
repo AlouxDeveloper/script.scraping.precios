@@ -3,9 +3,8 @@ version: 2
 models:
   - name: int_texto_er_tienda
     description: >
-      Texto de tienda listo para vectorizar, parametrizado por
-      `var('variante_tienda', 't1')` (ver `macros/texto_er_tienda.sql` y
-      ALD-85). Gemelo de `int_texto_er_ndf` del lado catálogo. Alimenta la
+      Texto de tienda listo para vectorizar: `descripcion` tal cual (la
+      variante alternativa de ALD-85 se descartó). Gemelo de `int_texto_er_ndf` del lado catálogo. Alimenta la
       vista combinada `int_texto_er` (ALD-61).
     columns:
       - name: producto_key
@@ -14,12 +13,12 @@ models:
           - not_null
           - unique
       - name: texto
-        description: Texto compuesto por la variante activa. Nunca vacío.
+        description: "`dim_producto.descripcion`. Nunca vacío."
         tests:
           - not_null
       - name: hash_texto
         description: >
           `hash_texto_embedding` sobre `texto` -misma llave que usa
-          `int_texto_er`. Cambia si cambia `variante_tienda`.
+          `int_texto_er`.
         tests:
           - not_null

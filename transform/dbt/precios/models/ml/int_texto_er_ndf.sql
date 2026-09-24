@@ -13,8 +13,8 @@
     calculando el hash distinto del mismo texto sería un bug esperando a
     pasar. También confirma, sin abrir el macro `texto_er_ndf`, que
     `variante_ndf` está llegando: correr este modelo con
-    `--vars '{variante_ndf: v2}'` produce un conjunto de hashes distinto al
-    de v1, porque el texto que se hashea cambió.
+    `--vars '{variante_ndf: v1}'` produce un conjunto de hashes distinto al
+    de v4, porque el texto que se hashea cambió.
 
     El join con `int_ndf_presentacion_expandida` es incondicional aunque
     solo `v4` lo use: un `ref()` dentro de un `if` sobre un var deja el DAG

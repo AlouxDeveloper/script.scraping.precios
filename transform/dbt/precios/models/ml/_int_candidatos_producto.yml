@@ -6,8 +6,8 @@ models:
       Búsqueda vectorial producto→NDF de la fase catálogo completo
       (ALD-88): `VECTOR_SEARCH` sobre `emb_ndf` (base, indexada, 180,914)
       con `emb_producto` (~240,400) como consulta, `top_k => 10`, coseno.
-      Mismo grano `(producto_key, ndf_id)` que `int_candidatos_ndf`,
-      dirección invertida porque aquí la base sí está completa.
+      Grano `(producto_key, ndf_id)`. Avisa antes de buscar si el índice
+      de `emb_ndf` no está completo (`avisar_indice_vectorial`).
 
       Corrida de referencia 2026-09-22: 2,404,000 filas (240,400
       producto_key × 10, sin huecos). `indexUsageMode = FULLY_USED`, sin
@@ -18,9 +18,6 @@ models:
             combination_of_columns:
               - producto_key
               - ndf_id
-      - dbt_utils.expression_is_true:
-          arguments:
-            expression: "not es_reciproco or (rank_desde_ndf = 1 and rank_desde_producto = 1)"
     columns:
       - name: ndf_id
         description: FK a `dim_ndf` (catálogo completo), lado base.
@@ -39,9 +36,7 @@ models:
                 to: ref('int_producto')
                 field: producto_key
       - name: tienda_key
-        description: >
-          FK a `dim_tienda`, heredado del producto -evita un join extra
-          para rankear `rank_desde_ndf` por tienda.
+        description: FK a `dim_tienda`, heredado del producto.
         tests:
           - not_null
           - relationships:
@@ -70,12 +65,6 @@ models:
           tienda antes de comparar magnitudes.
         tests:
           - not_null
-      - name: rank_desde_ndf
-        description: >
-          `row_number()` particionado por `(ndf_id, tienda_key)`: el mejor
-          candidato de cada tienda para ese NDF. Mide cobertura.
-        tests:
-          - not_null
       - name: rank_desde_producto
         description: >
           `row_number()` particionado por `producto_key`: el mejor NDF
@@ -88,9 +77,3 @@ models:
           candidato del producto menos la del primero. NULL en el resto y
           también NULL si el producto no tiene segundo candidato -no hay
           "segundo mejor" que reportar.
-      - name: es_reciproco
-        description: >
-          `rank_desde_ndf = 1` y `rank_desde_producto = 1` a la vez -el
-          producto y el NDF se eligen mutuamente como mejor candidato.
-        tests:
-          - not_null

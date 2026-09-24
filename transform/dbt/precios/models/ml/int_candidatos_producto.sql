@@ -1,7 +1,6 @@
 {#
-    Búsqueda vectorial de la fase catálogo completo (ALD-88). `table`, mismo
-    motivo que `int_candidatos_ndf`: no vale la pena recalcular un
-    `VECTOR_SEARCH` completo en cada consulta.
+    Búsqueda vectorial de la fase catálogo completo (ALD-88). `table`: no vale la
+    pena recalcular un `VECTOR_SEARCH` completo en cada consulta.
 
     Dirección producto→NDF, invertida contra la fase Sanfer -y la razón es
     que aquí la base sí está completa (`emb_ndf`, 180,914, indexada
@@ -14,14 +13,13 @@
     (`emb_producto`, consulta) lo busca él mismo.
 
     `top_k => 10`, no 50 ni 1: el margen contra el segundo candidato
-    necesita al menos dos, `recall_at_10` (`rev_er_metricas_catalogo`) es
+    necesita al menos dos, `recall_at_10` (`rev_er_calibracion`) es
     la métrica que dice si el método tiene techo (85.13% con v4), y los 10
     son la lista de la que elige el método 3 en `ndf_cuarentena` -ninguna
     de las tres existe con `top_k => 1`.
 
-    Mismo grano `(producto_key, ndf_id)` que `int_candidatos_ndf`, agnóstico
-    a la dirección por diseño (ver su propio docstring). `int_match_ndf`
-    toma solo el rank 1.
+    Grano `(producto_key, ndf_id)`. `int_match_ndf` toma solo el rank 1;
+    `ndf_cuarentena`, los 10.
 
     Corrida de referencia 2026-09-22: 2,404,000 filas (240,400 producto_key
     × 10, sin huecos, ver `assert_int_candidatos_producto_top_k.sql`).
@@ -29,8 +27,15 @@
     `INFORMATION_SCHEMA.JOBS.vector_search_statistics` del job -sin
     `indexUnusedReason`, confirma que no cayó a fuerza bruta contra
     180,914 × 240,400 vectores de 768 dimensiones.
+
+    Antes de buscar, `avisar_indice_vectorial` emite un warning si el
+    índice de `emb_ndf` no está completo (ALD-99): tras una carga nueva el
+    `merge` deja unos miles de filas sin indexar que se buscan por fuerza
+    bruta, lo que es aceptable; si el aviso dice 0% o sin índice, conviene
+    esperar a que BigQuery termine de indexar (~10 min).
 #}
 {{ config(materialized='table') }}
+{{ avisar_indice_vectorial([ref('emb_ndf')]) }}
 
 with busqueda as (
 
@@ -58,8 +63,7 @@ atributos_producto as (
 
 ),
 
--- `limpiar_texto` aparte de `extraer_atributos`, mismo motivo que
--- `int_candidatos_ndf`: encadenarlos repetiría el regex de `limpiar_texto`
+-- `limpiar_texto` aparte de `extraer_atributos`: encadenarlos repetiría el regex de `limpiar_texto`
 -- una vez por cada patrón que prueba `extraer_atributos` (~14).
 presentacion_normalizada as (
 
@@ -89,10 +93,6 @@ candidatos as (
         atributos_producto.atributos_producto,
         atributos_ndf.atributos_ndf,
         row_number() over (
-            partition by busqueda.ndf_id, busqueda.tienda_key
-            order by busqueda.distancia
-        ) as rank_desde_ndf,
-        row_number() over (
             partition by busqueda.producto_key
             order by busqueda.distancia
         ) as rank_desde_producto,
@@ -115,8 +115,6 @@ select
     distancia,
     atributos_producto,
     atributos_ndf,
-    rank_desde_ndf,
     rank_desde_producto,
-    case when rank_desde_producto = 1 then margen_desde_mejor end as margen,
-    rank_desde_ndf = 1 and rank_desde_producto = 1 as es_reciproco
+    case when rank_desde_producto = 1 then margen_desde_mejor end as margen
 from candidatos

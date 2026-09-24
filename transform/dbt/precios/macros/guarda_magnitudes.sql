@@ -1,8 +1,7 @@
 {#
-    Guarda de magnitudes, aislada de la reciprocidad (ALD-73 la necesita
-    sola: filtra candidatos por magnitud ANTES de rankear cuál es el
-    mejor, mientras que la reciprocidad se evalúa después, sobre el
-    candidato ya elegido -no son el mismo paso). Una condición por
+    Guarda de magnitudes del candidato rank 1 (ALD-73): si falla, el
+    producto va a `cuarentena` en vez de `vectorial` (ver
+    `decision_vectorial.sql`). Una condición por
     atributo de `extraer_atributos` (ALD-69): aprueba si CUALQUIERA de
     los dos lados no declaró el atributo -NULL es "no declarado", no cero,
     la ausencia no se penaliza-, y exige igualdad exacta cuando ambos
@@ -11,7 +10,7 @@
     discordancia, ignora ausencia? vive en el modelo que usa este macro").
 
     Recibe los dos STRUCT ya calculados (`atributos_producto`,
-    `atributos_ndf` de `int_candidatos_ndf`) -no vuelve a llamar
+    `atributos_ndf` de `int_candidatos_producto`) -no vuelve a llamar
     `extraer_atributos` ni a tocar el texto crudo.
 #}
 {% macro guarda_magnitudes(atributos_producto, atributos_ndf) %}

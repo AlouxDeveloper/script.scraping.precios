@@ -1,5 +1,5 @@
 -- Modelo remoto emb_gemini: referencia de BigQuery al endpoint de embeddings
--- de Vertex AI, contra la conexión BigLake `vertex` (02_conexion_vertex.sh).
+-- de Vertex AI, contra la conexión BigLake `vertex` (conexion_vertex.sh).
 --
 -- AI.GENERATE_EMBEDDING lo usa en cada llamada. La función se llamaba
 -- ML.GENERATE_EMBEDDING; se renombró a AI.GENERATE_EMBEDDING, confirmado
@@ -7,7 +7,7 @@
 --
 -- Se corre a mano una sola vez, desde la raíz del repo:
 --   bq query --use_legacy_sql=false \
---     < transform/entity_resolution/sql/03_modelo_emb_gemini.sql
+--     < transform/entity_resolution/sql/modelo_emb_gemini.sql
 --
 -- output_dimensionality y task_type NO se fijan aquí: son parámetros de la
 -- llamada a AI.GENERATE_EMBEDDING (STRUCT), no del modelo. Van en cada query

@@ -1,5 +1,5 @@
--- Denominador alcanzable del catalogo completo (ALD-90), gemela de
--- 07_denominador_alcanzable_sanfer.sql (ALD-82) pero escalada a 180,914
+-- Denominador alcanzable del catalogo completo (ALD-90), gemela de la
+-- consulta de la fase Sanfer (ALD-82, borrada en ALD-99) pero escalada a 180,914
 -- ndf_id / 30,836 marcas -70x el recorte Sanfer. Corrida de referencia
 -- 2026-09-22.
 --
@@ -31,7 +31,7 @@
 --
 -- Se corre a mano, desde la raiz del repo:
 --   bq query --use_legacy_sql=false \
---     < transform/entity_resolution/sql/16_denominador_alcanzable_catalogo.sql
+--     < transform/entity_resolution/sql/denominador_alcanzable_catalogo.sql
 
 CREATE OR REPLACE TABLE `scenic-firefly-473823-f7.precios_ml.rev_ndf_alcanzabilidad_catalogo` AS
 WITH tokens_desc AS (

@@ -1,0 +1,27 @@
+version: 2
+
+models:
+  - name: int_candidato_evaluado
+    description: >
+      Candidato rank 1 de cada producto con las señales de la regla de
+      decisión (marca, distancia, margen, guarda, división,
+      `cuarentena_forzada`). Lo leen `int_match_ndf` y
+      `rev_er_calibracion`; la regla está en `macros/decision_vectorial.sql`.
+    columns:
+      - name: producto_key
+        tests:
+          - not_null
+          - unique
+      - name: ndf_id
+        tests:
+          - not_null
+      - name: marca_ok
+        description: Todas las palabras de la marca del NDF están en la descripción.
+        tests:
+          - not_null
+      - name: guarda_ok
+        description: Las magnitudes declaradas no se contradicen (`guarda_magnitudes`).
+      - name: es_cuarentena_forzada
+        description: La tienda/división está en el var `cuarentena_forzada`.
+        tests:
+          - not_null

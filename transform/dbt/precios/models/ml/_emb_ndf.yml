@@ -3,22 +3,24 @@ version: 2
 models:
   - name: emb_ndf
     description: >
-      Catálogo NDF completo vectorizado (ALD-70). `table`, base indexada
-      de la fase del catálogo completo (`TREE_AH`, ver
-      `entity_resolution/sql/13_indice_emb_ndf.sql`). `ndf_id` +
-      `embedding`, resuelto desde `emb_texto` por el hash del texto de
-      catálogo (`int_texto_er_ndf`). Gemelo de `emb_producto` (ALD-71).
+      Catálogo NDF completo vectorizado (ALD-70). Incremental con `merge`
+      por `ndf_id` (ALD-99), mismo motivo que `emb_producto`; el
+      `post_hook` borra los NDF que salieron del catálogo y crea el índice
+      `TREE_AH` si falta. Base de `int_candidatos_producto`.
     columns:
       - name: ndf_id
         description: FK a `dim_ndf`, grano de esta tabla.
         tests:
           - not_null
           - unique
-      - name: embedding
+      - name: texto_hash
         description: >
-          Vector de `emb_texto`. `NULL` si el banco no tiene el hash del
-          texto de este `ndf_id` -un `ndf_id` sin vector es un error
-          (banco incompleto), no un caso a manejar; este `not_null` es lo
-          que lo hace fallar en vez de propagarse.
+          Hash del texto con que se generó el vector (`emb_texto.texto_hash`).
+          Es lo que el `merge` compara para saber si el texto cambió.
         tests:
           - not_null
+      - name: embedding
+        description: >
+          Vector de `emb_texto`. Siempre presente: la fila solo entra si el
+          banco tiene el texto; los faltantes los reporta
+          `assert_emb_ndf_cobertura`.

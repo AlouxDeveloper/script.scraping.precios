@@ -3,8 +3,7 @@
     las 180,914 filas de dim_ndf, columna por columna: v1 debe ser
     exactamente `presentacion` y v4 exactamente `presentacion_expandida`
     (ALD-94). Si esto falla, o el macro cambió sin querer, o
-    int_texto_er_ndf dejó de leer la variante correcta. v2 y v3 no se
-    fijan: se descartaron en ALD-64 y no se usan.
+    int_texto_er_ndf dejó de leer la variante correcta.
 #}
 {%- set variante = var('variante_ndf', 'v1') -%}
 

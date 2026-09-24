@@ -1,0 +1,40 @@
+version: 2
+
+models:
+  - name: rev_er_calibracion
+    description: >
+      Curva precisión/volumen de la regla vigente (`decision_vectorial`)
+      contra el split de calibración, por división del NDF candidato y
+      `tau`. Es la herramienta para recalibrar `tau_farma` /
+      `tau_no_farma` cuando cambia el texto o la regla; ver el docstring
+      del modelo.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - division
+              - tau
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "n_correctos <= n_vectorial"
+    columns:
+      - name: division
+        description: División (`FARMA` / `NO FARMA`) del NDF candidato.
+        tests:
+          - not_null
+      - name: tau
+        description: Distancia máxima evaluada, de 0 a 0.20 en pasos de 0.005.
+        tests:
+          - not_null
+      - name: n_vectorial
+        description: Productos que la regla aceptaría como `vectorial` con este `tau`.
+      - name: n_correctos
+        description: De `n_vectorial`, cuántos coinciden con el `ndf_id` del crosswalk.
+      - name: precision
+        description: "`n_correctos / n_vectorial`. NULL si no se acepta ninguno."
+      - name: n_cuarentena
+        description: Productos que caerían en `cuarentena` con este `tau`.
+      - name: recall_at_10
+        description: >
+          Fracción de la calibración de esta división (por el NDF
+          verdadero) cuyo NDF correcto está entre los 10 candidatos.

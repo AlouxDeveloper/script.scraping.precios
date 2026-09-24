@@ -7,7 +7,7 @@ models:
       -sobrevive a un `--full-refresh` de gold porque no depende de
       `producto_key` ni `ndf_id`. Se llena por lotes desde `int_texto_er`
       contra `AI.GENERATE_EMBEDDING` (modelo remoto `emb_gemini`, ver
-      `entity_resolution/sql/03_modelo_emb_gemini.sql`).
+      `entity_resolution/sql/modelo_emb_gemini.sql`).
     tests:
       - dbt_utils.expression_is_true:
           arguments:

@@ -56,22 +56,6 @@ vars:
   # a los de la generación anterior, que siguen en el banco `emb_texto`.
   variante_ndf: v4
 
-  # Bucket A (alto solape léxico, ALD-84): gi, klyns, isseg, aurrera, heb,
-  # farmatodo, guadalajara, benavides, walmart. Cualquier tienda que NO
-  # esté en esta lista cae en bucket B por default. Ya no decide umbrales:
-  # solo lo usan las vistas de calibración `rev_er_metricas*` para
-  # desglosar sus métricas.
-  bucket_tienda_a:
-    - gi
-    - klyns
-    - isseg
-    - aurrera
-    - heb
-    - farmatodo
-    - guadalajara
-    - benavides
-    - walmart
-
   # delta_min: margen mínimo entre el primer y segundo candidato de un
   # producto, global. Es el único filtro además de la marca que se gana su
   # lugar en el diagnóstico de ALD-93 (+10.7 pp de precisión en d<=0.04);

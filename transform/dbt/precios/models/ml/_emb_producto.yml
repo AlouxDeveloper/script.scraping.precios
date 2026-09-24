@@ -3,10 +3,10 @@ version: 2
 models:
   - name: emb_producto
     description: >
-      Lado tienda vectorizado (ALD-71). `table`, base indexada de la fase
-      Sanfer (`TREE_AH`, ver `entity_resolution/sql/12_indice_emb_producto.sql`).
-      `producto_key` + `tienda_key` + `embedding`, resuelto desde
-      `emb_texto` por el hash del texto de tienda (`int_texto_er_tienda`).
+      Lado tienda vectorizado (ALD-71). Incremental con `merge` por
+      `producto_key` (ALD-99): una carga nueva solo inserta o actualiza
+      lo que cambió de texto. Tabla de consulta de
+      `int_candidatos_producto`; sin índice vectorial (lo lleva `emb_ndf`).
     columns:
       - name: producto_key
         description: FK a `dim_producto`, grano de esta tabla.
@@ -14,17 +14,17 @@ models:
           - not_null
           - unique
       - name: tienda_key
+        description: FK a `dim_tienda`.
+        tests:
+          - not_null
+      - name: texto_hash
         description: >
-          FK a `dim_tienda`. Va `STORING` en el índice vectorial para
-          rankear por `(ndf_id, tienda_key)` sin volver a la tabla base
-          -el ranking por tienda es el que mide cobertura.
+          Hash del texto con que se generó el vector (`emb_texto.texto_hash`).
+          Es lo que el `merge` compara para saber si el texto cambió.
         tests:
           - not_null
       - name: embedding
         description: >
-          Vector de `emb_texto`. `NULL` si el banco no tiene el hash del
-          texto de este producto -un `producto_key` sin vector es un error
-          (banco incompleto), no un caso a manejar; este `not_null` es lo
-          que lo hace fallar en vez de propagarse.
-        tests:
-          - not_null
+          Vector de `emb_texto`. Siempre presente: la fila solo entra si el
+          banco tiene el texto; los faltantes los reporta
+          `assert_emb_producto_cobertura`.
