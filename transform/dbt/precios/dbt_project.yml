@@ -96,6 +96,16 @@ vars:
     - {tienda: similares, division: FARMA}    # 5/8
     - {tienda: fahorro, division: NO FARMA}   # 2/8, talla de medias Daonsa
 
+  # Panel del dashboard (`models/gold/mart/`, PRD §12). Antes de oct 2025
+  # solo hay Farmacias del Ahorro, así que el panel multicadena empieza ahí.
+  mes_inicio_panel: "2025-10-01"
+  # Un mes con menos cadenas capturadas es incompleto y no se publica; hoy
+  # eso solo deja fuera nov 2025.
+  min_cadenas_mes: 5
+  # Laboratorio del cliente, comparado contra `dim_ndf.laboratorio`. Es
+  # igualdad exacta: `SANFERGO` es otro laboratorio.
+  laboratorio_cliente: SANFER
+
 # El seed tiendas alimenta dim_tienda. Va a precios_bronce -no a precios_gold-
 # porque es dato de entrada curado a mano, no una tabla modelada: dim_tienda
 # lo lee igual que stg_ndf lee ndf_ext. column_types no es opcional: sin él
