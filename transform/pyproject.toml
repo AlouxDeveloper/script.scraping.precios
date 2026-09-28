@@ -10,6 +10,13 @@ dependencies = [
     # (sin pasar por dbt), y dbt-bigquery la trae transitiva pero no
     # conviene depender de eso sin declararlo.
     "google-cloud-bigquery",
+    # indices/estimar_cpd_tpd.py: OLS del CPD y el TPD (statsmodels), lectura
+    # y escritura de DataFrames contra BigQuery (pandas, db-dtypes) y la base
+    # del TPD leída de las vars de dbt_project.yml (pyyaml).
+    "statsmodels>=0.15.0",
+    "pandas>=3.0.5",
+    "db-dtypes>=1.7.1",
+    "pyyaml>=6.0.3",
 ]
 
 # El módulo no distribuye wheel propio (es un proyecto dbt + scripts sueltos

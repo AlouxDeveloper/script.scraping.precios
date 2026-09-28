@@ -12,7 +12,7 @@ construye las capas silver y gold sobre BigQuery.
 | --- | --- | --- | --- |
 | staging | `precios_silver` | vista | Tipado y limpieza 1:1 con la source. `stg_precios`, `stg_ndf`, `stg_puente_aportador`. |
 | silver | `precios_silver` | tabla | Universo depurado. `precios` (filas válidas, sin duplicados exactos) y `precios_cuarentena` (lo descartado, con su `motivo_descarte`), particionadas por `mes`. Además `int_producto` (producto con los cruces por código, entrada del entity resolution) y `ndf_cuarentena` (la banda gris del vectorial, entrada del método 3). |
-| gold | `precios_gold` | tabla | Star schema: `fact_precios` y sus dimensiones. Además las tablas `mart_` del dashboard (`models/gold/mart/`, PRD §12): `mart_precio_cadena_mes` es el panel mensual por presentación NDF y cadena, desde `mes_inicio_panel`, sin meses incompletos ni el mes en curso, con precio efectivo, descuento, atípicos (z robusto) y posición contra la mediana del mercado. `mart_precio_ndf_mes` resume cada presentación por mes (cuantiles, dispersión, precio por mg) y `mart_competencia_mes` la compara contra su grupo competitivo (percentil y prima contra genéricos). `mart_presencia_mes` es la malla presentación del cliente × 19 cadenas × mes con el estado Detectado / No detectado / Cadena sin captura. `int_ndf_grupo_competitivo` da a los marts la vía, los mg por envase y el grupo de cada `ndf_id` del catálogo. |
+| gold | `precios_gold` | tabla | Star schema: `fact_precios` y sus dimensiones. Además las tablas `mart_` del dashboard (`models/gold/mart/`, PRD §12): `mart_precio_cadena_mes` es el panel mensual por presentación NDF y cadena, desde `mes_inicio_panel`, sin meses incompletos ni el mes en curso, con precio efectivo, descuento, atípicos (z robusto) y posición contra la mediana del mercado. `mart_precio_ndf_mes` resume cada presentación por mes (cuantiles, dispersión, precio por mg) y `mart_competencia_mes` la compara contra su grupo competitivo (percentil y prima contra genéricos). `mart_cpd_cadena_mes` (nivel de precios por cadena) y `mart_tpd_indice_mes` (índice temporal del portafolio) no son de dbt: las escribe `transform/indices/estimar_cpd_tpd.py` (paso 5 de la carga mensual). `mart_presencia_mes` es la malla presentación del cliente × 19 cadenas × mes con el estado Detectado / No detectado / Cadena sin captura. `int_ndf_grupo_competitivo` da a los marts la vía, los mg por envase y el grupo de cada `ndf_id` del catálogo. |
 | ml | `precios_ml` | tabla / vista / incremental | Entity resolution vectorial: texto a vectorizar, banco de embeddings, búsqueda, decisión y vistas de calibración (`rev_`). Va en su propio dataset porque gold se reconstruye entera en cada build y los embeddings son llamadas a la API ya pagadas: la frontera tiene que ser física, no una convención. |
 
 El seed `tiendas` (catálogo propio de 19 filas, una por tienda scrapeada)
@@ -159,6 +159,12 @@ los de `load/`. En orden:
    0% o no existe, esperar ~10 min y volver a construir
    `int_candidatos_producto+`. Con unos miles de filas sin indexar no hace
    falta.
+5. Con el `dbt build` en verde, `uv run --project transform
+   transform/indices/estimar_cpd_tpd.py`. Re-estima el CPD de cada mes y
+   el índice TPD de todo el panel (base `mes_base_tpd`) y reemplaza
+   `mart_cpd_cadena_mes` y `mart_tpd_indice_mes`, que dbt no construye.
+   El índice de los meses anteriores se revisa con cada mes nuevo. Si un
+   assert falla, no escribe nada. Looker lee las tablas directo.
 
 ## Decisiones que el lector nuevo debe conocer
 

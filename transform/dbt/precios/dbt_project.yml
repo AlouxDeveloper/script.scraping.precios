@@ -105,6 +105,12 @@ vars:
   # Laboratorio del cliente, comparado contra `dim_ndf.laboratorio`. Es
   # igualdad exacta: `SANFERGO` es otro laboratorio.
   laboratorio_cliente: SANFER
+  # Base del índice TPD (= 100). No la lee dbt sino
+  # `transform/indices/estimar_cpd_tpd.py`. Jun 2026 es el primer mes con
+  # las 19 cadenas: con oct 2025 todos los meses heredaban el ruido de un
+  # mes con pocos precios. La base no cambia la variación entre meses, solo
+  # el ancho de las bandas.
+  mes_base_tpd: "2026-06-01"
 
 # El seed tiendas alimenta dim_tienda. Va a precios_bronce -no a precios_gold-
 # porque es dato de entrada curado a mano, no una tabla modelada: dim_tienda
