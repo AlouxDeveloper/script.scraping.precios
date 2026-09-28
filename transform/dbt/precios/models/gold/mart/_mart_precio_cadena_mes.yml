@@ -140,8 +140,9 @@ models:
         description: Molécula(s) del principio activo, separadas por ` + `.
       - name: via
         description: >
-          Vía de administración, derivada de la primera letra de `cve_ff`
-          (NFC). NULL cuando el catálogo no trae forma farmacéutica.
+          Vía de administración, de `int_ndf_grupo_competitivo` (primera
+          letra de `cve_ff`). NULL cuando el catálogo no trae forma
+          farmacéutica.
       - name: forma
         description: Forma farmacéutica nivel 3 del NDF, sin espacios de relleno.
       - name: genero
@@ -247,6 +248,10 @@ unit_tests:
         rows:
           - {ndf_id: "8479830", producto: TABALON, presentacion: TABALON TABL 400 MG 10, laboratorio: SANFER, molecula: IBUPROFENO, cve_ff: AAA, forma_farmaceutica_n3: "ORAL S.ORD.TABLETAS   ", genero: ETICO, division: FARMA}
           - {ndf_id: "8467910", producto: SYNCOL, presentacion: SYNCOL TABL 12, laboratorio: SANFER, molecula: PARACETAMOL + PAMABRON + MALEATO DE PIRILAMINA, cve_ff: AAA, forma_farmaceutica_n3: "ORAL S.ORD.TABLETAS   ", genero: O.T.C., division: FARMA}
+      - input: ref('int_ndf_grupo_competitivo')
+        rows:
+          - {ndf_id: "8479830", via: ORAL}
+          - {ndf_id: "8467910", via: ORAL}
     expect:
       rows:
         # Tabalon: mediana 186, nadie atípico (Chedraui z = −2.48).

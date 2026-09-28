@@ -1,0 +1,132 @@
+version: 2
+
+models:
+  - name: mart_precio_ndf_mes
+    description: >
+      Estadísticos por presentación NDF y mes (vistas V1, V2 y V3). Grano
+      `(ndf_id, mes)`, sobre las cadenas de `mart_precio_cadena_mes` sin
+      atípicos.
+
+      M2 (mínimo, P25, mediana, P75, máximo y sus cadenas) y M3 (rango e IQR
+      relativos) solo con 4 o más cadenas. `precio_tipico` es la mediana con
+      cualquier n. M7: precio por mg de principio activo y grupo
+      competitivo.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - ndf_id
+              - mes
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: >
+              precio_p25 is null or (precio_min <= precio_p25
+              and precio_p25 <= precio_mediana and precio_mediana <= precio_p75
+              and precio_p75 <= precio_max)
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "precio_mediana is null or cadenas_n >= 4"
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "precio_tipico > 0"
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "precio_mg is null or precio_mg > 0"
+    columns:
+      - name: ndf_id
+        description: FK a `dim_ndf`.
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_ndf')
+                field: ndf_id
+      - name: mes
+        description: Primer día del mes. Columna de partición.
+        tests:
+          - not_null
+      - name: cadenas_n
+        description: Cadenas con precio no atípico. Es el n de todos los estadísticos.
+        tests:
+          - not_null
+      - name: atipicos_n
+        description: Cadenas marcadas como atípicas (M13), fuera de los estadísticos.
+      - name: precio_min
+        description: M2 · Precio mínimo entre cadenas. NULL con n < 4.
+      - name: precio_p25
+        description: M2 · Percentil 25 (`PERCENTILE_CONT`, tipo 7). NULL con n < 4.
+      - name: precio_mediana
+        description: M2 · Mediana, el precio de referencia del mercado. NULL con n < 4.
+      - name: precio_p75
+        description: M2 · Percentil 75. NULL con n < 4.
+      - name: precio_max
+        description: M2 · Precio máximo. NULL con n < 4.
+      - name: cadena_min
+        description: Cadena del precio mínimo; desempata el nombre. NULL con n < 4.
+      - name: cadena_max
+        description: Cadena del precio máximo; desempata el nombre. NULL con n < 4.
+      - name: rango_rel_pct
+        description: M3 · máximo / mínimo − 1, como fracción. NULL con n < 4.
+      - name: iqr_rel_pct
+        description: M3 · (P75 − P25) / mediana, como fracción. NULL con n < 4.
+      - name: precio_tipico
+        description: >
+          Mediana con cualquier n (la usa V4). Se muestra siempre junto a
+          `cadenas_n`.
+        tests:
+          - not_null
+      - name: mg_por_envase
+        description: >
+          mg de principio activo por envase, de la presentación del NDF
+          (`int_ndf_grupo_competitivo`). NULL si no se puede extraer.
+      - name: precio_mg
+        description: M7 · precio_tipico / mg_por_envase.
+      - name: grupo_competitivo
+        description: Molécula exacta + vía + mg por unidad. NULL sin molécula, vía o dosis.
+      - name: marca
+        description: Marca comercial del NDF.
+      - name: presentacion
+        description: Presentación comercial del NDF.
+      - name: laboratorio
+        description: Laboratorio del NDF.
+      - name: molecula
+        description: Molécula(s) del principio activo.
+      - name: via
+        description: Vía de administración.
+      - name: forma
+        description: Forma farmacéutica nivel 3.
+      - name: genero
+        description: Género del NDF (`G.P.` = genérico).
+      - name: es_cliente
+        description: Verdadero si el laboratorio es el `laboratorio_cliente`.
+
+unit_tests:
+  - name: mart_precio_ndf_mes_tabalon
+    description: >
+      Tabalon 400 mg ×10, agosto 2026 (PRD M2, M3 y M7): 8 cadenas y un
+      atípico que no debe entrar. P25 179.125, mediana 186, P75 193.75,
+      rango relativo 35.5%, IQR relativo 7.9% y $0.0465/mg. Tabalon ×20,
+      con 2 cadenas, no tiene M2 ni M3 pero sí precio típico.
+    model: mart_precio_ndf_mes
+    given:
+      - input: ref('mart_precio_cadena_mes')
+        rows:
+          - {ndf_id: "8479830", mes: 2026-08-01, cadena: Chedraui, precio: 155, es_atipico: false}
+          - {ndf_id: "8479830", mes: 2026-08-01, cadena: Farmatodo, precio: 173.5, es_atipico: false}
+          - {ndf_id: "8479830", mes: 2026-08-01, cadena: La Comer, precio: 181, es_atipico: false}
+          - {ndf_id: "8479830", mes: 2026-08-01, cadena: Farmalisto, precio: 185, es_atipico: false}
+          - {ndf_id: "8479830", mes: 2026-08-01, cadena: Soriana, precio: 187, es_atipico: false}
+          - {ndf_id: "8479830", mes: 2026-08-01, cadena: Farmacias del Ahorro, precio: 192, es_atipico: false}
+          - {ndf_id: "8479830", mes: 2026-08-01, cadena: H-E-B, precio: 199, es_atipico: false}
+          - {ndf_id: "8479830", mes: 2026-08-01, cadena: Farmacias Benavides, precio: 210, es_atipico: false}
+          - {ndf_id: "8479830", mes: 2026-08-01, cadena: Walmart, precio: 900, es_atipico: true}
+          - {ndf_id: "8479835", mes: 2026-08-01, cadena: Chedraui, precio: 340, es_atipico: false}
+          - {ndf_id: "8479835", mes: 2026-08-01, cadena: Soriana, precio: 357, es_atipico: false}
+      - input: ref('int_ndf_grupo_competitivo')
+        rows:
+          - {ndf_id: "8479830", mg_por_envase: 4000, grupo_competitivo: "IBUPROFENO | ORAL | 400 MG"}
+          - {ndf_id: "8479835", mg_por_envase: 8000, grupo_competitivo: "IBUPROFENO | ORAL | 400 MG"}
+    expect:
+      rows:
+        - {ndf_id: "8479830", cadenas_n: 8, atipicos_n: 1, precio_min: 155, precio_p25: 179.125, precio_mediana: 186, precio_p75: 193.75, precio_max: 210, cadena_min: Chedraui, cadena_max: Farmacias Benavides, rango_rel_pct: 0.3548, iqr_rel_pct: 0.0786, precio_tipico: 186, precio_mg: 0.0465}
+        - {ndf_id: "8479835", cadenas_n: 2, atipicos_n: 0, precio_min: null, precio_p25: null, precio_mediana: null, precio_p75: null, precio_max: null, cadena_min: null, cadena_max: null, rango_rel_pct: null, iqr_rel_pct: null, precio_tipico: 348.5, precio_mg: 0.0435625}

@@ -164,7 +164,8 @@ con_mercado as (
         countif(coalesce(abs(z_robusto) <= 3.5, true)) over mercado
             as cadenas_sin_atipicos_n,
         percentile_cont(
-            if(coalesce(abs(z_robusto) <= 3.5, true), precio, null), 0.5
+            if(coalesce(abs(z_robusto) <= 3.5, true), precio, null),
+            numeric '0.5'
         ) over mercado as mediana_sin_atipicos
     from con_atipicos
     window mercado as (partition by ndf_id, mes)
@@ -230,28 +231,7 @@ select
     dim_ndf.presentacion,
     dim_ndf.laboratorio,
     dim_ndf.molecula,
-    -- La vía es la primera letra de la clave de forma farmacéutica (NFC).
-    -- Se separa la vía oral sistémica (A-E) de la tópica bucal (K) para que
-    -- una pastilla para la garganta no compita con una tableta.
-    case left(dim_ndf.cve_ff, 1)
-        when 'A' then 'ORAL'
-        when 'B' then 'ORAL'
-        when 'C' then 'ORAL'
-        when 'D' then 'ORAL'
-        when 'E' then 'ORAL'
-        when 'F' then 'PARENTERAL'
-        when 'G' then 'PARENTERAL'
-        when 'H' then 'RECTAL'
-        when 'I' then 'NASAL'
-        when 'J' then 'OTRA'
-        when 'K' then 'BUCAL'
-        when 'M' then 'TOPICA'
-        when 'N' then 'OFTALMICA'
-        when 'P' then 'OTICA'
-        when 'Q' then 'NASAL'
-        when 'R' then 'INHALADA'
-        when 'T' then 'VAGINAL'
-    end as via,
+    int_ndf_grupo_competitivo.via,
     trim(dim_ndf.forma_farmaceutica_n3) as forma,
     dim_ndf.genero,
     dim_ndf.laboratorio = '{{ var("laboratorio_cliente") }}' as es_cliente
@@ -259,4 +239,6 @@ from con_posicion
 inner join {{ ref('dim_tienda') }} as dim_tienda
     using (tienda_key)
 inner join {{ ref('dim_ndf') }} as dim_ndf
+    using (ndf_id)
+inner join {{ ref('int_ndf_grupo_competitivo') }} as int_ndf_grupo_competitivo
     using (ndf_id)
