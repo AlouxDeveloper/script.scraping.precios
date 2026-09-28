@@ -54,10 +54,22 @@ models:
                 to: ref('dim_ndf')
                 field: ndf_id
       - name: marca
-        description: Marca del competidor, o "Genéricos (mediana)" en la fila sintética.
+        description: Marca de la presentación del cliente (`ndf_id`).
       - name: presentacion
+        description: Presentación del cliente. Mismo nombre que en los demás `mart_` para el filtro global.
+      - name: molecula
+        description: Molécula de la presentación del cliente.
+      - name: via
+        description: Vía de la presentación del cliente.
+      - name: forma
+        description: Forma farmacéutica de la presentación del cliente.
+      - name: genero
+        description: Género de la presentación del cliente.
+      - name: marca_competidor
+        description: Marca del competidor, o "Genéricos (mediana)" en la fila sintética.
+      - name: presentacion_competidor
         description: Presentación del competidor.
-      - name: laboratorio
+      - name: laboratorio_competidor
         description: Laboratorio del competidor.
       - name: es_propio
         description: Verdadero en la fila de la propia presentación del cliente.

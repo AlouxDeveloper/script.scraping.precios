@@ -19,6 +19,12 @@
     `G.P.` del NDF) del grupo; exige 3 o más. Las marcas propias de las
     cadenas pueden venir en otro género y entonces no cuentan como genérico.
 
+    Los atributos sin sufijo (`marca`, `presentacion`, `molecula`, `via`,
+    `forma`, `genero`) son de la presentación del cliente y los del
+    competidor llevan `_competidor`: Looker filtra por nombre de campo entre
+    tablas, y un filtro global de "Presentación" o "Molécula" tiene que
+    elegir al producto del cliente, no a sus rivales.
+
     `en_grafica` acota la gráfica de V4 a los 10 más baratos, los 10 más
     caros, la propia presentación y la fila de genéricos: un grupo como
     ibuprofeno 400 mg tiene decenas de presentaciones.
@@ -46,6 +52,10 @@ with con_precio as (
         marca,
         presentacion,
         laboratorio,
+        molecula,
+        via,
+        forma,
+        genero,
         genero = 'G.P.' as es_generico,
         es_cliente
     from {{ ref('mart_precio_ndf_mes') }}
@@ -84,10 +94,16 @@ competidores as (
     select
         cliente.ndf_id,
         cliente.mes,
+        cliente.marca,
+        cliente.presentacion,
+        cliente.molecula,
+        cliente.via,
+        cliente.forma,
+        cliente.genero,
         competidor.ndf_id as ndf_id_competidor,
-        competidor.marca,
-        competidor.presentacion,
-        competidor.laboratorio,
+        competidor.marca as marca_competidor,
+        competidor.presentacion as presentacion_competidor,
+        competidor.laboratorio as laboratorio_competidor,
         competidor.ndf_id = cliente.ndf_id as es_propio,
         competidor.es_generico,
         false as es_sintetica,
@@ -140,10 +156,16 @@ genericos as (
     select
         ndf_id,
         mes,
+        marca,
+        presentacion,
+        molecula,
+        via,
+        forma,
+        genero,
         cast(null as string) as ndf_id_competidor,
-        'Genéricos (mediana)' as marca,
-        cast(null as string) as presentacion,
-        cast(null as string) as laboratorio,
+        'Genéricos (mediana)' as marca_competidor,
+        cast(null as string) as presentacion_competidor,
+        cast(null as string) as laboratorio_competidor,
         false as es_propio,
         true as es_generico,
         true as es_sintetica,
