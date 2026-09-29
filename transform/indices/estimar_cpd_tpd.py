@@ -9,7 +9,8 @@ atípicos) y escribe con ``WRITE_TRUNCATE`` sus dos tablas en
   cadena es ``e^β − 1`` contra la cadena promedio, con IC95%.
 - ``mart_tpd_indice_mes`` (M6): OLS de ``ln p ~ artículo + mes`` sobre todo
   el panel, artículo = (presentación, cadena). Índice ``100·e^δ`` con base
-  en la var ``mes_base_tpd`` de ``dbt_project.yml``.
+  en la var ``mes_base_tpd`` de ``dbt_project.yml``, y su variación contra
+  el mes calendario anterior (``variacion_pct``, NULL si ese mes falta).
 
 Vive fuera de dbt porque BigQuery ML no expone la covarianza completa de
 los coeficientes, y sin ella no hay error estándar para la cadena omitida
@@ -187,13 +188,25 @@ def estimar_tpd(precios: pd.DataFrame, mes_base: date) -> pd.DataFrame:
         indice["delta"] + Z95 * indice["error_estandar"]
     )
     indice["es_base"] = indice["mes"] == mes_base
+    # Solo contra el mes calendario anterior: si el panel tiene un hueco,
+    # comparar contra el último mes publicado mezclaría varios meses.
+    por_mes = indice.set_index("mes")["indice"]
+    anterior = indice["mes"].map(
+        lambda mes: por_mes.get(
+            date(mes.year - (mes.month == 1), (mes.month - 2) % 12 + 1, 1)
+        )
+    )
+    indice["variacion_pct"] = indice["indice"] / anterior - 1
     return indice.join(conteos, on="mes")
 
 
 def validar(cpd: pd.DataFrame, tpd: pd.DataFrame) -> None:
     """Revisa las invariantes antes de escribir; aborta si alguna falla."""
     assert not cpd.isna().any().any(), "CPD con valores nulos"
-    assert not tpd.isna().any().any(), "TPD con valores nulos"
+    # variacion_pct es NULL en el primer mes y tras un hueco del panel.
+    assert not tpd.drop(columns="variacion_pct").isna().any().any(), (
+        "TPD con valores nulos"
+    )
     assert (cpd["ic95_inf"] <= cpd["nivel_pct"]).all(), "IC del CPD desordenado"
     assert (cpd["nivel_pct"] <= cpd["ic95_sup"]).all(), "IC del CPD desordenado"
     suma_beta = cpd.groupby("mes")["beta"].sum().abs().max()
@@ -255,6 +268,12 @@ def probar() -> None:
         assert np.allclose(del_mes["beta"], efecto_cadena, atol=0.01)
     esperado = np.array([efecto_mes[mes] for mes in meses])
     assert np.allclose(np.log(tpd["indice"] / 100), esperado, atol=0.01)
+    assert np.isnan(tpd["variacion_pct"].iloc[0])
+    assert np.allclose(
+        tpd["variacion_pct"].iloc[1:],
+        np.exp(np.diff(esperado)) - 1,
+        atol=0.01,
+    )
     print("Verificación con datos simulados: OK")
 
 
