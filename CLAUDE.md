@@ -66,6 +66,10 @@ not apply to docstrings or documentation the closing step requires: write those 
 - Never delete in BigQuery or GCS (`bq rm`, `DROP`, `DELETE`, `TRUNCATE`). Give Aldo the exact
   commands to run manually. A hook enforces this.
 - Never run `emb_texto` with `--full-refresh`: it holds paid embeddings (see `transform/CLAUDE.md`).
+- The Data Studio reports read the `precios_gold.mart_*` tables by name. Only update them in place
+  (dbt `create or replace`, `WRITE_TRUNCATE`). Never rename, move or drop a `mart_` model, and never
+  rename, drop or retype a column (e.g. `mes` must stay DATE) without asking Aldo first: it breaks
+  the charts and calculated fields that use it.
 
 ## Tools
 
