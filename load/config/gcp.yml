@@ -34,4 +34,4 @@ ruta_local_catalogos: ./salida/catalogos
 # Último mes que entra en la ingesta, inclusive. El mes en curso se queda
 # fuera: su corrida de scraping aún no ha terminado y sus archivos cambian.
 # Al cerrar un mes se avanza este campo.
-anio_mes_maximo: "2026-08"
+anio_mes_maximo: "2026-09"

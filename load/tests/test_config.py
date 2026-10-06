@@ -173,4 +173,4 @@ def test_el_gcp_yml_real_declara_el_corte():
     """El corte vive en la configuración, no en el código."""
     from precios_load.config import cargar_config as cargar_real
 
-    assert cargar_real().anio_mes_maximo == "2026-08"
+    assert cargar_real().anio_mes_maximo == "2026-09"

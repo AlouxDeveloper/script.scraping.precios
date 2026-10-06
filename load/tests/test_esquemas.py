@@ -27,8 +27,8 @@ COLUMNAS_V4 = [
     "URL_IMAGEN", "Fecha_Hora_Captura", "Tienda",
 ]
 
-# Reparto esperado del histórico en disco (septiembre pendiente de cierre).
-POR_VARIANTE = {"V1": 89, "V2": 68, "V3": 15, "V4": 1, "V5": 1, "V6": 1}
+# Reparto esperado del histórico en disco (hasta septiembre de 2026).
+POR_VARIANTE = {"V1": 102, "V2": 72, "V3": 17, "V4": 1, "V5": 1, "V6": 1}
 
 
 def declarado(ruta="2026/03_marzo/x.csv", **extra):
@@ -164,7 +164,7 @@ def test_v4_con_el_ancho_correcto_pasa():
 # --- El histórico completo --------------------------------------------------
 
 
-def test_las_175_firmas_se_clasifican(tmp_path):
+def test_las_194_firmas_se_clasifican(tmp_path):
     base = cargar_config().ruta_datos()
     if not os.path.isdir(base):
         pytest.skip("salida/data no existe en esta máquina")

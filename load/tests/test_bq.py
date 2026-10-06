@@ -13,8 +13,8 @@ import pyarrow.parquet as pq
 from precios_load import bq
 from precios_load.bronce import ESQUEMA_BRONCE
 
-# Todo el histórico cargado a bronce hoy (134 archivos, septiembre fuera).
-FILAS_HISTORICO = 987_461
+# Todo el histórico cargado a bronce hoy (194 archivos, hasta sep-2026).
+FILAS_HISTORICO = 1_327_099
 
 # El catálogo NDF: el corte de julio 2026, verificado en ALD-39.
 FILAS_NDF = 180_914

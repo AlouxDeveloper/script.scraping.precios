@@ -24,7 +24,7 @@ uv run --project load pytest load/
 ./salida/data/2026/<MM_mes>/*.csv        (extract/ output, listed in load/config/archivos.yml)
       │  cli.py ingesta
       ▼
-gs://raw_precios_bitek/precios/tienda=<slug>/anio_mes=<YYYY-MM>/<archivo>.csv   ← CSV byte for byte
+gs://raw_precios_bitek/precios/tienda=<slug>/anio_mes=<YYYY-MM>/<archivo>.csv   ← CSV byte for byte, only up to 2026-08
       │  bronce.escribir  (normalizes to 26 typed columns, keeps the *_raw)
       ▼
 gs://bronce_precios_bitek/precios/tienda=<slug>/anio_mes=<YYYY-MM>/<archivo>.parquet
@@ -62,8 +62,13 @@ renames the cut's TXT (`Puentes por Aportador <fecha>.txt`) to `puente_aportador
 - **The catalog Parquet is all STRING on purpose.** Typing belongs in dbt (`ndf_id` without
   leading zeros, `fecha_lanzamiento` as `YYYYMM` with the `190012` sentinel). The
   `Cve Sal1..6` columns are dropped.
-- **The raw bucket is a frozen archive** (Dec-2025 to Sep-2026). A parser bug is fixed by
-  regenerating bronce from raw or re-deriving in dbt from the `*_raw` columns; the past is
-  never re-scraped.
+- **The raw bucket is a frozen archive** (Dec-2025 to Aug-2026). From 2026-09 on, `ingesta`
+  writes only the bronce Parquet (`ULTIMO_MES_RAW` in `config.py`; the manifest row has
+  `uri_raw` NULL). A parser bug is fixed by regenerating bronce from raw (up to Aug-2026) or
+  re-deriving in dbt from the `*_raw` columns; the past is never re-scraped.
+- **One batch per store and month.** When a month has several scraping runs, only one goes
+  into `salida/data` and `archivos.yml`; the rest live in `salida/_corridas/<YYYY-MM>/`.
+  The `mart_` models keep the lowest price of the month, so loading every run would make
+  that month look cheaper than months captured once.
 - Config lives in `load/config/gcp.yml` (infrastructure) and `load/config/archivos.yml` (file
   inventory). A month is added to `archivos.yml` only after it closes.

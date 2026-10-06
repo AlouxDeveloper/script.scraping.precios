@@ -8,7 +8,12 @@ correr en cualquier máquina con el histórico local y sin red.
 import os
 from dataclasses import dataclass
 
-from precios_load.config import ArchivoDeclarado, ConfigGCP, anio_mes_de_ruta
+from precios_load.config import (
+    ULTIMO_MES_RAW,
+    ArchivoDeclarado,
+    ConfigGCP,
+    anio_mes_de_ruta,
+)
 from precios_load.descubrimiento import ArchivoFuente, Descubrimiento
 
 # Acciones posibles para un archivo.
@@ -24,7 +29,8 @@ class EntradaPlan:
     """Lo que pasaría con un archivo concreto."""
 
     fuente: ArchivoFuente
-    uri_raw: str
+    # None en los meses posteriores a `ULTIMO_MES_RAW`: solo suben a bronce.
+    uri_raw: str | None
     uri_bronce: str
     accion: str
     motivo: str
@@ -114,7 +120,11 @@ def _entrada(fuente: ArchivoFuente, config: ConfigGCP) -> EntradaPlan:
 
     return EntradaPlan(
         fuente=fuente,
-        uri_raw=config.uri_raw(fuente.tienda, fuente.anio_mes, fuente.nombre),
+        uri_raw=(
+            config.uri_raw(fuente.tienda, fuente.anio_mes, fuente.nombre)
+            if fuente.anio_mes <= ULTIMO_MES_RAW
+            else None
+        ),
         uri_bronce=config.uri_bronce(fuente.tienda, fuente.anio_mes, nombre_parquet),
         accion=SALTA if vacio else SUBE,
         motivo=MOTIVO_VACIO if vacio else "",
@@ -198,7 +208,7 @@ def _lineas_por_archivo(plan: Plan) -> list[str]:
             f"{marca} {f.anio_mes}  {f.tienda:<11} {f.nombre:<42} {f.variante}"
             f"  {f.filas:>7,} filas  {formato_bytes(f.bytes):>8}  {e.accion}{motivo}{flags}"
         )
-        lineas.append(f"    raw     {e.uri_raw}")
+        lineas.append(f"    raw     {e.uri_raw or f'(no sube: raw cerrado en {ULTIMO_MES_RAW})'}")
         lineas.append(f"    bronce  {e.uri_bronce}")
     return lineas
 

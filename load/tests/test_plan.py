@@ -228,10 +228,10 @@ def test_plan_corre_sin_tocar_google_cloud():
 
 
 def test_plan_avisa_si_el_mes_pedido_queda_fuera_del_corte():
-    resultado = runner.invoke(app, ["plan", "--mes", "2026-09", "--resumen"])
+    resultado = runner.invoke(app, ["plan", "--mes", "2026-10", "--resumen"])
 
     assert resultado.exit_code == 0
-    assert "--hasta 2026-09" in resultado.output
+    assert "--hasta 2026-10" in resultado.output
 
 
 @pytest.mark.parametrize("flag,valor", [("--hasta", "2026-9"), ("--mes", "26-08")])

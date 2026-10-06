@@ -39,8 +39,8 @@ MIXTOS = {
 }
 
 # Reparto del histórico en disco: 150 fechas vacías, el resto parsea.
-# Incluye el backfill de base_price_v.3.csv (ago-2024..feb-2026).
-TOTAL_OK = 1225914
+# Incluye el backfill de base_price_v.3.csv (ago-2024..feb-2026) y sep-2026.
+TOTAL_OK = 1326949
 TOTAL_FALLO = 150
 
 
@@ -156,11 +156,10 @@ PATRONES_PRECIO = [
 CENTINELAS = ["No disponible", "NO DISPONIBLE", "", "   ", "#N/D", "N/A", "null"]
 
 # Reparto del histórico en disco sobre las dos columnas de precio
-# (septiembre pendiente de cierre). Incluye el backfill de
-# base_price_v.3.csv.
-PRECIO_TOTAL_OK = 2405711
-PRECIO_TOTAL_NULO = 46417
-PRECIO_TOTAL_CERO = 12402
+# (hasta sep-2026). Incluye el backfill de base_price_v.3.csv.
+PRECIO_TOTAL_OK = 2594690
+PRECIO_TOTAL_NULO = 59508
+PRECIO_TOTAL_CERO = 14126
 
 
 # --- Los 6 patrones ---------------------------------------------------------
@@ -289,15 +288,15 @@ FILA_BUENA = [
     "HEB",
 ]
 
-# Reparto del histórico en disco por fila (septiembre pendiente de cierre).
+# Reparto del histórico en disco por fila (hasta sep-2026).
 # Incluye el backfill de base_price_v.3.csv (ago-2024..feb-2026).
-FILAS_TOTAL = 1226064
-FILAS_SKU_CENTINELA = 7280  # search 5130 + N/A 1564 + vacío 586
+FILAS_TOTAL = 1327099
+FILAS_SKU_CENTINELA = 8546  # search 5355 + N/A 2462 + vacío 729
 FILAS_VACIAS = 150
-FILAS_SIN_FLAGS = 1191353
+FILAS_SIN_FLAGS = 1284572
 
 # Cada centinela de SKU con las veces que aparece en el histórico.
-CENTINELAS_SKU_LITERALES = {"search": 5130, "N/A": 1564, "": 586}
+CENTINELAS_SKU_LITERALES = {"search": 5355, "N/A": 2462, "": 729}
 
 
 def esquema_v1():

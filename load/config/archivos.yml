@@ -1,4 +1,4 @@
-# Inventario declarado del histórico: 139 archivos bajo salida/data/.
+# Inventario declarado del histórico: 194 archivos bajo salida/data/.
 #
 # Esta es la única fuente de verdad de a qué tienda pertenece cada archivo.
 # Los nombres son inconsistentes (scraping_detalle_, scraping_detalles_,
@@ -609,5 +609,64 @@ archivos:
     anio_mes: 2026-08
 
   # --- 2026-09 ---
-  # El mes en curso: el scraping aún no ha terminado y sus archivos no están en
-  # disco. Se declaran aquí (con sus 2 casos vacíos) cuando septiembre cierre.
+  # Septiembre tuvo 4 corridas de las 16 tiendas chicas, 2 de guadalajara y 1
+  # de walmart y aurrera. Solo se carga un lote mensual: la corrida 2 (17-18 sep)
+  # de las 16, la primera de guadalajara (17-21 sep) y la única de walmart y
+  # aurrera. El resto vive en salida/_corridas/2026-09/, fuera del inventario.
+  - ruta: 2026/09_septiembre/scraping_detalle_alsuper.csv
+    tienda: alsuper
+    anio_mes: 2026-09
+  - ruta: 2026/09_septiembre/scraping_detalle_aurrera.csv
+    tienda: aurrera
+    anio_mes: 2026-09
+  - ruta: 2026/09_septiembre/scraping_detalle_benavides.csv
+    tienda: benavides
+    anio_mes: 2026-09
+  - ruta: 2026/09_septiembre/scraping_detalle_chedraui.csv
+    tienda: chedraui
+    anio_mes: 2026-09
+  - ruta: 2026/09_septiembre/scraping_detalle_comer.csv
+    tienda: comer
+    anio_mes: 2026-09
+  - ruta: 2026/09_septiembre/scraping_detalle_farmalisto.csv
+    tienda: farmalisto
+    anio_mes: 2026-09
+  - ruta: 2026/09_septiembre/scraping_detalle_farmatodo.csv
+    tienda: farmatodo
+    anio_mes: 2026-09
+  - ruta: 2026/09_septiembre/scraping_detalle_fesa.csv
+    tienda: fesa
+    anio_mes: 2026-09
+  - ruta: 2026/09_septiembre/scraping_detalle_guadalajara_170926.csv
+    tienda: guadalajara
+    anio_mes: 2026-09
+  - ruta: 2026/09_septiembre/scraping_detalle_heb.csv
+    tienda: heb
+    anio_mes: 2026-09
+  - ruta: 2026/09_septiembre/scraping_detalle_isseg.csv
+    tienda: isseg
+    anio_mes: 2026-09
+  - ruta: 2026/09_septiembre/scraping_detalle_klyns.csv
+    tienda: klyns
+    anio_mes: 2026-09
+  - ruta: 2026/09_septiembre/scraping_detalle_similares.csv
+    tienda: similares
+    anio_mes: 2026-09
+  - ruta: 2026/09_septiembre/scraping_detalle_soriana.csv
+    tienda: soriana
+    anio_mes: 2026-09
+  - ruta: 2026/09_septiembre/scraping_detalle_walmart.csv
+    tienda: walmart
+    anio_mes: 2026-09
+  - ruta: 2026/09_septiembre/scraping_detalle_yza.csv
+    tienda: yza
+    anio_mes: 2026-09
+  - ruta: 2026/09_septiembre/scraping_detalles_fahorro.csv
+    tienda: fahorro
+    anio_mes: 2026-09
+  - ruta: 2026/09_septiembre/scraping_detalles_gi.csv
+    tienda: gi
+    anio_mes: 2026-09
+  - ruta: 2026/09_septiembre/scraping_detalles_sanpablo.csv
+    tienda: sanpablo
+    anio_mes: 2026-09

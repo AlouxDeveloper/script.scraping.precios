@@ -4,9 +4,8 @@ Concilia la salida del dry-run con el inventario conocido. Si algo aquí falla,
 el problema está en `archivos.yml` o en un parser, y hay que arreglarlo antes
 de subir un solo byte a Google Cloud.
 
-Corre sobre el histórico en disco: septiembre aún no ha cerrado, sus archivos
-no están en disco ni declarados. Cuando entre, se re-agregan las 6 entradas
-(con sus 2 casos vacíos) y se reactiva `test_los_dos_archivos_vacios`.
+Corre sobre el histórico en disco, hasta septiembre de 2026: ese mes entra
+como un solo lote por tienda (19 archivos, ninguno vacío).
 
 Incluye el backfill de `salida/data/base_price_v.3.csv` (ago-2024..feb-2026,
 41 archivos `historico_detalle_<tienda>.csv`, todos V2): ver el bloque
@@ -19,11 +18,11 @@ from precios_load.config import cargar_config
 from precios_load.descubrimiento import descubrir
 from precios_load.plan import construir_plan
 
-TODO_EL_HISTORICO = "2026-08"
+TODO_EL_HISTORICO = "2026-09"
 
-TOTAL_ARCHIVOS = 175
-TOTAL_FILAS = 1226064
-TOTAL_BYTES = 444489478
+TOTAL_ARCHIVOS = 194
+TOTAL_FILAS = 1327099
+TOTAL_BYTES = 477080694
 
 FILAS_POR_MES = {
     "2024-08": 5122, "2024-09": 4078, "2024-10": 4121, "2024-11": 4042,
@@ -31,7 +30,7 @@ FILAS_POR_MES = {
     "2025-04": 4084, "2025-05": 4949, "2025-06": 4181, "2025-10": 17624,
     "2025-11": 10067, "2025-12": 55327, "2026-01": 147236, "2026-02": 144566,
     "2026-03": 142103, "2026-04": 130294, "2026-05": 135526, "2026-06": 119023,
-    "2026-07": 143466, "2026-08": 134329,
+    "2026-07": 143466, "2026-08": 134329, "2026-09": 101035,
 }
 
 ARCHIVOS_POR_MES = {
@@ -39,10 +38,10 @@ ARCHIVOS_POR_MES = {
     "2025-01": 1, "2025-02": 1, "2025-03": 1, "2025-04": 1, "2025-05": 1,
     "2025-06": 1, "2025-10": 13, "2025-11": 1, "2025-12": 9, "2026-01": 18,
     "2026-02": 16, "2026-03": 17, "2026-04": 15, "2026-05": 18, "2026-06": 19,
-    "2026-07": 19, "2026-08": 19,
+    "2026-07": 19, "2026-08": 19, "2026-09": 19,
 }
 
-POR_VARIANTE = {"V1": 89, "V2": 68, "V3": 15, "V4": 1, "V5": 1, "V6": 1}
+POR_VARIANTE = {"V1": 102, "V2": 72, "V3": 17, "V4": 1, "V5": 1, "V6": 1}
 
 TIENDAS = {
     "alsuper", "aurrera", "benavides", "chedraui", "comer", "fahorro",
@@ -50,7 +49,7 @@ TIENDAS = {
     "klyns", "sanpablo", "similares", "soriana", "walmart", "yza",
 }
 
-VACIOS: set[str] = set()  # septiembre pendiente de cierre: sin archivos vacíos en disco
+VACIOS: set[str] = set()  # ningún archivo del histórico en disco está vacío
 
 # Archivo -> (filas desfasadas, filas del archivo, mes mayoritario de las fechas).
 DESFASES = {
@@ -80,7 +79,7 @@ def flags_de(entrada, prefijo: str) -> str | None:
 # --- Los totales ------------------------------------------------------------
 
 
-def test_los_175_archivos_estan_clasificados(plan):
+def test_los_194_archivos_estan_clasificados(plan):
     assert len(plan.entradas) == TOTAL_ARCHIVOS
     assert plan.faltantes == ()
     assert plan.fuera_de_rango == ()
@@ -126,8 +125,7 @@ def test_las_19_tiendas_sin_slugs_inventados(plan):
 # --- Las anomalías conocidas ------------------------------------------------
 
 
-@pytest.mark.skip(reason="septiembre pendiente de cierre: sin archivos vacíos en disco")
-def test_los_dos_archivos_vacios(plan):
+def test_ningun_archivo_vacio(plan):
     vacios = {e.fuente.ruta for e in plan.entradas if e.fuente.vacio}
     assert vacios == VACIOS
     assert all(e.accion == "salta" for e in plan.entradas if e.fuente.vacio)
@@ -163,8 +161,8 @@ def test_el_desfase_se_ve_en_los_flags(plan):
 def test_el_reparto_entre_subir_y_saltar(plan):
     archivos, filas, bytes_ = plan.totales()
 
-    # Sin archivos vacíos en disco, todo lo declarado se sube (septiembre
-    # pendiente de cierre traería 2 archivos VACIO que restan de este total).
+    # Sin archivos vacíos en disco, todo lo declarado se sube. Un archivo
+    # VACIO restaría de este total.
     assert archivos == TOTAL_ARCHIVOS - len(VACIOS)
     assert filas == TOTAL_FILAS
     assert bytes_ == TOTAL_BYTES - 77 * len(VACIOS)

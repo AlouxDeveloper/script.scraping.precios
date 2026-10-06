@@ -79,6 +79,29 @@ def test_ejecutar_sube_archivo_nuevo_y_registra_fila_ok(
     assert fila.version == 1
 
 
+def test_mes_posterior_al_corte_de_raw_solo_escribe_bronce(
+    cliente_bq, cliente_gcs, cfg_gcp, base_local, limpiar_raw, limpiar_bronce, tabla_manifest_tmp
+):
+    contenido = csv_valido(2)
+    fuente = fuente_falsa(contenido, anio_mes="2026-09")
+    base = base_local(fuente, contenido)
+    limpiar_raw(_uri(cfg_gcp, fuente))
+    limpiar_bronce(_uri_bronce(cfg_gcp, fuente))
+
+    resultado = ingesta.ejecutar(
+        cliente_bq, cliente_gcs, cfg_gcp, [_entrada(fuente)],
+        base=base, tabla=tabla_manifest_tmp,
+    )
+
+    assert resultado.procesados == (fuente.ruta,)
+    fila = manifest.leer_estado(cliente_bq, cfg_gcp, tabla=tabla_manifest_tmp)[fuente.ruta]
+    assert fila.estado == manifest.ESTADO_OK
+    assert fila.uri_raw is None
+    assert fila.uri_bronce == _uri_bronce(cfg_gcp, fuente)
+    objeto = _uri(cfg_gcp, fuente).removeprefix(f"gs://{cfg_gcp.bucket_raw}/")
+    assert cliente_gcs.bucket(cfg_gcp.bucket_raw).get_blob(objeto) is None
+
+
 def test_ejecutar_dos_veces_la_segunda_salta_sin_escribir(
     cliente_bq, cliente_gcs, cfg_gcp, base_local, limpiar_raw, limpiar_bronce, tabla_manifest_tmp
 ):

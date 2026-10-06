@@ -5,6 +5,9 @@ descarta nada: si mañana un parser de bronce tiene un bug, bronce se regenera
 desde raw sin volver a scrapear. El objeto conserva el nombre original del
 archivo, incluidos los raros (`aurrera1`, `fahorro_a`); la partición (`tienda=`,
 `anio_mes=`) sale de la carpeta de origen, no del contenido.
+
+Raw solo cubre hasta `ULTIMO_MES_RAW` (ago-2026). Los meses posteriores van
+directo a bronce, y su red de seguridad son las columnas `*_raw` del Parquet.
 """
 
 import base64

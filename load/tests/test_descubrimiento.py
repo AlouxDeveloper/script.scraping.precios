@@ -24,19 +24,17 @@ RUTA_YZA = "2026/06_junio/scraping_detalle_yza.csv"
 
 # Reparto real del histórico en disco. Incluye el backfill de
 # salida/data/base_price_v.3.csv (41 archivos historico_detalle_<tienda>.csv,
-# ago-2024..feb-2026, todos V2). Septiembre aún no ha cerrado: sus archivos
-# no están en disco ni declarados en archivos.yml. Cuando entre, se
-# re-agregan las 6 entradas (con sus 2 casos vacíos) y se reactivan los tests
-# marcados con skip "septiembre pendiente de cierre".
-TOTAL_ARCHIVOS = 175
-TOTAL_FILAS = 1226064
-POR_VARIANTE = {"V1": 89, "V2": 68, "V3": 15, "V4": 1, "V5": 1, "V6": 1}
+# ago-2024..feb-2026, todos V2) y septiembre de 2026 (19 archivos, un lote
+# por tienda; ninguno vacío).
+TOTAL_ARCHIVOS = 194
+TOTAL_FILAS = 1327099
+POR_VARIANTE = {"V1": 102, "V2": 72, "V3": 17, "V4": 1, "V5": 1, "V6": 1}
 
 # El corte declarado en gcp.yml. Hoy no deja nada fuera: todo lo declarado es
-# de agosto o antes.
-HASTA = "2026-08"
-ARCHIVOS_HASTA_AGOSTO = 175
-FILAS_HASTA_AGOSTO = 1226064
+# de septiembre o antes.
+HASTA = "2026-09"
+ARCHIVOS_AL_CORTE = 194
+FILAS_AL_CORTE = 1327099
 
 
 def escribir(base, ruta: str, contenido: str) -> str:
@@ -138,12 +136,12 @@ def historico(datos_reales):
 
 
 @pytest.fixture(scope="module")
-def hasta_agosto(datos_reales):
+def al_corte(datos_reales):
     """Lo que realmente se ingiere: el corte de `gcp.yml`."""
     return descubrir()
 
 
-def test_descubre_los_175_archivos(historico):
+def test_descubre_los_194_archivos(historico):
     assert len(historico.archivos) == TOTAL_ARCHIVOS
     assert historico.faltantes == ()
     assert len({a.ruta for a in historico.archivos}) == TOTAL_ARCHIVOS
@@ -168,16 +166,6 @@ def test_las_filas_cuadran_con_el_historico(historico):
     assert sum(a.filas for a in historico.archivos) == TOTAL_FILAS
 
 
-@pytest.mark.skip(reason="septiembre pendiente de cierre: sin archivos vacíos en disco")
-def test_los_dos_archivos_de_septiembre_estan_vacios(historico):
-    vacios = {a.ruta for a in historico.archivos if a.vacio}
-    assert vacios == {
-        "2026/09_septiembre/scraping_detalle_benavides.csv",
-        "2026/09_septiembre/scraping_detalles_fahorro.csv",
-    }
-    assert {a.bytes for a in historico.archivos if a.vacio} == {77}
-
-
 def test_el_inventario_declarado_y_el_disco_son_el_mismo_conjunto(historico, declarados):
     assert {a.ruta for a in historico.archivos} == {d.ruta for d in declarados}
 
@@ -185,26 +173,26 @@ def test_el_inventario_declarado_y_el_disco_son_el_mismo_conjunto(historico, dec
 # --- El corte de mes --------------------------------------------------------
 
 
-def test_por_defecto_solo_llega_hasta_el_mes_declarado(hasta_agosto):
-    assert hasta_agosto.hasta == HASTA
-    assert len(hasta_agosto.archivos) == ARCHIVOS_HASTA_AGOSTO
-    assert max(a.anio_mes for a in hasta_agosto.archivos) == HASTA
+def test_por_defecto_solo_llega_hasta_el_mes_declarado(al_corte):
+    assert al_corte.hasta == HASTA
+    assert len(al_corte.archivos) == ARCHIVOS_AL_CORTE
+    assert max(a.anio_mes for a in al_corte.archivos) == HASTA
 
 
-@pytest.mark.skip(reason="septiembre pendiente de cierre: no hay mes posterior al corte declarado")
-def test_septiembre_queda_fuera_de_rango_no_faltante(hasta_agosto):
-    assert hasta_agosto.fuera_de_rango != ()
-    assert hasta_agosto.faltantes == ()
+@pytest.mark.skip(reason="sin mes posterior al corte declarado: octubre aún no se declara")
+def test_el_mes_abierto_queda_fuera_de_rango_no_faltante(al_corte):
+    assert al_corte.fuera_de_rango != ()
+    assert al_corte.faltantes == ()
 
 
-def test_las_filas_del_corte(hasta_agosto):
-    assert sum(a.filas for a in hasta_agosto.archivos) == FILAS_HASTA_AGOSTO
+def test_las_filas_del_corte(al_corte):
+    assert sum(a.filas for a in al_corte.archivos) == FILAS_AL_CORTE
 
 
-@pytest.mark.skip(reason="septiembre pendiente de cierre: no hay mes en curso declarado")
-def test_el_mes_en_curso_solo_entra_si_se_pide_explicito(historico, hasta_agosto):
+@pytest.mark.skip(reason="sin mes posterior al corte declarado: octubre aún no se declara")
+def test_el_mes_en_curso_solo_entra_si_se_pide_explicito(historico, al_corte):
     """Reprocesar el mes abierto es una decisión, no un descuido."""
-    assert len(historico.archivos) > len(hasta_agosto.archivos)
+    assert len(historico.archivos) > len(al_corte.archivos)
     assert historico.fuera_de_rango == ()
 
 

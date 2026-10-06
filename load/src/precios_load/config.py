@@ -24,6 +24,12 @@ UBICACIONES = ("US", "EU")
 # Formato del corte de mes: `2026-08`.
 FORMATO_ANIO_MES = re.compile(r"\d{4}-(0[1-9]|1[0-2])")
 
+# Último mes cuyo CSV se archiva en la capa raw. Desde septiembre de 2026 solo
+# se conserva el Parquet de bronce: el CSV dejó de interesar como respaldo y
+# raw queda congelado de dic-2025 a ago-2026. Bronce sigue guardando los `*_raw`,
+# así que un bug de parser se corrige re-derivando en dbt.
+ULTIMO_MES_RAW = "2026-08"
+
 
 class ErrorConfig(Exception):
     """Configuración inválida. Siempre nombra el campo y el archivo."""

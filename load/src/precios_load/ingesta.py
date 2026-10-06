@@ -21,6 +21,10 @@ Reglas heredadas de ALD-17:
 Un archivo vacío (solo header) sube a raw como `VACIO` y no genera Parquet, así
 que su fila lleva `uri_bronce` y `filas_bronce` en `None`. La reconciliación de
 conteos vive en `bronce.escribir`; aquí solo se decide qué hacer con su fallo.
+
+Los meses posteriores a `ULTIMO_MES_RAW` no suben a raw: solo escriben bronce y
+su fila lleva `uri_raw` en `None`. El MD5 del CSV local sigue siendo la base de
+la idempotencia, así que el manifest funciona igual sin el objeto en raw.
 """
 
 from concurrent.futures import ThreadPoolExecutor
@@ -30,7 +34,7 @@ from datetime import UTC, datetime
 from google.cloud import bigquery, storage
 
 from precios_load import bronce, manifest, raw
-from precios_load.config import ConfigGCP
+from precios_load.config import ULTIMO_MES_RAW, ConfigGCP
 from precios_load.plan import EntradaPlan
 
 # Cuántos archivos se suben a la vez. El límite es el ancho de banda de subida,
@@ -131,9 +135,11 @@ def _procesar_una(
     uri_bronce = None
     filas_bronce = None
     try:
-        uri_raw = raw.subir(cliente_gcs, config, fuente, base=base)
+        if fuente.anio_mes <= ULTIMO_MES_RAW:
+            uri_raw = raw.subir(cliente_gcs, config, fuente, base=base)
         if fuente.vacio:
-            # Un archivo sin filas no genera Parquet: queda VACIO en raw.
+            # Un archivo sin filas no genera Parquet: queda VACIO (en raw solo
+            # si su mes todavía archiva el CSV).
             estado_fila = manifest.ESTADO_VACIO
         else:
             uri_bronce, filas_bronce = bronce.escribir(
