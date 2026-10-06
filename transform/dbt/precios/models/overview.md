@@ -142,7 +142,8 @@ hay que recalibrarlos (los de `v1` sin guarda eran 0.08 / 0.035).
 Todo lo de dbt corre con un solo `dbt build`; los pasos fuera de dbt son
 los de `load/`. En orden:
 
-1. `load/`: `cli.py ingesta` (CSV del mes a raw y bronce) y, si cambió el
+1. `load/`: `cli.py ingesta` (un lote del mes por tienda a bronce; desde
+   sep-2026 ya no se archiva el CSV en raw) y, si cambió el
    catálogo NDF o el crosswalk, `cli.py catalogos` / `catalogos-puente`.
    Las external tables ven los archivos nuevos al instante.
 2. `dbt build`. En el orden del DAG: silver y `int_producto` suman los
@@ -158,7 +159,11 @@ los de `load/`. En orden:
 4. Si `int_candidatos_producto` avisa que el índice de `emb_ndf` está en
    0% o no existe, esperar ~10 min y volver a construir
    `int_candidatos_producto+`. Con unos miles de filas sin indexar no hace
-   falta.
+   falta. Si en cambio falla por timeout (300 s): el `merge` y el borrado
+   del `post_hook` de `emb_ndf` tocan la tabla aunque no cambien filas, y
+   BigQuery refresca el índice ~7 min mientras `INFORMATION_SCHEMA` sigue
+   diciendo 100%. Esperar a que `last_refresh_time` del índice sea
+   posterior a esa escritura y correr `dbt retry`.
 5. Con el `dbt build` en verde, `uv run --project transform
    transform/indices/estimar_cpd_tpd.py`. Re-estima el CPD de cada mes y
    el índice TPD de todo el panel (base `mes_base_tpd`) y reemplaza
