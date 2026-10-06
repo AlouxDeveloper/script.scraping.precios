@@ -46,6 +46,7 @@ Mismo criterio, comando propio. Es lo que le da `ndf_id` a `dim_producto` en la 
 ├── extract/          # scraping, proyecto uv propio
 ├── load/              # ingesta a Google Cloud, proyecto uv propio (con tests)
 ├── transform/          # dbt (transform/dbt/precios): staging, silver, gold; + entity_resolution
+├── scrapers/          # Scrapers 2.0 en construcción, proyecto uv propio; hoy solo reconocimiento/
 └── salida/              # salida de extract/, en .gitignore
 ```
 
@@ -56,7 +57,7 @@ Python 3.13+, [`uv`](https://docs.astral.sh/uv/), credenciales de Google Cloud (
 
 ## Instalación
 
-Cada módulo (`extract/`, `load/`, `transform/`) es un proyecto `uv` independiente, con su
+Cada módulo (`extract/`, `load/`, `transform/`, `scrapers/`) es un proyecto `uv` independiente, con su
 propio `pyproject.toml` y entorno virtual. Instala las dependencias de cada uno antes de
 correrlo, siempre desde la raíz del repo:
 
@@ -64,6 +65,7 @@ correrlo, siempre desde la raíz del repo:
 cd extract && uv sync && cd ..
 cd load && uv sync && cd ..
 cd transform && uv sync && cd ..
+cd scrapers && uv sync && cd ..
 ```
 
 ### Variables de entorno

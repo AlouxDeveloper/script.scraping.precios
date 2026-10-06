@@ -1,0 +1,3 @@
+# Peticiones mínimas a validar con validar_endpoint.py, en formato cURL.
+# Copiar desde DevTools ("Copy as cURL") y BORRAR los headers Cookie y
+# Authorization antes de pegarlas aquí.
