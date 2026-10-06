@@ -1,0 +1,8 @@
+# Artefactos de dbt (duplicados en el .gitignore raíz, aquí para que el módulo
+# sea autocontenido si se mueve o se abre por separado).
+target/
+dbt_packages/
+logs/
+
+# Identificador anónimo que dbt genera por máquina, no es del proyecto.
+.user.yml

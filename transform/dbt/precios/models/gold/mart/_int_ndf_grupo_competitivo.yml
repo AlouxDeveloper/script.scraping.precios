@@ -1,0 +1,48 @@
+version: 2
+
+models:
+  - name: int_ndf_grupo_competitivo
+    description: >
+      Vía, magnitudes y grupo competitivo de cada presentación del catálogo
+      NDF. Grano `ndf_id`, todo `dim_ndf`. Alimenta la vía de
+      `mart_precio_cadena_mes`, el precio por mg de `mart_precio_ndf_mes` y
+      el conteo en catálogo de `mart_competencia_mes`.
+
+      Las magnitudes salen de `mg_por_envase` sobre la presentación del NDF
+      (caso de validación en `assert_mg_por_envase_casos`).
+    tests:
+      - dbt_utils.equal_rowcount:
+          arguments:
+            compare_model: ref('dim_ndf')
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "(mg_por_unidad is null) = (unidad_mg is null)"
+    columns:
+      - name: ndf_id
+        description: FK a `dim_ndf`, única.
+        tests:
+          - not_null
+          - unique
+      - name: via
+        description: >
+          Vía de administración por la primera letra de `cve_ff` (NFC). NULL
+          para `SIN FF`, uso no humano y desconocido.
+        tests:
+          - accepted_values:
+              arguments:
+                values: [ORAL, PARENTERAL, RECTAL, NASAL, OTRA, BUCAL, TOPICA,
+                         OFTALMICA, OTICA, INHALADA, VAGINAL]
+      - name: mg_por_unidad
+        description: mg por tableta o cápsula, o mg por ml en líquidos.
+      - name: unidad_mg
+        description: "`MG` (sólidos) o `MG/ML` (líquidos)."
+        tests:
+          - accepted_values:
+              arguments:
+                values: [MG, MG/ML]
+      - name: mg_por_envase
+        description: mg de principio activo en el envase completo.
+      - name: grupo_competitivo
+        description: >
+          `molecula | via | mg_por_unidad unidad_mg`. NULL para la molécula
+          `SIN SAL`, sin vía o sin dosis.

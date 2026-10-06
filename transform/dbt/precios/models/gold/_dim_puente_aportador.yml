@@ -1,0 +1,71 @@
+version: 2
+
+models:
+  - name: dim_puente_aportador
+    description: >
+      Crosswalk tienda-sku-ndf (Kimball: dimensión-puente), grano
+      `(tienda_key, sku, ndf_id)` — NO `(tienda_key, sku)`: 278 combos de
+      `(tienda_key, sku)` traen más de un `ndf_id` candidato, ambigüedad
+      real del aportador que el entity resolution tiene que resolver, no
+      este modelo. `stg_puente_aportador` inner join `dim_tienda`
+      resolviendo `aportador_clave` a `tienda_key`.
+
+      Insumo de la primera pasada del entity resolution:
+      `dim_producto.ndf_id`/`match_method='aportadores'` la consume (solo
+      candidatos con `ndf_id` real y sin ambigüedad). `sku` está a 15
+      dígitos y se cruza contra `dim_producto.sku_cruce` (columna temporal,
+      no expuesta) — esa pasada cubre ~35%% de `dim_producto` (83,510 de
+      240,400); el resto sigue pendiente de matching por texto.
+
+      Menos filas que `stg_puente_aportador`: se filtran las 6 del
+      centinela `sku` NULL y se dedupean 2,196 pares que repetían
+      exactamente el mismo `(tienda_key, sku, ndf_id)` (ver
+      `assert_dim_puente_aportador_solo_excluye_sku_nulo`).
+    tests:
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "length(sku) = 15"
+            where: "sku is not null"
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - tienda_key
+              - sku
+              - ndf_id
+    columns:
+      - name: tienda_key
+        description: FK a `dim_tienda`. Conserva el nombre de la PK de la dimensión.
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_tienda')
+                field: tienda_key
+      - name: sku
+        description: >
+          Identificador del producto según el aportador, normalizado a 15
+          dígitos (`trim` + relleno con ceros a la izquierda). Se cruza
+          contra `dim_producto.sku_cruce` (también a 15), no contra
+          `dim_producto.sku`. NO es único por sí solo ni junto con
+          `tienda_key`: ver el grano en la descripción del modelo.
+        tests:
+          - not_null
+      - name: ndf_id
+        description: >
+          Llave del catálogo NDF reportada por el aportador, sin padding.
+          Relación contra `dim_ndf.ndf_id` en `warn`, no `error`: calza
+          ~59%% (validado); el resto es `8989898` (centinela "sin ndf_id") o
+          un `ndf_id` que el corte actual de `dim_ndf` no tiene — no una
+          pérdida por formato.
+        tests:
+          - not_null
+          - relationships:
+              config:
+                severity: warn
+              arguments:
+                to: ref('dim_ndf')
+                field: ndf_id
+      - name: producto
+        description: Nombre del producto según el aportador. Solo para auditoría.
+      - name: descripcion
+        description: Descripción / complemento del nombre. Solo para auditoría.

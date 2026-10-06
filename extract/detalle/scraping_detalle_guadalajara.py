@@ -11,8 +11,13 @@ import csv
 import os
 
 # === Configuración ===
-EXCEL_PATH = "./data/data_scraping_guadalajara.xlsx"
-CSV_OUTPUT = "./salida/data/2026/08_agosto/scraping_detalle_guadalajara.csv"
+EXCEL_PATH = "./salida/urls/data_scraping_guadalajara.xlsx"
+CSV_OUTPUT = "./salida/data/2026/10_octubre/scraping_detalle_guadalajara.csv"
+TIENDA = "11"
+CHROME_VERSION = 153
+# CSV aparte para URLs que fallaron (bloqueo, error de red o de parseo), para
+# no repetirlas al reanudar.
+CSV_ESTADO_URLS = "./salida/data/2026/10_octubre/scraping_detalle_guadalajara_fallidas.csv"
 
 os.makedirs(os.path.dirname(CSV_OUTPUT), exist_ok=True)
 
@@ -20,21 +25,57 @@ os.makedirs(os.path.dirname(CSV_OUTPUT), exist_ok=True)
 df = pd.read_excel(EXCEL_PATH)
 urls_busqueda = df["URL_Producto"].astype(str).tolist()
 
+# === CONTROL DE AVANCE INCREMENTAL ===
+urls_procesadas = set()
+if os.path.exists(CSV_OUTPUT) and os.stat(CSV_OUTPUT).st_size > 0:
+    try:
+        df_prev = pd.read_csv(CSV_OUTPUT)
+        if "URL_Producto" in df_prev.columns:
+            urls_procesadas = set(
+                df_prev["URL_Producto"].dropna().astype(str).tolist()
+            )
+    except Exception as e:
+        print(f"⚠️ Alerta leyendo avance previo: {e}")
+
+if os.path.exists(CSV_ESTADO_URLS) and os.stat(CSV_ESTADO_URLS).st_size > 0:
+    try:
+        df_fallidas = pd.read_csv(CSV_ESTADO_URLS)
+        if "URL_PRODUCTO" in df_fallidas.columns:
+            urls_procesadas |= set(df_fallidas["URL_PRODUCTO"].dropna().astype(str).tolist())
+    except Exception as e:
+        print(f"⚠️ Alerta leyendo URLs fallidas previas: {e}")
+
+
+def marcar_fallida(url: str, detalle: str = "") -> None:
+    """Registra una URL que no se pudo procesar en CSV_ESTADO_URLS."""
+    es_nuevo = not os.path.exists(CSV_ESTADO_URLS) or os.stat(CSV_ESTADO_URLS).st_size == 0
+    with open(CSV_ESTADO_URLS, "a", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f)
+        if es_nuevo:
+            writer.writerow(["URL_PRODUCTO", "Estatus", "Detalle", "Fecha_Hora_Captura"])
+        writer.writerow([url, "ERROR", detalle, datetime.now().strftime("%Y-%m-%d %H:%M:%S")])
+
+
+print(f"📂 Historial: {len(urls_procesadas)} URLs ya se encuentran en el archivo de salida.")
+
 # === Bucle de Scraping (Se mantiene idéntico) ===
 for i, url in enumerate(urls_busqueda, start=1):
     if not url.startswith("http"):
         print(f"⚠️ [{i}/{len(urls_busqueda)}] URL no válida: {url}")
         continue
 
+    if url in urls_procesadas:
+        continue
+
     print(f"🔎 [{i}/{len(urls_busqueda)}] Procesando: {url}")
-    
+
     driver = None
     try:
         options = Options()
         options.add_argument("--start-maximized")
         options.add_argument("--log-level=3")
-        options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36")
-        
+        options.add_argument(f"user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{CHROME_VERSION}.0.0.0 Safari/537.36")
+
         service = Service()
         driver = webdriver.Chrome(service=service, options=options)
         wait = WebDriverWait(driver, 15)
@@ -47,9 +88,9 @@ for i, url in enumerate(urls_busqueda, start=1):
                 nombre_element = wait.until(EC.presence_of_element_located((By.ID, "fgProductName")))
             except:
                 nombre_element = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "h1")))
-                
+
             nombre = nombre_element.get_attribute("innerText").strip()
-            
+
             # 2. Extraer SKU (ID)
             sku_limpio = "N/A"
             try:
@@ -57,7 +98,7 @@ for i, url in enumerate(urls_busqueda, start=1):
                 sku_limpio = "".join(filter(str.isdigit, sku_element.get_attribute("innerText")))
             except:
                 pass
-                
+
             if not sku_limpio or sku_limpio == "N/A":
                 sku_limpio = "".join(filter(str.isdigit, url.split('-')[-1]))
 
@@ -76,7 +117,7 @@ for i, url in enumerate(urls_busqueda, start=1):
                 # Caso A: Con descuento (Buscamos los atributos 'content' directo del HTML provisto)
                 val_normal_elem = driver.find_element(By.CSS_SELECTOR, ".price-before .value")
                 precio_normal = val_normal_elem.get_attribute("content").strip()
-                
+
                 val_oferta_elem = driver.find_element(By.CSS_SELECTOR, ".sales.offer-mini-cart .value")
                 precio_actual = val_oferta_elem.get_attribute("content").strip()
             except:
@@ -102,7 +143,7 @@ for i, url in enumerate(urls_busqueda, start=1):
                 "Precio_Oferta": precio_actual,
                 "URL_IMAGEN": url_imagen,
                 "Fecha_Hora_Captura": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                "Tienda": "1",
+                "Tienda": TIENDA,
             }
 
             # Guardar en CSV inmediatamente (append mode)
@@ -113,14 +154,19 @@ for i, url in enumerate(urls_busqueda, start=1):
                     writer.writeheader()
                 writer.writerow(resultado)
 
+            urls_procesadas.add(url)
             print(f"✅ Éxito: {sku_limpio} | {nombre[:25]} | Normal: {precio_normal} | Oferta: {precio_actual}")
 
         except Exception as e:
             print(f"⚠️ Error al extraer datos de la página: {url} | Detalle: {e}")
+            marcar_fallida(url, str(e)[:200])
+            urls_procesadas.add(url)
 
     except Exception as e:
         print(f"❌ Error de conexión/driver: {e}")
-    
+        marcar_fallida(url, str(e)[:200])
+        urls_procesadas.add(url)
+
     finally:
         if driver:
             driver.quit()

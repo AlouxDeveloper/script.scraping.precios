@@ -1,0 +1,24 @@
+version: 2
+
+models:
+  - name: int_texto_er_tienda
+    description: >
+      Texto de tienda listo para vectorizar: `descripcion` tal cual (la
+      variante alternativa de ALD-85 se descartó). Gemelo de `int_texto_er_ndf` del lado catálogo. Alimenta la
+      vista combinada `int_texto_er` (ALD-61).
+    columns:
+      - name: producto_key
+        description: FK a `dim_producto`, grano de esta vista.
+        tests:
+          - not_null
+          - unique
+      - name: texto
+        description: "`dim_producto.descripcion`. Nunca vacío."
+        tests:
+          - not_null
+      - name: hash_texto
+        description: >
+          `hash_texto_embedding` sobre `texto` -misma llave que usa
+          `int_texto_er`.
+        tests:
+          - not_null

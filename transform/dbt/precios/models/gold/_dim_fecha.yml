@@ -1,0 +1,105 @@
+version: 2
+
+models:
+  - name: dim_fecha
+    description: >
+      Dimensión de fecha (Kimball). Una fila por día natural entre la
+      primera y la última `fecha_captura` de `precios_silver.precios`; el
+      rango se deriva del dato con `dbt_utils.date_spine`, no se hardcodea,
+      porque el histórico crece cada mes.
+
+      `fecha_key` es la FK que la fact conservará con el mismo nombre.
+
+      El nombre del mes es `mes_nombre` y el primer día del mes es
+      `mes_inicio` (empata con la columna `mes` de silver). Se evita a
+      propósito llamar `mes` a la cadena: `mes` ya es el DATE de partición
+      en silver.
+    columns:
+      - name: fecha_key
+        description: Día natural. Llave primaria de la dimensión, tipo DATE.
+        tests:
+          - not_null
+          - unique
+      - name: anio
+        description: Año (INT64).
+        tests:
+          - not_null
+      - name: trimestre
+        description: Trimestre del año, 1 a 4.
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 1
+                max_value: 4
+      - name: mes_num
+        description: Mes del año, 1 a 12.
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 1
+                max_value: 12
+      - name: mes_nombre
+        description: Nombre del mes en español, en minúsculas.
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - enero
+                  - febrero
+                  - marzo
+                  - abril
+                  - mayo
+                  - junio
+                  - julio
+                  - agosto
+                  - septiembre
+                  - octubre
+                  - noviembre
+                  - diciembre
+      - name: mes_inicio
+        description: >
+          Primer día del mes al que pertenece `fecha_key`. Es el DATE que
+          empata con la columna `mes` de `precios` y `precios_cuarentena`.
+        tests:
+          - not_null
+      - name: semana_iso
+        description: Número de semana ISO-8601, 1 a 53.
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 1
+                max_value: 53
+      - name: dia
+        description: Día del mes, 1 a 31.
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 1
+                max_value: 31
+      - name: dia_semana_num
+        description: Día de la semana en numeración ISO, lunes=1 .. domingo=7.
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 1
+                max_value: 7
+      - name: dia_semana_nombre
+        description: Nombre del día de la semana en español, en minúsculas.
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - lunes
+                  - martes
+                  - miércoles
+                  - jueves
+                  - viernes
+                  - sábado
+                  - domingo

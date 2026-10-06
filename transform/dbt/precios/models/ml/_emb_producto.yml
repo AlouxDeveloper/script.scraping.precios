@@ -1,0 +1,30 @@
+version: 2
+
+models:
+  - name: emb_producto
+    description: >
+      Lado tienda vectorizado (ALD-71). Incremental con `merge` por
+      `producto_key` (ALD-99): una carga nueva solo inserta o actualiza
+      lo que cambió de texto. Tabla de consulta de
+      `int_candidatos_producto`; sin índice vectorial (lo lleva `emb_ndf`).
+    columns:
+      - name: producto_key
+        description: FK a `dim_producto`, grano de esta tabla.
+        tests:
+          - not_null
+          - unique
+      - name: tienda_key
+        description: FK a `dim_tienda`.
+        tests:
+          - not_null
+      - name: texto_hash
+        description: >
+          Hash del texto con que se generó el vector (`emb_texto.texto_hash`).
+          Es lo que el `merge` compara para saber si el texto cambió.
+        tests:
+          - not_null
+      - name: embedding
+        description: >
+          Vector de `emb_texto`. Siempre presente: la fila solo entra si el
+          banco tiene el texto; los faltantes los reporta
+          `assert_emb_producto_cobertura`.

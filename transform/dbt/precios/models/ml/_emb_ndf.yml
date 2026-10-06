@@ -1,0 +1,26 @@
+version: 2
+
+models:
+  - name: emb_ndf
+    description: >
+      Catálogo NDF completo vectorizado (ALD-70). Incremental con `merge`
+      por `ndf_id` (ALD-99), mismo motivo que `emb_producto`; el
+      `post_hook` borra los NDF que salieron del catálogo y crea el índice
+      `TREE_AH` si falta. Base de `int_candidatos_producto`.
+    columns:
+      - name: ndf_id
+        description: FK a `dim_ndf`, grano de esta tabla.
+        tests:
+          - not_null
+          - unique
+      - name: texto_hash
+        description: >
+          Hash del texto con que se generó el vector (`emb_texto.texto_hash`).
+          Es lo que el `merge` compara para saber si el texto cambió.
+        tests:
+          - not_null
+      - name: embedding
+        description: >
+          Vector de `emb_texto`. Siempre presente: la fila solo entra si el
+          banco tiene el texto; los faltantes los reporta
+          `assert_emb_ndf_cobertura`.

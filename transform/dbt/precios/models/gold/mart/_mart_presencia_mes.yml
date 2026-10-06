@@ -1,0 +1,101 @@
+version: 2
+
+models:
+  - name: mart_presencia_mes
+    description: >
+      Presencia de cada presentación del cliente por cadena y mes (M10,
+      vistas V1, V3 y V5). Malla completa: presentaciones del cliente
+      observadas al menos una vez × 19 cadenas × meses publicados.
+
+      El % de presencia lo calcula Looker como suma de `detectado_n` entre
+      suma de `capturada_n`, para que responda a los filtros. "No
+      detectado" es cota inferior: incluye listings que el cruce no asignó.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - ndf_id
+              - tienda_key
+              - mes
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "detectado_n <= capturada_n"
+    columns:
+      - name: ndf_id
+        description: Presentación del cliente. FK a `dim_ndf`.
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_ndf')
+                field: ndf_id
+      - name: tienda_key
+        description: FK a `dim_tienda`.
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_tienda')
+                field: tienda_key
+      - name: mes
+        description: Primer día del mes. Columna de partición.
+        tests:
+          - not_null
+      - name: cadena
+        description: Nombre comercial de la cadena.
+      - name: estado
+        description: >
+          M10 · `Detectado` (con precio ese mes, atípico o no), `No
+          detectado` (la cadena se capturó y la presentación no apareció) o
+          `Cadena sin captura` (la cadena no tiene ningún precio ese mes).
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [Detectado, No detectado, Cadena sin captura]
+      - name: detectado_n
+        description: 1 si el estado es `Detectado`, 0 si no. Numerador del %.
+      - name: capturada_n
+        description: >
+          1 si la cadena tiene algún precio ese mes, 0 si no. Denominador
+          del %.
+      - name: marca
+        description: Marca comercial del NDF.
+      - name: presentacion
+        description: Presentación comercial del NDF.
+      - name: molecula
+        description: Molécula(s) del principio activo.
+      - name: via
+        description: Vía de administración.
+      - name: forma
+        description: Forma farmacéutica nivel 3.
+      - name: genero
+        description: Género del NDF.
+
+unit_tests:
+  - name: mart_presencia_mes_estados
+    description: >
+      Una presentación del cliente y tres cadenas en agosto 2026: con precio
+      (Detectado), capturada con otro producto pero sin esta presentación
+      (No detectado) y sin ningún precio (Cadena sin captura). La
+      presentación de otro laboratorio no entra a la malla.
+    model: mart_presencia_mes
+    given:
+      - input: ref('mart_precio_cadena_mes')
+        rows:
+          - {ndf_id: "8479830", tienda_key: 1, mes: 2026-08-01, es_cliente: true, marca: TABALON}
+          - {ndf_id: "5929510", tienda_key: 2, mes: 2026-08-01, es_cliente: false, marca: MOTRIN}
+      - input: ref('dim_tienda')
+        rows:
+          - {tienda_key: 1, tienda_nombre: Chedraui}
+          - {tienda_key: 2, tienda_nombre: Soriana}
+          - {tienda_key: 3, tienda_nombre: Walmart}
+      - input: ref('fact_precios')
+        rows:
+          - {tienda_key: 1, fecha_key: 2026-08-10}
+          - {tienda_key: 2, fecha_key: 2026-08-10}
+    expect:
+      rows:
+        - {ndf_id: "8479830", tienda_key: 1, estado: Detectado, detectado_n: 1, capturada_n: 1}
+        - {ndf_id: "8479830", tienda_key: 2, estado: No detectado, detectado_n: 0, capturada_n: 1}
+        - {ndf_id: "8479830", tienda_key: 3, estado: Cadena sin captura, detectado_n: 0, capturada_n: 0}

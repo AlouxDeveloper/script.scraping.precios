@@ -1,0 +1,39 @@
+version: 2
+
+models:
+  - name: producto_split_aportadores
+    description: >
+      Split determinístico de calibración/holdout (ALD-65) sobre el set
+      completo de `dim_producto` con `match_method = 'aportadores'`
+      (61,085 filas, todos los laboratorios, no el recorte Sanfer -los
+      umbrales se calibran con este set completo y se aplican a Sanfer-).
+      `mod(abs(farm_fingerprint(producto_key)), 2)`: sin estado, dos
+      corridas dan el mismo split. Holdout se mide una sola vez al final de
+      cada fase; medirlo más de una vez lo convierte en calibración.
+    columns:
+      - name: producto_key
+        description: FK a `dim_producto`, grano de esta vista.
+        tests:
+          - not_null
+          - unique
+      - name: tienda_key
+        description: FK a `dim_tienda`.
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_tienda')
+                field: tienda_key
+      - name: split
+        description: >
+          `'calibracion'` -donde se prueban variantes, umbrales y
+          guardas- o `'holdout'` -intocado hasta la verificación final de
+          cada fase-.
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - calibracion
+                  - holdout
+                quote: true

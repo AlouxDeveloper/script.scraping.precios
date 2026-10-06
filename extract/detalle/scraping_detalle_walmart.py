@@ -4,26 +4,45 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from tqdm import tqdm
 from datetime import datetime
 import time
 import csv
 import os
 
 # === Configuración ===
-INPUT_CSV = "./salida/urls/productos_walmart.csv" 
-CSV_OUTPUT = "./salida/data/2026/08_agosto/scraping_detalle_walmart.csv"
-TIENDA = "12"
+INPUT_CSV = "./salida/urls/productos_walmart.csv"
+CSV_OUTPUT = "./salida/data/2026/10_octubre/scraping_detalle_walmart.csv"
+TIENDA = "18"
+
+# Versión mayor del Chrome instalado en la máquina donde corre el script.
+# undetected_chromedriver 3.5.5 no la detecta bien: baja el chromedriver de
+# la última versión publicada (153) y revienta contra un Chrome 152 con
+# "This version of ChromeDriver only supports Chrome version 153".
+# Al actualizarse Chrome hay que subir este número.
+VERSION_CHROME = 153
 
 ENCABEZADOS = [
-    "SKU", "URL_PRODUCTO", "Producto", "Precio_Actual", 
+    "SKU", "URL_PRODUCTO", "Producto", "Precio_Actual",
     "Precio_Oferta", "URL_IMAGEN", "Fecha_Hora_Captura", "Tienda"
 ]
+
+# CSV aparte para URLs que fallaron (producto dado de baja, bloqueo, timeout).
+# No comparte esquema con CSV_OUTPUT a propósito: así una URL caída nunca se
+# mezcla con los productos capturados con éxito y no hay que migrar el
+# histórico ya guardado si se agrega este control después.
+CSV_ESTADO_URLS = "./salida/data/2026/10_octubre/scraping_detalle_walmart_fallidas.csv"
+ENCABEZADOS_ESTADO = ["URL_PRODUCTO", "Estatus", "Detalle", "Fecha_Hora_Captura"]
 
 # Asegurar carpetas y archivo de salida
 os.makedirs(os.path.dirname(CSV_OUTPUT) or ".", exist_ok=True)
 if not os.path.exists(CSV_OUTPUT):
     with open(CSV_OUTPUT, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=ENCABEZADOS)
+        writer.writeheader()
+if not os.path.exists(CSV_ESTADO_URLS):
+    with open(CSV_ESTADO_URLS, "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=ENCABEZADOS_ESTADO)
         writer.writeheader()
 
 # === CONTROL DE AVANCE INCREMENTAL ===
@@ -35,6 +54,16 @@ if os.path.exists(CSV_OUTPUT) and os.stat(CSV_OUTPUT).st_size > 0:
             urls_procesadas = set(df_prev["URL_PRODUCTO"].dropna().astype(str).tolist())
     except Exception as e:
         print(f"⚠️ Alerta leyendo avance previo: {e}")
+
+# URLs ya marcadas como caídas/bloqueadas en corridas anteriores: se saltan
+# igual que las exitosas, para no repetir peticiones sin sentido.
+if os.path.exists(CSV_ESTADO_URLS) and os.stat(CSV_ESTADO_URLS).st_size > 0:
+    try:
+        df_fallidas = pd.read_csv(CSV_ESTADO_URLS)
+        if "URL_PRODUCTO" in df_fallidas.columns:
+            urls_procesadas |= set(df_fallidas["URL_PRODUCTO"].dropna().astype(str).tolist())
+    except Exception as e:
+        print(f"⚠️ Alerta leyendo URLs fallidas previas: {e}")
 
 # Manejo de Encoding
 try:
@@ -51,22 +80,26 @@ print(f"📂 Historial: {len(urls_procesadas)} URLs ya se encuentran en el archi
 print(f"🚀 Iniciando captura blindada (Abriendo y cerrando navegador por producto)...")
 
 # === Bucle de Scraping ===
-for i, item in enumerate(lista_productos, 1):
+barra = tqdm(lista_productos, desc="walmart", unit="url", initial=len(urls_procesadas))
+for i, item in enumerate(barra, 1):
     url = item['URL']
-    
+
     if url in urls_procesadas:
         continue
-        
-    print(f"\n🔍 [{i}/{len(lista_productos)}] Procesando: {url}")
-    
+
+    tqdm.write(f"\n🔍 [{i}/{len(lista_productos)}] Procesando: {url}")
+
     driver = None
     try:
         options = uc.ChromeOptions()
-        options.add_argument("--window-size=1280,1000") 
+        options.add_argument("--window-size=1280,1000")
         options.add_argument("--disable-blink-features=AutomationControlled")
 
-        # CORREGIDO: Eliminamos 'version_main' para que detecte automáticamente tu Chrome actual en Windows
-        driver = uc.Chrome(options=options, version_main=150, use_subprocess=True)
+        driver = uc.Chrome(
+            options=options,
+            use_subprocess=True,
+            version_main=VERSION_CHROME,
+        )
         wait = WebDriverWait(driver, 25)
 
         # Cargar la URL
@@ -83,22 +116,23 @@ for i, item in enumerate(lista_productos, 1):
         time.sleep(2)
 
         sku = url.split('/')[-1].split('?')[0]
-        
+
         try:
             titulo = driver.find_element(By.ID, "main-title").text.strip()
         except:
             titulo = item.get('Nombre', 'Sin nombre')
+        tqdm.write(f"   🔬 Título capturado: {titulo[:60]}")
 
         # === LÓGICA DE PRECIOS BLINDADA PARA WALMART ===
         precio_actual = "0"
         precio_oferta = "0"
-        
+
         try:
             wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, '[data-seo-id="hero-price"]')))
-            
+
             precio_hero_elem = driver.find_element(By.CSS_SELECTOR, '[data-seo-id="hero-price"]')
             precio_detectado = precio_hero_elem.text.replace('$', '').replace(',', '').strip()
-            
+
             try:
                 precio_tachado_elem = driver.find_element(By.CSS_SELECTOR, '[data-seo-id="strike-through-price"]')
                 precio_actual = precio_tachado_elem.text.replace('$', '').replace(',', '').strip()
@@ -110,6 +144,7 @@ for i, item in enumerate(lista_productos, 1):
         except Exception:
             precio_actual = "No disponible"
             precio_oferta = "No disponible"
+        tqdm.write(f"   🔬 Precio capturado: actual={precio_actual} oferta={precio_oferta}")
 
         # 4. IMAGEN BLINDADA
         try:
@@ -117,6 +152,7 @@ for i, item in enumerate(lista_productos, 1):
             imagen_url = contenedor_img.find_element(By.TAG_NAME, "img").get_attribute("src")
         except:
             imagen_url = "No disponible"
+        tqdm.write(f"   🔬 Imagen capturada: {imagen_url}")
 
         # 5. Guardado
         fila = {
@@ -135,10 +171,21 @@ for i, item in enumerate(lista_productos, 1):
             writer.writerow(fila)
 
         urls_procesadas.add(url)
-        print(f"   ✅ Guardado: {titulo[:30]}... | Actual: ${precio_actual} | Oferta: ${precio_oferta}")
+        tqdm.write(
+            f"   ✅ Guardado: {titulo[:30]}... | "
+            f"Actual: ${precio_actual} | Oferta: ${precio_oferta}"
+        )
 
     except Exception as e:
-        print(f"   ❌ Saltó la ventana {i} por error o bloqueo. Detalle: {e}")
+        tqdm.write(f"   ❌ Saltó la ventana {i} por error o bloqueo. Detalle: {e}")
+        with open(CSV_ESTADO_URLS, "a", newline="", encoding="utf-8") as f_estado:
+            csv.DictWriter(f_estado, fieldnames=ENCABEZADOS_ESTADO).writerow({
+                "URL_PRODUCTO": url,
+                "Estatus": "ERROR",
+                "Detalle": str(e)[:200],
+                "Fecha_Hora_Captura": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            })
+        urls_procesadas.add(url)
         time.sleep(3)
         
     finally:

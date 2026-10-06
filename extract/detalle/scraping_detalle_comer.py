@@ -11,11 +11,26 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from tqdm import tqdm
 
 # ========== Configuración ==========
 CSV_INPUT  = "./salida/urls/urls_lacomer.csv"
-CSV_OUTPUT = "./salida/data/2026/08_agosto/scraping_detalle_comer.csv"
-TIENDA     = "La Comer"
+CSV_OUTPUT = "./salida/data/2026/10_octubre/scraping_detalle_comer.csv"
+TIENDA     = "5"
+# CSV aparte para URLs que fallaron, para no repetirlas al reanudar.
+CSV_ESTADO_URLS = "./salida/data/2026/10_octubre/scraping_detalle_comer_fallidas.csv"
+# Version de Chrome que se declara en el User-Agent; ajusta aqui si cambia.
+CHROME_VERSION = 153
+
+
+def marcar_fallida(url: str, detalle: str = "") -> None:
+    """Registra una URL que no se pudo procesar en CSV_ESTADO_URLS."""
+    es_nuevo = not os.path.exists(CSV_ESTADO_URLS) or os.stat(CSV_ESTADO_URLS).st_size == 0
+    with open(CSV_ESTADO_URLS, "a", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        if es_nuevo:
+            w.writerow(["URL_PRODUCTO", "Estatus", "Detalle", "Fecha_Hora_Captura"])
+        w.writerow([url, "ERROR", detalle, datetime.now().strftime("%Y-%m-%d %H:%M:%S")])
 
 FIELDNAMES = [
     "SKU", "URL_PRODUCTO", "Producto", "Precio_Actual", 
@@ -28,7 +43,7 @@ def configurar_driver():
     opts.add_argument("--disable-blink-features=AutomationControlled")
     opts.add_experimental_option("excludeSwitches", ["enable-automation"])
     opts.add_experimental_option('useAutomationExtension', False)
-    opts.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+    opts.add_argument(f"user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{CHROME_VERSION}.0.0.0 Safari/537.36")
     
     # Selenium 4 gestiona el driver nativamente sin requerir ChromeDriverManager
     driver = webdriver.Chrome(options=opts)
@@ -62,6 +77,12 @@ def main():
             urls_procesadas = set(df_existente["URL_PRODUCTO"].astype(str).tolist())
         except:
             pass
+    if os.path.exists(CSV_ESTADO_URLS) and os.stat(CSV_ESTADO_URLS).st_size > 0:
+        try:
+            df_fallidas = pd.read_csv(CSV_ESTADO_URLS)
+            urls_procesadas |= set(df_fallidas["URL_PRODUCTO"].astype(str).tolist())
+        except:
+            pass
 
     driver = configurar_driver()
     establecer_sucursal(driver)
@@ -73,7 +94,8 @@ def main():
             if not urls_procesadas and (not os.path.exists(CSV_OUTPUT) or os.stat(CSV_OUTPUT).st_size == 0):
                 writer.writeheader()
 
-            for i, row in df_urls.iterrows():
+            barra = tqdm(list(df_urls.iterrows()), desc="comer", unit="url", initial=len(urls_procesadas))
+            for i, row in barra:
                 url = str(row["URL_PRODUCTO"])
                 if url in urls_procesadas:
                     continue
@@ -126,8 +148,10 @@ def main():
                     count += 1
                     print(f"   ✅ Guardado: {precio_limpio}")
 
-                except Exception:
+                except Exception as e:
                     print(f"   ⚠️ Error en SKU {sku}. Posible producto no disponible.")
+                    marcar_fallida(url, str(e)[:200])
+                    urls_procesadas.add(url)
                 
                 time.sleep(random.uniform(1.5, 3.0))
 

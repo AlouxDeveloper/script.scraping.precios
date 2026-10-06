@@ -5,15 +5,18 @@ import requests
 import pandas as pd
 import re
 from datetime import datetime
+from tqdm import tqdm
 
 # ========== Configuración ==========
-EXCEL_CATEGORIAS = "./data/urls_categorias_alsuper.xlsx" 
+EXCEL_CATEGORIAS = "./salida/urls/urls_categorias_alsuper.xlsx" 
 COLUMNA_EXCEL = "URL_CATEGORIA" 
-CSV_OUTPUT = "./salida/data/2026/09_septiembre/scraping_detalle_alsuper.csv"
-TIENDA = "22"
+CSV_OUTPUT = "./salida/data/2026/10_octubre/scraping_detalle_alsuper.csv"
+TIENDA = "1"
+# Version de Chrome que se declara en el User-Agent; ajusta aqui si cambia.
+CHROME_VERSION = 153
 
 HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "User-Agent": f"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{CHROME_VERSION}.0.0.0 Safari/537.36",
     "Accept": "application/json",
     "Referer": "https://alsuper.com/",
 }
@@ -36,7 +39,7 @@ def main():
         writer = csv.DictWriter(f, fieldnames=CSV_FIELDS)
         writer.writeheader()
 
-        for url_base in lista_urls_api:
+        for url_base in tqdm(lista_urls_api, desc="alsuper", unit="categoria"):
             # Limpieza de parámetros de página previos
             url_limpia = re.sub(r'([?&])page=\d+', r'\1', url_base)
             url_limpia = re.sub(r'([?&])limit=\d+', r'\1', url_limpia).replace('&&', '&').replace('?&', '?').rstrip('&').rstrip('?')

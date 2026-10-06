@@ -1,0 +1,86 @@
+version: 2
+
+models:
+  - name: int_match_ndf
+    description: >
+      Decisión por producto sobre el catálogo completo: toma el candidato
+      rank 1 de `int_candidatos_producto` y lo resuelve en una fila por
+      `producto_key`, universo completo de `int_producto` (240,400 filas).
+      Regla de ALD-93: la marca del NDF aparece palabra por palabra en la
+      descripción, la distancia queda dentro del `tau` de la división del
+      NDF (`tau_farma` / `tau_no_farma`), y para `vectorial` además
+      `margen >= delta_min` y la guarda de magnitudes. Sin reciprocidad.
+      Ver el docstring del modelo para las mediciones detrás de cada
+      decisión.
+    tests:
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "(ndf_id is null) = (decision = 'sin_match')"
+      # Sin marca en la descripción la precisión ronda 0.5: nada fuera de
+      # sin_match puede llegar sin ella.
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "decision = 'sin_match' or marca_ok"
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: >-
+              decision != 'vectorial'
+              or (guarda_ok and margen >= {{ var('delta_min') }})
+    columns:
+      - name: producto_key
+        description: FK a `dim_producto`, grano de esta tabla.
+        tests:
+          - not_null
+          - unique
+      - name: ndf_id
+        description: >
+          El candidato rank 1 de la búsqueda vectorial. `NULL` exactamente
+          cuando `decision = 'sin_match'`, ver el test de este modelo.
+        tests:
+          - relationships:
+              arguments:
+                to: ref('dim_ndf')
+                field: ndf_id
+      - name: distancia
+        description: >
+          Distancia coseno del candidato en `ndf_id`. Mismo `NULL` que
+          `ndf_id`.
+        tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                max_value: 2
+                inclusive: true
+      - name: margen
+        description: >
+          Distancia del segundo candidato menos la del primero, tal cual la
+          calcula `int_candidatos_producto`. `NULL` si no hay segundo
+          candidato; por diseño eso nunca cumple `margen >= delta_min` y
+          cae a `cuarentena`.
+      - name: guarda_ok
+        description: >
+          Si las magnitudes declaradas del candidato coinciden con las del
+          producto (`macros/guarda_magnitudes.sql`). Ya no descarta
+          candidatos: si es `false`, el producto va a `cuarentena` en vez
+          de `vectorial`.
+      - name: marca_ok
+        description: >
+          Si todas las palabras de la marca del NDF (`dim_ndf.producto`
+          normalizado con `limpiar_texto`) aparecen en la descripción del
+          producto. Siempre `true` fuera de `sin_match`.
+      - name: decision
+        description: >
+          `vectorial` (marca, distancia <= tau de la división, margen >=
+          delta_min, guarda OK y tienda/división fuera de
+          `cuarentena_forzada`), `cuarentena` (marca y distancia cuadran,
+          pero falla alguna de las otras) o `sin_match` (sin candidato,
+          sin marca o fuera del tau).
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - vectorial
+                  - cuarentena
+                  - sin_match
+                quote: true

@@ -1,0 +1,53 @@
+version: 2
+
+models:
+  - name: stg_puente_aportador
+    description: >
+      Puente aportador tipado: `puente_aportador_ext` con `sku` derivado de
+      `correlativo` (a 15 dígitos) y `bandera` descartada. El resto queda
+      STRING tal como viene de bronce. 952,605 filas, una por producto
+      reportado por cada aportador.
+
+      **`sku` a 15 dígitos, `trim` + relleno con ceros.** El origen rellena
+      `correlativo` con ceros o con espacios según el aportador (`S1` y `I4`
+      usan espacios); sin `trim`, Ahorro y Farmalisto cruzaban 0% contra
+      `dim_producto`. Con la normalización Ahorro cruza ~93% y Farmalisto
+      ~41%. Siguen en 0% soriana, fesa, alsuper y similares (yza 1 de
+      4,655): ahí el sku del aportador es otro identificador, no un
+      problema de formato, y necesitan matching por texto
+      (`producto`/`descripcion` vs `dim_ndf`/`dim_producto.descripcion`).
+    tests:
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "length(sku) = 15"
+            where: "sku is not null"
+    columns:
+      - name: aportador_clave
+        description: >
+          Clave del aportador. Se traduce a `tienda_key` en
+          `dim_puente_aportador` vía `dim_tienda.aportador_clave`.
+        tests:
+          - not_null
+      - name: aportador
+        description: >
+          Nombre del aportador, ya traducido en bronce. NULL si la clave no
+          estaba en `CVE_APORTADOR_NOMBRE.xlsx` al momento del corte.
+      - name: sku
+        description: >
+          `correlativo` normalizado a 15 dígitos (`trim` + `lpad` con
+          ceros); el test de largo lo vigila. Se cruza contra
+          `dim_producto.sku_cruce`, no contra `dim_producto.sku`. NULL en
+          las 6 filas centinela (`correlativo = '000000000000000'`); se
+          excluyen en `dim_puente_aportador`, no aquí.
+      - name: ndf_id
+        description: >
+          Llave del catálogo NDF, sin padding (mismo criterio que
+          `dim_ndf.ndf_id`). Validado: quitar el padding aquí recupera
+          102,446 filas que el join perdía en silencio (~48%% -> ~59%% de
+          match contra `dim_ndf`) — era el bloqueo que documenta `stg_ndf`,
+          resuelto de este lado. `8989898` es el centinela de "sin ndf_id
+          conocido" del aportador (no empieza en cero, sobrevive intacto).
+      - name: producto
+        description: Nombre del producto según el aportador.
+      - name: descripcion
+        description: Descripción / complemento del nombre.

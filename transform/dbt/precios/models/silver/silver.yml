@@ -1,0 +1,182 @@
+version: 2
+
+models:
+  - name: precios
+    description: >
+      Tabla limpia de primera etapa: `stg_precios` sin filas descartadas
+      ni duplicados exactos (`motivo_descarte IS NULL AND rn = 1`), con
+      las derivadas de precio ya resueltas. Particionada por `mes`
+      (granularidad mes) y clusterizada por `tienda`.
+    columns:
+      - name: tienda
+        description: Slug de `load/config/archivos.yml`.
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - alsuper
+                  - aurrera
+                  - benavides
+                  - chedraui
+                  - comer
+                  - fahorro
+                  - farmalisto
+                  - farmatodo
+                  - fesa
+                  - gi
+                  - guadalajara
+                  - heb
+                  - isseg
+                  - klyns
+                  - sanpablo
+                  - similares
+                  - soriana
+                  - walmart
+                  - yza
+                quote: true
+          # Integridad referencial contra el catálogo. Atrapa que el seed
+          # `tiendas` y lo que ya está en BigQuery se desalineen -una tienda
+          # nueva en `archivos.yml` que nadie agregó al catálogo- haciendo
+          # fallar el build, en vez de dejar un join silencioso a nada aguas
+          # abajo. Misma idea que tendrá `ndf_id` cuando llegue el crosswalk.
+          - relationships:
+              arguments:
+                to: ref('dim_tienda')
+                field: tienda_slug
+      - name: mes
+        description: Primer día del ciclo mensual. Columna de partición.
+        tests:
+          - not_null
+      - name: fecha_captura
+        description: Día real de scrapeo, sin hora.
+        tests:
+          - not_null
+      - name: url_producto
+        description: Tal cual la escribió el scraper, sin canonicalizar.
+        tests:
+          - not_null
+      - name: sku
+        description: >
+          Siempre presente: aurrera lo imputa desde el código en
+          `url_producto` en staging; la fila que aun así no lo resuelve
+          se descarta a `precios_cuarentena` (`motivo_descarte =
+          'SIN_SKU'`).
+        tests:
+          - not_null
+      - name: producto
+        description: Descripción original, sin normalizar.
+        tests:
+          - not_null
+      - name: descripcion
+        description: >
+          Descripción normalizada con la macro `limpiar_texto`, en
+          mayúsculas.
+        tests:
+          - not_null
+      - name: url_imagen
+        description: "`SIN_IMAGEN` cuando el CSV no traía una."
+        tests:
+          - not_null
+      - name: precio_lista
+        description: >
+          Siempre `> 0`. Si el CSV solo traía un precio, este toma su
+          valor.
+        tests:
+          - not_null
+      - name: precio_oferta
+        description: >
+          NULL si no hay descuento real. No se rellena con `0`: ese
+          centinela contamina cualquier `MIN()`/`AVG()` aguas abajo. El
+          `0` original vive en `precios_ext` y `precios_cuarentena`.
+    tests:
+      # La garantía de que no quedó ningún duplicado exacto: la razón de
+      # ser de esta tabla.
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - tienda
+              - url_producto
+              - sku
+              - producto
+              - url_imagen
+              - precio_lista
+              - precio_oferta
+              - fecha_captura
+      - dbt_utils.expression_is_true:
+          arguments:
+            column_name: precio_lista
+            expression: "> 0"
+      - dbt_utils.expression_is_true:
+          # Solo evalúa las filas con oferta real: las que no tienen
+          # descuento traen `precio_oferta` NULL y la comparación las
+          # deja pasar sin chequear. Antes, con el centinela `0`, cubría
+          # también esos casos (`0 < precio_lista` siempre cierto).
+          arguments:
+            expression: "precio_oferta < precio_lista"
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "descripcion = upper(descripcion)"
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "trim(descripcion) != ''"
+      # San pablo marzo lo viola legítimamente: la corrida se hizo el 1
+      # de abril y fecha_captura quedó fuera del mes de la partición. Por
+      # eso avisa, no rompe el build.
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "fecha_captura between mes and last_day(mes)"
+          config:
+            severity: warn
+
+  - name: precios_cuarentena
+    description: >
+      Filas de `stg_precios` que no pasaron el filtro de `precios`
+      (`motivo_descarte IS NOT NULL OR rn > 1`), con los valores `*_raw`
+      de bronce en vez de los tipados. Particionada por `mes`,
+      clusterizada por `motivo_descarte`.
+    columns:
+      - name: motivo_descarte
+        description: >
+          `SIN_DESCRIPCION`, `SIN_PRECIO`, `SIN_SKU` (sin identificador
+          y sin regla de imputación aplicable) o `DUPLICADO` (este
+          último cuando la fila era válida pero perdió el `rn = 1`).
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  ["SIN_DESCRIPCION", "SIN_PRECIO", "SIN_SKU", "DUPLICADO"]
+                quote: true
+      - name: tienda
+        description: Slug de `load/config/archivos.yml`.
+        tests:
+          - not_null
+      - name: mes
+        description: Primer día del ciclo mensual. Columna de partición.
+        tests:
+          - not_null
+      - name: fecha_captura
+        description: Día real de scrapeo, sin hora.
+      - name: url_producto
+        description: Tal cual la escribió el scraper.
+      - name: producto
+        description: Descripción original, sin normalizar.
+      - name: sku_raw
+        description: RAW. Texto del SKU tal cual venía en el CSV.
+      - name: precio_actual_raw
+        description: RAW. Texto del precio de lista, antes de parsear.
+      - name: precio_oferta_raw
+        description: RAW. Texto del precio de oferta, antes de parsear.
+      - name: fecha_captura_raw
+        description: RAW. Texto de la fecha, antes de parsear.
+      - name: tienda_raw
+        description: RAW. Literal de la columna `Tienda` del CSV de origen.
+      - name: calidad_flags
+        description: Lista de motivos de sospecha de la fila, heredada de bronce.
+      - name: _archivo_origen
+        description: Ruta relativa del CSV original.
+      - name: _fila_num
+        description: Índice 1-based dentro de ese CSV.
+      - name: _ingestado_en
+        description: Corrida de ingesta de `load/` que produjo la fila.

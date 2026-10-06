@@ -1,0 +1,125 @@
+# Proyecto dbt de transform/. Lee las external tables de precios_bronce (la
+# frontera del módulo load/) y materializa staging como vistas en
+# precios_silver, silver como tablas en precios_silver y gold como tablas en
+# precios_gold. Los seeds -catálogos curados a mano- también aterrizan en
+# precios_bronce: son dato de entrada, no un modelo de ninguna capa.
+
+name: "precios"
+version: "0.1.0"
+config-version: 2
+
+profile: "precios"
+
+model-paths: ["models"]
+macro-paths: ["macros"]
+seed-paths: ["seeds"]
+test-paths: ["tests"]
+analysis-paths: ["analyses"]
+snapshot-paths: ["snapshots"]
+
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+models:
+  precios:
+    # staging es la capa de tipado y limpieza: se recalcula en cada consulta,
+    # así que no cuesta almacenamiento ni necesita refresco.
+    staging:
+      +materialized: view
+    # silver es lo que consume gold y las herramientas de BI: se materializa
+    # para no reprocesar el histórico completo en cada lectura. Sin +schema:
+    # cae en target.schema (precios_silver).
+    silver:
+      +materialized: table
+    # gold: modelo dimensional (fact + dims). +schema: precios_gold es
+    # literal gracias a macros/generate_schema_name.sql; sin esa macro dbt
+    # escribiría en precios_silver_precios_gold.
+    gold:
+      +materialized: table
+      +schema: precios_gold
+    # ml: infraestructura del entity resolution vectorial (banco de
+    # embeddings, vectores del catálogo NDF, vistas de calibración). Va en su
+    # propio dataset y no en precios_gold porque gold se reconstruye entero en
+    # cada build y los embeddings son llamadas a la API ya pagadas: la
+    # frontera tiene que ser física, no una convención que alguien olvida.
+    ml:
+      +schema: precios_ml
+
+# Umbrales del entity resolution vectorial. Los valores de las fases
+# anteriores (por bucket, ALD-68 Sanfer y ALD-89 catálogo) quedan en el
+# historial de git y en el cierre de sus issues; la regla vigente es la de
+# ALD-93, ver el docstring de `int_match_ndf`.
+vars:
+  # Texto del catálogo que se vectoriza (`macros/texto_er_ndf.sql`). v4 =
+  # presentación sin abreviaturas (ALD-94). Volver a v1 cambia los hashes
+  # a los de la generación anterior, que siguen en el banco `emb_texto`.
+  variante_ndf: v4
+
+  # delta_min: margen mínimo entre el primer y segundo candidato de un
+  # producto, global. Es el único filtro además de la marca que se gana su
+  # lugar en el diagnóstico de ALD-93 (+10.7 pp de precisión en d<=0.04);
+  # su calibración original (ALD-68, verificada otra vez en ALD-89) sigue
+  # vigente.
+  delta_min: 0.008
+
+  # tau por división del NDF: distancia coseno máxima para considerar un
+  # candidato cuya marca aparece en la descripción. Recalibrados en ALD-95
+  # sobre el texto ganador (v4) con la regla completa de `int_match_ndf`
+  # (marca + margen + guarda), split de calibración, corrida 2026-09-24.
+  # Objetivo de precisión 0.95 FARMA / 0.85 NO FARMA. Los de ALD-93 (0.08 /
+  # 0.035) eran de v1 y sin guarda: la escala de distancias cambia con el
+  # texto, así que no se reutilizan.
+  #
+  # FARMA: con la regla completa la precisión nunca cruza 0.95 hacia abajo
+  # (0.9593 en 0.15, el extremo del barrido): la marca y la guarda hacen el
+  # trabajo. Se toma 0.10, donde la curva se satura (11,117 correctos, 0.9599;
+  # de 0.10 a 0.15 solo se suman 6), en vez de abrir la puerta a distancias
+  # que la calibración casi no ve.
+  tau_farma: 0.10
+  # NO FARMA: 0.8521 en 0.04 (3,778 correctos); 0.045 ya cae a 0.8475.
+  # Pegado al objetivo: 0.035 da 0.8618 con 3,211 si hace falta margen.
+  tau_no_farma: 0.04
+
+  # Combinaciones tienda/división que nunca se aceptan en automático: su
+  # `vectorial` pasa a `cuarentena` (ALD-96). Auditoría de 208 huérfanos
+  # (`transform/entity_resolution/auditar_huerfanos.py`, 2026-09-24): el
+  # límite superior del IC de Wilson de estas cuatro quedó más de 5 pp abajo
+  # del objetivo. Sus errores no son de distancia -la marca del NDF es una
+  # palabra genérica (`ZINC`, `VITAMINA E`) o coincide el producto pero
+  # cambia la cantidad o la talla-, así que bajar su tau no los corregiría.
+  # Suman 87 productos; el resto de los huérfanos da ~0.98 FARMA / ~0.94
+  # NO FARMA ponderado por tamaño de estrato.
+  cuarentena_forzada:
+    - {tienda: walmart, division: FARMA}      # 4/8 correctos
+    - {tienda: aurrera, division: FARMA}      # 5/8
+    - {tienda: similares, division: FARMA}    # 5/8
+    - {tienda: fahorro, division: NO FARMA}   # 2/8, talla de medias Daonsa
+
+  # Panel del dashboard (`models/gold/mart/`, PRD §12). Antes de oct 2025
+  # solo hay Farmacias del Ahorro, así que el panel multicadena empieza ahí.
+  mes_inicio_panel: "2025-10-01"
+  # Un mes con menos cadenas capturadas es incompleto y no se publica; hoy
+  # eso solo deja fuera nov 2025.
+  min_cadenas_mes: 5
+  # Laboratorio del cliente, comparado contra `dim_ndf.laboratorio`. Es
+  # igualdad exacta: `SANFERGO` es otro laboratorio.
+  laboratorio_cliente: SANFER
+  # Base del índice TPD (= 100). No la lee dbt sino
+  # `transform/indices/estimar_cpd_tpd.py`. Jun 2026 es el primer mes con
+  # las 19 cadenas: con oct 2025 todos los meses heredaban el ruido de un
+  # mes con pocos precios. La base no cambia la variación entre meses, solo
+  # el ancho de las bandas.
+  mes_base_tpd: "2026-06-01"
+
+# El seed tiendas alimenta dim_tienda. Va a precios_bronce -no a precios_gold-
+# porque es dato de entrada curado a mano, no una tabla modelada: dim_tienda
+# lo lee igual que stg_ndf lee ndf_ext. column_types no es opcional: sin él
+# dbt infiere el tipo del CSV y tienda_key podría llegar como STRING, lo que
+# rompería en silencio el test `relationships` de la fact contra la dimensión.
+seeds:
+  precios:
+    +schema: precios_bronce
+    tiendas:
+      +column_types:
+        tienda_key: int64

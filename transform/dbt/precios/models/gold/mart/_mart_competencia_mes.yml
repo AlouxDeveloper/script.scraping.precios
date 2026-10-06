@@ -1,0 +1,210 @@
+version: 2
+
+models:
+  - name: mart_competencia_mes
+    description: >
+      Competencia de cada presentación del cliente (vista V4). Grano
+      `(ndf_id, ndf_id_competidor, mes)`: `ndf_id` es la presentación del
+      cliente y `ndf_id_competidor` cada presentación del mismo grupo
+      competitivo con precio ese mes, incluida la propia. Una fila
+      sintética "Genéricos (mediana)" por presentación y mes, con
+      `ndf_id_competidor` NULL, cuando hay 3 o más genéricos.
+
+      M8: percentil de rango medio del precio por mg (N >= 5). M9: prima
+      contra la mediana de los genéricos `G.P.` del grupo (3 o más).
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - ndf_id
+              - ndf_id_competidor
+              - mes
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "percentil is null or percentil between 0 and 100"
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "percentil is null or presentaciones_n >= 5"
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "prima_genericos is null or (prima_genericos > 0 and genericos_n >= 3)"
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "es_sintetica = (ndf_id_competidor is null)"
+    columns:
+      - name: ndf_id
+        description: Presentación del cliente (`es_cliente`). FK a `dim_ndf`.
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_ndf')
+                field: ndf_id
+      - name: mes
+        description: Primer día del mes. Columna de partición.
+        tests:
+          - not_null
+      - name: ndf_id_competidor
+        description: >
+          Presentación del mismo grupo competitivo. NULL en la fila sintética
+          de genéricos.
+        tests:
+          - relationships:
+              arguments:
+                to: ref('dim_ndf')
+                field: ndf_id
+      - name: marca
+        description: Marca de la presentación del cliente (`ndf_id`).
+      - name: presentacion
+        description: Presentación del cliente. Mismo nombre que en los demás `mart_` para el filtro global.
+      - name: molecula
+        description: Molécula de la presentación del cliente.
+      - name: via
+        description: Vía de la presentación del cliente.
+      - name: forma
+        description: Forma farmacéutica de la presentación del cliente.
+      - name: genero
+        description: Género de la presentación del cliente.
+      - name: marca_competidor
+        description: Marca del competidor, o "Genéricos (mediana)" en la fila sintética.
+      - name: presentacion_competidor
+        description: Presentación del competidor.
+      - name: laboratorio_competidor
+        description: Laboratorio del competidor.
+      - name: es_propio
+        description: Verdadero en la fila de la propia presentación del cliente.
+        tests:
+          - not_null
+      - name: es_generico
+        description: Género `G.P.` en el NDF. Verdadero en la fila sintética.
+      - name: es_sintetica
+        description: Verdadero solo en la fila "Genéricos (mediana)".
+        tests:
+          - not_null
+      - name: precio_mg
+        description: >
+          M7 · Precio típico entre mg por envase. En la fila sintética, la
+          mediana del precio por mg de los genéricos.
+        tests:
+          - not_null
+      - name: precio_tipico
+        description: >
+          Mediana del precio entre cadenas con cualquier n. En la fila
+          sintética, la mediana del precio típico de los genéricos.
+      - name: cadenas_n
+        description: Cadenas con precio del competidor. NULL en la fila sintética.
+      - name: percentil
+        description: >
+          M8 · 100 · (#más baratas + ½ · #empatadas) / N, con una decimal.
+          NULL con N < 5 y en la fila sintética.
+      - name: prima_genericos
+        description: >
+          M9 · precio_mg / mediana del precio_mg de los genéricos, con dos
+          decimales. NULL con menos de 3 genéricos; 1 en la fila sintética.
+      - name: presentaciones_n
+        description: N · presentaciones del grupo con precio ese mes, incluida la propia.
+      - name: genericos_n
+        description: Genéricos `G.P.` del grupo con precio ese mes.
+      - name: catalogo_n
+        description: Presentaciones del grupo en el catálogo NDF, con o sin precio.
+      - name: grupo_competitivo
+        description: Molécula exacta + vía + mg por unidad.
+      - name: en_grafica
+        description: >
+          Verdadero para las 10 más baratas y las 10 más caras por mg, la
+          propia y la fila sintética.
+        tests:
+          - not_null
+
+unit_tests:
+  - name: mart_competencia_mes_ejemplo_prd
+    description: >
+      Ibuprofeno 400 mg oral sólido, agosto 2026 (PRD M8 y M9): 8 marcas y
+      16 genéricos con mediana $47.00 ($0.01175/mg). Tabalon ×10 queda en el
+      percentil 97.9 (≈98) con prima 3.96; Motrin ×10 2.32, Advil ×10 2.20 y
+      Temprafen ×10 2.15. Los genéricos son inventados dentro del rango del
+      PRD ($15.75 a $65.00). Solo Tabalon ×10 va como cliente para acotar
+      las filas esperadas a un grupo.
+    model: mart_competencia_mes
+    given:
+      - input: ref('mart_precio_ndf_mes')
+        rows:
+          - {ndf_id: "8479830", mes: 2026-08-01, grupo_competitivo: "IBUPROFENO | ORAL | 400 MG", precio_tipico: 186, precio_mg: 0.0465, cadenas_n: 1, marca: "TABALON ×10", genero: "ETICO", es_cliente: true}
+          - {ndf_id: "8479835", mes: 2026-08-01, grupo_competitivo: "IBUPROFENO | ORAL | 400 MG", precio_tipico: 348.50, precio_mg: 0.0435625, cadenas_n: 1, marca: "TABALON ×20", genero: "ETICO", es_cliente: false}
+          - {ndf_id: "1", mes: 2026-08-01, grupo_competitivo: "IBUPROFENO | ORAL | 400 MG", precio_tipico: 126.50, precio_mg: 0.031625, cadenas_n: 1, marca: "ACTRON ×10", genero: "ETICO", es_cliente: false}
+          - {ndf_id: "2", mes: 2026-08-01, grupo_competitivo: "IBUPROFENO | ORAL | 400 MG", precio_tipico: 109, precio_mg: 0.02725, cadenas_n: 1, marca: "MOTRIN ×10", genero: "ETICO", es_cliente: false}
+          - {ndf_id: "3", mes: 2026-08-01, grupo_competitivo: "IBUPROFENO | ORAL | 400 MG", precio_tipico: 103.31, precio_mg: 0.0258275, cadenas_n: 1, marca: "ADVIL ×10", genero: "ETICO", es_cliente: false}
+          - {ndf_id: "4", mes: 2026-08-01, grupo_competitivo: "IBUPROFENO | ORAL | 400 MG", precio_tipico: 461.25, precio_mg: 0.025625, cadenas_n: 1, marca: "MOTRIN ×45", genero: "ETICO", es_cliente: false}
+          - {ndf_id: "5", mes: 2026-08-01, grupo_competitivo: "IBUPROFENO | ORAL | 400 MG", precio_tipico: 101, precio_mg: 0.02525, cadenas_n: 1, marca: "TEMPRAFEN ×10", genero: "ETICO", es_cliente: false}
+          - {ndf_id: "6", mes: 2026-08-01, grupo_competitivo: "IBUPROFENO | ORAL | 400 MG", precio_tipico: 179, precio_mg: 0.022375, cadenas_n: 1, marca: "ADVIL ×20", genero: "ETICO", es_cliente: false}
+          - {ndf_id: "100", mes: 2026-08-01, grupo_competitivo: "IBUPROFENO | ORAL | 400 MG", precio_tipico: 15.75, precio_mg: 0.0039375, cadenas_n: 1, marca: "GENERICO 1", genero: "G.P.", es_cliente: false}
+          - {ndf_id: "101", mes: 2026-08-01, grupo_competitivo: "IBUPROFENO | ORAL | 400 MG", precio_tipico: 25, precio_mg: 0.00625, cadenas_n: 1, marca: "GENERICO 2", genero: "G.P.", es_cliente: false}
+          - {ndf_id: "102", mes: 2026-08-01, grupo_competitivo: "IBUPROFENO | ORAL | 400 MG", precio_tipico: 30, precio_mg: 0.0075, cadenas_n: 1, marca: "GENERICO 3", genero: "G.P.", es_cliente: false}
+          - {ndf_id: "103", mes: 2026-08-01, grupo_competitivo: "IBUPROFENO | ORAL | 400 MG", precio_tipico: 35, precio_mg: 0.00875, cadenas_n: 1, marca: "GENERICO 4", genero: "G.P.", es_cliente: false}
+          - {ndf_id: "104", mes: 2026-08-01, grupo_competitivo: "IBUPROFENO | ORAL | 400 MG", precio_tipico: 39, precio_mg: 0.00975, cadenas_n: 1, marca: "GENERICO 5", genero: "G.P.", es_cliente: false}
+          - {ndf_id: "105", mes: 2026-08-01, grupo_competitivo: "IBUPROFENO | ORAL | 400 MG", precio_tipico: 42, precio_mg: 0.0105, cadenas_n: 1, marca: "GENERICO 6", genero: "G.P.", es_cliente: false}
+          - {ndf_id: "106", mes: 2026-08-01, grupo_competitivo: "IBUPROFENO | ORAL | 400 MG", precio_tipico: 45, precio_mg: 0.01125, cadenas_n: 1, marca: "GENERICO 7", genero: "G.P.", es_cliente: false}
+          - {ndf_id: "107", mes: 2026-08-01, grupo_competitivo: "IBUPROFENO | ORAL | 400 MG", precio_tipico: 46, precio_mg: 0.0115, cadenas_n: 1, marca: "GENERICO 8", genero: "G.P.", es_cliente: false}
+          - {ndf_id: "108", mes: 2026-08-01, grupo_competitivo: "IBUPROFENO | ORAL | 400 MG", precio_tipico: 48, precio_mg: 0.012, cadenas_n: 1, marca: "GENERICO 9", genero: "G.P.", es_cliente: false}
+          - {ndf_id: "109", mes: 2026-08-01, grupo_competitivo: "IBUPROFENO | ORAL | 400 MG", precio_tipico: 49, precio_mg: 0.01225, cadenas_n: 1, marca: "GENERICO 10", genero: "G.P.", es_cliente: false}
+          - {ndf_id: "110", mes: 2026-08-01, grupo_competitivo: "IBUPROFENO | ORAL | 400 MG", precio_tipico: 52, precio_mg: 0.013, cadenas_n: 1, marca: "GENERICO 11", genero: "G.P.", es_cliente: false}
+          - {ndf_id: "111", mes: 2026-08-01, grupo_competitivo: "IBUPROFENO | ORAL | 400 MG", precio_tipico: 55, precio_mg: 0.01375, cadenas_n: 1, marca: "GENERICO 12", genero: "G.P.", es_cliente: false}
+          - {ndf_id: "112", mes: 2026-08-01, grupo_competitivo: "IBUPROFENO | ORAL | 400 MG", precio_tipico: 58, precio_mg: 0.0145, cadenas_n: 1, marca: "GENERICO 13", genero: "G.P.", es_cliente: false}
+          - {ndf_id: "113", mes: 2026-08-01, grupo_competitivo: "IBUPROFENO | ORAL | 400 MG", precio_tipico: 60, precio_mg: 0.015, cadenas_n: 1, marca: "GENERICO 14", genero: "G.P.", es_cliente: false}
+          - {ndf_id: "114", mes: 2026-08-01, grupo_competitivo: "IBUPROFENO | ORAL | 400 MG", precio_tipico: 62, precio_mg: 0.0155, cadenas_n: 1, marca: "GENERICO 15", genero: "G.P.", es_cliente: false}
+          - {ndf_id: "115", mes: 2026-08-01, grupo_competitivo: "IBUPROFENO | ORAL | 400 MG", precio_tipico: 65, precio_mg: 0.01625, cadenas_n: 1, marca: "GENERICO 16", genero: "G.P.", es_cliente: false}
+      - input: ref('int_ndf_grupo_competitivo')
+        rows:
+          # Las 24 con precio y una más solo en catálogo.
+          - {ndf_id: "8479830", grupo_competitivo: "IBUPROFENO | ORAL | 400 MG"}
+          - {ndf_id: "8479835", grupo_competitivo: "IBUPROFENO | ORAL | 400 MG"}
+          - {ndf_id: "1", grupo_competitivo: "IBUPROFENO | ORAL | 400 MG"}
+          - {ndf_id: "2", grupo_competitivo: "IBUPROFENO | ORAL | 400 MG"}
+          - {ndf_id: "3", grupo_competitivo: "IBUPROFENO | ORAL | 400 MG"}
+          - {ndf_id: "4", grupo_competitivo: "IBUPROFENO | ORAL | 400 MG"}
+          - {ndf_id: "5", grupo_competitivo: "IBUPROFENO | ORAL | 400 MG"}
+          - {ndf_id: "6", grupo_competitivo: "IBUPROFENO | ORAL | 400 MG"}
+          - {ndf_id: "100", grupo_competitivo: "IBUPROFENO | ORAL | 400 MG"}
+          - {ndf_id: "101", grupo_competitivo: "IBUPROFENO | ORAL | 400 MG"}
+          - {ndf_id: "102", grupo_competitivo: "IBUPROFENO | ORAL | 400 MG"}
+          - {ndf_id: "103", grupo_competitivo: "IBUPROFENO | ORAL | 400 MG"}
+          - {ndf_id: "104", grupo_competitivo: "IBUPROFENO | ORAL | 400 MG"}
+          - {ndf_id: "105", grupo_competitivo: "IBUPROFENO | ORAL | 400 MG"}
+          - {ndf_id: "106", grupo_competitivo: "IBUPROFENO | ORAL | 400 MG"}
+          - {ndf_id: "107", grupo_competitivo: "IBUPROFENO | ORAL | 400 MG"}
+          - {ndf_id: "108", grupo_competitivo: "IBUPROFENO | ORAL | 400 MG"}
+          - {ndf_id: "109", grupo_competitivo: "IBUPROFENO | ORAL | 400 MG"}
+          - {ndf_id: "110", grupo_competitivo: "IBUPROFENO | ORAL | 400 MG"}
+          - {ndf_id: "111", grupo_competitivo: "IBUPROFENO | ORAL | 400 MG"}
+          - {ndf_id: "112", grupo_competitivo: "IBUPROFENO | ORAL | 400 MG"}
+          - {ndf_id: "113", grupo_competitivo: "IBUPROFENO | ORAL | 400 MG"}
+          - {ndf_id: "114", grupo_competitivo: "IBUPROFENO | ORAL | 400 MG"}
+          - {ndf_id: "115", grupo_competitivo: "IBUPROFENO | ORAL | 400 MG"}
+          - {ndf_id: "999", grupo_competitivo: "IBUPROFENO | ORAL | 400 MG"}
+    expect:
+      rows:
+        - {ndf_id_competidor: "100", es_sintetica: false, percentil: 2.1, prima_genericos: 0.34, en_grafica: true, presentaciones_n: 24, genericos_n: 16, catalogo_n: 25}
+        - {ndf_id_competidor: "101", es_sintetica: false, percentil: 6.3, prima_genericos: 0.53, en_grafica: true, presentaciones_n: 24, genericos_n: 16, catalogo_n: 25}
+        - {ndf_id_competidor: "102", es_sintetica: false, percentil: 10.4, prima_genericos: 0.64, en_grafica: true, presentaciones_n: 24, genericos_n: 16, catalogo_n: 25}
+        - {ndf_id_competidor: "103", es_sintetica: false, percentil: 14.6, prima_genericos: 0.74, en_grafica: true, presentaciones_n: 24, genericos_n: 16, catalogo_n: 25}
+        - {ndf_id_competidor: "104", es_sintetica: false, percentil: 18.8, prima_genericos: 0.83, en_grafica: true, presentaciones_n: 24, genericos_n: 16, catalogo_n: 25}
+        - {ndf_id_competidor: "105", es_sintetica: false, percentil: 22.9, prima_genericos: 0.89, en_grafica: true, presentaciones_n: 24, genericos_n: 16, catalogo_n: 25}
+        - {ndf_id_competidor: "106", es_sintetica: false, percentil: 27.1, prima_genericos: 0.96, en_grafica: true, presentaciones_n: 24, genericos_n: 16, catalogo_n: 25}
+        - {ndf_id_competidor: "107", es_sintetica: false, percentil: 31.3, prima_genericos: 0.98, en_grafica: true, presentaciones_n: 24, genericos_n: 16, catalogo_n: 25}
+        - {ndf_id_competidor: "108", es_sintetica: false, percentil: 35.4, prima_genericos: 1.02, en_grafica: true, presentaciones_n: 24, genericos_n: 16, catalogo_n: 25}
+        - {ndf_id_competidor: "109", es_sintetica: false, percentil: 39.6, prima_genericos: 1.04, en_grafica: true, presentaciones_n: 24, genericos_n: 16, catalogo_n: 25}
+        - {ndf_id_competidor: "110", es_sintetica: false, percentil: 43.8, prima_genericos: 1.11, en_grafica: false, presentaciones_n: 24, genericos_n: 16, catalogo_n: 25}
+        - {ndf_id_competidor: "111", es_sintetica: false, percentil: 47.9, prima_genericos: 1.17, en_grafica: false, presentaciones_n: 24, genericos_n: 16, catalogo_n: 25}
+        - {ndf_id_competidor: "112", es_sintetica: false, percentil: 52.1, prima_genericos: 1.23, en_grafica: false, presentaciones_n: 24, genericos_n: 16, catalogo_n: 25}
+        - {ndf_id_competidor: "113", es_sintetica: false, percentil: 56.3, prima_genericos: 1.28, en_grafica: false, presentaciones_n: 24, genericos_n: 16, catalogo_n: 25}
+        - {ndf_id_competidor: "114", es_sintetica: false, percentil: 60.4, prima_genericos: 1.32, en_grafica: true, presentaciones_n: 24, genericos_n: 16, catalogo_n: 25}
+        - {ndf_id_competidor: "115", es_sintetica: false, percentil: 64.6, prima_genericos: 1.38, en_grafica: true, presentaciones_n: 24, genericos_n: 16, catalogo_n: 25}
+        - {ndf_id_competidor: "6", es_sintetica: false, percentil: 68.8, prima_genericos: 1.90, en_grafica: true, presentaciones_n: 24, genericos_n: 16, catalogo_n: 25}
+        - {ndf_id_competidor: "5", es_sintetica: false, percentil: 72.9, prima_genericos: 2.15, en_grafica: true, presentaciones_n: 24, genericos_n: 16, catalogo_n: 25}
+        - {ndf_id_competidor: "4", es_sintetica: false, percentil: 77.1, prima_genericos: 2.18, en_grafica: true, presentaciones_n: 24, genericos_n: 16, catalogo_n: 25}
+        - {ndf_id_competidor: "3", es_sintetica: false, percentil: 81.3, prima_genericos: 2.20, en_grafica: true, presentaciones_n: 24, genericos_n: 16, catalogo_n: 25}
+        - {ndf_id_competidor: "2", es_sintetica: false, percentil: 85.4, prima_genericos: 2.32, en_grafica: true, presentaciones_n: 24, genericos_n: 16, catalogo_n: 25}
+        - {ndf_id_competidor: "1", es_sintetica: false, percentil: 89.6, prima_genericos: 2.69, en_grafica: true, presentaciones_n: 24, genericos_n: 16, catalogo_n: 25}
+        - {ndf_id_competidor: "8479835", es_sintetica: false, percentil: 93.8, prima_genericos: 3.71, en_grafica: true, presentaciones_n: 24, genericos_n: 16, catalogo_n: 25}
+        - {ndf_id_competidor: "8479830", es_sintetica: false, percentil: 97.9, prima_genericos: 3.96, en_grafica: true, presentaciones_n: 24, genericos_n: 16, catalogo_n: 25}
+        - {ndf_id_competidor: null, es_sintetica: true, percentil: null, prima_genericos: 1, en_grafica: true, presentaciones_n: 24, genericos_n: 16, catalogo_n: 25}

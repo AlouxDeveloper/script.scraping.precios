@@ -1,0 +1,276 @@
+version: 2
+
+models:
+  - name: mart_precio_cadena_mes
+    description: >
+      Panel mensual por cadena del dashboard. Grano `(ndf_id, tienda_key,
+      mes)`: un precio por presentación NDF, cadena y mes, para todo el
+      mercado (todos los laboratorios con `ndf_id`). Base de los demás
+      `mart_` y de las vistas V2 y V3.
+
+      Publica los meses desde `mes_inicio_panel` con al menos
+      `min_cadenas_mes` cadenas capturadas, sin el mes en curso. El precio
+      del mes es el efectivo más bajo entre listings y capturas; el regular
+      y la oferta vienen de ese mismo listing.
+
+      Métricas: precio efectivo (M1), descuento (M11), atípicos por z
+      modificado sobre ln(precio) (M13), posición contra la mediana del
+      mercado sin atípicos (M4) y confianza del cruce (M12, solo devs).
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - ndf_id
+              - tienda_key
+              - mes
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "precio > 0"
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "precio_oferta is null or precio_oferta < precio_regular"
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "descuento_pct is null or (descuento_pct >= 0 and descuento_pct < 1)"
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "mes >= date '{{ var('mes_inicio_panel') }}' and mes < date_trunc(current_date('America/Mexico_City'), month)"
+    columns:
+      - name: ndf_id
+        description: FK a `dim_ndf`. Presentación NDF del listing.
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_ndf')
+                field: ndf_id
+      - name: tienda_key
+        description: FK a `dim_tienda`.
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_tienda')
+                field: tienda_key
+      - name: mes
+        description: Primer día del mes. Columna de partición (grano mes).
+        tests:
+          - not_null
+      - name: cadena
+        description: Nombre comercial de la cadena (`dim_tienda.tienda_nombre`).
+      - name: precio
+        description: >
+          M1 · Precio efectivo: la oferta si existe; si no, el regular. Es el
+          mínimo del mes entre los listings y capturas de la cadena.
+        tests:
+          - not_null
+      - name: precio_regular
+        description: >
+          Precio regular (`precio_lista` de la fact) del listing elegido.
+          Igual a `precio` cuando no hay oferta.
+        tests:
+          - not_null
+      - name: precio_oferta
+        description: >
+          Precio de oferta del listing elegido. NULL si no hay descuento real.
+      - name: descuento_pct
+        description: >
+          M11 · 1 − oferta / regular, como fracción (0.30 = 30%), redondeada
+          a 4 decimales. NULL sin oferta. Puede valer 0: ofertas de un
+          centavo (Benavides, 1,259 → 1,258.99) son descuento real en la
+          fuente pero se pierden al redondear.
+      - name: listings_n
+        description: >
+          Listings distintos de la cadena con esta presentación en el mes.
+          Más de uno indica duplicados en la tienda o vendedores terceros.
+      - name: cadenas_n
+        description: Cadenas con precio de la presentación en el mes.
+      - name: z_robusto
+        description: >
+          M13 · z modificado (Iglewicz y Hoaglin) sobre ln(precio): 0.6745 ·
+          (ln p − mediana) / MAD, o (ln p − mediana) / (1.2533 · MeanAD)
+          cuando la MAD vale 0. NULL con menos de 4 cadenas.
+      - name: es_atipico
+        description: >
+          M13 · |z_robusto| > 3.5. Falso cuando no se evalúa (menos de 4
+          cadenas). Los atípicos se excluyen de la mediana y de los
+          estadísticos de los demás `mart_`.
+        tests:
+          - not_null
+      - name: mediana_mercado
+        description: >
+          Mediana del precio efectivo entre cadenas no atípicas. NULL si
+          quedan menos de 4.
+      - name: pct_vs_mediana
+        description: >
+          M4 · precio / mediana_mercado − 1, como fracción, redondeada a 4
+          decimales. NULL sin mediana.
+      - name: tramo
+        description: >
+          M4 · Tramo de la posición con cortes en ±5% y ±15% (convención de la
+          industria). NULL sin mediana.
+        tests:
+          - accepted_values:
+              arguments:
+                values:
+                  - Muy por encima
+                  - Por encima
+                  - En paridad
+                  - Por debajo
+                  - Muy por debajo
+      - name: match_method
+        description: >
+          M12 (solo devs) · Método con el que se cruzó el listing elegido:
+          `aportadores`, `ean_cruzado` o `vectorial`.
+        tests:
+          - not_null
+      - name: precision_esperada
+        description: >
+          M12 (solo devs) · Precisión medida del método: aportadores 0.990,
+          EAN 0.994, vectorial 0.96 FARMA y 0.85 el resto.
+      - name: url_imagen
+        description: Imagen del listing elegido.
+      - name: marca
+        description: Marca comercial del NDF (`dim_ndf.producto`).
+      - name: presentacion
+        description: Presentación comercial del NDF.
+      - name: laboratorio
+        description: Laboratorio del NDF.
+      - name: molecula
+        description: Molécula(s) del principio activo, separadas por ` + `.
+      - name: via
+        description: >
+          Vía de administración, de `int_ndf_grupo_competitivo` (primera
+          letra de `cve_ff`). NULL cuando el catálogo no trae forma
+          farmacéutica.
+      - name: forma
+        description: Forma farmacéutica nivel 3 del NDF, sin espacios de relleno.
+      - name: genero
+        description: Género del NDF (`ETICO`, `O.T.C.`, ...).
+      - name: es_cliente
+        description: >
+          Verdadero si `laboratorio` es el `laboratorio_cliente` del proyecto.
+        tests:
+          - not_null
+
+unit_tests:
+  - name: mart_precio_cadena_mes_ejemplos_prd
+    description: >
+      Ejemplos del PRD, agosto 2026. Tabalon 400 mg ×10: mediana 186 y
+      Chedraui en −16.7% ("Muy por debajo"); Chedraui trae dos listings y
+      gana el más barato. Syncol 12: Walmart y Bodega Aurrerá a $217 son
+      atípicos y salen de la mediana. Quedan fuera sep 2025 (antes del
+      panel), nov 2025 (una sola cadena), sep 2026 (mes en curso) y el
+      listing sin `ndf_id`.
+    model: mart_precio_cadena_mes
+    overrides:
+      macros:
+        dbt.current_timestamp: "timestamp '2026-09-15 12:00:00'"
+    given:
+      - input: ref('fact_precios')
+        rows:
+          # Tabalon, ago 2026. Chedraui: dos listings y dos capturas.
+          - {producto_key: t3, tienda_key: 3, fecha_key: 2026-08-10, precio_lista: 210, precio_oferta: null}
+          - {producto_key: t4a, tienda_key: 4, fecha_key: 2026-08-05, precio_lista: 160, precio_oferta: null}
+          - {producto_key: t4a, tienda_key: 4, fecha_key: 2026-08-20, precio_lista: 158, precio_oferta: null}
+          - {producto_key: t4b, tienda_key: 4, fecha_key: 2026-08-20, precio_lista: 155, precio_oferta: null}
+          - {producto_key: t5, tienda_key: 5, fecha_key: 2026-08-10, precio_lista: 181, precio_oferta: null}
+          - {producto_key: t6, tienda_key: 6, fecha_key: 2026-08-10, precio_lista: 192, precio_oferta: null}
+          - {producto_key: t7, tienda_key: 7, fecha_key: 2026-08-10, precio_lista: 185, precio_oferta: null}
+          - {producto_key: t8, tienda_key: 8, fecha_key: 2026-08-10, precio_lista: 173.5, precio_oferta: null}
+          - {producto_key: t12, tienda_key: 12, fecha_key: 2026-08-10, precio_lista: 199, precio_oferta: null}
+          - {producto_key: t17, tienda_key: 17, fecha_key: 2026-08-10, precio_lista: 187, precio_oferta: null}
+          # Syncol 12, ago 2026.
+          - {producto_key: s2, tienda_key: 2, fecha_key: 2026-08-10, precio_lista: 217, precio_oferta: null}
+          - {producto_key: s3, tienda_key: 3, fecha_key: 2026-08-10, precio_lista: 124, precio_oferta: null}
+          - {producto_key: s4, tienda_key: 4, fecha_key: 2026-08-10, precio_lista: 115, precio_oferta: null}
+          - {producto_key: s6, tienda_key: 6, fecha_key: 2026-08-10, precio_lista: 137, precio_oferta: 116.45}
+          - {producto_key: s11, tienda_key: 11, fecha_key: 2026-08-10, precio_lista: 183, precio_oferta: 113}
+          - {producto_key: s12, tienda_key: 12, fecha_key: 2026-08-10, precio_lista: 137, precio_oferta: null}
+          - {producto_key: s14, tienda_key: 14, fecha_key: 2026-08-10, precio_lista: 183, precio_oferta: 119.90}
+          - {producto_key: s15, tienda_key: 15, fecha_key: 2026-08-10, precio_lista: 133, precio_oferta: null}
+          - {producto_key: s17, tienda_key: 17, fecha_key: 2026-08-10, precio_lista: 128.5, precio_oferta: null}
+          - {producto_key: s18, tienda_key: 18, fecha_key: 2026-08-10, precio_lista: 217, precio_oferta: null}
+          # Listing sin ndf_id: fuera.
+          - {producto_key: sin_ndf, tienda_key: 4, fecha_key: 2026-08-10, precio_lista: 50, precio_oferta: null}
+          # Sep 2025: 5 cadenas, pero antes de mes_inicio_panel.
+          - {producto_key: t3, tienda_key: 3, fecha_key: 2025-09-10, precio_lista: 200, precio_oferta: null}
+          - {producto_key: t5, tienda_key: 5, fecha_key: 2025-09-10, precio_lista: 200, precio_oferta: null}
+          - {producto_key: t6, tienda_key: 6, fecha_key: 2025-09-10, precio_lista: 200, precio_oferta: null}
+          - {producto_key: t7, tienda_key: 7, fecha_key: 2025-09-10, precio_lista: 200, precio_oferta: null}
+          - {producto_key: t8, tienda_key: 8, fecha_key: 2025-09-10, precio_lista: 200, precio_oferta: null}
+          # Nov 2025: una sola cadena, mes incompleto.
+          - {producto_key: t3, tienda_key: 3, fecha_key: 2025-11-10, precio_lista: 205, precio_oferta: null}
+          # Sep 2026: 5 cadenas, pero es el mes en curso.
+          - {producto_key: t3, tienda_key: 3, fecha_key: 2026-09-10, precio_lista: 210, precio_oferta: null}
+          - {producto_key: t5, tienda_key: 5, fecha_key: 2026-09-10, precio_lista: 181, precio_oferta: null}
+          - {producto_key: t6, tienda_key: 6, fecha_key: 2026-09-10, precio_lista: 192, precio_oferta: null}
+          - {producto_key: t7, tienda_key: 7, fecha_key: 2026-09-10, precio_lista: 185, precio_oferta: null}
+          - {producto_key: t8, tienda_key: 8, fecha_key: 2026-09-10, precio_lista: 173.5, precio_oferta: null}
+      - input: ref('dim_producto')
+        rows:
+          - {producto_key: t3, ndf_id: "8479830", match_method: aportadores}
+          - {producto_key: t4a, ndf_id: "8479830", match_method: aportadores}
+          - {producto_key: t4b, ndf_id: "8479830", match_method: ean_cruzado}
+          - {producto_key: t5, ndf_id: "8479830", match_method: aportadores}
+          - {producto_key: t6, ndf_id: "8479830", match_method: aportadores}
+          - {producto_key: t7, ndf_id: "8479830", match_method: aportadores}
+          - {producto_key: t8, ndf_id: "8479830", match_method: aportadores}
+          - {producto_key: t12, ndf_id: "8479830", match_method: aportadores}
+          - {producto_key: t17, ndf_id: "8479830", match_method: vectorial}
+          - {producto_key: s2, ndf_id: "8467910", match_method: aportadores}
+          - {producto_key: s3, ndf_id: "8467910", match_method: aportadores}
+          - {producto_key: s4, ndf_id: "8467910", match_method: aportadores}
+          - {producto_key: s6, ndf_id: "8467910", match_method: aportadores}
+          - {producto_key: s11, ndf_id: "8467910", match_method: aportadores}
+          - {producto_key: s12, ndf_id: "8467910", match_method: aportadores}
+          - {producto_key: s14, ndf_id: "8467910", match_method: aportadores}
+          - {producto_key: s15, ndf_id: "8467910", match_method: aportadores}
+          - {producto_key: s17, ndf_id: "8467910", match_method: vectorial}
+          - {producto_key: s18, ndf_id: "8467910", match_method: aportadores}
+          - {producto_key: sin_ndf, ndf_id: null, match_method: null}
+      - input: ref('dim_tienda')
+        rows:
+          - {tienda_key: 2, tienda_nombre: Bodega Aurrerá}
+          - {tienda_key: 3, tienda_nombre: Farmacias Benavides}
+          - {tienda_key: 4, tienda_nombre: Chedraui}
+          - {tienda_key: 5, tienda_nombre: La Comer}
+          - {tienda_key: 6, tienda_nombre: Farmacias del Ahorro}
+          - {tienda_key: 7, tienda_nombre: Farmalisto}
+          - {tienda_key: 8, tienda_nombre: Farmatodo}
+          - {tienda_key: 11, tienda_nombre: Farmacias Guadalajara}
+          - {tienda_key: 12, tienda_nombre: H-E-B}
+          - {tienda_key: 14, tienda_nombre: Farmacias Klyns}
+          - {tienda_key: 15, tienda_nombre: Farmacia San Pablo}
+          - {tienda_key: 17, tienda_nombre: Soriana}
+          - {tienda_key: 18, tienda_nombre: Walmart}
+      - input: ref('dim_ndf')
+        rows:
+          - {ndf_id: "8479830", producto: TABALON, presentacion: TABALON TABL 400 MG 10, laboratorio: SANFER, molecula: IBUPROFENO, cve_ff: AAA, forma_farmaceutica_n3: "ORAL S.ORD.TABLETAS   ", genero: ETICO, division: FARMA}
+          - {ndf_id: "8467910", producto: SYNCOL, presentacion: SYNCOL TABL 12, laboratorio: SANFER, molecula: PARACETAMOL + PAMABRON + MALEATO DE PIRILAMINA, cve_ff: AAA, forma_farmaceutica_n3: "ORAL S.ORD.TABLETAS   ", genero: O.T.C., division: FARMA}
+      - input: ref('int_ndf_grupo_competitivo')
+        rows:
+          - {ndf_id: "8479830", via: ORAL}
+          - {ndf_id: "8467910", via: ORAL}
+    expect:
+      rows:
+        # Tabalon: mediana 186, nadie atípico (Chedraui z = −2.48).
+        - {ndf_id: "8479830", tienda_key: 3, mes: 2026-08-01, precio: 210, listings_n: 1, descuento_pct: null, es_atipico: false, mediana_mercado: 186, pct_vs_mediana: 0.129, tramo: Por encima, precision_esperada: 0.990, via: ORAL, es_cliente: true}
+        - {ndf_id: "8479830", tienda_key: 4, mes: 2026-08-01, precio: 155, listings_n: 2, descuento_pct: null, es_atipico: false, mediana_mercado: 186, pct_vs_mediana: -0.1667, tramo: Muy por debajo, precision_esperada: 0.994, via: ORAL, es_cliente: true}
+        - {ndf_id: "8479830", tienda_key: 5, mes: 2026-08-01, precio: 181, listings_n: 1, descuento_pct: null, es_atipico: false, mediana_mercado: 186, pct_vs_mediana: -0.0269, tramo: En paridad, precision_esperada: 0.990, via: ORAL, es_cliente: true}
+        - {ndf_id: "8479830", tienda_key: 6, mes: 2026-08-01, precio: 192, listings_n: 1, descuento_pct: null, es_atipico: false, mediana_mercado: 186, pct_vs_mediana: 0.0323, tramo: En paridad, precision_esperada: 0.990, via: ORAL, es_cliente: true}
+        - {ndf_id: "8479830", tienda_key: 7, mes: 2026-08-01, precio: 185, listings_n: 1, descuento_pct: null, es_atipico: false, mediana_mercado: 186, pct_vs_mediana: -0.0054, tramo: En paridad, precision_esperada: 0.990, via: ORAL, es_cliente: true}
+        - {ndf_id: "8479830", tienda_key: 8, mes: 2026-08-01, precio: 173.5, listings_n: 1, descuento_pct: null, es_atipico: false, mediana_mercado: 186, pct_vs_mediana: -0.0672, tramo: Por debajo, precision_esperada: 0.990, via: ORAL, es_cliente: true}
+        - {ndf_id: "8479830", tienda_key: 12, mes: 2026-08-01, precio: 199, listings_n: 1, descuento_pct: null, es_atipico: false, mediana_mercado: 186, pct_vs_mediana: 0.0699, tramo: Por encima, precision_esperada: 0.990, via: ORAL, es_cliente: true}
+        - {ndf_id: "8479830", tienda_key: 17, mes: 2026-08-01, precio: 187, listings_n: 1, descuento_pct: null, es_atipico: false, mediana_mercado: 186, pct_vs_mediana: 0.0054, tramo: En paridad, precision_esperada: 0.96, via: ORAL, es_cliente: true}
+        # Syncol 12: Walmart y Aurrerá atípicos; mediana de las 8 restantes 121.95.
+        - {ndf_id: "8467910", tienda_key: 2, mes: 2026-08-01, precio: 217, listings_n: 1, descuento_pct: null, es_atipico: true, mediana_mercado: 121.95, pct_vs_mediana: 0.7794, tramo: Muy por encima, precision_esperada: 0.990, via: ORAL, es_cliente: true}
+        - {ndf_id: "8467910", tienda_key: 3, mes: 2026-08-01, precio: 124, listings_n: 1, descuento_pct: null, es_atipico: false, mediana_mercado: 121.95, pct_vs_mediana: 0.0168, tramo: En paridad, precision_esperada: 0.990, via: ORAL, es_cliente: true}
+        - {ndf_id: "8467910", tienda_key: 4, mes: 2026-08-01, precio: 115, listings_n: 1, descuento_pct: null, es_atipico: false, mediana_mercado: 121.95, pct_vs_mediana: -0.057, tramo: Por debajo, precision_esperada: 0.990, via: ORAL, es_cliente: true}
+        - {ndf_id: "8467910", tienda_key: 6, mes: 2026-08-01, precio: 116.45, listings_n: 1, descuento_pct: 0.15, es_atipico: false, mediana_mercado: 121.95, pct_vs_mediana: -0.0451, tramo: En paridad, precision_esperada: 0.990, via: ORAL, es_cliente: true}
+        - {ndf_id: "8467910", tienda_key: 11, mes: 2026-08-01, precio: 113, listings_n: 1, descuento_pct: 0.3825, es_atipico: false, mediana_mercado: 121.95, pct_vs_mediana: -0.0734, tramo: Por debajo, precision_esperada: 0.990, via: ORAL, es_cliente: true}
+        - {ndf_id: "8467910", tienda_key: 12, mes: 2026-08-01, precio: 137, listings_n: 1, descuento_pct: null, es_atipico: false, mediana_mercado: 121.95, pct_vs_mediana: 0.1234, tramo: Por encima, precision_esperada: 0.990, via: ORAL, es_cliente: true}
+        - {ndf_id: "8467910", tienda_key: 14, mes: 2026-08-01, precio: 119.90, listings_n: 1, descuento_pct: 0.3448, es_atipico: false, mediana_mercado: 121.95, pct_vs_mediana: -0.0168, tramo: En paridad, precision_esperada: 0.990, via: ORAL, es_cliente: true}
+        - {ndf_id: "8467910", tienda_key: 15, mes: 2026-08-01, precio: 133, listings_n: 1, descuento_pct: null, es_atipico: false, mediana_mercado: 121.95, pct_vs_mediana: 0.0906, tramo: Por encima, precision_esperada: 0.990, via: ORAL, es_cliente: true}
+        - {ndf_id: "8467910", tienda_key: 17, mes: 2026-08-01, precio: 128.5, listings_n: 1, descuento_pct: null, es_atipico: false, mediana_mercado: 121.95, pct_vs_mediana: 0.0537, tramo: Por encima, precision_esperada: 0.96, via: ORAL, es_cliente: true}
+        - {ndf_id: "8467910", tienda_key: 18, mes: 2026-08-01, precio: 217, listings_n: 1, descuento_pct: null, es_atipico: true, mediana_mercado: 121.95, pct_vs_mediana: 0.7794, tramo: Muy por encima, precision_esperada: 0.990, via: ORAL, es_cliente: true}
