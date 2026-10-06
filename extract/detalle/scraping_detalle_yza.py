@@ -10,10 +10,10 @@ from tqdm import tqdm
 
 # === Configuración ===
 CSV_INPUT    = "./salida/urls/urls_yza.csv"
-CSV_OUTPUT   = "./salida/data/2026/09_septiembre/scraping_detalle_yza.csv"
+CSV_OUTPUT   = "./salida/data/2026/10_octubre/scraping_detalle_yza.csv"
 TIENDA       = "19"
 # CSV aparte para URLs que fallaron, para no repetirlas al reanudar.
-CSV_ESTADO_URLS = "./salida/data/2026/09_septiembre/scraping_detalle_yza_fallidas.csv"
+CSV_ESTADO_URLS = "./salida/data/2026/10_octubre/scraping_detalle_yza_fallidas.csv"
 
 
 def marcar_fallida(url: str, detalle: str = "") -> None:

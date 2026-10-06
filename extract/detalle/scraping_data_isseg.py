@@ -11,7 +11,7 @@ from tqdm import tqdm
 
 # === Configuración de Archivos y Rutas ===
 EXCEL_INPUT = "./salida/urls/url_catego_isseg.xlsx"
-CSV_OUTPUT = "./salida/data/2026/09_septiembre/scraping_detalle_isseg.csv"
+CSV_OUTPUT = "./salida/data/2026/10_octubre/scraping_detalle_isseg.csv"
 NOMBRE_COLUMNA_URL_ENTRADA = "Url"
 TIENDA_NOMBRE = "13"
 

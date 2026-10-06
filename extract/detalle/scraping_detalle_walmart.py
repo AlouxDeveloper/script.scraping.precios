@@ -12,7 +12,7 @@ import os
 
 # === Configuración ===
 INPUT_CSV = "./salida/urls/productos_walmart.csv"
-CSV_OUTPUT = "./salida/data/2026/09_septiembre/scraping_detalle_walmart.csv"
+CSV_OUTPUT = "./salida/data/2026/10_octubre/scraping_detalle_walmart.csv"
 TIENDA = "18"
 
 # Versión mayor del Chrome instalado en la máquina donde corre el script.
@@ -31,7 +31,7 @@ ENCABEZADOS = [
 # No comparte esquema con CSV_OUTPUT a propósito: así una URL caída nunca se
 # mezcla con los productos capturados con éxito y no hay que migrar el
 # histórico ya guardado si se agrega este control después.
-CSV_ESTADO_URLS = "./salida/data/2026/09_septiembre/scraping_detalle_walmart_fallidas.csv"
+CSV_ESTADO_URLS = "./salida/data/2026/10_octubre/scraping_detalle_walmart_fallidas.csv"
 ENCABEZADOS_ESTADO = ["URL_PRODUCTO", "Estatus", "Detalle", "Fecha_Hora_Captura"]
 
 # Asegurar carpetas y archivo de salida

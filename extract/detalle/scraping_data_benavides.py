@@ -13,11 +13,11 @@ from tqdm import tqdm
 # Archivo CSV de entrada generado en la Fase 1 (URLs de producto)
 CSV_INPUT = "./salida/urls/urls_productos_benavides.csv"
 # Archivo CSV de salida con todos los detalles
-CSV_OUTPUT = "./salida/data/2026/09_septiembre/scraping_detalle_benavides.csv" # RUTA ACTUALIZADA
+CSV_OUTPUT = "./salida/data/2026/10_octubre/scraping_detalle_benavides.csv" # RUTA ACTUALIZADA
 TIENDA_NOMBRE = "3"
 # CSV aparte para URLs que fallaron (HTTP distinto de 200, error de red), para
 # no repetirlas en la siguiente reanudación.
-CSV_ESTADO_URLS = "./salida/data/2026/09_septiembre/scraping_detalle_benavides_fallidas.csv"
+CSV_ESTADO_URLS = "./salida/data/2026/10_octubre/scraping_detalle_benavides_fallidas.csv"
 # Version de Chrome que se declara en el User-Agent; ajusta aqui si cambia.
 CHROME_VERSION = 153
 

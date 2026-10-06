@@ -10,7 +10,7 @@ from tqdm import tqdm
 # ========== Configuración ==========
 EXCEL_CATEGORIAS = "./salida/urls/urls_categorias_alsuper.xlsx" 
 COLUMNA_EXCEL = "URL_CATEGORIA" 
-CSV_OUTPUT = "./salida/data/2026/09_septiembre/scraping_detalle_alsuper.csv"
+CSV_OUTPUT = "./salida/data/2026/10_octubre/scraping_detalle_alsuper.csv"
 TIENDA = "1"
 # Version de Chrome que se declara en el User-Agent; ajusta aqui si cambia.
 CHROME_VERSION = 153

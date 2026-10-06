@@ -10,13 +10,13 @@ from tqdm import tqdm
 
 # --- Configuración de Archivos y Columnas ---
 CSV_ENTRADA = "./salida/urls/urls_productos_sanpablo.csv"
-CSV_OUTPUT_DETALLES = "./salida/data/2026/09_septiembre/scraping_detalles_sanpablo.csv"
+CSV_OUTPUT_DETALLES = "./salida/data/2026/10_octubre/scraping_detalles_sanpablo.csv"
 COLUMNAS_ENTRADA = ["URL", "Producto"]
 COLUMNAS_SALIDA_DETALLES = ["SKU", "URL_PRODUCTO", "PRODUCTO", "PRECIO_ACTUAL",
                              "PRECIO_OFERTA", "URL_IMAGEN", "FECHA", "TIENDA"]
 TIENDA_NOMBRE = "15"
 # CSV aparte para URLs que fallaron, para no repetirlas al reanudar.
-CSV_ESTADO_URLS = "./salida/data/2026/09_septiembre/scraping_detalles_sanpablo_fallidas.csv"
+CSV_ESTADO_URLS = "./salida/data/2026/10_octubre/scraping_detalles_sanpablo_fallidas.csv"
 # Version de Chrome que se declara en el User-Agent; ajusta aqui si cambia.
 CHROME_VERSION = 153
 

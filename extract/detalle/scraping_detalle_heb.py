@@ -41,10 +41,10 @@ Correr siempre desde la raíz del repo: las rutas son relativas a ella.
 #
 # # === Configuración ===
 # CSV_INPUT    = "./salida/urls/urls_scraping_heb.csv"
-# CSV_OUTPUT   = "./salida/data/2026/09_septiembre/scraping_detalle_heb.csv"
+# CSV_OUTPUT   = "./salida/data/2026/10_octubre/scraping_detalle_heb.csv"
 # TIENDA       = "12"
 # # CSV aparte para URLs que fallaron, para no repetirlas al reanudar.
-# CSV_ESTADO_URLS = "./salida/data/2026/09_septiembre/scraping_detalle_heb_fallidas.csv"
+# CSV_ESTADO_URLS = "./salida/data/2026/10_octubre/scraping_detalle_heb_fallidas.csv"
 # # Version de Chrome que se declara en el User-Agent; ajusta aqui si cambia.
 # CHROME_VERSION = 153
 #
@@ -232,11 +232,11 @@ from tqdm import tqdm
 
 # === Configuración ===
 CSV_INPUT = "./salida/urls/urls_scraping_heb.csv"
-CSV_OUTPUT = "./salida/data/2026/09_septiembre/scraping_detalle_heb.csv"
+CSV_OUTPUT = "./salida/data/2026/10_octubre/scraping_detalle_heb.csv"
 TIENDA = "12"
 # CSV aparte para URLs que fallaron, para no repetirlas al reanudar.
 CSV_ESTADO_URLS = (
-    "./salida/data/2026/09_septiembre/scraping_detalle_heb_fallidas.csv"
+    "./salida/data/2026/10_octubre/scraping_detalle_heb_fallidas.csv"
 )
 # Version de Chrome que se declara en el User-Agent; ajusta aqui si cambia.
 CHROME_VERSION = 153

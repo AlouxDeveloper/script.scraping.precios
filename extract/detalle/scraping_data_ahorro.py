@@ -12,10 +12,10 @@ from tqdm import tqdm
 # Archivo de entrada: CSV generado por el scraper de listado
 CSV_INPUT_PATH = './salida/urls/urls_productos_ahorrro.csv'
 # Archivo de salida: CSV de detalles de productos
-CSV_OUTPUT_PATH = './salida/data/2026/09_septiembre/scraping_detalles_fahorro.csv'
+CSV_OUTPUT_PATH = './salida/data/2026/10_octubre/scraping_detalles_fahorro.csv'
 # CSV aparte para URLs que fallaron (no existía reanudación previa: se agrega
 # junto con el control de avance para no repetir peticiones sin sentido).
-CSV_ESTADO_URLS = './salida/data/2026/09_septiembre/scraping_detalles_fahorro_fallidas.csv'
+CSV_ESTADO_URLS = './salida/data/2026/10_octubre/scraping_detalles_fahorro_fallidas.csv'
 
 # Asegurar que el directorio de salida exista
 os.makedirs(os.path.dirname(CSV_OUTPUT_PATH), exist_ok=True)

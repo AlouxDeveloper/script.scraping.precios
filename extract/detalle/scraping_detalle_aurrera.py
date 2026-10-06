@@ -23,10 +23,10 @@ ssl._create_default_https_context = lambda: ssl.create_default_context(
 
 # === Configuración ===
 INPUT_CSV = "./salida/urls/productos_aurrera.csv"
-CSV_OUTPUT = "./salida/data/2026/09_septiembre/scraping_detalle_aurrera.csv"
+CSV_OUTPUT = "./salida/data/2026/10_octubre/scraping_detalle_aurrera.csv"
 TIENDA = "2"
 # CSV aparte para URLs que fallaron, para no repetirlas al reanudar.
-CSV_ESTADO_URLS = "./salida/data/2026/09_septiembre/scraping_detalle_aurrera_fallidas.csv"
+CSV_ESTADO_URLS = "./salida/data/2026/10_octubre/scraping_detalle_aurrera_fallidas.csv"
 # Version mayor del Chrome instalado (chrome://settings/help). uc descarga el
 # chromedriver que declares aqui; si Chrome se autoactualiza sin avisar,
 # ajusta este numero en vez de tocar el resto del script.

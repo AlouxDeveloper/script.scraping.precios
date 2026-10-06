@@ -18,11 +18,11 @@ from tqdm import tqdm
 
 # --- Configuraciones de Archivos ---
 CSV_URLS_ENTRADA = './salida/urls/urls_productos_fesa.csv'
-CSV_DETALLE_SALIDA = './salida/data/2026/09_septiembre/scraping_detalle_fesa.csv'
+CSV_DETALLE_SALIDA = './salida/data/2026/10_octubre/scraping_detalle_fesa.csv'
 COLUMNA_URL_ENTRADA = 'URL'
 TIENDA = "9"
 # CSV aparte para URLs que fallaron, para no repetirlas al reanudar.
-CSV_ESTADO_URLS = './salida/data/2026/09_septiembre/scraping_detalle_fesa_fallidas.csv'
+CSV_ESTADO_URLS = './salida/data/2026/10_octubre/scraping_detalle_fesa_fallidas.csv'
 # Version de Chrome que se declara en el User-Agent; ajusta aqui si cambia.
 CHROME_VERSION = "153.0.0.0"
 

@@ -12,12 +12,12 @@ import os
 
 # === Configuración ===
 EXCEL_PATH = "./salida/urls/data_scraping_guadalajara.xlsx"
-CSV_OUTPUT = "./salida/data/2026/09_septiembre/scraping_detalle_guadalajara.csv"
+CSV_OUTPUT = "./salida/data/2026/10_octubre/scraping_detalle_guadalajara.csv"
 TIENDA = "11"
 CHROME_VERSION = 153
 # CSV aparte para URLs que fallaron (bloqueo, error de red o de parseo), para
 # no repetirlas al reanudar.
-CSV_ESTADO_URLS = "./salida/data/2026/09_septiembre/scraping_detalle_guadalajara_fallidas.csv"
+CSV_ESTADO_URLS = "./salida/data/2026/10_octubre/scraping_detalle_guadalajara_fallidas.csv"
 
 os.makedirs(os.path.dirname(CSV_OUTPUT), exist_ok=True)
 
