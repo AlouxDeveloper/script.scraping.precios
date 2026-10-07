@@ -784,4 +784,5 @@ resolvió ningún desafío.
 - **Errores del navegador:** cerrar la página con rutas en vuelo hacía fallar la siguiente
   (`TargetClosedError`, 3 de 25 páginas); se corrige con `unroute_all` antes de cerrar, y los
   errores de Patchright se reintentan con Backoff.
-- **Windows nativo:** no probado todavía.
+- **Windows nativo:** la descarga funciona igual; el proceso no terminaba en 1 de cada 3 corridas
+  (loop de scrapy-playwright sin cerrar, ver `cerrar_loop_windows`). Corregido: 20 de 20. Sonda completa en Windows: 25 de 25 páginas, sin desafío, 167 s.
