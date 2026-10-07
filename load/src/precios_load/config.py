@@ -50,6 +50,7 @@ class ConfigGCP:
     conexion_biglake: str
     ruta_local_datos: str
     ruta_local_catalogos: str
+    ruta_local_v2: str
     anio_mes_maximo: str
 
     # --- Rutas derivadas -------------------------------------------------
@@ -124,6 +125,10 @@ class ConfigGCP:
     def ruta_datos(self) -> str:
         """Ruta absoluta a `salida/data`, resuelta desde la raíz del repo."""
         return os.path.normpath(os.path.join(raiz_repo(), self.ruta_local_datos))
+
+    def ruta_datos_v2(self) -> str:
+        """Ruta absoluta a la salida local de Scrapers 2.0 (`salida/data_v2`)."""
+        return os.path.normpath(os.path.join(raiz_repo(), self.ruta_local_v2))
 
 
 def cargar_config(ruta_yml: str = RUTA_GCP_YML) -> ConfigGCP:
@@ -201,6 +206,7 @@ def _validar_valores(config: ConfigGCP, ruta_yml: str) -> None:
         "prefijo_catalogos",
         "ruta_local_datos",
         "ruta_local_catalogos",
+        "ruta_local_v2",
     ):
         valor = getattr(config, clave)
         if valor.startswith("/"):

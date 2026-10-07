@@ -9,9 +9,11 @@ Bronce vive en GCS; `precios_bronce` solo lo mira. La limpieza y las capas
 silver/gold son trabajo de dbt sobre estas tablas, no de este módulo.
 """
 
+import pyarrow as pa
 from google.cloud import bigquery
 
 from precios_load.config import ConfigGCP
+from precios_load.precios_v2 import ESQUEMA_P1
 
 # Nombres por defecto. Los tests los sustituyen por tablas desechables que
 # apuntan al mismo prefijo de GCS.
@@ -45,12 +47,22 @@ def crear_external_bronce(
     `tienda` y `anio_mes` están también dentro del Parquet: como el nombre y el
     tipo coinciden, BigQuery fusiona la columna del archivo con la de partición
     y el valor sale del path.
+
+    El esquema va explícito (el de P1, que incluye las 26 columnas del
+    histórico). Inferido, BigQuery toma el del archivo alfabéticamente último,
+    que es del histórico, y las columnas de precios_v2 desaparecerían. Con el
+    esquema explícito, un Parquet viejo lee NULL en las columnas que no trae.
     """
     referencia = config.tabla_bronce(tabla or TABLA_BRONCE_EXT)
     prefijo = config.prefijo_bronce()
+    columnas = ",\n          ".join(
+        f"`{campo.name}` {tipo_sql(campo.type)}" for campo in ESQUEMA_P1
+        if campo.name not in ("tienda", "anio_mes"))
 
     ddl = f"""
-        CREATE OR REPLACE EXTERNAL TABLE `{referencia}`
+        CREATE OR REPLACE EXTERNAL TABLE `{referencia}` (
+          {columnas}
+        )
         WITH PARTITION COLUMNS (
           tienda STRING,
           anio_mes STRING
@@ -65,6 +77,27 @@ def crear_external_bronce(
     """
     cliente.query(ddl).result()
     return referencia
+
+
+def tipo_sql(tipo: pa.DataType) -> str:
+    """Tipo de BigQuery con el que una external table lee ese tipo de Parquet.
+
+    Sin `enable_list_inference`, una lista llega como
+    `STRUCT<list ARRAY<STRUCT<element>>>` (así lee staging `calidad_flags`) y
+    un mapa como `STRUCT<key_value ARRAY<STRUCT<key, value>>>`. El decimal de
+    bronce (38, 9) es NUMERIC.
+    """
+    if pa.types.is_map(tipo):
+        return (f"STRUCT<key_value ARRAY<STRUCT<key {tipo_sql(tipo.key_type)}, "
+                f"value {tipo_sql(tipo.item_type)}>>>")
+    if pa.types.is_list(tipo):
+        return f"STRUCT<list ARRAY<STRUCT<element {tipo_sql(tipo.value_type)}>>>"
+    if pa.types.is_decimal(tipo):
+        return "NUMERIC"
+    if pa.types.is_timestamp(tipo):
+        return "TIMESTAMP"
+    return {pa.string(): "STRING", pa.bool_(): "BOOL",
+            pa.int64(): "INT64"}[tipo]
 
 
 def crear_external_ndf(

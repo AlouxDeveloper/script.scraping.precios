@@ -22,6 +22,7 @@ CONFIG = ConfigGCP(
     ruta_local_datos="./salida/data",
     prefijo_catalogos="catalogos",
     ruta_local_catalogos="./salida/catalogos",
+    ruta_local_v2="./salida/data_v2",
     anio_mes_maximo="2026-08",
 )
 

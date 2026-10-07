@@ -9,7 +9,14 @@ import os
 
 import typer
 
-from precios_load import __version__, bq, catalogos, manifest, puente_aportador
+from precios_load import (
+    __version__,
+    bq,
+    catalogos,
+    manifest,
+    precios_v2,
+    puente_aportador,
+)
 from precios_load.clientes import cliente_bq, cliente_gcs
 from precios_load.config import (
     FORMATO_ANIO_MES,
@@ -161,6 +168,43 @@ def ingesta(
         f"fallidos {len(resultado.fallidos)}"
     )
     if resultado.fallidos:
+        raise typer.Exit(code=1)
+
+
+@app.command(name="ingesta-v2")
+def ingesta_v2(
+    ctx: typer.Context,
+    origen: str = typer.Option(
+        None,
+        help="Carpeta local o gs://.../precios_v2. Por defecto, ruta_local_v2 de gcp.yml.",
+    ),
+) -> None:
+    """Lleva a bronce (P1) las corridas completas de Scrapers 2.0.
+
+    Las corridas parciales o abortadas no entran a bronce, pero su
+    `_corrida.json` sí se carga en `precios_ops._corridas_scraping`.
+    """
+    cfg = ctx.obj
+    origen = origen or cfg.ruta_datos_v2()
+    resultado = precios_v2.ejecutar(cliente_bq(cfg), cliente_gcs(cfg), cfg, origen)
+
+    for ruta in resultado.procesadas:
+        typer.echo(f"→ {ruta}")
+    for ruta in resultado.saltadas:
+        typer.echo(f"· {ruta}  (sin cambios)")
+    for carpeta in resultado.corridas_omitidas:
+        typer.echo(f"· {carpeta}  (corrida no completa, no va a bronce)")
+    for ruta, error in resultado.fallidas:
+        typer.echo(f"❌ {ruta}: {error}", err=True)
+
+    typer.echo(
+        f"\npartes procesadas {len(resultado.procesadas)}  "
+        f"saltadas {len(resultado.saltadas)}  "
+        f"fallidas {len(resultado.fallidas)}  "
+        f"corridas omitidas {len(resultado.corridas_omitidas)}  "
+        f"_corrida.json cargados {resultado.jsons_cargados}"
+    )
+    if resultado.fallidas:
         raise typer.Exit(code=1)
 
 

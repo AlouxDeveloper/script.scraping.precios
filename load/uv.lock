@@ -639,6 +639,7 @@ dependencies = [
     { name = "pyarrow" },
     { name = "pyyaml" },
     { name = "typer" },
+    { name = "tzdata" },
 ]
 
 [package.dev-dependencies]
@@ -655,6 +656,7 @@ requires-dist = [
     { name = "pyarrow" },
     { name = "pyyaml" },
     { name = "typer" },
+    { name = "tzdata", specifier = ">=2026.3" },
 ]
 
 [package.metadata.requires-dev]

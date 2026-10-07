@@ -30,6 +30,8 @@ conexion_biglake: precios_biglake
 # Relativas a la raíz del repo, igual que las rutas de los scrapers.
 ruta_local_datos: ./salida/data
 ruta_local_catalogos: ./salida/catalogos
+# Salida local de Scrapers 2.0 (precios_v2), origen por defecto de ingesta-v2.
+ruta_local_v2: ./salida/data_v2
 
 # Último mes que entra en la ingesta, inclusive. El mes en curso se queda
 # fuera: su corrida de scraping aún no ha terminado y sus archivos cambian.
