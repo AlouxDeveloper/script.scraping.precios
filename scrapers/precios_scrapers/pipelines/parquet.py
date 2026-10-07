@@ -30,10 +30,15 @@ ZONA_MX = ZoneInfo("America/Mexico_City")
 RAZONES_ABORTADA = {"bloqueo_sostenido"}
 
 
-def estado_por_razon(razon: str) -> str:
-    """completa solo si Scrapy terminó la cola; abortada si nos rendimos."""
+def estado_por_razon(razon: str, filas: int = 1) -> str:
+    """completa solo si Scrapy terminó la cola con filas; abortada si nos
+    rendimos.
+
+    Una cola terminada sin filas es parcial: pasa cuando el navegador no
+    arranca o todas las peticiones fallan, y no debe pasar por buena.
+    """
     if razon == "finished":
-        return "completa"
+        return "completa" if filas else "parcial"
     return "abortada" if razon in RAZONES_ABORTADA else "parcial"
 
 
@@ -122,6 +127,13 @@ class PipelineParquet:
             "unicos": unicos,
             "total_reportado": total,
             "cobertura": round(unicos / total, 4) if total else None,
+            "por_categoria": {
+                categoria: {"total_reportado": dato["total_reportado"],
+                            "unicos": len(dato["skus"]),
+                            "cobertura": (round(len(dato["skus"])
+                                                / dato["total_reportado"], 4)
+                                          if dato["total_reportado"] else None)}
+                for categoria, dato in spider.por_categoria.items()},
             "peticiones": stats.get("downloader/request_count", 0),
             "respuestas_por_status": {
                 clave.removeprefix(prefijo): valor
@@ -140,4 +152,5 @@ class PipelineParquet:
         # la razón de cierre; las stats siguen abiertas en ese momento.
         if self.lote:
             self.escribir_parte()
-        self.escribir_corrida(estado_por_razon(reason), razon=reason)
+        self.escribir_corrida(estado_por_razon(reason, len(self.skus)),
+                              razon=reason)

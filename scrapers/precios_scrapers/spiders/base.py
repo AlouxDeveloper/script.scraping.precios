@@ -68,6 +68,9 @@ class SpiderTienda(scrapy.Spider):
         # Lo llena cada spider con lo que reporta el sitio; sirve para la
         # cobertura de _corrida.json.
         spider.total_reportado = None
+        # Igual, por categoría: id -> {"total_reportado": n, "skus": set()}.
+        # El spider agrega cada SKU que ve en la categoría.
+        spider.por_categoria = {}
         logs.instalar(crawler.settings.get("LOG_LEVEL"), logs.ContextoCorrida(
             cls.name, spider.corrida_id, spider.tienda["escalon"]))
         entorno = crawler.settings.get("AXIOM_ENTORNO")

@@ -786,3 +786,27 @@ resolvió ningún desafío.
   errores de Patchright se reintentan con Backoff.
 - **Windows nativo:** la descarga funciona igual; el proceso no terminaba en 1 de cada 3 corridas
   (loop de scrapy-playwright sin cerrar, ver `cerrar_loop_windows`). Corregido: 20 de 20. Sonda completa en Windows: 25 de 25 páginas, sin desafío, 167 s.
+
+## Sondas de ALD-121 (2026-10-07)
+
+Dos sondas desde la oficina (WSL2, escalón d, un contexto): 11 páginas buenas y ningún desafío.
+
+- **Sucursal:** las 11 páginas salieron con `stores: 3864`. Por decisión de Aldo, el spider acepta la
+  que asigna el sitio por la IP (igual que el legado), la guarda en `zona_precio` y cierra la corrida
+  como parcial (`sucursal_cambiada`) si una página trae otra.
+- **Hojas:** la faceta `cat_id` del listado de la rama trae las 25 hojas con `itemCount` y
+  `baseSeoURL`, que carga aunque su slug venga mutilado (`analg-sicos`). Medicamentos reportó 2,384
+  en la rama y 4,730 sumando hojas (hay repetidos). Sobre el tope: Alta Especialidad (1,607) y Otros
+  Medicamentos (1,518).
+- **Filtro de precio:** `?min_price=A&max_price=B` (sin `max_price`, abierto) en la URL de la hoja;
+  cada segmento declara su propio `aggregatedCount` y `maxPage`. Alta Especialidad: 0-100 = 202,
+  100-500 = 558, 500+ = 844; suman 1,604 contra 1,607 sin filtro (los bordes entran en ambos). La
+  faceta `price` da `max` (26,856) para partir el segmento abierto.
+- **Tope:** `maxPage` se queda en 23, pero `?page=24` y `?page=25` traen 40 productos distintos de la
+  23. No se usan: el spider parte por precio.
+- **Falso positivo de bloqueo:** una página fuera de rango (Analgésicos `?page=3`, "No se pudo
+  encontrar esta página") trae la firma `captcha` en sus primeros 5,000 bytes; `Bloqueo` la reintentó
+  6 veces y descartó 2 contextos. El spider nunca pide más allá de `maxPage`.
+- **Total contra listado:** la hoja Tos reportó 32 y su única página listó 30; como en P3 (82 contra
+  78), el total incluye productos que el listado no muestra. La cobertura por hoja queda algo debajo
+  de 100% aunque se recorra completa.

@@ -45,6 +45,24 @@ def test_estado_por_razon(razon, estado):
     assert estado_por_razon(razon) == estado
 
 
+def test_corrida_sin_filas_no_es_completa(tmp_path):
+    # Pasa si el navegador no arranca: la cola termina sin una sola fila.
+    assert estado_por_razon("finished", 0) == "parcial"
+    pipeline = armar(tmp_path)
+    pipeline.cerrar(pipeline.crawler.spider, reason="finished")
+    assert corrida(pipeline)["estado"] == "parcial"
+
+
+def test_cobertura_por_categoria(tmp_path):
+    pipeline = armar(tmp_path)
+    pipeline.crawler.spider.por_categoria = {
+        "hoja": {"total_reportado": 4, "skus": {"1", "2", "3"}}}
+    pipeline.process_item(fila(1))
+    pipeline.cerrar(pipeline.crawler.spider, reason="finished")
+    assert corrida(pipeline)["por_categoria"] == {
+        "hoja": {"total_reportado": 4, "unicos": 3, "cobertura": 0.75}}
+
+
 def test_corrida_completa(tmp_path):
     pipeline = armar(tmp_path)
     assert "/anio_mes=2026-09/" in pipeline.carpeta

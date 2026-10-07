@@ -4,7 +4,8 @@
 # escalon: a (API/JSON), b (HTTP impersonado), c (navegador → HTTP),
 #   d (navegador completo). Metodología, sección 1.
 # entornos_permitidos: valores de AXIOM_ENTORNO donde el spider puede correr.
-# sucursal: id de sucursal fija o null si la tienda no tiene precio por zona.
+# sucursal: id de sucursal fija, o null si la tienda no tiene precio por zona
+#   o si se acepta la que asigne el sitio (ver cada spider).
 # trafico: arranca con la Metodología, sección 7, y se ajusta con la ficha.
 # firmas_bloqueo (opcional): textos que, en el cuerpo de una respuesta,
 #   indican bloqueo en esta tienda; se suman a las de la Metodología.
@@ -21,12 +22,16 @@ prueba:
 walmart:
   escalon: d
   entornos_permitidos: [oficina]
-  # Tienda del reconocimiento (SC Toreo). La cookie assortmentStoreId sola no
-  # la fija: el sitio geolocaliza la IP (ALD-120, ver notas.md). TODO: ALD-121.
-  sucursal: "2344"
-  # TODO: alcance v1 pendiente de Aldo (solo Medicamentos o las 16 ramas de
-  # Farmacia). Por ahora solo la rama Medicamentos.
-  categorias: ["264536_1310112"]
+  # La que el sitio asigna por la IP, como el legado (decisión de Aldo,
+  # ALD-121): desde la oficina, 3864 SC Puebla Reforma. La cookie
+  # assortmentStoreId sola no fija otra (ALD-120, ver notas.md). El spider
+  # cierra la corrida si la sucursal cambia a mitad.
+  sucursal: null
+  # Ramas de nivel 2; el spider descubre sus hojas en cada corrida.
+  # TODO: alcance v1 pendiente de Aldo. Por ahora solo Medicamentos, que no
+  # alcanza el volumen del legado que pide el corte (ALD-122).
+  categorias:
+    - /browse/farmacia-y-cuidado-de-la-salud/medicamentos/264536_1310112
   trafico: {concurrencia: 1, delay: 5.0, jitter: 0.5}
 
 aurrera:
