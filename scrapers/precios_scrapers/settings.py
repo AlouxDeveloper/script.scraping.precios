@@ -38,6 +38,11 @@ DOWNLOADER_MIDDLEWARES = {
 USER_AGENT = None
 DEFAULT_REQUEST_HEADERS = {}
 
+# Validación del contrato v1 y dedup; el pipeline Parquet va después.
+ITEM_PIPELINES = {
+    "precios_scrapers.pipelines.contrato.PipelineContrato": 100,
+}
+
 # robots.txt es un riesgo informado de la ficha, no un filtro: las rutas ya se
 # revisaron en el reconocimiento (Metodología, reglas). Además, la petición de
 # robots.txt saldría sin impersonar y Akamai la corta.
