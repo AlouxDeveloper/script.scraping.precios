@@ -2,12 +2,17 @@
 
 Estrategia (reconocimiento en ``reconocimiento/walmart/notas.md``): cada rama
 de ``categorias`` en tiendas.yml lista sus hojas en la faceta ``cat_id``; cada
-hoja se recorre con ``?page=1..maxPage`` y el ``__NEXT_DATA__`` del listado
-trae precio, EAN (``usItemId``) y vendedor, así que no se abren fichas.
+hoja se parte por rango de precio hasta que cada segmento cabe en una página,
+y el ``__NEXT_DATA__`` del listado trae precio, EAN (``usItemId``) y
+vendedor, así que no se abren fichas.
 
-El sitio declara a lo más 23 páginas de 40 productos por listado. Una hoja
-con más productos se parte por rango de precio (``min_price``/``max_price``,
-bordes incluidos en ambos lados) a la mitad, hasta que cada segmento cabe.
+No se pagina (medido en ALD-121 con Antigripales, 185 productos): las páginas
+2..N pierden productos y sin filtro cada página mete 6 anuncios que desplazan
+a 6 orgánicos. Recorrer sus 5 páginas dio 146 únicos; partirla en segmentos
+``min_price``/``max_price`` de una página, 183. Con filtro de precio el sitio
+no mete anuncios. Los bordes entran en ambos segmentos y el pipeline
+deduplica; el corte va en la mediana de los precios vistos, porque casi todo
+cuesta menos de $500 y la faceta de precio llega a decenas de miles.
 
 La sucursal es la que el sitio asigna por la IP (decisión de Aldo, igual que
 el legado). La primera página fija la sucursal de la corrida y va en
@@ -21,6 +26,7 @@ Uso, desde la raíz del repo:
 import json
 from datetime import datetime, timezone
 from decimal import Decimal
+from statistics import median
 
 import scrapy
 from scrapy.exceptions import CloseSpider
@@ -30,8 +36,8 @@ from precios_scrapers.spiders.base import SpiderTienda
 
 SITIO = "https://www.walmart.com.mx"
 POR_PAGINA = 40
-# maxPage nunca pasa de 23. Las páginas 24 y 25 aún traen productos, pero no
-# está documentado hasta dónde: lo que no cabe se parte por precio.
+# maxPage nunca pasa de 23; solo importa si un segmento de un peso de ancho
+# sigue sin caber y hay que paginarlo.
 TOPE_PAGINAS = 23
 
 
@@ -62,6 +68,18 @@ def facetas(nodo):
 
 def faceta(datos: dict, tipo: str) -> dict | None:
     return next((f for f in facetas(datos) if f["type"] == tipo), None)
+
+
+def organicos(busqueda: dict) -> list[dict]:
+    """Productos del listado sin anuncios.
+
+    Sin filtro de precio, cada página trae un ``AdPlaceholder`` y 6
+    patrocinados (``isSponsoredFlag``), repetidos en todas las páginas y a
+    veces de otra hoja: no son del listado y se descartan.
+    """
+    return [item for pila in busqueda["itemStacks"] for item in pila["items"]
+            if item.get("__typename") == "Product"
+            and not item.get("isSponsoredFlag")]
 
 
 def precio(texto: str) -> Decimal | None:
@@ -116,36 +134,41 @@ class SpiderWalmart(SpiderTienda):
             self.por_categoria.setdefault(hoja, {"total_reportado": total,
                                                  "skus": set()})
             techo = (faceta(datos, "price") or {}).get("max")
-        yield from self.productos(busqueda, response, hoja, ruta)
-        if pagina > 1:
+        items = organicos(busqueda)
+        yield from self.productos(items, response, hoja, ruta)
+        if pagina > 1 or total <= POR_PAGINA:
             return
 
+        precios = [item["price"] for item in items if item.get("price")]
+        mitades = self.partir(segmento or (0, None), techo, precios)
+        if mitades:
+            for mitad in mitades:
+                yield self.pedir(response.url, hoja, ruta, mitad, 1, techo)
+            return
+        # Más de 40 productos con el mismo precio: no queda más que paginar.
+        self.logger.warning("Segmento de precio sin partir con %s productos",
+                            total, extra={"url": response.url})
+        self.crawler.stats.inc_value("walmart/segmentos_paginados")
         paginas = busqueda["paginationV2"]["maxPage"]
-        if total > TOPE_PAGINAS * POR_PAGINA:
-            mitades = self.partir(segmento or (0, None), techo)
-            if mitades:
-                for mitad in mitades:
-                    yield self.pedir(response.url, hoja, ruta, mitad, 1, techo)
-                return
-            self.logger.warning(
-                "Segmento de precio sin partir con %s productos", total,
-                extra={"url": response.url})
-            self.crawler.stats.inc_value("walmart/segmentos_sobre_tope")
         for n in range(2, min(paginas, TOPE_PAGINAS) + 1):
             yield self.pedir(response.url, hoja, ruta, segmento, n, techo)
 
     @staticmethod
-    def partir(segmento, techo) -> list | None:
-        """Parte ``segmento`` a la mitad o devuelve None si ya no se puede.
+    def partir(segmento, techo, precios: list) -> list | None:
+        """Parte ``segmento`` en dos o devuelve None si ya no se puede.
 
-        El borde va en las dos mitades: un precio igual al corte sale en
-        ambas y el pipeline lo deduplica, pero ninguno se pierde.
+        Corta en la mediana de ``precios`` (los de la página, una muestra del
+        segmento) y, si cae fuera del segmento, a la mitad del rango. El
+        borde va en las dos mitades: un precio igual al corte sale en ambas
+        y el pipeline lo deduplica, pero ninguno se pierde.
         """
         minimo, maximo = segmento
         tope = maximo if maximo is not None else techo
         if tope is None:
             return None
-        corte = (minimo + tope) // 2
+        corte = int(median(precios)) if precios else minimo
+        if not minimo < corte < tope:
+            corte = (minimo + tope) // 2
         if corte <= minimo:
             return None
         return [(minimo, corte), (corte, maximo)]
@@ -185,18 +208,14 @@ class SpiderWalmart(SpiderTienda):
             raise CloseSpider("sucursal_cambiada")
         return datos
 
-    def productos(self, busqueda: dict, response, hoja: str,
+    def productos(self, items: list[dict], response, hoja: str,
                   ruta: list[str]):
         ahora = datetime.now(timezone.utc)
         cobertura = self.por_categoria.get(hoja)
-        for pila in busqueda["itemStacks"]:
-            for item in pila["items"]:
-                # Cada página trae un AdPlaceholder entre los productos.
-                if item.get("__typename") != "Product":
-                    continue
-                if cobertura is not None:
-                    cobertura["skus"].add(item["usItemId"])
-                yield self.fila(item, ahora, response.url, ruta)
+        for item in items:
+            if cobertura is not None:
+                cobertura["skus"].add(item["usItemId"])
+            yield self.fila(item, ahora, response.url, ruta)
 
     def fila(self, item: dict, ahora: datetime, url_fuente: str,
              ruta: list[str]) -> dict:

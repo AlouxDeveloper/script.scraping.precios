@@ -813,3 +813,26 @@ Dos sondas desde la oficina (WSL2, escalón d, un contexto): 11 páginas buenas 
 - **Total contra listado:** la hoja Tos reportó 32 y su única página listó 30; como en P3 (82 contra
   78), el total incluye productos que el listado no muestra. La cobertura por hoja queda algo debajo
   de 100% aunque se recorra completa.
+
+## Primera corrida completa y cambio de estrategia (2026-10-07)
+
+Corrida en Windows de la rama Medicamentos, paginando las hojas y partiendo por precio solo sobre el
+tope de 23 páginas: `completa` en 17 min, 141 páginas, 0 bloqueos, un solo contexto, sucursal 3864.
+**Cobertura 93.1%** (2,221 únicos contra 2,385), debajo del 98% del issue; hasta las hojas recorridas
+completas quedaban entre 82% y 95%.
+
+Causa, medida con Antigripales (185 productos, 5 páginas):
+
+| Recorrido | Únicos |
+| --- | --- |
+| `?page=1..5` sin filtro (como la corrida) | 146 |
+| `?min_price=0&page=1..5` | 169 |
+| 8 segmentos de precio de una página cada uno | 183 |
+
+- **Anuncios:** sin filtro, cada página trae 6 patrocinados (`isSponsoredFlag: true`,
+  `sponsoredProduct`), los mismos en las 5 páginas, que desplazan a 6 orgánicos. Con cualquier filtro
+  de precio no aparecen.
+- **Paginación:** aun sin anuncios, las páginas 2..N pierden productos (169 de 185).
+- **Estrategia nueva:** partir cada hoja por precio hasta que cada segmento cabe en una página (40),
+  sin paginar; el corte va en la mediana de los precios de la página. Los patrocinados se descartan.
+  Cuesta más páginas (estimado: ~2 por cada 25 productos de hoja).

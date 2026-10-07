@@ -59,19 +59,15 @@ def test_rama_pide_sus_25_hojas(spider):
                                       "Medicamentos", "Alta Especialidad"]
 
 
-def test_hoja_chica_pagina_hasta_max_page(spider):
+def test_hoja_de_mas_de_una_pagina_se_parte_en_la_mediana(spider):
     filas, peticiones = separar(spider.parse_listado(
         respuesta("analgesicos_p1", ANALGESICOS), hoja="h", ruta=RUTA))
     assert len(filas) == 40
-    assert [parametros(p) for p in peticiones] == [{"page": "2"}]
+    # 75 productos no caben en una página: corte en la mediana de sus 40.
+    assert [parametros(p) for p in peticiones] == [
+        {"min_price": "0", "max_price": "132"}, {"min_price": "132"}]
     assert spider.por_categoria["h"]["total_reportado"] == 75
     assert len(spider.por_categoria["h"]["skus"]) == 40
-
-    filas, peticiones = separar(spider.parse_listado(
-        respuesta("analgesicos_p2", f"{ANALGESICOS}?page=2"), hoja="h",
-        ruta=RUTA, pagina=2))
-    assert len(filas) == 31 and not peticiones
-    assert len(spider.por_categoria["h"]["skus"]) == 71
 
 
 def test_filas_cumplen_el_contrato(spider):
@@ -98,24 +94,46 @@ def test_precio_tachado_va_como_lista(spider):
         assert fila["precio_oferta"] < fila["precio_lista"]
 
 
-def test_hoja_sobre_el_tope_se_parte_por_precio(spider):
-    # 1,607 productos no caben en 23 páginas de 40.
+def test_anuncios_no_se_guardan(spider):
+    # Alta Especialidad sin filtro: 40 productos, uno patrocinado.
     filas, peticiones = separar(spider.parse_listado(
         respuesta("hoja_alta_especialidad", ALTA), hoja="h", ruta=RUTA))
-    assert len(filas) == 40
+    assert len(filas) == 39
     assert [parametros(p) for p in peticiones] == [
-        {"min_price": "0", "max_price": "13428"}, {"min_price": "13428"}]
+        {"min_price": "0", "max_price": "515"}, {"min_price": "515"}]
     assert peticiones[1].cb_kwargs["techo"] == 26856
 
 
-def test_segmento_que_cabe_pagina_con_su_filtro(spider):
-    url = f"{ALTA}?min_price=500"
+def test_segmento_abierto_se_sigue_partiendo(spider):
     _, peticiones = separar(spider.parse_listado(
-        respuesta("segmento_desde_500", url), hoja="h", ruta=RUTA,
-        segmento=(500, None), techo=26856))
-    assert len(peticiones) == 19
-    assert parametros(peticiones[-1]) == {"min_price": "500", "page": "20"}
-    assert peticiones[-1].cb_kwargs["segmento"] == (500, None)
+        respuesta("segmento_desde_500", f"{ALTA}?min_price=500"), hoja="h",
+        ruta=RUTA, segmento=(500, None), techo=26856))
+    assert [parametros(p) for p in peticiones] == [
+        {"min_price": "500", "max_price": "908"}, {"min_price": "908"}]
+    assert peticiones[0].cb_kwargs["segmento"] == (500, 908)
+
+
+def test_segmento_de_una_pagina_no_pide_mas(spider):
+    url = ("https://www.walmart.com.mx/browse/farmacia-y-cuidado-de-la-salud/"
+           "antigripales/264536_1310112_2460013?min_price=150&max_price=200")
+    filas, peticiones = separar(spider.parse_listado(
+        respuesta("segmento_chico", url), hoja="h", ruta=RUTA,
+        segmento=(150, 200), techo=1918))
+    assert len(filas) == 28 and not peticiones
+
+
+def test_segmento_de_un_peso_se_pagina(spider):
+    # Si ya no se puede partir, queda paginar hasta maxPage con el filtro.
+    _, peticiones = separar(spider.parse_listado(
+        respuesta("analgesicos_p1", ANALGESICOS), hoja="h", ruta=RUTA,
+        segmento=(10, 11), techo=2800))
+    assert [parametros(p) for p in peticiones] == [
+        {"page": "2", "min_price": "10", "max_price": "11"}]
+    filas, peticiones = separar(spider.parse_listado(
+        respuesta("analgesicos_p2", f"{ANALGESICOS}?page=2"), hoja="h",
+        ruta=RUTA, segmento=(10, 11), pagina=2, techo=2800))
+    assert len(filas) == 31 and not peticiones
+    assert spider.crawler.stats.get_value("walmart/segmentos_paginados") == 1
 
 
 def test_segmento_vacio_no_pide_nada(spider):
@@ -127,10 +145,15 @@ def test_segmento_vacio_no_pide_nada(spider):
         segmento=(6714, 13428), techo=26856)) == []
 
 
-def test_partir_se_detiene_en_un_peso():
-    assert SpiderWalmart.partir((10, 11), None) is None
-    assert SpiderWalmart.partir((0, None), None) is None
-    assert SpiderWalmart.partir((0, None), 100) == [(0, 50), (50, None)]
+def test_partir():
+    partir = SpiderWalmart.partir
+    assert partir((0, None), 26856, [100, 120, 300]) == [(0, 120),
+                                                         (120, None)]
+    # Mediana fuera del segmento o sin precios: a la mitad del rango.
+    assert partir((500, 600), None, [50]) == [(500, 550), (550, 600)]
+    assert partir((0, None), 100, []) == [(0, 50), (50, None)]
+    assert partir((10, 11), None, [10]) is None
+    assert partir((0, None), None, [5]) is None
 
 
 def test_sucursal_distinta_cierra_la_corrida(spider):

@@ -17,7 +17,7 @@ PAGINACION = {"maxPage", "pageProperties"}
 PROPIEDADES = {"stores", "page", "min_price", "max_price", "cat_id"}
 ITEM = {"__typename", "usItemId", "name", "brand", "canonicalUrl", "price",
         "priceInfo", "availabilityStatusV2", "sellerName", "sellerType",
-        "imageInfo"}
+        "imageInfo", "isSponsoredFlag"}
 PRECIO = {"linePrice", "wasPrice", "priceRangeString"}
 FACETAS = {"cat_id", "price"}
 
