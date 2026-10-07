@@ -58,8 +58,11 @@ class SpiderTienda(scrapy.Spider):
         spider = super().from_crawler(crawler, *args, **kwargs)
         # TODO: con JOBDIR, la corrida reanudada debe conservar su corrida_id
         # (guardarlo en spider.state); lo resuelve el pipeline de _corrida.json.
-        spider.corrida_id = (
-            f"{cls.name}_{datetime.now(timezone.utc):%Y%m%dT%H%MZ}")
+        spider.inicio = datetime.now(timezone.utc)
+        spider.corrida_id = f"{cls.name}_{spider.inicio:%Y%m%dT%H%MZ}"
+        # Lo llena cada spider con lo que reporta el sitio; sirve para la
+        # cobertura de _corrida.json.
+        spider.total_reportado = None
         logs.instalar(crawler.settings.get("LOG_LEVEL"), logs.ContextoCorrida(
             cls.name, spider.corrida_id, spider.tienda["escalon"]))
         entorno = crawler.settings.get("AXIOM_ENTORNO")

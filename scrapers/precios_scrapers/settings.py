@@ -38,10 +38,12 @@ DOWNLOADER_MIDDLEWARES = {
 USER_AGENT = None
 DEFAULT_REQUEST_HEADERS = {}
 
-# Validación del contrato v1 y dedup; el pipeline Parquet va después.
+# Validación del contrato v1 y dedup; después, Parquet en lotes.
 ITEM_PIPELINES = {
     "precios_scrapers.pipelines.contrato.PipelineContrato": 100,
+    "precios_scrapers.pipelines.parquet.PipelineParquet": 300,
 }
+PARQUET_FILAS_POR_PARTE = 2000
 
 # robots.txt es un riesgo informado de la ficha, no un filtro: las rutas ya se
 # revisaron en el reconocimiento (Metodología, reglas). Además, la petición de
