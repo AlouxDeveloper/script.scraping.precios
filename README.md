@@ -69,6 +69,14 @@ cd transform && uv sync && cd ..
 cd scrapers && uv sync && cd ..
 ```
 
+Las tiendas de escalón d de `scrapers/` (Walmart, Aurrera) abren Google Chrome real con
+Patchright. Si la máquina no lo tiene, instálalo una vez (en Linux pide sudo; en WSL la
+ventana sale por WSLg):
+
+```bash
+scrapers/.venv/bin/patchright install --with-deps chrome
+```
+
 ### Variables de entorno
 
 Copia `.env.example` a `.env` en la raíz del repo y llena los valores reales. `.env` está en

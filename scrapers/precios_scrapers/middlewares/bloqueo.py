@@ -60,7 +60,9 @@ class Bloqueo:
         firma = next((f for f in self.firmas if f in cuerpo), None)
         if firma:
             return f"firma_{firma.decode()}"
-        if request.meta.get("redirect_urls"):
+        # Con navegador el redirect ocurre dentro de Chrome: no deja
+        # redirect_urls, solo una URL final distinta.
+        if request.meta.get("redirect_urls") or response.url != request.url:
             ruta = urlparse(response.url).path.lower()
             if ruta in ("", "/") or any(r in ruta for r in RUTAS_BLOQUEO):
                 return "redirect"
@@ -96,7 +98,10 @@ class Bloqueo:
             self.pausar(ESPERAS[min(self.seguidos, len(ESPERAS)) - 1],
                         request.url)
         # dont_filter: el dupefilter ya vio esta URL y la descartaría.
-        return request.replace(dont_filter=True)
+        # axiom_bloqueo: el escalón d cuenta bloqueos por contexto.
+        reintento = request.replace(dont_filter=True)
+        reintento.meta["axiom_bloqueo"] = motivo
+        return reintento
 
     def pausar(self, segundos: float, url: str) -> None:
         pausar(self.crawler, segundos, url)

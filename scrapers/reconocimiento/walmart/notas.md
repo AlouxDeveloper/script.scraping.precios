@@ -714,6 +714,7 @@ el legado, que abre un Chrome nuevo por cada URL.
 7. **Desafíos:** renueva el contexto del navegador cada ≤ 5 páginas, antes del umbral observado de
    8 a 10. Ante un desafío, no se resuelve: se descarta el contexto, se espera y se reintenta con uno
    nuevo; K desafíos seguidos cierran la corrida con `bloqueo_sostenido`.
+   **Corregido en ALD-120:** renovar el contexto empeora los desafíos; ver "Validación en ALD-120".
 
 ### Presupuesto (sección 5), por alcance
 
@@ -749,3 +750,38 @@ sostenido crece con el volumen.
 3. Una hoja sobre el tope (Alta Especialidad) con un filtro de marca o de precio: ¿cómo viaja en la
    URL y respeta el tope?
 4. La cookie `assortmentStoreId` fijada a mano cambia `pageProperties.stores`.
+
+## Validación en ALD-120 (2026-10-07)
+
+Sonda de Scrapy con el escalón d (`precios_scrapers/navegador.py`): Patchright con Google Chrome
+real y ventana visible, desde la oficina (WSL2 con WSLg), delay de 5 s con jitter de 0.5. No se
+resolvió ningún desafío.
+
+| Prueba | Resultado |
+| --- | --- |
+| 1. Analgésicos p1 y `?page=2`, contexto nuevo | ✅ 41 y 32 productos, sin desafío |
+| 2. Contexto renovado cada 5 páginas | ❌ el contexto nuevo recibe el desafío en su primera página ("Verifica tu identidad", `/blocked`); renovarlo en cada bloqueo encadenó 6 desafíos seguidos |
+| 2b. Un solo contexto toda la corrida | ✅ 25 páginas seguidas (Analgésicos p1-p2 y Medicamentos p1-p23) sin desafío, dos veces; ~6 s por página |
+| 3. Hoja sobre el tope con filtro | No probado; pasa a ALD-121 |
+| 4. Cookie `assortmentStoreId` a mano | ❌ solo la primera página sale con 2344 |
+
+- **Desafío de HUMAN:** lo dispara la sesión nueva, no el volumen. En un contexto que acaba de recibir
+  el desafío, la siguiente página pasa sin resolver nada: el sensor corre en la página del desafío y
+  deja `_px3`. Por eso el escalón d usa **un solo contexto por corrida** y lo descarta solo con 2
+  bloqueos seguidos (`NAVEGADOR_BLOQUEOS_POR_CONTEXTO`). La hipótesis de "un desafío cada 8 a 10
+  páginas" del reconocimiento venía de navegación humana con pausas de 8 a 17 s y no se reprodujo.
+- **Presupuesto:** L ≈ 6 s por página (no 15). Solo Medicamentos (~167 páginas) ≈ 17 min.
+- **Sucursal:** el JavaScript del sitio geolocaliza la IP (`selectionSource: IP_SNIFFED_BY_LS`; la
+  oficina cae en SC Puebla Reforma, 3864) y escribe `assortmentStoreId`, `locDataV3` y
+  `locGuestData` en el host `www.walmart.com.mx`. Reescribir `assortmentStoreId` antes de cada página
+  no basta: el servidor responde 3864, así que decide con `locDataV3` (JSON en base64 con `nodeId`) u
+  otra señal. Fijar la sucursal queda para ALD-121 (opciones: elegir tienda por la interfaz una vez
+  por contexto, o escribir `locDataV3`/`locGuestData` coherentes con 2344).
+- **Status:** con Patchright, scrapy-playwright no recibe la respuesta de la navegación ("returned
+  None"): todas las páginas llegan con status 200 y sin headers. Los bloqueos se detectan por la URL
+  final (`/blocked`) y por las firmas del cuerpo; no hubo falsos positivos de `_pxhd` ni `captcha` en
+  las páginas buenas.
+- **Errores del navegador:** cerrar la página con rutas en vuelo hacía fallar la siguiente
+  (`TargetClosedError`, 3 de 25 páginas); se corrige con `unroute_all` antes de cerrar, y los
+  errores de Patchright se reintentan con Backoff.
+- **Windows nativo:** no probado todavía.

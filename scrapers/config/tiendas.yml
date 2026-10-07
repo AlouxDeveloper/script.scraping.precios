@@ -21,8 +21,8 @@ prueba:
 walmart:
   escalon: d
   entornos_permitidos: [oficina]
-  # Cookie assortmentStoreId observada en el reconocimiento; qué valores
-  # acepta está por verificar.
+  # Tienda del reconocimiento (SC Toreo). La cookie assortmentStoreId sola no
+  # la fija: el sitio geolocaliza la IP (ALD-120, ver notas.md). TODO: ALD-121.
   sucursal: "2344"
   # TODO: alcance v1 pendiente de Aldo (solo Medicamentos o las 16 ramas de
   # Farmacia). Por ahora solo la rama Medicamentos.

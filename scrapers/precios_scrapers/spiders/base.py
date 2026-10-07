@@ -41,7 +41,12 @@ class SpiderTienda(scrapy.Spider):
 
     @classmethod
     def update_settings(cls, settings) -> None:
-        trafico = cargar_tienda(cls.name)["trafico"]
+        tienda = cargar_tienda(cls.name)
+        if tienda["escalon"] == "d":
+            # Import local: navegador importa este módulo.
+            from precios_scrapers import navegador
+            settings.setdict(navegador.SETTINGS, priority="spider")
+        trafico = tienda["trafico"]
         settings.set("CONCURRENT_REQUESTS_PER_DOMAIN", trafico["concurrencia"],
                      priority="spider")
         settings.set("DOWNLOAD_DELAY", trafico["delay"], priority="spider")

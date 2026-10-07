@@ -35,12 +35,19 @@ class ContextoCorrida(logging.Filter):
         return True
 
 
+SIEMPRE = {"severity", "timestamp", "exc_info"}
+
+
 class FormatoJson(JsonFormatter):
-    """JsonFormatter que solo escribe CAMPOS, sin los extra de cada logger."""
+    """JsonFormatter que solo escribe CAMPOS, sin los extra de cada logger.
+
+    Conserva el traceback (``exc_info``): sin él, un "Error downloading" de
+    Scrapy no dice qué falló.
+    """
 
     def add_fields(self, log_data, record, message_dict) -> None:
         super().add_fields(log_data, record, message_dict)
-        for clave in set(log_data) - set(CAMPOS) - {"severity", "timestamp"}:
+        for clave in set(log_data) - set(CAMPOS) - SIEMPRE:
             del log_data[clave]
 
 
