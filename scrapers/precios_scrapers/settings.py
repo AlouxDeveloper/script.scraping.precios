@@ -29,9 +29,22 @@ DOWNLOAD_HANDLERS = {
     "http": "scrapy_impersonate.ImpersonateDownloadHandler",
     "https": "scrapy_impersonate.ImpersonateDownloadHandler",
 }
+# En la vuelta, Bloqueo (585) corre después de Redirect (600) y de
+# HttpCompression (590): ve el destino final de un redirect y el cuerpo ya
+# descomprimido, y reprograma los bloqueos antes de que Backoff (que reemplaza
+# al RetryMiddleware) los cuente como reintento.
 DOWNLOADER_MIDDLEWARES = {
     "precios_scrapers.spiders.base.MetaEscalon": 350,
+    "scrapy.downloadermiddlewares.retry.RetryMiddleware": None,
+    "precios_scrapers.middlewares.backoff.Backoff": 550,
+    "precios_scrapers.middlewares.bloqueo.Bloqueo": 585,
+    "precios_scrapers.middlewares.proxy.Proxy": 740,
 }
+# Intentos con espera de 30, 60 y 120 s (Metodología, sección 7).
+RETRY_TIMES = 3
+# Circuit breaker: 10 bloqueos seguidos pausan 30 min; la segunda vez cierra.
+BLOQUEO_SEGUIDOS = 10
+BLOQUEO_PAUSA_LARGA = 1800
 # curl_cffi pone el User-Agent y los headers del navegador que impersona. Los
 # de Scrapy ("Scrapy/2.19", Accept-Language "en") los pisarían y la huella
 # dejaría de parecer Chrome.

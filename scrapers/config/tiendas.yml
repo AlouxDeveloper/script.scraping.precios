@@ -6,6 +6,8 @@
 # entornos_permitidos: valores de AXIOM_ENTORNO donde el spider puede correr.
 # sucursal: id de sucursal fija o null si la tienda no tiene precio por zona.
 # trafico: arranca con la Metodología, sección 7, y se ajusta con la ficha.
+# firmas_bloqueo (opcional): textos que, en el cuerpo de una respuesta,
+#   indican bloqueo en esta tienda; se suman a las de la Metodología.
 
 # Spider de prueba: una sola petición a robots.txt de Guadalajara, que pasa
 # solo si la impersonación TLS funciona (Akamai corta HTTP sin impersonar).
