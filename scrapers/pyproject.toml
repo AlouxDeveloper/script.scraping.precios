@@ -1,8 +1,28 @@
 [project]
 name = "precios-scrapers"
 version = "0.1.0"
-description = "Scrapers 2.0: reconocimiento de tiendas y, más adelante, spiders de Scrapy"
+description = "Scrapers 2.0: spiders de Scrapy por tienda y herramientas de reconocimiento"
 requires-python = ">=3.13"
 dependencies = [
     "curl-cffi",
+    "pyarrow>=25.0.1",
+    "python-json-logger>=4.2.0",
+    "pyyaml>=6.0.3",
+    "scrapy>=2.19",
+    "scrapy-impersonate>=1.9.0",
 ]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["precios_scrapers"]

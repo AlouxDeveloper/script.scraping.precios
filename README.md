@@ -46,7 +46,8 @@ Mismo criterio, comando propio. Es lo que le da `ndf_id` a `dim_producto` en la 
 ├── extract/          # scraping, proyecto uv propio
 ├── load/              # ingesta a Google Cloud, proyecto uv propio (con tests)
 ├── transform/          # dbt (transform/dbt/precios): staging, silver, gold; + entity_resolution
-├── scrapers/          # Scrapers 2.0 en construcción, proyecto uv propio; hoy solo reconocimiento/
+├── scrapers/          # Scrapers 2.0 en construcción (Scrapy), proyecto uv propio, con tests
+├── scrapy.cfg         # apunta a scrapers/; está en la raíz porque Scrapy se corre desde aquí
 └── salida/              # salida de extract/, en .gitignore
 ```
 
@@ -82,6 +83,14 @@ Usadas hoy:
 - `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` — alerta de Telegram que manda
   `extract/detalle/monitoreo.py` cuando un scraper detecta bloqueo o captcha repetido.
 
+`scrapers/` (Scrapers 2.0) lee además, todas opcionales en la oficina:
+
+- `AXIOM_ENTORNO` — `oficina` (default) o `gcp`. Un spider aborta si su tienda no lo
+  permite en `scrapers/config/tiendas.yml` (`entornos_permitidos`).
+- `AXIOM_DESTINO` — destino de la salida; default `./salida/data_v2`.
+- `AXIOM_JOBDIR` — carpeta base de pausa y reanudación; vacía la desactiva.
+- `PROXY_URL` — proxy, vacío por defecto.
+
 ## Uso
 
 Siempre desde la raíz del repo. El flujo completo, en orden:
@@ -111,6 +120,14 @@ uv run --project transform dbt build --project-dir transform/dbt/precios --profi
 # 6. transform — documentación navegable (portal web local con DAG y linaje)
 uv run --project transform dbt docs generate --project-dir transform/dbt/precios --profiles-dir transform/dbt/precios
 uv run --project transform dbt docs serve    --project-dir transform/dbt/precios --profiles-dir transform/dbt/precios
+```
+
+Scrapers 2.0, en construcción (logs JSON de una línea en stderr; `-L DEBUG` agrega una línea
+por petición):
+
+```bash
+uv run --project scrapers scrapy crawl prueba      # spider de prueba: 1 petición impersonada
+uv run --project scrapers pytest scrapers
 ```
 
 `load/` y los comandos dbt abortan o escriben en el lugar equivocado si no se corren

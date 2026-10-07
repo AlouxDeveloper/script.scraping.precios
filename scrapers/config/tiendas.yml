@@ -1,0 +1,75 @@
+# Configuración por tienda de Scrapers 2.0 (PRD, sección 3.2). La clave es el
+# slug, igual al `name` del spider y al slug de load/config/archivos.yml.
+#
+# escalon: a (API/JSON), b (HTTP impersonado), c (navegador → HTTP),
+#   d (navegador completo). Metodología, sección 1.
+# entornos_permitidos: valores de AXIOM_ENTORNO donde el spider puede correr.
+# sucursal: id de sucursal fija o null si la tienda no tiene precio por zona.
+# trafico: arranca con la Metodología, sección 7, y se ajusta con la ficha.
+
+# Spider de prueba: una sola petición a robots.txt de Guadalajara, que pasa
+# solo si la impersonación TLS funciona (Akamai corta HTTP sin impersonar).
+prueba:
+  escalon: b
+  entornos_permitidos: [oficina]
+  sucursal: null
+  categorias: ["https://www.farmaciasguadalajara.com/robots.txt"]
+  trafico: {concurrencia: 1, delay: 1.5, jitter: 0.5}
+
+walmart:
+  escalon: d
+  entornos_permitidos: [oficina]
+  # Cookie assortmentStoreId observada en el reconocimiento; qué valores
+  # acepta está por verificar.
+  sucursal: "2344"
+  # TODO: alcance v1 pendiente de Aldo (solo Medicamentos o las 16 ramas de
+  # Farmacia). Por ahora solo la rama Medicamentos.
+  categorias: ["264536_1310112"]
+  trafico: {concurrencia: 1, delay: 5.0, jitter: 0.5}
+
+aurrera:
+  escalon: d
+  entornos_permitidos: [oficina]
+  sucursal: "2769"
+  # TODO: mismo alcance pendiente que walmart; mismos IDs de rama.
+  categorias: ["264536_1310112"]
+  trafico: {concurrencia: 1, delay: 5.0, jitter: 0.5}
+
+guadalajara:
+  escalon: b
+  entornos_permitidos: [oficina]
+  # Sin ubicación por defecto: precio online (zona_precio = sin_ubicacion).
+  sucursal: null
+  # Las 29 categorías de nivel 2; cada listado incluye su subárbol.
+  categorias:
+    - /farmacia/medicina
+    - /farmacia/accesorios-medicos
+    - /farmacia/obesidad
+    - /farmacia/circulatorio
+    - /farmacia/curaciones
+    - /farmacia/diabetes-y-endocrinas
+    - /farmacia/incontinencia
+    - /farmacia/salud-sexual
+    - /farmacia/sueros
+    - /farmacia/visual
+    - /farmacia/vitaminas-y-suplementos-
+    - /farmacia/dermatologia
+    - /dermo/cuidado-facial
+    - /dermo/cuidado-corporal
+    - /dermo/cuidado-del-cabello
+    - /dermo/cuidado-especializado
+    - /dermo/proteccion-solar
+    - /dermo/tipo-de-piel
+    - /dermo/marcas
+    - /super/alimentos
+    - /super/bebidas
+    - /super/electronicos
+    - /super/higiene-y-belleza
+    - /super/hogar
+    - /super/jugueteria
+    - /super/mascotas
+    - /super/papeleria
+    - /super/bebes
+  # Delay de 10 s y no 1.5: Akamai reseteó la conexión tras ~12 peticiones
+  # seguidas a 3 s y ninguna a 10 s (reconocimiento, 2026-10-07).
+  trafico: {concurrencia: 1, delay: 10.0, jitter: 0.5}
