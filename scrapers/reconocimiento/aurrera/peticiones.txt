@@ -1,0 +1,15 @@
+# Peticiones mínimas a validar con validar_endpoint.py, en formato cURL.
+# Sin cookies ni headers de autorización. La validación desde la oficina
+# (2026-10-07) está en validacion.csv; el resultado va en cada comentario.
+
+# Listado de una categoría hoja, página 1 (HTML con __NEXT_DATA__ y precios).
+# Sin impersonar: 307 a /blocked. Impersonando Chrome: 200, ~490 KB, servido
+# por prerender (x-prerender-apache-hit: true); una vez 429 por ritmo.
+curl 'https://www.bodegaaurrera.com.mx/browse/farmacia-y-cuidado-de-la-salud/antigripales/264536_1310112_2460013'
+
+# Listado, página N por URL. En el navegador trae la página renderizada en
+# servidor; sin navegador: 307 a /blocked con y sin impersonar.
+curl 'https://www.bodegaaurrera.com.mx/browse/farmacia-y-cuidado-de-la-salud/antigripales/264536_1310112_2460013?page=2&affinityOverride=default'
+
+# Ficha de producto (no validada sin navegador; en Walmart da 307).
+curl 'https://www.bodegaaurrera.com.mx/ip/Broncolin-Etiqueta-verde-250-ml-jarabe/00071470691059'

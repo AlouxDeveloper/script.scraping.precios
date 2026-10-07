@@ -1,0 +1,19 @@
+# Peticiones mínimas a validar con validar_endpoint.py, en formato cURL.
+# Sin cookies ni headers de autorización. La validación desde la oficina
+# (2026-10-06) está en validacion.csv; el resultado va en cada comentario.
+
+# Listado de una categoría hoja, página 1 (HTML con __NEXT_DATA__ y precios).
+# Sin impersonar: 307 a /blocked. Impersonando Chrome: 200, ~678 KB,
+# servido por prerender (header x-prerender-apache-hit: true).
+curl 'https://www.walmart.com.mx/browse/farmacia-y-cuidado-de-la-salud/medicamentos/analgesicos/264536_1310112_2410125'
+
+# Listado, página N por URL. En el navegador (sesión validada) trae la página
+# renderizada en servidor; sin navegador: 307 a /blocked con y sin impersonar.
+curl 'https://www.walmart.com.mx/browse/farmacia-y-cuidado-de-la-salud/medicamentos/analgesicos/264536_1310112_2410125?page=2&affinityOverride=default'
+
+# Ficha de producto. Sin navegador: 307 a /blocked con y sin impersonar.
+curl 'https://www.walmart.com.mx/ip/Paracetamol-Medimart-650-mg-24-tabletas/00750164475124'
+
+# GraphQL persistido que usa el navegador al paginar (por verificar: falta el
+# hash de la consulta y el JSON de variables; no se ha validado sin navegador).
+curl 'https://www.walmart.com.mx/orchestra/snb/graphql/Browse/{HASH}/browse?variables={JSON}'

@@ -1,0 +1,13 @@
+fecha,perfil,url,status,detalle,segundos,bytes
+2026-10-07T17:11:59.833314+00:00,sin_impersonar,https://www.farmaciasguadalajara.com/farmacia/medicina/dolor/analgesicos?start=0&sz=96,ERROR,"Failed to perform, curl: (92) HTTP/2 stream 1 reset by server (error 0x2 INTERNAL_ERROR). See https://curl.se/libcurl/c/",0.19,0
+2026-10-07T17:12:10.036794+00:00,sin_impersonar,https://www.farmaciasguadalajara.com/farmacia/medicina/dolor/analgesicos?start=0&sz=96,ERROR,"Failed to perform, curl: (92) HTTP/2 stream 1 reset by server (error 0x2 INTERNAL_ERROR). See https://curl.se/libcurl/c/",0.2,0
+2026-10-07T17:12:20.250092+00:00,sin_impersonar,https://www.farmaciasguadalajara.com/farmacia/medicina/dolor/analgesicos?start=0&sz=96,ERROR,"Failed to perform, curl: (92) HTTP/2 stream 1 reset by server (error 0x2 INTERNAL_ERROR). See https://curl.se/libcurl/c/",0.21,0
+2026-10-07T17:12:32.888910+00:00,chrome,https://www.farmaciasguadalajara.com/farmacia/medicina/dolor/analgesicos?start=0&sz=96,200,,2.64,1151016
+2026-10-07T17:12:45.572148+00:00,chrome,https://www.farmaciasguadalajara.com/farmacia/medicina/dolor/analgesicos?start=0&sz=96,200,,2.68,1151016
+2026-10-07T17:12:58.054621+00:00,chrome,https://www.farmaciasguadalajara.com/farmacia/medicina/dolor/analgesicos?start=0&sz=96,200,,2.48,1151016
+2026-10-07T17:13:08.395414+00:00,sin_impersonar,https://www.farmaciasguadalajara.com/medicina/analgesicos/naxen-500-mg--15-tabletas.-1184105.html,ERROR,"Failed to perform, curl: (92) HTTP/2 stream 1 reset by server (error 0x2 INTERNAL_ERROR). See https://curl.se/libcurl/c/",0.23,0
+2026-10-07T17:13:18.636262+00:00,sin_impersonar,https://www.farmaciasguadalajara.com/medicina/analgesicos/naxen-500-mg--15-tabletas.-1184105.html,ERROR,"Failed to perform, curl: (92) HTTP/2 stream 1 reset by server (error 0x2 INTERNAL_ERROR). See https://curl.se/libcurl/c/",0.24,0
+2026-10-07T17:13:28.880226+00:00,sin_impersonar,https://www.farmaciasguadalajara.com/medicina/analgesicos/naxen-500-mg--15-tabletas.-1184105.html,ERROR,"Failed to perform, curl: (92) HTTP/2 stream 1 reset by server (error 0x2 INTERNAL_ERROR). See https://curl.se/libcurl/c/",0.24,0
+2026-10-07T17:13:39.829270+00:00,chrome,https://www.farmaciasguadalajara.com/medicina/analgesicos/naxen-500-mg--15-tabletas.-1184105.html,200,,0.95,517720
+2026-10-07T17:13:50.913683+00:00,chrome,https://www.farmaciasguadalajara.com/medicina/analgesicos/naxen-500-mg--15-tabletas.-1184105.html,200,,1.08,517717
+2026-10-07T17:14:01.925713+00:00,chrome,https://www.farmaciasguadalajara.com/medicina/analgesicos/naxen-500-mg--15-tabletas.-1184105.html,200,,1.01,517717

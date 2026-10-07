@@ -1,0 +1,58 @@
+[
+  {
+    "usItemId": "00750164475124",
+    "id": "1AB8FD0WHA8L",
+    "offerId": "1BE0AAA4E11947EBA9723219D09C513D",
+    "name": "Paracetamol Medimart 650 mg, 24 tabletas",
+    "brand": null,
+    "canonicalUrl": "/ip/Paracetamol-Medimart-650-mg-24-tabletas/00750164475124",
+    "price": 38,
+    "priceInfo": {
+      "linePrice": "$38.00",
+      "wasPrice": "",
+      "savings": "",
+      "savingsAmt": 0,
+      "unitPrice": "",
+      "minPrice": 0,
+      "priceRangeString": ""
+    },
+    "imageInfo": {
+      "thumbnailUrl": "https://i5-mx.walmartimages.com/asr/2190ca02-9c20-4f11-88c4-fb211f8b9f14.b052d16d4b859a8e2c3947bcd93f3dc7.jpeg"
+    },
+    "availabilityStatusV2": {"display": "Disponible", "value": "IN_STOCK"},
+    "isOutOfStock": false,
+    "sellerId": "FDAE70BB7FA44EA5A97DEE41858D7FCA",
+    "sellerName": "Walmart",
+    "sellerType": "INTERNAL",
+    "catalogSellerId": "1",
+    "sponsoredProduct": null
+  },
+  {
+    "usItemId": "00750222742608",
+    "id": "7BIDE4L8EVCX",
+    "offerId": "7801DEDDADD141C8958E20E260BCE40F",
+    "name": "Ibuprofeno Medimart 400 mg 10 cápsulas en gel",
+    "brand": null,
+    "canonicalUrl": "/ip/Ibuprofeno-Medimart-400-mg-10-capsulas-en-gel/00750222742608",
+    "price": 45,
+    "priceInfo": {
+      "linePrice": "$45.00",
+      "wasPrice": "",
+      "savings": "",
+      "savingsAmt": 0,
+      "unitPrice": "",
+      "minPrice": 0,
+      "priceRangeString": ""
+    },
+    "imageInfo": {
+      "thumbnailUrl": "https://i5-mx.walmartimages.com/asr/ee13d398-288f-400e-b591-9e45872134bf.e80eafafc59a153f7e342b25a9f8c70b.jpeg"
+    },
+    "availabilityStatusV2": {"display": "Disponible", "value": "IN_STOCK"},
+    "isOutOfStock": false,
+    "sellerId": "FDAE70BB7FA44EA5A97DEE41858D7FCA",
+    "sellerName": "Walmart",
+    "sellerType": "INTERNAL",
+    "catalogSellerId": "1",
+    "sponsoredProduct": null
+  }
+]

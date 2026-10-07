@@ -1,0 +1,27 @@
+# Peticiones mínimas a validar con validar_endpoint.py, en formato cURL.
+# Sin cookies ni headers de autorización. La validación desde la oficina
+# (2026-10-07) está en validacion.csv; el resultado va en cada comentario.
+
+# Listado de categoría por URL SEO (permitida en robots.txt), con paginación
+# start/sz. Trae precio normal y de oferta de cada producto (f = 0).
+# Sin impersonar: reset HTTP/2 de Akamai. Impersonando Chrome: 200,
+# ~1.15 MB con sz=96, p50 2.6 s.
+curl 'https://www.farmaciasguadalajara.com/farmacia/medicina/dolor/analgesicos?start=0&sz=96'
+
+# Mismo listado con sz=600: la categoría completa (597) en una petición,
+# 4.3 MB y 13.8 s.
+curl 'https://www.farmaciasguadalajara.com/farmacia/medicina/dolor/analgesicos?start=0&sz=600'
+
+# Conteo ligero de una categoría ("N productos" en el HTML).
+curl 'https://www.farmaciasguadalajara.com/farmacia/medicina?start=0&sz=1'
+
+# Ficha de producto (JSON-LD Product + precios en HTML). Sin impersonar:
+# reset HTTP/2. Impersonando Chrome: 200, ~518 KB, p50 1.0 s.
+curl 'https://www.farmaciasguadalajara.com/medicina/analgesicos/naxen-500-mg--15-tabletas.-1184105.html'
+
+# Inventario de referencia: índice con 3 sitemaps, 11,797 fichas de producto.
+curl 'https://www.farmaciasguadalajara.com/sitemap_index.xml'
+
+# NO USAR: "Más resultados" del sitio pagina con este controlador, que
+# robots.txt prohíbe (Disallow: /on/demandware.store/).
+# curl 'https://www.farmaciasguadalajara.com/on/demandware.store/Sites-fragua-Site/default/Search-UpdateGrid?cgid=F1A1B4C1&start=20&sz=20'

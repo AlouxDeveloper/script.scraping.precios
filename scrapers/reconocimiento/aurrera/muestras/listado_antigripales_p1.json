@@ -1,0 +1,24 @@
+[
+  {
+    "usItemId": "00750112410308",
+    "name": "Rinofren Pediátrico solución pediátrica 30 ml",
+    "price": 248,
+    "priceInfo": {"linePrice": "$248.00", "wasPrice": ""},
+    "canonicalUrl": "/ip/Rinofren-Pediatrico-solucion-pediatrica-30-ml/00750112410308",
+    "imageInfo": {"thumbnailUrl": "https://i5-mx.walmartimages.com/asr/b0fb0da2-2f3e-4384-8a71-940a372212e3.da555fd65761ed1d32d010df4f292217.jpeg"},
+    "availabilityStatusV2": {"display": "Disponible", "value": "IN_STOCK"},
+    "sellerName": "Farmacia Prixz",
+    "sellerType": "EXTERNAL"
+  },
+  {
+    "usItemId": "00071470691059",
+    "name": "Broncolin Etiqueta verde 250 ml jarabe",
+    "price": 132,
+    "priceInfo": {"linePrice": "$132.00", "wasPrice": ""},
+    "canonicalUrl": "/ip/Broncolin-Etiqueta-verde-250-ml-jarabe/00071470691059",
+    "imageInfo": {"thumbnailUrl": "https://i5-mx.walmartimages.com/asr/a74610ac-217c-42ac-a885-dc0cd001957c.bc2b99887ad6f57882840947abdbadd9.jpeg"},
+    "availabilityStatusV2": {"display": "Disponible", "value": "IN_STOCK"},
+    "sellerName": "Bodega Aurrera",
+    "sellerType": "INTERNAL"
+  }
+]

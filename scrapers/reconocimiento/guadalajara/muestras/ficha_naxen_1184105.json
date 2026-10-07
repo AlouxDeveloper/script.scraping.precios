@@ -1,0 +1,29 @@
+{
+  "ld_json": [
+    {
+      "@context": "http://schema.org/",
+      "@type": "Product",
+      "name": "Naxen 500 mg, 15 Tabletas.",
+      "description": null,
+      "mpn": "1184105",
+      "sku": "1184105",
+      "brand": {
+        "@type": "Thing",
+        "name": "NAXEN"
+      },
+      "image": [
+        "https://www.movil.farmaciasguadalajara.com/wcsstore/FGCAS/wcs/products/1184105_A_1280_AL.jpg",
+        "https://www.movil.farmaciasguadalajara.com/wcsstore/FGCAS/wcs/products/1184105_S_1280_F.jpg",
+        "https://www.movil.farmaciasguadalajara.com/wcsstore/FGCAS/wcs/products/1184105_S_1280_B.jpg"
+      ],
+      "offers": {
+        "url": {},
+        "@type": "Offer",
+        "priceCurrency": "MXN",
+        "price": "238.74",
+        "availability": "http://schema.org/OutOfStock"
+      }
+    }
+  ],
+  "html_precio": "<div class=\"price\"> <span> <div class=\"price-before strike-through\"> <span class=\"value\" content=\"346.00\"> <span class=\"sr-only\"> Price reduced from </span> $346.00 <span class=\"sr-only\"> to </span> </span> </div> <span class=\"sales offer-mini-cart \"> <span class=\"value\" content=\"238.74\"></span> $238.74 </span> </span> </div> </div>"
+}
