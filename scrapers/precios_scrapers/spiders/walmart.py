@@ -30,9 +30,8 @@ from precios_scrapers.spiders.base import SpiderTienda
 
 SITIO = "https://www.walmart.com.mx"
 POR_PAGINA = 40
-# maxPage nunca pasa de 23. Las páginas 24 y 25 aún traen productos, pero
-# fuera de rango el sitio responde una página que el middleware toma por
-# desafío (firma "captcha"): no se pide nada más allá de maxPage.
+# maxPage nunca pasa de 23. Las páginas 24 y 25 aún traen productos, pero no
+# está documentado hasta dónde: lo que no cabe se parte por precio.
 TOPE_PAGINAS = 23
 
 

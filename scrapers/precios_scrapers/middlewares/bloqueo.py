@@ -56,7 +56,11 @@ class Bloqueo:
         """Devuelve por qué la respuesta es bloqueo, o None si no lo es."""
         if response.status in STATUS_BLOQUEO:
             return f"status_{response.status}"
-        cuerpo = response.body[:5000].lower()
+        # Walmart lista www.recaptcha.net en la CSP del <head> de toda página;
+        # en una página sin productos cae dentro de los 5,000 bytes y la
+        # firma "captcha" la tomaba por desafío (ALD-121). Nombrar el host no
+        # es un desafío.
+        cuerpo = response.body[:5000].lower().replace(b"recaptcha.net", b"")
         firma = next((f for f in self.firmas if f in cuerpo), None)
         if firma:
             return f"firma_{firma.decode()}"

@@ -118,6 +118,15 @@ def test_segmento_que_cabe_pagina_con_su_filtro(spider):
     assert peticiones[-1].cb_kwargs["segmento"] == (500, None)
 
 
+def test_segmento_vacio_no_pide_nada(spider):
+    # Sin medicamentos de ese precio: total 0 y maxPage 0, sin desafío.
+    url = (f"{MEDICAMENTOS}/otros-medicamentos/264536_1310112_2470029"
+           "?min_price=6714&max_price=13428")
+    assert list(spider.parse_listado(
+        respuesta("segmento_vacio", url), hoja="h", ruta=RUTA,
+        segmento=(6714, 13428), techo=26856)) == []
+
+
 def test_partir_se_detiene_en_un_peso():
     assert SpiderWalmart.partir((10, 11), None) is None
     assert SpiderWalmart.partir((0, None), None) is None

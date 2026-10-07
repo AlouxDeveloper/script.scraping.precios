@@ -804,9 +804,12 @@ Dos sondas desde la oficina (WSL2, escalón d, un contexto): 11 páginas buenas 
   faceta `price` da `max` (26,856) para partir el segmento abierto.
 - **Tope:** `maxPage` se queda en 23, pero `?page=24` y `?page=25` traen 40 productos distintos de la
   23. No se usan: el spider parte por precio.
-- **Falso positivo de bloqueo:** una página fuera de rango (Analgésicos `?page=3`, "No se pudo
-  encontrar esta página") trae la firma `captcha` en sus primeros 5,000 bytes; `Bloqueo` la reintentó
-  6 veces y descartó 2 contextos. El spider nunca pide más allá de `maxPage`.
+- **Falso positivo de bloqueo:** toda página de Walmart lista `www.recaptcha.net` en la CSP del
+  `<head>`. En una página normal queda pasado el byte 17,000, pero en una sin productos (fuera de
+  rango, o un segmento de precio vacío: `total: 0`, `maxPage: 0`) cae en los primeros 5,000 bytes y
+  la firma `captcha` la tomaba por desafío. La primera corrida en Windows se atoró así en el segmento
+  6,714-13,428 de Otros Medicamentos (8 reintentos, 3 contextos descartados). Corregido en `Bloqueo`:
+  el host `recaptcha.net` se ignora antes de buscar firmas.
 - **Total contra listado:** la hoja Tos reportó 32 y su única página listó 30; como en P3 (82 contra
   78), el total incluye productos que el listado no muestra. La cobertura por hoja queda algo debajo
   de 100% aunque se recorra completa.

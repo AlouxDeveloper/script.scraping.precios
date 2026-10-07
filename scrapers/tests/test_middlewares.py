@@ -88,6 +88,15 @@ def test_redirect_a_portada_es_bloqueo(bloqueo):
     assert isinstance(mw.process_response(request, final), Request)
 
 
+def test_recaptcha_en_la_csp_no_es_bloqueo(bloqueo):
+    mw, registro = bloqueo
+    csp = (b'<meta http-equiv="Content-Security-Policy" '
+           b'content="script-src www.google.com www.recaptcha.net">')
+    r = respuesta(cuerpo=csp)
+    assert mw.process_response(r.request, r) is r
+    assert registro.pausas == []
+
+
 @pytest.mark.parametrize("status, headers", [
     (404, None), (503, None), (429, {"Retry-After": "90"}), (200, None)])
 def test_lo_que_no_es_bloqueo_pasa(bloqueo, status, headers):
