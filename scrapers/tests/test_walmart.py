@@ -167,5 +167,19 @@ def test_sucursal_distinta_cierra_la_corrida(spider):
 def test_pagina_sin_datos_no_rompe(spider):
     vacia = HtmlResponse(ANALGESICOS, body=b"<html></html>",
                          request=Request(ANALGESICOS))
-    assert list(spider.parse_listado(vacia, hoja="h", ruta=RUTA)) == []
+    [otra] = spider.parse_listado(vacia, hoja="h", ruta=RUTA)
+    assert otra.url == ANALGESICOS and otra.dont_filter
     assert spider.crawler.stats.get_value("walmart/paginas_sin_datos") == 1
+
+
+def test_pagina_sin_sucursal_se_pide_otra_vez(spider):
+    # ALD-123: una página de Aurrera llegó sin stores; no es otra sucursal.
+    cuerpo = (FIXTURES / "analgesicos_p1.html").read_text()
+    cuerpo = cuerpo.replace(', "stores": "3864"', "")
+    pagina = HtmlResponse(ANALGESICOS, body=cuerpo.encode(),
+                          request=Request(ANALGESICOS))
+    spider.sucursal = "3864"
+    [otra] = spider.parse_listado(pagina, hoja="h", ruta=RUTA)
+    assert isinstance(otra, Request) and otra.url == ANALGESICOS
+    assert spider.crawler.stats.get_value(
+        "walmart/paginas_sin_sucursal") == 1

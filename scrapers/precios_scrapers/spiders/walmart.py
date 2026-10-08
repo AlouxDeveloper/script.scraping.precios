@@ -29,6 +29,7 @@ from decimal import Decimal
 from statistics import median
 
 import scrapy
+from scrapy.downloadermiddlewares.retry import get_retry_request
 from scrapy.exceptions import CloseSpider
 from w3lib.url import add_or_replace_parameters
 
@@ -92,6 +93,8 @@ class SpiderWalmart(SpiderTienda):
     """Ramas -> hojas -> páginas (o segmentos de precio) -> productos."""
 
     name = "walmart"
+    # Bodega Aurrera corre en la misma plataforma y solo cambia esto.
+    sitio = SITIO
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
@@ -99,11 +102,12 @@ class SpiderWalmart(SpiderTienda):
 
     async def start(self):
         for ruta in self.tienda["categorias"]:
-            yield scrapy.Request(SITIO + ruta, callback=self.parse_rama)
+            yield scrapy.Request(self.sitio + ruta, callback=self.parse_rama)
 
     def parse_rama(self, response):
         datos = self.leer(response)
         if datos is None:
+            yield from self.reintento(response)
             return
         busqueda = datos["searchResult"]
         self.total_reportado = ((self.total_reportado or 0)
@@ -111,7 +115,7 @@ class SpiderWalmart(SpiderTienda):
         rama = [paso["name"] for paso in busqueda.get("breadCrumb") or []]
         for hoja in faceta(datos, "cat_id")["values"]:
             yield scrapy.Request(
-                SITIO + hoja["baseSeoURL"], callback=self.parse_listado,
+                self.sitio + hoja["baseSeoURL"], callback=self.parse_listado,
                 cb_kwargs={"hoja": hoja["id"],
                            "ruta": [*rama, hoja["name"]]})
 
@@ -125,6 +129,7 @@ class SpiderWalmart(SpiderTienda):
         """
         datos = self.leer(response)
         if datos is None:
+            yield from self.reintento(response)
             return
         busqueda = datos["searchResult"]
         total = busqueda["aggregatedCount"]
@@ -148,7 +153,7 @@ class SpiderWalmart(SpiderTienda):
         # Más de 40 productos con el mismo precio: no queda más que paginar.
         self.logger.warning("Segmento de precio sin partir con %s productos",
                             total, extra={"url": response.url})
-        self.crawler.stats.inc_value("walmart/segmentos_paginados")
+        self.crawler.stats.inc_value(f"{self.name}/segmentos_paginados")
         paginas = busqueda["paginationV2"]["maxPage"]
         for n in range(2, min(paginas, TOPE_PAGINAS) + 1):
             yield self.pedir(response.url, hoja, ruta, segmento, n, techo)
@@ -189,15 +194,27 @@ class SpiderWalmart(SpiderTienda):
                        "pagina": pagina, "techo": techo})
 
     def leer(self, response) -> dict | None:
-        """Datos del listado tras verificar la sucursal de la página."""
+        """Datos del listado tras verificar la sucursal de la página.
+
+        Devuelve None si la página llegó incompleta: sin ``__NEXT_DATA__``
+        de listado o sin sucursal. En ALD-123 una página de Aurrera llegó una
+        vez sin ``stores`` y la misma URL, pedida de nuevo, sí la traía; sin
+        sucursal tampoco se sabe de qué zona es el precio, así que no se
+        guarda y se pide otra vez.
+        """
         datos = datos_listado(response)
         busqueda = (datos or {}).get("searchResult")
         if not busqueda:
             self.logger.warning("Página sin __NEXT_DATA__ de listado",
                                 extra={"url": response.url})
-            self.crawler.stats.inc_value("walmart/paginas_sin_datos")
+            self.crawler.stats.inc_value(f"{self.name}/paginas_sin_datos")
             return None
         tienda = busqueda["paginationV2"]["pageProperties"].get("stores")
+        if tienda is None:
+            self.logger.warning("Página sin sucursal",
+                                extra={"url": response.url})
+            self.crawler.stats.inc_value(f"{self.name}/paginas_sin_sucursal")
+            return None
         if self.sucursal is None:
             self.sucursal = tienda
             self.logger.info("Sucursal de la corrida: %s", tienda)
@@ -207,6 +224,17 @@ class SpiderWalmart(SpiderTienda):
                               extra={"url": response.url})
             raise CloseSpider("sucursal_cambiada")
         return datos
+
+    def reintento(self, response):
+        """Pide otra vez una página incompleta, hasta ``RETRY_TIMES``.
+
+        Si se agotan los reintentos la página se pierde y se nota en la
+        cobertura de su categoría.
+        """
+        otra = get_retry_request(response.request, spider=self,
+                                 reason="pagina_incompleta")
+        if otra is not None:
+            yield otra
 
     def productos(self, items: list[dict], response, hoja: str,
                   ruta: list[str]):
@@ -231,7 +259,7 @@ class SpiderWalmart(SpiderTienda):
                      "precio_rango": info.get("priceRangeString")}
         return {
             "capturado_en": ahora,
-            "url_producto": SITIO + item["canonicalUrl"],
+            "url_producto": self.sitio + item["canonicalUrl"],
             "sku_tienda": sku,
             "producto": item["name"],
             "marca": item.get("brand") or None,

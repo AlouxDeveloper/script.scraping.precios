@@ -373,3 +373,22 @@ El alcance de la v1 está pendiente de decisión de Aldo (igual que en Walmart).
 - **ToS:** por verificar.
 - El legado escribe el centinela `SEARCH` como SKU cuando cae en la página de búsqueda; el spider
   nuevo lee `usItemId` del JSON y no hereda ese error.
+
+## Spider y primera corrida (ALD-123, 2026-10-08)
+
+El spider hereda el de Walmart sin cambios de lógica: solo cambia el dominio. La URL de la hoja sin
+el slug de la rama sale tal cual de `baseSeoURL`, y la faceta `cat_id` en `contentLayout` ya la
+encuentra la búsqueda recursiva. La sucursal 2769 queda fija en `tiendas.yml` y coincide con la que
+el sitio asigna por la IP de la oficina.
+
+**Página sin sucursal.** En el primer intento, la corrida se cerró como `sucursal_cambiada` a los
+15 minutos (118 páginas, cobertura 70.5%): una página de Dolor (`?min_price=106`) llegó sin
+`pageProperties.stores`, y el spider leyó ese vacío como otra sucursal. La misma URL, pedida de
+nuevo desde WSL, sí traía `stores: 2769`. Desde entonces, una página sin sucursal o sin
+`__NEXT_DATA__` se pide otra vez (hasta `RETRY_TIMES`) y no se guarda, porque sin sucursal no se
+sabe de qué zona es el precio. Aplica también a Walmart.
+
+**Resultado** (Windows, oficina, solo Medicamentos): estado `completa`, cobertura **99.4%**
+(1,939 de 1,951) en 31 minutos, 268 páginas, 0 bloqueos y 0 reintentos, sucursal 2769. La hoja más
+baja fue Congestión Nasal (97.5%). El pipeline descartó 6,775 duplicados: cada segmento repite los
+productos de la página que lo originó, y muchos productos están en varias hojas.

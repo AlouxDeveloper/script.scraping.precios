@@ -356,3 +356,24 @@ El catálogo completo cabe con holgura: **frente a las ~85 h del legado, menos d
 - **Disponibilidad sin ubicación no es confiable** (`OutOfStock` con botón "Agregar" visible).
 - **Contrato del HTML:** los selectores de la tarjeta (`data-pid`, `.sales .value[content]`) son de
   SFRA estándar, pero un cambio de tema los rompe.
+
+## Spider y primera corrida (ALD-125, 2026-10-08)
+
+El spider sigue la propuesta de este reconocimiento y no la del issue (inventario del sitemap y una
+petición por ficha): recorre los listados de nivel 2 con `?start=N&sz=96` y lee las tarjetas, sin
+abrir fichas. `disponible` va vacío y `zona_precio = sin_ubicacion`. Todas las tarjetas observadas
+traen precio tachado mayor que el de venta; la promoción ("3 X 2", "2 x $60") va en
+`atributos_tienda.promocion`.
+
+**Bloqueo por sesión, no por IP.** En el primer intento, tras 33 páginas en 7 minutos (a 10 s),
+Akamai reseteó las 5 restantes y siguió reseteándolas después de esperas de 30, 60 y 120 s, hasta
+que el circuit breaker entró a la pausa de 30 minutos. En ese momento, la misma URL pedida desde
+WSL sin cookies dio 200. Como `scrapy-impersonate` abre una sesión de curl por petición, lo único
+que arrastraba la sesión marcada eran las cookies de Akamai (`_abck`, `bm_sv`) del cookie jar de
+Scrapy. El spider corre ahora con `COOKIES_ENABLED = False`.
+
+**Resultado** (Windows, oficina, solo `/farmacia/medicina`): estado `completa`, cobertura **100%**
+(3,575 de 3,575) en 7.5 minutos, 38 peticiones, 0 bloqueos y 0 reintentos.
+
+Pendiente para las corridas finales: la cobertura contra el inventario del sitemap (11,797 fichas),
+que con una sola categoría no tiene sentido medir.

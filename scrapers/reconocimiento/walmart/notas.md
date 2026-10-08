@@ -836,3 +836,7 @@ Causa, medida con Antigripales (185 productos, 5 páginas):
 - **Estrategia nueva:** partir cada hoja por precio hasta que cada segmento cabe en una página (40),
   sin paginar; el corte va en la mediana de los precios de la página. Los patrocinados se descartan.
   Cuesta más páginas (estimado: ~2 por cada 25 productos de hoja).
+
+Resultado con la estrategia nueva (Windows, lanzada desde WSL con Git Bash): `completa` en 42 min,
+340 páginas, 0 bloqueos, sucursal 3864, ningún segmento paginado. **Cobertura 98.2%** (2,341 únicos
+contra 2,384). Por hoja, de 91% (Anti-tabaco, 53 de 58) a 100%; las dos hojas grandes, 99%.
