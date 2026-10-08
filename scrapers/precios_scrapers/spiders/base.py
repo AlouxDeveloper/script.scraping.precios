@@ -71,9 +71,17 @@ class SpiderTienda(scrapy.Spider):
         # Igual, por categoría: id -> {"total_reportado": n, "skus": set()}.
         # El spider agrega cada SKU que ve en la categoría.
         spider.por_categoria = {}
-        logs.instalar(crawler.settings.get("LOG_LEVEL"), logs.ContextoCorrida(
-            cls.name, spider.corrida_id, spider.tienda["escalon"]))
+        archivo = logs.instalar(
+            crawler.settings.get("LOG_LEVEL"),
+            logs.ContextoCorrida(cls.name, spider.corrida_id,
+                                 spider.tienda["escalon"]),
+            crawler.settings)
         entorno = crawler.settings.get("AXIOM_ENTORNO")
+        # La terminal no repite tienda ni corrida en cada línea: van aquí.
+        logger.info("Corrida %s · escalón %s · entorno %s · destino %s · "
+                    "log JSON %s", spider.corrida_id,
+                    spider.tienda["escalon"], entorno,
+                    crawler.settings.get("AXIOM_DESTINO"), archivo)
         permitidos = spider.tienda["entornos_permitidos"]
         if entorno not in permitidos:
             mensaje = (f"La tienda '{cls.name}' no puede correr en el entorno "

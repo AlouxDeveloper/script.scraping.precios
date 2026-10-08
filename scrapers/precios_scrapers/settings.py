@@ -5,6 +5,13 @@ entorno (PRD, sección 3.7) y lo que cambia por tienda (escalón, tráfico) lo
 aplica ``SpiderTienda`` desde ``config/tiendas.yml``.
 """
 import os
+from pathlib import Path
+
+from dotenv import load_dotenv
+
+# El .env de la raíz del repo (el mismo de extract/) trae el bot de Telegram.
+# No pisa variables que ya vengan del entorno real (GCP las inyecta así).
+load_dotenv(Path(__file__).resolve().parents[2] / ".env")
 
 BOT_NAME = "precios_scrapers"
 SPIDER_MODULES = ["precios_scrapers.spiders"]
@@ -15,6 +22,8 @@ NEWSPIDER_MODULE = "precios_scrapers.spiders"
 # se permiten en oficina aborten.
 AXIOM_ENTORNO = os.environ.get("AXIOM_ENTORNO", "oficina")
 AXIOM_DESTINO = os.environ.get("AXIOM_DESTINO", "./salida/data_v2")
+# Carpeta del log JSON de cada corrida (en oficina; en GCP va a stderr).
+AXIOM_LOGS = os.environ.get("AXIOM_LOGS", "./salida/logs_v2")
 # Carpeta base para pausa y reanudación (JOBDIR); el spider le agrega su slug.
 # Vacía no activa JOBDIR: en GCP se reanuda por lotes.
 AXIOM_JOBDIR = os.environ.get("AXIOM_JOBDIR", "")
@@ -54,6 +63,18 @@ NAVEGADOR_BLOQUEOS_POR_CONTEXTO = 2
 # dejaría de parecer Chrome.
 USER_AGENT = None
 DEFAULT_REQUEST_HEADERS = {}
+
+# Alertas por Telegram (ALD-129). El vigía revisa la corrida cada
+# ALERTA_INTERVALO_S; las demás reglas se revisan al cerrar.
+EXTENSIONS = {"precios_scrapers.alertas.Vigia": 500}
+ALERTA_INTERVALO_S = 300
+ALERTA_SIN_AVANCE_MIN = 20
+ALERTA_HORAS_MAX = 30
+ALERTA_COBERTURA_MIN = 0.98
+ALERTA_CAIDA_MAX = 0.10
+ALERTA_RECHAZO_MAX = 0.005
+# Con menos filas, un par de rechazos ya pasa del 0.5%: no es señal.
+ALERTA_RECHAZO_MIN_FILAS = 1000
 
 # Validación del contrato v1 y dedup; después, Parquet en lotes.
 ITEM_PIPELINES = {

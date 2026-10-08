@@ -97,6 +97,13 @@ class Bloqueo:
                 self.cerrar("bloqueo_sostenido")
                 raise IgnoreRequest("bloqueo_sostenido")
             self.pausas_largas += 1
+            # Alerta en vivo (ALD-129): la corrida queda detenida un buen rato
+            # y, si vuelve a pasar, se cierra.
+            duracion = (f"{self.pausa_larga // 60} min"
+                        if self.pausa_larga >= 60 else f"{self.pausa_larga} s")
+            logger.error("Pausa de %s tras %s bloqueos seguidos (%s); si se "
+                         "repite, la corrida se cierra", duracion, self.umbral,
+                         motivo, extra={"url": request.url, "alerta": True})
             self.pausar(self.pausa_larga, request.url)
         else:
             self.pausar(ESPERAS[min(self.seguidos, len(ESPERAS)) - 1],

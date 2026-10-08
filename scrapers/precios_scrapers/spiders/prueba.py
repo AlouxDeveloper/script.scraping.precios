@@ -6,6 +6,7 @@ sintéticos para ejercitar el contrato y el pipeline Parquet sin más tráfico.
 Uso, desde la raíz del repo:
     uv run --project scrapers scrapy crawl prueba
     uv run --project scrapers scrapy crawl prueba -a filas=4500
+    uv run --project scrapers scrapy crawl prueba -a url=https://httpbin.org/status/403
 """
 from datetime import datetime, timezone
 from decimal import Decimal
@@ -18,9 +19,12 @@ class SpiderPrueba(SpiderTienda):
 
     name = "prueba"
 
-    def __init__(self, *args, filas: int = 0, **kwargs) -> None:
+    def __init__(self, *args, filas: int = 0, url: str | None = None,
+                 **kwargs) -> None:
         super().__init__(*args, **kwargs)
-        self.start_urls = self.tienda["categorias"]
+        # ``url`` sustituye las de tiendas.yml: sirve para simular un
+        # bloqueo con una URL que responde 403 y probar las alertas.
+        self.start_urls = [url] if url else self.tienda["categorias"]
         self.filas = int(filas)
 
     def parse(self, response):

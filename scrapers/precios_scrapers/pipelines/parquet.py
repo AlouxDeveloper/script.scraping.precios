@@ -23,6 +23,7 @@ import pyarrow.parquet as pq
 from pyarrow import fs
 from scrapy import signals
 
+from precios_scrapers import alertas
 from precios_scrapers.contrato import CONTRATO_VERSION, ESQUEMA
 
 ZONA_MX = ZoneInfo("America/Mexico_City")
@@ -77,8 +78,9 @@ class PipelineParquet:
     def open_spider(self) -> None:
         spider = self.crawler.spider
         anio_mes = spider.inicio.astimezone(ZONA_MX).strftime("%Y-%m")
-        self.fs, raiz = abrir_destino(self.crawler.settings["AXIOM_DESTINO"])
-        self.carpeta = (f"{raiz}/tienda={spider.name}/anio_mes={anio_mes}"
+        self.fs, self.raiz = abrir_destino(
+            self.crawler.settings["AXIOM_DESTINO"])
+        self.carpeta = (f"{self.raiz}/tienda={spider.name}/anio_mes={anio_mes}"
                         f"/corrida={spider.corrida_id}")
         # En GCS no hay carpetas; crearlas dejaría objetos vacíos que load/
         # tendría que ignorar.
@@ -108,7 +110,7 @@ class PipelineParquet:
         with self.fs.open_output_stream(f"{self.carpeta}/{nombre}") as f:
             f.write(datos)
 
-    def escribir_corrida(self, estado: str, razon: str | None) -> None:
+    def escribir_corrida(self, estado: str, razon: str | None) -> dict:
         spider = self.crawler.spider
         stats = self.crawler.stats.get_stats()
         prefijo = "downloader/response_status_count/"
@@ -146,11 +148,14 @@ class PipelineParquet:
         }
         texto = json.dumps(corrida, ensure_ascii=False, indent=2)
         self.escribir("_corrida.json", texto.encode("utf-8"))
+        return corrida
 
     def cerrar(self, spider, reason: str) -> None:
         # Va en spider_closed y no en close_spider porque solo la señal trae
         # la razón de cierre; las stats siguen abiertas en ese momento.
         if self.lote:
             self.escribir_parte()
-        self.escribir_corrida(estado_por_razon(reason, len(self.skus)),
-                              razon=reason)
+        corrida = self.escribir_corrida(
+            estado_por_razon(reason, len(self.skus)), razon=reason)
+        # Después de escribir el JSON: la alerta nunca debe costar el resumen.
+        alertas.al_cerrar(self.crawler, corrida, self.fs, self.raiz)
