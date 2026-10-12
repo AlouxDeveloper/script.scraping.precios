@@ -116,6 +116,15 @@ class PipelineParquet:
         prefijo = "downloader/response_status_count/"
         unicos = len(self.skus)
         total = spider.total_reportado
+        cobertura = round(unicos / total, 4) if total else None
+        # Con categorías, la cobertura es la de todas juntas: SKU vistos en
+        # cada una contra lo que reporta cada una. Las hojas de Walmart se
+        # traslapan, así que los únicos de toda la corrida contra la suma de
+        # sus totales la hundirían sin que falte nada.
+        reportado = sum(d["total_reportado"] for d in spider.por_categoria.values())
+        if reportado:
+            vistos = sum(len(d["skus"]) for d in spider.por_categoria.values())
+            cobertura = round(vistos / reportado, 4)
         corrida = {
             "corrida_id": spider.corrida_id,
             "tienda": spider.name,
@@ -128,7 +137,8 @@ class PipelineParquet:
             "filas_total": sum(p["filas"] for p in self.partes),
             "unicos": unicos,
             "total_reportado": total,
-            "cobertura": round(unicos / total, 4) if total else None,
+            "cobertura": cobertura,
+            "categorias_sin_datos": sorted(spider.sin_datos),
             "por_categoria": {
                 categoria: {"total_reportado": dato["total_reportado"],
                             "unicos": len(dato["skus"]),

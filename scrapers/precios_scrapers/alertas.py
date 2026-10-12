@@ -52,8 +52,10 @@ def revisar(corrida: dict, anterior: dict | None, rechazados: int,
     cobertura = corrida.get("cobertura")
     minimo = settings.getfloat("ALERTA_COBERTURA_MIN")
     if cobertura is not None and cobertura < minimo:
-        razones.append(f"Cobertura {cobertura:.1%} (mínimo {minimo:.0%}): "
-                       f"{corrida['unicos']:,} de {corrida['total_reportado']:,}")
+        razones.append(f"Cobertura {cobertura:.1%} (mínimo {minimo:.0%})")
+    if corrida.get("categorias_sin_datos"):
+        razones.append("Categorías sin datos: "
+                       + ", ".join(corrida["categorias_sin_datos"]))
     if anterior and anterior.get("unicos"):
         caida = 1 - corrida["unicos"] / anterior["unicos"]
         if caida > settings.getfloat("ALERTA_CAIDA_MAX"):

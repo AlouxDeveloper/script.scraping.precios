@@ -40,6 +40,12 @@ def test_reglas_de_cierre(settings):
     assert razones[4] == "La corrida duró 31.0 h"
 
 
+def test_categoria_sin_datos_alerta(settings):
+    perdida = {**SANA, "categorias_sin_datos": ["/farmacia/visual"]}
+    assert alertas.revisar(perdida, SANA, 0, settings) == [
+        "Categorías sin datos: /farmacia/visual"]
+
+
 def test_pocos_rechazos_en_corrida_chica_no_alertan(settings):
     chica = {**SANA, "filas_total": 50, "unicos": 50, "total_reportado": 50,
              "cobertura": 1.0}

@@ -1,7 +1,8 @@
 """Spider de Walmart México (escalón d, solo listados).
 
 Estrategia (reconocimiento en ``reconocimiento/walmart/notas.md``): cada rama
-de ``categorias`` en tiendas.yml lista sus hojas en la faceta ``cat_id``; cada
+de ``categorias`` en tiendas.yml lista sus hojas en la faceta ``cat_id``, y
+una hoja suelta en ``categorias`` se recorre sin pasar por su rama; cada
 hoja se parte por rango de precio hasta que cada segmento cabe en una página,
 y el ``__NEXT_DATA__`` del listado trae precio, EAN (``usItemId``) y
 vendedor, así que no se abren fichas.
@@ -102,13 +103,31 @@ class SpiderWalmart(SpiderTienda):
 
     async def start(self):
         for ruta in self.tienda["categorias"]:
-            yield scrapy.Request(self.sitio + ruta, callback=self.parse_rama)
+            self.sin_datos.add(ruta)
+            ident = ruta.rsplit("/", 1)[-1]
+            # Las hojas tienen tres niveles de ID (264536_1310112_120504) y se
+            # recorren directo; las ramas tienen dos y piden todas sus hojas.
+            if ident.count("_") >= 2:
+                yield scrapy.Request(self.sitio + ruta,
+                                     callback=self.parse_listado,
+                                     cb_kwargs={"hoja": ident, "ruta": None})
+            else:
+                yield scrapy.Request(self.sitio + ruta, callback=self.parse_rama)
+
+    def entrada(self, response) -> bool:
+        """True si la página es una categoría de tiendas.yml (y la marca)."""
+        ruta = response.request.url.removeprefix(self.sitio)
+        if ruta in self.sin_datos:
+            self.sin_datos.discard(ruta)
+            return True
+        return False
 
     def parse_rama(self, response):
         datos = self.leer(response)
         if datos is None:
             yield from self.reintento(response)
             return
+        self.entrada(response)
         busqueda = datos["searchResult"]
         self.total_reportado = ((self.total_reportado or 0)
                                 + busqueda["aggregatedCount"])
@@ -139,6 +158,12 @@ class SpiderWalmart(SpiderTienda):
             self.por_categoria.setdefault(hoja, {"total_reportado": total,
                                                  "skus": set()})
             techo = (faceta(datos, "price") or {}).get("max")
+            # Una hoja de tiendas.yml no pasó por su rama: su total y su
+            # ruta salen de aquí.
+            if self.entrada(response):
+                self.total_reportado = (self.total_reportado or 0) + total
+                ruta = [paso["name"] for paso in busqueda.get("breadCrumb")
+                        or []]
         items = organicos(busqueda)
         yield from self.productos(items, response, hoja, ruta)
         if pagina > 1 or total <= POR_PAGINA:

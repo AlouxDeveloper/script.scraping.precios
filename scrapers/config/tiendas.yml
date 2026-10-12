@@ -27,11 +27,64 @@ walmart:
   # assortmentStoreId sola no fija otra (ALD-120, ver notas.md). El spider
   # cierra la corrida si la sucursal cambia a mitad.
   sucursal: null
-  # Ramas de nivel 2; el spider descubre sus hojas en cada corrida.
-  # TODO: alcance v1 pendiente de Aldo. Por ahora solo Medicamentos, que no
-  # alcanza el volumen del legado que pide el corte (ALD-122).
-  categorias:
+  # Alcance v1 (Excel de alcance, 2026-10-12): ramas completas, cuyas hojas
+  # descubre el spider en cada corrida, y hojas sueltas de las demás. De
+  # cada par de hojas duplicadas entra una sola; lo que aún se repite lo
+  # deduplica el pipeline por SKU.
+  categorias: &categorias_walmart
+    # Medicamentos: rama completa
     - /browse/farmacia-y-cuidado-de-la-salud/medicamentos/264536_1310112
+    # Higiene Íntima e Incontinencia: rama completa
+    - /browse/farmacia-y-cuidado-de-la-salud/higiene-intima-e-incontinencia/264536_264543
+    # Sueros y Orales: rama completa
+    - /browse/farmacia-y-cuidado-de-la-salud/sueros-y-orales/264536_1520002
+    # Equipo Médico
+    - /browse/farmacia-y-cuidado-de-la-salud/term-metros/264536_264564_264565
+    - /browse/farmacia-y-cuidado-de-la-salud/nebulizadores/264536_264564_264570
+    - /browse/farmacia-y-cuidado-de-la-salud/bauman-metros-ox-metros-y-puls-metros/264536_264564_264567
+    - /browse/farmacia-y-cuidado-de-la-salud/monitores-de-presi-n/264536_264564_960015
+    # Accesorios para Farmacia y Cuidado de la salud
+    - /browse/farmacia-y-cuidado-de-la-salud/quemaduras-y-protectores/264536_2067466_120487
+    - /browse/farmacia-y-cuidado-de-la-salud/estomacales/264536_2067466_3200079
+    - /browse/farmacia-y-cuidado-de-la-salud/antimic-ticos-pies/264536_2067466_3200062
+    - /browse/farmacia-y-cuidado-de-la-salud/antimic-ticos-u-as/264536_2067466_3200063
+    - /browse/farmacia-y-cuidado-de-la-salud/antipiojos/264536_2067466_3200019
+    # Oftálmicos y Óticos
+    - /browse/farmacia-y-cuidado-de-la-salud/soluciones-para-lentes-de-contacto/264536_264594_1520007
+    - /browse/farmacia-y-cuidado-de-la-salud/o-do/264536_264594_1520009
+    # Vitaminas y Suplementos
+    - /browse/farmacia-y-cuidado-de-la-salud/suplementos-diet-ticos/264536_264549_264551
+    - /browse/farmacia-y-cuidado-de-la-salud/vitaminas-y-suplementos/264536_264549_3200083
+    - /browse/farmacia-y-cuidado-de-la-salud/herbolarias-y-naturistas/264536_264549_960025
+    - /browse/farmacia-y-cuidado-de-la-salud/vitaminas/264536_264549_350098
+    - /browse/farmacia-y-cuidado-de-la-salud/multivitam-nicos/264536_264549_960024
+    - /browse/farmacia-y-cuidado-de-la-salud/clorofilas/264536_264549_120509
+    - /browse/farmacia-y-cuidado-de-la-salud/otros-medicina-y-suplementos/264536_264549_264631
+    # Material de Curación
+    - /browse/farmacia-y-cuidado-de-la-salud/banditas/264536_970119_265961
+    - /browse/farmacia-y-cuidado-de-la-salud/algod-n/264536_970119_860020
+    - /browse/farmacia-y-cuidado-de-la-salud/hisopos/264536_970119_860021
+    - /browse/farmacia-y-cuidado-de-la-salud/material-de-curaci-n/264536_970119_3200080
+    - /browse/farmacia-y-cuidado-de-la-salud/soluciones-antis-pticas/264536_970119_3200044
+    - /browse/farmacia-y-cuidado-de-la-salud/alcohol/264536_970119_860019
+    - /browse/farmacia-y-cuidado-de-la-salud/pomadas-antis-pticas/264536_970119_860025
+    - /browse/farmacia-y-cuidado-de-la-salud/otros/264536_970119_3200046
+    # Incontinencia
+    - /browse/farmacia-y-cuidado-de-la-salud/pa-ales-para-adultos/264536_264537_264548
+    - /browse/farmacia-y-cuidado-de-la-salud/toallas-protectoras/264536_264537_960035
+    - /browse/farmacia-y-cuidado-de-la-salud/calzones-anat-micos/264536_264537_264538
+    # Botiquines
+    - /browse/farmacia-y-cuidado-de-la-salud/jeringas/264536_265802_265801
+    - /browse/farmacia-y-cuidado-de-la-salud/gasas-y-vendas/264536_265802_265963
+    - /browse/farmacia-y-cuidado-de-la-salud/guantes-y-cubrebocas/264536_265802_3200041
+    # Diabetes
+    - /browse/farmacia-y-cuidado-de-la-salud/jeringas/264536_960017_960021
+    - /browse/farmacia-y-cuidado-de-la-salud/tiras-reactivas-y-lancetas/264536_960017_960019
+    - /browse/farmacia-y-cuidado-de-la-salud/gluc-metros/264536_960017_960018
+    # Bienestar Sexual
+    - /browse/farmacia-y-cuidado-de-la-salud/lubricantes-y-humectantes/264536_264585_264589
+    - /browse/farmacia-y-cuidado-de-la-salud/condones-y-anticonceptivos/264536_264585_264591
+    - /browse/farmacia-y-cuidado-de-la-salud/pruebas-de-embarazo-y-ovulaci-n/264536_264585_960027
   trafico: {concurrencia: 1, delay: 5.0, jitter: 0.5}
 
 aurrera:
@@ -41,11 +94,8 @@ aurrera:
   # oficina, con y sin navegador (ALD-123, notas.md). Fija aquí, el spider
   # cierra la corrida si una página trae otra.
   sucursal: "2769"
-  # Mismas ramas e IDs que walmart. La URL de la rama sí lleva su slug; las
-  # hojas no, pero salen tal cual de la faceta.
-  # TODO: alcance v1 pendiente de Aldo; por ahora solo Medicamentos.
-  categorias:
-    - /browse/farmacia-y-cuidado-de-la-salud/medicamentos/264536_1310112
+  # Mismas ramas, hojas e IDs que walmart, para que ambas se comparen.
+  categorias: *categorias_walmart
   trafico: {concurrencia: 1, delay: 5.0, jitter: 0.5}
 
 guadalajara:
@@ -53,38 +103,32 @@ guadalajara:
   entornos_permitidos: [oficina]
   # Sin ubicación por defecto: precio online (zona_precio = sin_ubicacion).
   sucursal: null
-  # Categorías de nivel 2; cada listado incluye su subárbol.
-  # TODO: alcance v1 pendiente de Aldo. Por ahora solo Medicina (prueba
-  # de ALD-125); las otras 28 del reconocimiento quedan comentadas.
+  # Categorías de nivel 2; cada listado incluye su subárbol. Alcance v1
+  # (Excel de alcance, 2026-10-12): Farmacia, Dermo y Pharmalife completas;
+  # de Super solo Higiene y Belleza y Bebés.
   categorias:
     - /farmacia/medicina
-    # - /farmacia/accesorios-medicos
-    # - /farmacia/obesidad
-    # - /farmacia/circulatorio
-    # - /farmacia/curaciones
-    # - /farmacia/diabetes-y-endocrinas
-    # - /farmacia/incontinencia
-    # - /farmacia/salud-sexual
-    # - /farmacia/sueros
-    # - /farmacia/visual
-    # - /farmacia/vitaminas-y-suplementos-
-    # - /farmacia/dermatologia
-    # - /dermo/cuidado-facial
-    # - /dermo/cuidado-corporal
-    # - /dermo/cuidado-del-cabello
-    # - /dermo/cuidado-especializado
-    # - /dermo/proteccion-solar
-    # - /dermo/tipo-de-piel
-    # - /dermo/marcas
-    # - /super/alimentos
-    # - /super/bebidas
-    # - /super/electronicos
-    # - /super/higiene-y-belleza
-    # - /super/hogar
-    # - /super/jugueteria
-    # - /super/mascotas
-    # - /super/papeleria
-    # - /super/bebes
+    - /farmacia/accesorios-medicos
+    - /farmacia/obesidad
+    - /farmacia/circulatorio
+    - /farmacia/curaciones
+    - /farmacia/diabetes-y-endocrinas
+    - /farmacia/incontinencia
+    - /farmacia/salud-sexual
+    - /farmacia/sueros
+    - /farmacia/visual
+    - /farmacia/vitaminas-y-suplementos-
+    - /farmacia/dermatologia
+    - /dermo/cuidado-facial
+    - /dermo/cuidado-corporal
+    - /dermo/cuidado-del-cabello
+    - /dermo/cuidado-especializado
+    - /dermo/proteccion-solar
+    - /dermo/tipo-de-piel
+    - /dermo/marcas
+    - /super/higiene-y-belleza
+    - /super/bebes
+    - /ofertas/pharmalife
   # Delay de 10 s y no 1.5: Akamai reseteó la conexión tras ~12 peticiones
   # seguidas a 3 s y ninguna a 10 s (reconocimiento, 2026-10-07).
   trafico: {concurrencia: 1, delay: 10.0, jitter: 0.5}

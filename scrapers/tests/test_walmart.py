@@ -3,6 +3,7 @@
 Los fixtures salen de las sondas de ALD-121 (2026-10-07, sucursal 3864) con
 ``fixtures/walmart/recortar.py``.
 """
+import asyncio
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
@@ -57,6 +58,29 @@ def test_rama_pide_sus_25_hojas(spider):
     assert alta.url.endswith("/264536_1310112_120504")
     assert alta.cb_kwargs["ruta"] == ["Farmacia y Cuidado de la Salud",
                                       "Medicamentos", "Alta Especialidad"]
+
+
+def test_arranque_por_rama_o_por_hoja(spider):
+    async def peticiones():
+        return [p async for p in spider.start()]
+
+    rama = "/browse/farmacia-y-cuidado-de-la-salud/medicamentos/264536_1310112"
+    hoja = ANALGESICOS.removeprefix(spider.sitio)
+    spider.tienda["categorias"] = [rama, hoja]
+    a_rama, a_hoja = asyncio.run(peticiones())
+    assert a_rama.callback == spider.parse_rama
+    assert a_hoja.callback == spider.parse_listado
+    assert a_hoja.cb_kwargs == {"hoja": "264536_1310112_2410125", "ruta": None}
+    assert spider.sin_datos == {rama, hoja}
+
+
+def test_hoja_de_tiendas_yml_toma_total_y_ruta_de_su_pagina(spider):
+    spider.sin_datos.add(ANALGESICOS.removeprefix(spider.sitio))
+    filas, peticiones = separar(spider.parse_listado(
+        respuesta("analgesicos_p1", ANALGESICOS), hoja="h", ruta=None))
+    assert spider.total_reportado == 75 and not spider.sin_datos
+    assert filas[0]["categoria_ruta"] == RUTA
+    assert peticiones[0].cb_kwargs["ruta"] == RUTA
 
 
 def test_hoja_de_mas_de_una_pagina_se_parte_en_la_mediana(spider):

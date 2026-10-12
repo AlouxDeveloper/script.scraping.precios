@@ -71,6 +71,10 @@ class SpiderTienda(scrapy.Spider):
         # Igual, por categoría: id -> {"total_reportado": n, "skus": set()}.
         # El spider agrega cada SKU que ve en la categoría.
         spider.por_categoria = {}
+        # Categorías de tiendas.yml cuya primera página no ha llegado. La
+        # cobertura sale de por_categoria, así que una categoría perdida
+        # entera no la baja; esto la delata en _corrida.json.
+        spider.sin_datos = set()
         archivo = logs.instalar(
             crawler.settings.get("LOG_LEVEL"),
             logs.ContextoCorrida(cls.name, spider.corrida_id,

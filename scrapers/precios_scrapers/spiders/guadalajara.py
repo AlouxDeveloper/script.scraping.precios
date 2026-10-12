@@ -62,6 +62,7 @@ class SpiderGuadalajara(SpiderTienda):
 
     async def start(self):
         for ruta in self.tienda["categorias"]:
+            self.sin_datos.add(ruta)
             yield self.pagina(ruta, 0)
 
     def pagina(self, categoria: str, inicio: int) -> scrapy.Request:
@@ -85,6 +86,7 @@ class SpiderGuadalajara(SpiderTienda):
                 yield otra
             return
         if inicio == 0:
+            self.sin_datos.discard(categoria)
             self.total_reportado = (self.total_reportado or 0) + total
             self.por_categoria[categoria] = {"total_reportado": total,
                                              "skus": set()}

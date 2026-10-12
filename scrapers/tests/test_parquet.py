@@ -57,10 +57,15 @@ def test_cobertura_por_categoria(tmp_path):
     pipeline = armar(tmp_path)
     pipeline.crawler.spider.por_categoria = {
         "hoja": {"total_reportado": 4, "skus": {"1", "2", "3"}}}
+    pipeline.crawler.spider.sin_datos = {"/perdida"}
     pipeline.process_item(fila(1))
     pipeline.cerrar(pipeline.crawler.spider, reason="finished")
-    assert corrida(pipeline)["por_categoria"] == {
+    datos = corrida(pipeline)
+    assert datos["por_categoria"] == {
         "hoja": {"total_reportado": 4, "unicos": 3, "cobertura": 0.75}}
+    # Sale de las categorías aunque la corrida solo guardó un SKU.
+    assert datos["cobertura"] == 0.75
+    assert datos["categorias_sin_datos"] == ["/perdida"]
 
 
 def test_corrida_completa(tmp_path):
