@@ -15,6 +15,7 @@ Un registro con ``extra={"alerta": True}`` se manda además a Telegram
 solo un log.
 """
 import logging
+import ssl
 import sys
 import threading
 import time
@@ -23,6 +24,7 @@ from pathlib import Path
 from urllib.parse import urlencode, urlparse
 from urllib.request import urlopen
 
+import truststore
 from pythonjsonlogger.json import JsonFormatter
 
 CAMPOS = ["levelname", "message", "tienda", "corrida_id", "url", "status",
@@ -156,12 +158,20 @@ class AlertaTelegram(logging.Handler):
     def enviar(self, texto: str) -> None:
         datos = urlencode({"chat_id": self.chat_id, "text": texto}).encode()
         try:
-            with urlopen(self.url, data=datos, timeout=10):
+            # Con los certificados del sistema y no los de Python: en redes
+            # que inspeccionan HTTPS (proxy o antivirus con su propia CA), la
+            # cadena trae un certificado que solo Windows conoce y urllib
+            # fallaba con CERTIFICATE_VERIFY_FAILED.
+            contexto = truststore.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+            with urlopen(self.url, data=datos, timeout=10, context=contexto):
                 pass
         except Exception as error:  # noqa: BLE001 -- nunca tumba la corrida
-            # Sin la URL: lleva el token del bot.
-            logger.warning("No se pudo enviar la alerta a Telegram: %s",
-                           type(error).__name__)
+            # La causa (DNS, certificado, proxy) dice qué arreglar en la PC;
+            # el token del bot va en la URL, así que se tapa por si aparece.
+            token = self.url.split("/bot")[1].split("/")[0]
+            causa = str(getattr(error, "reason", error)).replace(token, "***")
+            logger.warning("No se pudo enviar la alerta a Telegram: %s (%s)",
+                           type(error).__name__, causa)
 
 
 def instalar(nivel: str, contexto: ContextoCorrida, settings) -> Path | None:

@@ -4,8 +4,6 @@
 # escalon: a (API/JSON), b (HTTP impersonado), c (navegador → HTTP),
 #   d (navegador completo). Metodología, sección 1.
 # entornos_permitidos: valores de AXIOM_ENTORNO donde el spider puede correr.
-# sucursal: id de sucursal fija, o null si la tienda no tiene precio por zona
-#   o si se acepta la que asigne el sitio (ver cada spider).
 # trafico: arranca con la Metodología, sección 7, y se ajusta con la ficha.
 # firmas_bloqueo (opcional): textos que, en el cuerpo de una respuesta,
 #   indican bloqueo en esta tienda; se suman a las de la Metodología.
@@ -15,18 +13,15 @@
 prueba:
   escalon: b
   entornos_permitidos: [oficina]
-  sucursal: null
   categorias: ["https://www.farmaciasguadalajara.com/robots.txt"]
   trafico: {concurrencia: 1, delay: 1.5, jitter: 0.5}
 
 walmart:
   escalon: d
   entornos_permitidos: [oficina]
-  # La que el sitio asigna por la IP, como el legado (decisión de Aldo,
-  # ALD-121): desde la oficina, 3864 SC Puebla Reforma. La cookie
-  # assortmentStoreId sola no fija otra (ALD-120, ver notas.md). El spider
-  # cierra la corrida si la sucursal cambia a mitad.
-  sucursal: null
+  # Sin sucursal fija: la asigna el sitio por la IP, como el legado
+  # (decisión de Aldo, ALD-121), y va por fila en zona_precio. La cookie
+  # assortmentStoreId sola no fija otra (ALD-120, ver notas.md).
   # Alcance v1 (Excel de alcance, 2026-10-12): ramas completas, cuyas hojas
   # descubre el spider en cada corrida, y hojas sueltas de las demás. De
   # cada par de hojas duplicadas entra una sola; lo que aún se repite lo
@@ -90,10 +85,8 @@ walmart:
 aurrera:
   escalon: d
   entornos_permitidos: [oficina]
-  # BA Hermanos Serdán, Puebla: la que el sitio asigna por la IP de la
-  # oficina, con y sin navegador (ALD-123, notas.md). Fija aquí, el spider
-  # cierra la corrida si una página trae otra.
-  sucursal: "2769"
+  # Sucursal por IP como walmart (desde la oficina, 2769 BA Hermanos
+  # Serdán; ALD-123, notas.md).
   # Mismas ramas, hojas e IDs que walmart, para que ambas se comparen.
   categorias: *categorias_walmart
   trafico: {concurrencia: 1, delay: 5.0, jitter: 0.5}
@@ -102,7 +95,6 @@ guadalajara:
   escalon: b
   entornos_permitidos: [oficina]
   # Sin ubicación por defecto: precio online (zona_precio = sin_ubicacion).
-  sucursal: null
   # Categorías de nivel 2; cada listado incluye su subárbol. Alcance v1
   # (Excel de alcance, 2026-10-12): Farmacia, Dermo y Pharmalife completas;
   # de Super solo Higiene y Belleza y Bebés.

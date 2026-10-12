@@ -9,7 +9,6 @@ from urllib.parse import parse_qs, urlparse
 
 import pytest
 from scrapy import Request
-from scrapy.exceptions import CloseSpider
 from scrapy.http import HtmlResponse
 from scrapy.utils.test import get_crawler
 
@@ -180,12 +179,13 @@ def test_partir():
     assert partir((0, None), None, [5]) is None
 
 
-def test_sucursal_distinta_cierra_la_corrida(spider):
+def test_sucursal_distinta_solo_avisa(spider, caplog):
+    # La sucursal no se fija: cada fila lleva la de su página.
     spider.sucursal = "2344"
-    with pytest.raises(CloseSpider) as cierre:
-        list(spider.parse_listado(respuesta("analgesicos_p1", ANALGESICOS),
-                                  hoja="h", ruta=RUTA))
-    assert cierre.value.reason == "sucursal_cambiada"
+    filas, _ = separar(spider.parse_listado(
+        respuesta("analgesicos_p1", ANALGESICOS), hoja="h", ruta=RUTA))
+    assert {f["zona_precio"] for f in filas} == {"3864"}
+    assert "cambió la sucursal de 2344 a 3864" in caplog.text
 
 
 def test_pagina_sin_datos_no_rompe(spider):

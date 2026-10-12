@@ -155,10 +155,11 @@ def test_telegram_manda_solo_alertas_y_no_repite(monkeypatch):
 
 def test_telegram_caido_no_rompe_la_corrida(monkeypatch, caplog):
     def falla(*args, **kwargs):
-        raise OSError("sin red")
+        raise OSError("sin red en https://api.telegram.org/botTOKEN/x")
     monkeypatch.setattr(logs, "urlopen", falla)
     logs.AlertaTelegram("TOKEN", "123").enviar("hola")
-    assert "No se pudo enviar la alerta a Telegram: OSError" in caplog.text
+    assert ("No se pudo enviar la alerta a Telegram: OSError (sin red en "
+            "https://api.telegram.org/bot***/x)") in caplog.text
     assert "TOKEN" not in caplog.text
 
 

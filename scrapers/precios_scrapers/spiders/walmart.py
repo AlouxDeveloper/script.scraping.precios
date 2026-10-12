@@ -16,9 +16,9 @@ deduplica; el corte va en la mediana de los precios vistos, porque casi todo
 cuesta menos de $500 y la faceta de precio llega a decenas de miles.
 
 La sucursal es la que el sitio asigna por la IP (decisión de Aldo, igual que
-el legado). La primera página fija la sucursal de la corrida y va en
-``zona_precio``; si una página posterior trae otra, la corrida se cierra
-como parcial. Con ``sucursal`` en tiendas.yml se exige esa desde el inicio.
+el legado) y no se fija: cada fila lleva en ``zona_precio`` la de su página.
+Así la misma corrida sirve desde cualquier PC; si el sitio cambia de
+sucursal a mitad, solo queda un aviso en el log.
 
 Uso, desde la raíz del repo:
     uv run --project scrapers scrapy crawl walmart
@@ -31,7 +31,6 @@ from statistics import median
 
 import scrapy
 from scrapy.downloadermiddlewares.retry import get_retry_request
-from scrapy.exceptions import CloseSpider
 from w3lib.url import add_or_replace_parameters
 
 from precios_scrapers.spiders.base import SpiderTienda
@@ -99,7 +98,8 @@ class SpiderWalmart(SpiderTienda):
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
-        self.sucursal = self.tienda["sucursal"]
+        # La última que trajo una página; solo para avisar cuando cambia.
+        self.sucursal = None
 
     async def start(self):
         for ruta in self.tienda["categorias"]:
@@ -150,6 +150,9 @@ class SpiderWalmart(SpiderTienda):
         if datos is None:
             yield from self.reintento(response)
             return
+        # Se copia antes de cualquier yield: Scrapy puede procesar otra
+        # respuesta mientras consume este generador.
+        zona = self.sucursal
         busqueda = datos["searchResult"]
         total = busqueda["aggregatedCount"]
         # La página 1 sin segmento da el total de la hoja; va antes de los
@@ -165,7 +168,7 @@ class SpiderWalmart(SpiderTienda):
                 ruta = [paso["name"] for paso in busqueda.get("breadCrumb")
                         or []]
         items = organicos(busqueda)
-        yield from self.productos(items, response, hoja, ruta)
+        yield from self.productos(items, response, hoja, ruta, zona)
         if pagina > 1 or total <= POR_PAGINA:
             return
 
@@ -219,7 +222,7 @@ class SpiderWalmart(SpiderTienda):
                        "pagina": pagina, "techo": techo})
 
     def leer(self, response) -> dict | None:
-        """Datos del listado tras verificar la sucursal de la página.
+        """Datos del listado; deja en ``self.sucursal`` la de la página.
 
         Devuelve None si la página llegó incompleta: sin ``__NEXT_DATA__``
         de listado o sin sucursal. En ALD-123 una página de Aurrera llegó una
@@ -241,13 +244,12 @@ class SpiderWalmart(SpiderTienda):
             self.crawler.stats.inc_value(f"{self.name}/paginas_sin_sucursal")
             return None
         if self.sucursal is None:
-            self.sucursal = tienda
-            self.logger.info("Sucursal de la corrida: %s", tienda)
+            self.logger.info("Sucursal asignada por el sitio: %s", tienda)
         elif tienda != self.sucursal:
-            self.logger.error("La página trae la sucursal %s y la corrida "
-                              "es de la %s", tienda, self.sucursal,
-                              extra={"url": response.url})
-            raise CloseSpider("sucursal_cambiada")
+            self.logger.warning("El sitio cambió la sucursal de %s a %s",
+                                self.sucursal, tienda,
+                                extra={"url": response.url})
+        self.sucursal = tienda
         return datos
 
     def reintento(self, response):
@@ -262,16 +264,16 @@ class SpiderWalmart(SpiderTienda):
             yield otra
 
     def productos(self, items: list[dict], response, hoja: str,
-                  ruta: list[str]):
+                  ruta: list[str], zona: str):
         ahora = datetime.now(timezone.utc)
         cobertura = self.por_categoria.get(hoja)
         for item in items:
             if cobertura is not None:
                 cobertura["skus"].add(item["usItemId"])
-            yield self.fila(item, ahora, response.url, ruta)
+            yield self.fila(item, ahora, response.url, ruta, zona)
 
     def fila(self, item: dict, ahora: datetime, url_fuente: str,
-             ruta: list[str]) -> dict:
+             ruta: list[str], zona: str) -> dict:
         info = item["priceInfo"]
         actual = Decimal(str(item["price"])) if item.get("price") else None
         antes = precio(info.get("wasPrice") or "")
@@ -296,7 +298,7 @@ class SpiderWalmart(SpiderTienda):
             "moneda": "MXN",
             "disponible": item["availabilityStatusV2"]["value"] == "IN_STOCK",
             "url_imagen": (item.get("imageInfo") or {}).get("thumbnailUrl"),
-            "zona_precio": self.sucursal,
+            "zona_precio": zona,
             "url_fuente": url_fuente,
             "atributos_tienda": {k: v for k, v in atributos.items() if v},
         }
