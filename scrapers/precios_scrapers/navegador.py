@@ -143,6 +143,24 @@ class ContextoNavegador:
                                 {"no_viewport": True})
 
     async def process_response(self, request, response):
+        await self.cerrar_pagina(request)
+        return response
+
+    async def process_exception(self, request, exception):
+        # Con playwright_include_page, scrapy-playwright no cierra la página
+        # si la descarga falla (p. ej. timeout de navegación). Abierta, ocupa
+        # el único lugar del contexto (PLAYWRIGHT_MAX_PAGES_PER_CONTEXT =
+        # CONCURRENT_REQUESTS = 1) y el reintento espera para siempre: en
+        # la primera corrida completa de Aurrera (2026-10-12) quedó 2.5 h sin
+        # respuestas y ni el Ctrl+C la cerraba. Se cierra y la excepción
+        # sigue a Retry.
+        try:
+            await self.cerrar_pagina(request)
+        except Exception:  # noqa: BLE001 -- el navegador pudo haber caído
+            logger.warning("No se pudo cerrar la página tras %s",
+                           type(exception).__name__, exc_info=True)
+
+    async def cerrar_pagina(self, request) -> None:
         pagina = request.meta.pop("playwright_page", None)
         if pagina is not None:
             self.contexto = pagina.context
@@ -151,7 +169,6 @@ class ContextoNavegador:
             # petición con TargetClosedError (3 de 25 páginas en la sonda).
             await pagina.unroute_all(behavior="ignoreErrors")
             await pagina.close()
-        return response
 
     async def descartar(self) -> None:
         if self.contexto is not None:

@@ -55,6 +55,17 @@ def descargar(mw, contexto: Contexto, request=None) -> Pagina:
     return pagina
 
 
+def test_descarga_fallida_cierra_la_pagina():
+    # Si no, ocupa el único lugar del contexto y el reintento se atora.
+    mw = navegador.ContextoNavegador.from_crawler(crawler_d())
+    request = Request(URL)
+    asyncio.run(mw.process_request(request))
+    pagina = Pagina(Contexto())
+    request.meta["playwright_page"] = pagina
+    assert asyncio.run(mw.process_exception(request, TimeoutError())) is None
+    assert pagina.cerrada and "playwright_page" not in request.meta
+
+
 def test_escalon_d_usa_playwright_con_patchright():
     settings = crawler_d().settings
     assert settings.getdict("DOWNLOAD_HANDLERS")["https"] == navegador.HANDLER
