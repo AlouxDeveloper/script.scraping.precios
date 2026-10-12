@@ -92,6 +92,10 @@ class SpiderTienda(scrapy.Spider):
                        f"'{entorno}'; permitidos: {permitidos}")
             logger.error(mensaje)
             raise EntornoNoPermitido(mensaje)
+        logger.info("%s categorías · escalón %s · %s",
+                    len(spider.tienda["categorias"]),
+                    spider.tienda["escalon"], entorno,
+                    extra={"alerta": True, "titulo": "🚀 Inició"})
         return spider
 
     def __init__(self, *args, **kwargs) -> None:

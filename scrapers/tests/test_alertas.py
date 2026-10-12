@@ -149,8 +149,27 @@ def test_telegram_manda_solo_alertas_y_no_repite(monkeypatch):
                           url="https://x.mx/a"))
     handler.emit(registro("Pausa de 30 min", alerta=True,
                           url="https://x.mx/a"))
-    assert enviados == ["🔴 guadalajara · guadalajara_20261008T1751Z\n"
-                        "Pausa de 30 min\nhttps://x.mx/a"]
+    assert enviados == ["<b>🔴 Alerta · Guadalajara</b>\n\nPausa de 30 min"
+                        '\n\n<a href="https://x.mx/a">/a</a>'
+                        "\n\n<code>guadalajara_20261008T1751Z</code>"]
+
+
+def test_telegram_titulo_propio_y_texto_escapado():
+    texto = logs.AlertaTelegram.formatear(
+        registro("x", logging.INFO, titulo="🚀 Inició"), "<5% & más")
+    assert texto.startswith("<b>🚀 Inició · Guadalajara</b>\n\n"
+                            "&lt;5% &amp; más\n\n")
+
+
+def test_cierre_sano_avisa_que_termino(settings, caplog):
+    caplog.set_level(logging.INFO)
+    crawler = SimpleNamespace(settings=settings, stats=Stats())
+    al_cerrar = {**SANA, "bloqueos": 0}
+    alertas.al_cerrar(crawler, al_cerrar, pafs.LocalFileSystem(), "/no/existe")
+    [aviso] = [r for r in caplog.records if getattr(r, "alerta", False)]
+    assert aviso.titulo == "✅ Terminó"
+    assert aviso.getMessage() == ("2,341 productos · cobertura 98.2%\n"
+                                  "Duración 40 min · 0 bloqueos")
 
 
 def test_telegram_caido_no_rompe_la_corrida(monkeypatch, caplog):

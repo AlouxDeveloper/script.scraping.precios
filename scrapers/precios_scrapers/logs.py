@@ -12,8 +12,10 @@ respuesta no se cuele en el log.
 
 Un registro con ``extra={"alerta": True}`` se manda además a Telegram
 (``AlertaTelegram``): así cualquier parte del código avisa en el momento con
-solo un log.
+solo un log. ``extra={"titulo": ...}`` cambia el encabezado del mensaje
+("🚀 Inició"); sin él sale según el nivel.
 """
+import html
 import logging
 import ssl
 import sys
@@ -42,7 +44,8 @@ SCRAPY_VISIBLE = {"scrapy.extensions.logstats", "scrapy.core.engine"}
 RUIDOSOS = ("scrapy-playwright", "asyncio", "scrapy.middleware", "py.warnings")
 # Un mismo aviso no se repite antes de esto (segundos).
 REPETICION_ALERTA = 600
-ICONOS = {logging.INFO: "✅", logging.WARNING: "🟠", logging.ERROR: "🔴"}
+TITULOS = {logging.INFO: "✅ Aviso", logging.WARNING: "🟠 Aviso",
+           logging.ERROR: "🔴 Alerta"}
 
 logger = logging.getLogger(__name__)
 
@@ -102,7 +105,10 @@ class FormatoTerminal(logging.Formatter):
     def format(self, record: logging.LogRecord) -> str:
         hora = datetime.fromtimestamp(record.created).strftime("%H:%M:%S")
         nivel = NIVELES.get(record.levelname, record.levelname)
-        texto = f"{hora} {nivel:<5} {record.getMessage()}"
+        titulo = getattr(record, "titulo", None)
+        mensaje = record.getMessage()
+        texto = f"{hora} {nivel:<5} " + (f"{titulo}: {mensaje}" if titulo
+                                         else mensaje)
         url = getattr(record, "url", None)
         if url:
             partes = urlparse(url)
@@ -148,15 +154,29 @@ class AlertaTelegram(logging.Handler):
                 < REPETICION_ALERTA:
             return
         self.enviados[mensaje] = ahora
-        icono = ICONOS.get(min(record.levelno, logging.ERROR), "🔴")
-        texto = (f"{icono} {getattr(record, 'tienda', '?')} · "
-                 f"{getattr(record, 'corrida_id', '?')}\n{mensaje}")
-        if getattr(record, "url", None):
-            texto += f"\n{record.url}"
-        threading.Thread(target=self.enviar, args=(texto,)).start()
+        threading.Thread(target=self.enviar,
+                         args=(self.formatear(record, mensaje),)).start()
+
+    @staticmethod
+    def formatear(record: logging.LogRecord, mensaje: str) -> str:
+        """Mensaje en HTML de Telegram: encabezado, cuerpo, enlace, corrida."""
+        titulo = getattr(record, "titulo", None) or TITULOS.get(
+            min(record.levelno, logging.ERROR), "🔴 Alerta")
+        tienda = getattr(record, "tienda", "?").capitalize()
+        partes = [f"<b>{html.escape(titulo)} · {html.escape(tienda)}</b>",
+                  html.escape(mensaje)]
+        url = getattr(record, "url", None)
+        if url:
+            partes.append(f'<a href="{html.escape(url)}">'
+                          f"{html.escape(urlparse(url).path)}</a>")
+        partes.append(f"<code>{html.escape(getattr(record, 'corrida_id', '?'))}"
+                      "</code>")
+        return "\n\n".join(partes)
 
     def enviar(self, texto: str) -> None:
-        datos = urlencode({"chat_id": self.chat_id, "text": texto}).encode()
+        datos = urlencode({"chat_id": self.chat_id, "text": texto,
+                           "parse_mode": "HTML",
+                           "disable_web_page_preview": "true"}).encode()
         try:
             # Con los certificados del sistema y no los de Python: en redes
             # que inspeccionan HTTPS (proxy o antivirus con su propia CA), la

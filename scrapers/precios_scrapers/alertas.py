@@ -42,6 +42,10 @@ def duracion_horas(corrida: dict) -> float | None:
     return (datetime.fromisoformat(corrida["fin"]) - inicio).total_seconds() / 3600
 
 
+def duracion(horas: float) -> str:
+    return f"{horas * 60:.0f} min" if horas < 1 else f"{horas:.1f} h"
+
+
 def revisar(corrida: dict, anterior: dict | None, rechazados: int,
             settings) -> list[str]:
     """Razones para alertar sobre una corrida cerrada; vacía si salió bien."""
@@ -108,13 +112,15 @@ def al_cerrar(crawler, corrida: dict, sistema: pafs.FileSystem,
     rechazados = crawler.stats.get_value("contrato/rechazados", 0)
     razones = revisar(corrida, anterior, rechazados, crawler.settings)
     if razones:
-        logger.error("\n".join(razones), extra=ALERTA)
+        logger.error("\n".join(f"• {razon}" for razon in razones),
+                     extra={**ALERTA, "titulo": "🔴 Terminó con problemas"})
         return
     cobertura = corrida.get("cobertura")
-    logger.info("Corrida completa: %s únicos, cobertura %s, %.1f h",
+    logger.info("%s productos · cobertura %s\nDuración %s · %s bloqueos",
                 f"{corrida['unicos']:,}",
                 f"{cobertura:.1%}" if cobertura is not None else "sin total",
-                duracion_horas(corrida) or 0, extra=ALERTA)
+                duracion(duracion_horas(corrida) or 0), corrida["bloqueos"],
+                extra={**ALERTA, "titulo": "✅ Terminó"})
 
 
 class Vigia:

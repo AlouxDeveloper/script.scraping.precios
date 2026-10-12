@@ -112,3 +112,24 @@ def test_segundo_bloqueo_seguido_descarta_el_contexto():
     descargar(mw, otro, bloquear())
     assert not otro.cerrado
     assert crawler.stats.get_value("navegador/contextos_descartados") == 1
+
+
+def test_en_windows_la_pagina_se_usa_en_el_loop_de_playwright(monkeypatch):
+    # En Windows Playwright vive en otro hilo; tocarlo desde el de Scrapy
+    # desordenó el protocolo del driver y colgó la corrida de Walmart.
+    import threading
+
+    from scrapy_playwright._loop import _ThreadedLoopAdapter
+
+    loop = asyncio.new_event_loop()
+    hilo = threading.Thread(target=loop.run_forever, daemon=True)
+    hilo.start()
+    monkeypatch.setattr(_ThreadedLoopAdapter, "_loop", loop, raising=False)
+
+    async def donde():
+        return threading.current_thread()
+
+    try:
+        assert asyncio.run(navegador.en_loop_playwright(donde())) is hilo
+    finally:
+        loop.call_soon_threadsafe(loop.stop)

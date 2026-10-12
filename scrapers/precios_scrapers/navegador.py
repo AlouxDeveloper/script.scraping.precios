@@ -14,6 +14,7 @@ reconocimiento, encadena desafíos sin salida.
 
 Los desafíos nunca se resuelven (Metodología): se tratan como bloqueo.
 """
+import asyncio
 import atexit
 import logging
 import sys
@@ -76,6 +77,28 @@ class ProviderPatchright:
 
     async def close(self) -> None:
         await self.stack.aclose()
+
+
+async def en_loop_playwright(coro):
+    """Corre ``coro`` en el loop de Playwright y espera su resultado.
+
+    En Windows scrapy-playwright corre Playwright en un loop propio en otro
+    hilo, y los middlewares corren en el de Scrapy. Llamar ahí a la página o
+    al contexto escribe al pipe del driver desde dos hilos: el 2026-10-12
+    Walmart soltó ``AssertionError`` en ``_ProactorBaseWritePipeTransport``,
+    el protocolo se desordenó (``KeyError`` en ``Connection.dispatch``), la
+    conexión con el driver murió y la corrida quedó 2 h esperando. Fuera de
+    Windows hay un solo loop y se espera directo.
+    """
+    from scrapy_playwright._loop import _ThreadedLoopAdapter
+
+    loop = getattr(_ThreadedLoopAdapter, "_loop", None)
+    if loop is None or loop is asyncio.get_running_loop():
+        return await coro
+    # ponytail: _loop es privado de scrapy-playwright (igual que en
+    # cerrar_loop_windows); cambiarlo si publican una forma de usarlo.
+    return await asyncio.wrap_future(
+        asyncio.run_coroutine_threadsafe(coro, loop))
 
 
 def cerrar_loop_windows() -> None:
@@ -167,14 +190,18 @@ class ContextoNavegador:
             # Sin unroute_all, los callbacks de ruta de scrapy-playwright que
             # siguen en vuelo hacen fallar el new_page de la siguiente
             # petición con TargetClosedError (3 de 25 páginas en la sonda).
-            await pagina.unroute_all(behavior="ignoreErrors")
-            await pagina.close()
+            await en_loop_playwright(cerrar(pagina))
 
     async def descartar(self) -> None:
         if self.contexto is not None:
-            await self.contexto.close()
+            await en_loop_playwright(self.contexto.close())
             self.crawler.stats.inc_value("navegador/contextos_descartados")
             logger.warning("Contexto del navegador descartado tras %s "
                            "bloqueos seguidos", self.bloqueos)
         self.contexto = None
         self.bloqueos = 0
+
+
+async def cerrar(pagina) -> None:
+    await pagina.unroute_all(behavior="ignoreErrors")
+    await pagina.close()
