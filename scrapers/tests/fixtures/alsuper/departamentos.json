@@ -1,0 +1,72 @@
+{
+ "data": [
+  {
+   "department_id": 1,
+   "description": "Frutas y verduras"
+  },
+  {
+   "department_id": 2,
+   "description": "Carnes, Pescados y Mariscos"
+  },
+  {
+   "department_id": 3,
+   "description": "Quesos y Salchichonería"
+  },
+  {
+   "department_id": 4,
+   "description": "Jugos y Bebidas"
+  },
+  {
+   "department_id": 5,
+   "description": "Despensa"
+  },
+  {
+   "department_id": 6,
+   "description": "Lácteos y huevo"
+  },
+  {
+   "department_id": 7,
+   "description": "Panadería y tortillería"
+  },
+  {
+   "department_id": 8,
+   "description": "Lavandería"
+  },
+  {
+   "department_id": 9,
+   "description": "Limpieza del hogar"
+  },
+  {
+   "department_id": 10,
+   "description": "Alimentos congelados"
+  },
+  {
+   "department_id": 11,
+   "description": "Higiene personal y belleza"
+  },
+  {
+   "department_id": 12,
+   "description": "Mascotas"
+  },
+  {
+   "department_id": 13,
+   "description": "Cervezas, vinos y licores"
+  },
+  {
+   "department_id": 14,
+   "description": "Artículos del hogar"
+  },
+  {
+   "department_id": 15,
+   "description": "Bebés"
+  },
+  {
+   "department_id": 17,
+   "description": "Cocina de Doña Elia"
+  },
+  {
+   "department_id": 18,
+   "description": "Farmacia"
+  }
+ ]
+}

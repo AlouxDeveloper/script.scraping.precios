@@ -204,3 +204,17 @@ sanpablo:
     - "06"
   # Akamai ya mostró que vigila (reconocimiento): 1 petición cada 2 s.
   trafico: {concurrencia: 1, delay: 2.0, jitter: 0.5}
+
+alsuper:
+  escalon: a
+  entornos_permitidos: [oficina]
+  # Sucursal 6, Alsuper Plus Leones (Chihuahua): la que el sitio asigna por
+  # defecto y la del legado (100 de 100 precios iguales). El precio regular
+  # coincide entre plazas; las ofertas pueden ser locales
+  # (reconocimiento/alsuper/notas.md).
+  sucursal: 6
+  # IDs de departamento; el spider arma el slug con /departments/web. Por
+  # ahora solo Farmacia (18), la categoría de prueba. Bebés (15) y los
+  # productos sin departamento los fija el Excel de alcance.
+  categorias: [18]
+  trafico: {concurrencia: 1, delay: 2.0, jitter: 0.5}

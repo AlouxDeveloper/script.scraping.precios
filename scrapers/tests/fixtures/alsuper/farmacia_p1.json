@@ -1,0 +1,92 @@
+{
+ "data": {
+  "total_items": 2504,
+  "data": [
+   {
+    "id": 473209,
+    "sku": 473209,
+    "ean": "7502258102374",
+    "name": "Almohadilla de algodón Medicare 100 Pza",
+    "brand": "Medicare",
+    "format": "100 PZ",
+    "price": 39.9,
+    "regular_price": 39.9,
+    "stock": 51,
+    "image_url": "https://cdn.alsuper.com/products/473209.png",
+    "share_url": "https://alsuper.com/producto/almohadilla-algodon-473209",
+    "department": "Farmacia",
+    "category_name": "Curación y Rehabilitación",
+    "subcategory_name": "Algodón",
+    "promotion": "OFERTA"
+   },
+   {
+    "id": 472660,
+    "sku": 472660,
+    "ean": "7502258102497",
+    "name": "Hisopos Medicare 150 Pza",
+    "brand": "Medicare",
+    "format": "150 PZ",
+    "price": 22.9,
+    "regular_price": 24.9,
+    "stock": 54,
+    "image_url": "https://cdn.alsuper.com/products/472660.png",
+    "share_url": "https://alsuper.com/producto/hisopos-472660",
+    "department": "Farmacia",
+    "category_name": "Curación y Rehabilitación",
+    "subcategory_name": "Algodón",
+    "promotion": "OFERTA"
+   },
+   {
+    "id": 47952,
+    "sku": 47952,
+    "ean": "7501020626124",
+    "name": "Almohadillas Facial Zuum  75 g",
+    "brand": "Zuum",
+    "format": "100 PZ",
+    "price": 54.9,
+    "regular_price": 54.9,
+    "stock": 13,
+    "image_url": "https://cdn.alsuper.com/products/47952.png",
+    "share_url": "https://alsuper.com/producto/almohadillas-facial-47952",
+    "department": "Farmacia",
+    "category_name": "Curación y Rehabilitación",
+    "subcategory_name": "Algodón",
+    "promotion": "OFERTA"
+   },
+   {
+    "id": 391551,
+    "sku": 391551,
+    "ean": "7501033958717",
+    "name": "Ensure Advance  Vainilla Abbott 237 Ml",
+    "brand": "Abbott",
+    "format": "237 ML",
+    "price": 61.9,
+    "regular_price": 69.9,
+    "stock": 50,
+    "image_url": "https://cdn.alsuper.com/products/391551.png",
+    "share_url": "https://alsuper.com/producto/ensure-advance-391551",
+    "department": "Farmacia",
+    "category_name": "Vitaminas y suplementos",
+    "subcategory_name": "Vitaminas y Suplementos",
+    "promotion": "OFERTA"
+   },
+   {
+    "id": 243232,
+    "sku": 243232,
+    "ean": "7501095451096",
+    "name": "Sal De Uvas Picot Efervecente   Bristol   10 Pza",
+    "brand": "Bristol",
+    "format": "10 PZ",
+    "price": 50.9,
+    "regular_price": 59.9,
+    "stock": 86,
+    "image_url": "https://cdn.alsuper.com/products/243232.png",
+    "share_url": "https://alsuper.com/producto/sal-de-uvas-picot-efervescente-243232",
+    "department": "Farmacia",
+    "category_name": "Medicamentos",
+    "subcategory_name": "Estomacales",
+    "promotion": "OFERTA"
+   }
+  ]
+ }
+}
