@@ -1,0 +1,113 @@
+[
+ {
+  "productId": "471",
+  "productName": "IBUPROFENO CAPSULAS 600MG 10 CAPSULAS",
+  "productReference": "2315",
+  "brand": "PICK UP",
+  "link": "https://www.farmaciasdesimilares.com/ibuprofeno_600mg_10cap/p",
+  "categories": [
+   "/Medicamentos/Analgésicos/",
+   "/Medicamentos/"
+  ],
+  "items": [
+   {
+    "itemId": "471",
+    "ean": "2315",
+    "images": [
+     {
+      "imageId": "160023",
+      "imageLabel": "2315",
+      "imageTag": "<img src=\"~/arquivos/ids/160023-#width#-#height#/2315.png?v=638494173902200000\" width=\"#width#\" height=\"#height#\" alt=\"2315\" id=\"\" />",
+      "imageUrl": "https://farmaciassimilaresmx.vteximg.com.br/arquivos/ids/160023/2315.png?v=638494173902200000",
+      "imageText": "2315",
+      "imageLastModified": "2024-04-22T21:16:30.2200000Z"
+     }
+    ],
+    "sellers": [
+     {
+      "sellerId": "1",
+      "commertialOffer": {
+       "Price": 34.0,
+       "ListPrice": 34.0,
+       "IsAvailable": true
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "productId": "1641",
+  "productName": "DAPAGLIFLOZINA 10MG 28 TABLETAS (GENERICO)",
+  "productReference": "4260",
+  "brand": "PICK UP",
+  "link": "https://www.farmaciasdesimilares.com/dapagliflozina_100mg_28tab_gen/p",
+  "categories": [
+   "/Medicamentos/Diabetes/",
+   "/Medicamentos/"
+  ],
+  "items": [
+   {
+    "itemId": "1640",
+    "ean": "4260",
+    "images": [
+     {
+      "imageId": "164580",
+      "imageLabel": "",
+      "imageTag": "<img src=\"~/arquivos/ids/164580-#width#-#height#/4260 DAPAGLIFOZINA 10MG 28 TAB 1.jpg?v=639137766965870000\" width=\"#width#\" height=\"#height#\" alt=\"4260 DAPAGLIFOZINA 10MG 28 TAB 1\" id=\"\" />",
+      "imageUrl": "https://farmaciassimilaresmx.vteximg.com.br/arquivos/ids/164580/4260 DAPAGLIFOZINA 10MG 28 TAB 1.jpg?v=639137766965870000",
+      "imageText": "4260 DAPAGLIFOZINA 10MG 28 TAB 1",
+      "imageLastModified": "2026-05-07T18:51:36.5870000Z"
+     }
+    ],
+    "sellers": [
+     {
+      "sellerId": "1",
+      "commertialOffer": {
+       "Price": 449.0,
+       "ListPrice": 449.0,
+       "IsAvailable": true
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "productId": "1165",
+  "productName": "DEXAMETASONA SOLUCION INYECTABLE 8MG/2ML 1 PIEZA",
+  "productReference": "76",
+  "brand": "PICK UP",
+  "link": "https://www.farmaciasdesimilares.com/dexametasona_8mg2ml_1amp/p",
+  "categories": [
+   "/Medicamentos/Antiinflamatorio/",
+   "/Medicamentos/"
+  ],
+  "items": [
+   {
+    "itemId": "1165",
+    "ean": "76",
+    "images": [
+     {
+      "imageId": "163195",
+      "imageLabel": "",
+      "imageTag": "<img src=\"~/arquivos/ids/163195-#width#-#height#/76_frente.png.png?v=638762646570230000\" width=\"#width#\" height=\"#height#\" alt=\"76_frente.png\" id=\"\" />",
+      "imageUrl": "https://farmaciassimilaresmx.vteximg.com.br/arquivos/ids/163195/76_frente.png.png?v=638762646570230000",
+      "imageText": "76_frente.png",
+      "imageLastModified": "2025-02-27T14:50:57.0230000Z"
+     }
+    ],
+    "sellers": [
+     {
+      "sellerId": "1",
+      "commertialOffer": {
+       "Price": 14.0,
+       "ListPrice": 14.0,
+       "IsAvailable": true
+      }
+     }
+    ]
+   }
+  ]
+ }
+]

@@ -174,3 +174,21 @@ klyns:
   categorias:
     - /68/
   trafico: {concurrencia: 1, delay: 2.0, jitter: 0.5}
+
+similares:
+  escalon: a
+  entornos_permitidos: [oficina]
+  dominio: https://www.farmaciasdesimilares.com
+  # El legado guardaba como SKU el código interno de la ficha, que es
+  # productReference (1 a 4 dígitos).
+  campo_sku: productReference
+  # El campo ean repite ese código interno: no hay código de barras.
+  ean_real: false
+  # El precio no cambia por región (reconocimiento/similares/notas.md).
+  zona_precio: sin_region
+  # Rutas de IDs de fq=C:. Por ahora solo Medicamentos, la categoría de
+  # prueba (621 productos, sin partición: ningún departamento llega al
+  # tope). Los demás los fija el Excel de alcance.
+  categorias:
+    - /29/
+  trafico: {concurrencia: 1, delay: 2.0, jitter: 0.5}

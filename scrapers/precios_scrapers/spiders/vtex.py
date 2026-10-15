@@ -20,15 +20,18 @@ por subcategorías, porque hay productos colgados de la categoría padre sin
 subcategoría que así se perderían (6 en Farmacia de Chedraui).
 
 Lo propio de cada tienda va en tiendas.yml: ``dominio``, ``campo_sku`` (el
-campo que el legado guardaba como SKU, para que el histórico empate) y
-``zona_precio``; si el SKU no es ``productReference``, este va en
-``atributos_tienda``. Una tienda nueva solo necesita una subclase con su ``name``.
+campo que el legado guardaba como SKU, para que el histórico empate),
+``zona_precio`` y, opcional, ``ean_real: false`` si el campo ``ean`` no es un
+código de barras. Si el SKU no es ``productReference``, este va en
+``atributos_tienda``. Una tienda nueva solo necesita una subclase con su
+``name``.
 
 Uso, desde la raíz del repo:
     uv run --project scrapers scrapy crawl chedraui
     uv run --project scrapers scrapy crawl chedraui -s CLOSESPIDER_ITEMCOUNT=50
     uv run --project scrapers scrapy crawl farmatodo
     uv run --project scrapers scrapy crawl klyns
+    uv run --project scrapers scrapy crawl similares
 """
 import re
 from datetime import datetime, timezone
@@ -70,6 +73,9 @@ class SpiderVtex(SpiderTienda):
         self.dominio = self.tienda["dominio"]
         self.campo_sku = self.tienda["campo_sku"]
         self.zona = self.tienda["zona_precio"]
+        # Similares llena el campo ean con su código interno (1 a 4 dígitos);
+        # guardarlo como EAN ensuciaría el cruce con el catálogo NDF.
+        self.ean_real = self.tienda.get("ean_real", True)
 
     async def start(self):
         for ruta in self.tienda["categorias"]:
@@ -176,7 +182,7 @@ class SpiderVtex(SpiderTienda):
         if lista is not None and (actual is None or lista <= actual):
             lista = None
         imagen = (item.get("images") or [{}])[0].get("imageUrl")
-        ean = item.get("ean") or None
+        ean = item.get("ean") if self.ean_real else None
         # categories trae la ruta de cada nivel ("/Farmacia/Medicamentos/");
         # la más larga es la miga completa.
         ruta = max(producto.get("categories") or ["/"], key=len)
@@ -222,3 +228,7 @@ class SpiderFarmatodo(SpiderVtex):
 
 class SpiderKlyns(SpiderVtex):
     name = "klyns"
+
+
+class SpiderSimilares(SpiderVtex):
+    name = "similares"

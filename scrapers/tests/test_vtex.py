@@ -1,8 +1,8 @@
-"""Pruebas offline de la base VTEX con el spider de Chedraui.
+"""Pruebas offline de la base VTEX y de los spiders de sus cuatro tiendas.
 
 Fixtures de ``catalog_system`` sobre Medicamentos de Chedraui
-(``fq=C:/4/403/``), de Farmatodo (``fq=C:/7/``) y Patente de Klyns
-(``fq=C:/68/``), 2026-10-15, recortados con
+(``fq=C:/4/403/``), Farmatodo (``fq=C:/7/``) y Similares (``fq=C:/29/``), y
+Patente de Klyns (``fq=C:/68/``), 2026-10-15, recortados con
 ``fixtures/chedraui/recortar.py``: los 3 primeros productos y 2 con
 descuento. El total va en el header ``resources``, que cada
 prueba pone según el caso.
@@ -21,7 +21,7 @@ from precios_scrapers.contrato import CONTRATO_VERSION
 from precios_scrapers.pipelines.contrato import validar
 from precios_scrapers.spiders.vtex import (TOPE, SpiderChedraui,
                                           SpiderFarmatodo, SpiderKlyns,
-                                          SpiderVtex)
+                                          SpiderSimilares, SpiderVtex)
 
 FIXTURES = Path(__file__).parent / "fixtures" / "chedraui"
 API = "https://www.chedraui.com.mx/api/catalog_system/pub/products/search"
@@ -216,3 +216,25 @@ def test_sin_refid_distinto_no_hay_atributos(spider):
     # En Chedraui productReference = productId = SKU: no se repite.
     fila = spider.fila(productos()[0], None, "")
     assert fila["atributos_tienda"] == {}
+
+
+def test_similares_sin_ean_y_sku_interno():
+    crawler = get_crawler(SpiderSimilares, {"AXIOM_ENTORNO": "oficina"})
+    spider = crawler.spider = SpiderSimilares.from_crawler(crawler)
+    spider.por_categoria["/29/"] = {"total_reportado": 3, "skus": set()}
+    cuerpo = json.loads((Path(__file__).parent / "fixtures" / "similares"
+                         / "medicamentos_p1.json").read_text())
+    url = ("https://www.farmaciasdesimilares.com/api/catalog_system/pub/"
+           "products/search?fq=C:/29/&_from=0&_to=49")
+    filas, peticiones = separar(spider.parse(
+        respuesta(url, 3, cuerpo), categoria="/29/", rango=None, inicio=0))
+    assert not peticiones and len(filas) == 3
+    for fila in filas:
+        completa = {**fila, "contrato_version": CONTRATO_VERSION,
+                    "corrida_id": spider.corrida_id, "tienda": "similares",
+                    "escalon": "a"}
+        assert validar(completa, "similares") is None, fila["sku_tienda"]
+    # El ean de Similares es su código interno: no se guarda como EAN.
+    assert all(f["ean"] is None for f in filas)
+    assert filas[0]["sku_tienda"] == "2315"
+    assert filas[0]["atributos_tienda"] == {}
