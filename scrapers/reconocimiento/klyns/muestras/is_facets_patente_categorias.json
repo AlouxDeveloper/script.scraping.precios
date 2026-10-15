@@ -1,0 +1,147 @@
+{
+ "facets": [
+  {
+   "values": [
+    {
+     "id": "68",
+     "quantity": 1,
+     "name": "Medicamentos de Patente",
+     "key": "category-1",
+     "value": "medicamentos-de-patente",
+     "selected": true,
+     "href": "medicamentos-de-patente/medicamentos-de-patente?map=departamento"
+    }
+   ],
+   "type": "TEXT",
+   "name": "Departamento",
+   "hidden": true,
+   "key": "category-1",
+   "quantity": 1
+  },
+  {
+   "values": [
+    {
+     "id": "70",
+     "quantity": 737,
+     "name": "Antiácidos y Estomacales",
+     "key": "category-2",
+     "value": "antiacidos-y-estomacales",
+     "selected": false,
+     "href": "medicamentos-de-patente/antiacidos-y-estomacales?map=categoria"
+    },
+    {
+     "id": "72",
+     "quantity": 727,
+     "name": "Analgésicos y Antiinflamatorios",
+     "key": "category-2",
+     "value": "analgesicos-y-antiinflamatorios",
+     "selected": false,
+     "href": "medicamentos-de-patente/analgesicos-y-antiinflamatorios?map=categoria"
+    },
+    {
+     "id": "73",
+     "quantity": 551,
+     "name": "Cardiovascular",
+     "key": "category-2",
+     "value": "cardiovascular",
+     "selected": false,
+     "href": "medicamentos-de-patente/cardiovascular?map=categoria"
+    },
+    {
+     "id": "71",
+     "quantity": 395,
+     "name": "Antiinfecciosos",
+     "key": "category-2",
+     "value": "antiinfecciosos",
+     "selected": false,
+     "href": "medicamentos-de-patente/antiinfecciosos?map=categoria"
+    },
+    {
+     "id": "77",
+     "quantity": 390,
+     "name": "Otros Medicamentos de Patente",
+     "key": "category-2",
+     "value": "otros-medicamentos-de-patente",
+     "selected": false,
+     "href": "medicamentos-de-patente/otros-medicamentos-de-patente?map=categoria"
+    },
+    {
+     "id": "75",
+     "quantity": 327,
+     "name": "Respiratorios",
+     "key": "category-2",
+     "value": "respiratorios",
+     "selected": false,
+     "href": "medicamentos-de-patente/respiratorios?map=categoria"
+    },
+    {
+     "id": "69",
+     "quantity": 262,
+     "name": "Alivio del Dolor",
+     "key": "category-2",
+     "value": "alivio-del-dolor",
+     "selected": false,
+     "href": "medicamentos-de-patente/alivio-del-dolor?map=categoria"
+    },
+    {
+     "id": "76",
+     "quantity": 189,
+     "name": "Oftálmicos",
+     "key": "category-2",
+     "value": "oftalmicos",
+     "selected": false,
+     "href": "medicamentos-de-patente/oftalmicos?map=categoria"
+    },
+    {
+     "id": "74",
+     "quantity": 94,
+     "name": "Hormonas",
+     "key": "category-2",
+     "value": "hormonas",
+     "selected": false,
+     "href": "medicamentos-de-patente/hormonas?map=categoria"
+    }
+   ],
+   "type": "TEXT",
+   "name": "Categoría",
+   "hidden": false,
+   "key": "category-2",
+   "quantity": 9
+  },
+  {
+   "values": [
+    {
+     "id": "94",
+     "quantity": 6,
+     "name": "Patente",
+     "key": "category-3",
+     "value": "patente",
+     "selected": false,
+     "href": "medicamentos-de-patente/patente?map=sub-categoria"
+    }
+   ],
+   "type": "TEXT",
+   "name": "Sub-Categoría",
+   "hidden": false,
+   "key": "category-3",
+   "quantity": 1
+  }
+ ],
+ "sampling": false,
+ "breadcrumb": [
+  {
+   "name": "Medicamentos de Patente",
+   "href": "/medicamentos-de-patente"
+  }
+ ],
+ "queryArgs": {
+  "query": "",
+  "selectedFacets": [
+   {
+    "key": "category-1",
+    "value": "medicamentos-de-patente"
+   }
+  ]
+ },
+ "translated": false
+}

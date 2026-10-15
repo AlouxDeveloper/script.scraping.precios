@@ -1,0 +1,28 @@
+# Peticiones mínimas a validar con validar_endpoint.py, en formato cURL.
+# Sin cookies ni headers de autorización. La validación desde la oficina
+# (2026-10-15) está en validacion.csv; el resultado va en cada comentario.
+# robots.txt no menciona /api/ ni query strings: las dos APIs están permitidas.
+
+# Listado por catalog_system. Trae productId, productReference (RefId),
+# items[0].ean (SKU del legado), Price y ListPrice (f = 0). Sin impersonar y
+# con impersonación: 206 (5/5 cada uno), p50 0.40 s y 0.16 s. El total viene
+# en el header resources.
+curl 'https://www.klyns.mx/api/catalog_system/pub/products/search?fq=C:/68/73/&_from=0&_to=49'
+
+# Mismo listado por Intelligent Search. 200 (5/5 cada perfil), p50 0.63 s y 0.53 s.
+curl 'https://www.klyns.mx/api/io/_v/api/intelligent-search/product_search/category-1/medicamentos-de-patente/category-2/cardiovascular?count=50&page=1'
+
+# Tope: Intelligent Search, página 51 con count=50 responde 400; catalog_system
+# responde 206 con _from=2500 (resources 2500-2549/3674).
+curl 'https://www.klyns.mx/api/io/_v/api/intelligent-search/product_search/category-1/medicamentos-de-patente?count=50&page=51'
+curl 'https://www.klyns.mx/api/catalog_system/pub/products/search?fq=C:/68/&_from=2500&_to=2549'
+
+# Árbol de categorías con IDs y conteos por departamento.
+curl 'https://www.klyns.mx/api/catalog_system/pub/category/tree/2'
+curl 'https://www.klyns.mx/api/io/_v/api/intelligent-search/facets/category-1/medicamentos-de-patente'
+
+# Región: el mismo regionId sin sellers para cualquier CP; no cambia precio
+# ni surtido. Solo para documentar; el spider corre sin región.
+curl 'https://www.klyns.mx/api/checkout/pub/regions?country=MEX&postalCode=01000'
+
+# NO USAR: búsqueda HTML, prohibida en robots.txt (Disallow: /busca/*).

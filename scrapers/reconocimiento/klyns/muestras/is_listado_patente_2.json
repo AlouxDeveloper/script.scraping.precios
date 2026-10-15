@@ -1,0 +1,627 @@
+{
+ "products": [
+  {
+   "cacheId": "sp-10428",
+   "productId": "10428",
+   "description": "Mounjaro Solucion Inyectable 5 mg / 0.5 mL 1 Ampula",
+   "productName": "Mounjaro Solucion Inyectable 5 mg / 0.5 mL 1 Ampula",
+   "productReference": "100036227",
+   "linkText": "mounjaro-sol-inyectable-5-ml-0-5-ml-1-amp",
+   "brand": "MOUNJARO",
+   "brandId": 2004341,
+   "link": "/mounjaro-sol-inyectable-5-ml-0-5-ml-1-amp/p",
+   "categories": [
+    "/Medicamentos de Patente/Antiácidos y Estomacales/",
+    "/Medicamentos de Patente/"
+   ],
+   "categoryId": "70",
+   "priceRange": {
+    "sellingPrice": {
+     "highPrice": 1684.48,
+     "lowPrice": 1684.48
+    },
+    "listPrice": {
+     "highPrice": 2296.5,
+     "lowPrice": 2296.5
+    }
+   },
+   "specificationGroups": [
+    {
+     "originalName": "allSpecifications",
+     "name": "allSpecifications",
+     "specifications": [
+      {
+       "originalName": "sellerId",
+       "name": "sellerId",
+       "values": [
+        "1"
+       ]
+      }
+     ]
+    }
+   ],
+   "skuSpecifications": [],
+   "productClusters": [
+    {
+     "id": "144",
+     "name": "Medicamento Refrigerado"
+    },
+    {
+     "id": "145",
+     "name": "Tarjeta Klyns: Sumando Contigo"
+    },
+    {
+     "id": "740",
+     "name": "Medicamento Crónico"
+    },
+    {
+     "id": "974",
+     "name": "Control de Peso"
+    },
+    {
+     "id": "996",
+     "name": "GLP1 - CUPONES"
+    },
+    {
+     "id": "1053",
+     "name": "Insulinas Control Peso"
+    },
+    {
+     "id": "1064",
+     "name": "Klyns: Sumando Contigo descuento adicional"
+    },
+    {
+     "id": "1179",
+     "name": "Mounjaro Precio Especial"
+    },
+    {
+     "id": "1184",
+     "name": "Precio Plan Lealtad: $1,340"
+    }
+   ],
+   "clusterHighlights": [
+    {
+     "id": "1184",
+     "name": "Precio Plan Lealtad: $1,340"
+    }
+   ],
+   "properties": [
+    {
+     "name": "sellerId",
+     "originalName": "sellerId",
+     "values": [
+      "1"
+     ]
+    }
+   ],
+   "items": [
+    {
+     "sellers": [
+      {
+       "sellerId": "1",
+       "sellerName": "Farmacias Klyns",
+       "addToCartLink": "",
+       "sellerDefault": true,
+       "commertialOffer": {
+        "DeliverySlaSamplesPerRegion": {},
+        "DeliverySlaSamples": [],
+        "AvailableQuantity": 10000,
+        "discountHighlights": [],
+        "Installments": [
+         {
+          "Value": 1684.48,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 1684.48,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "American Express",
+          "PaymentSystemGroupName": "creditCardPaymentGroup",
+          "Name": "American Express à vista"
+         },
+         {
+          "Value": 1684.48,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 1684.48,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Visa",
+          "PaymentSystemGroupName": "creditCardPaymentGroup",
+          "Name": "Visa à vista"
+         },
+         {
+          "Value": 1684.48,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 1684.48,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Mastercard",
+          "PaymentSystemGroupName": "creditCardPaymentGroup",
+          "Name": "Mastercard à vista"
+         },
+         {
+          "Value": 1684.48,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 1684.48,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Visa Electron",
+          "PaymentSystemGroupName": "debitCardPaymentGroup",
+          "Name": "Visa Electron à vista"
+         },
+         {
+          "Value": 1684.48,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 1684.48,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Vale",
+          "PaymentSystemGroupName": "giftCardPaymentGroup",
+          "Name": "Vale à vista"
+         },
+         {
+          "Value": 1684.48,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 1684.48,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Mastercard Debit",
+          "PaymentSystemGroupName": "debitCardPaymentGroup",
+          "Name": "Mastercard Debit à vista"
+         },
+         {
+          "Value": 1684.48,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 1684.48,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "SPEI",
+          "PaymentSystemGroupName": "SPEIPaymentGroup",
+          "Name": "SPEI à vista"
+         },
+         {
+          "Value": 1684.48,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 1684.48,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "MercadoPagoPro",
+          "PaymentSystemGroupName": "MercadoPagoProPaymentGroup",
+          "Name": "MercadoPagoPro à vista"
+         },
+         {
+          "Value": 1684.48,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 1684.48,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Aplazo Payment",
+          "PaymentSystemGroupName": "aplazoPaymentGroup",
+          "Name": "Aplazo Payment à vista"
+         },
+         {
+          "Value": 1684.48,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 1684.48,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Contra entrega (Efectivo)",
+          "PaymentSystemGroupName": "custom202PaymentGroupPaymentGroup",
+          "Name": "Contra entrega (Efectivo) à vista"
+         },
+         {
+          "Value": 1684.48,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 1684.48,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Contra entrega (Tarjeta)",
+          "PaymentSystemGroupName": "custom203PaymentGroupPaymentGroup",
+          "Name": "Contra entrega (Tarjeta) à vista"
+         },
+         {
+          "Value": 1684.48,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 1684.48,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "KUESKI",
+          "PaymentSystemGroupName": "custom204PaymentGroupPaymentGroup",
+          "Name": "KUESKI à vista"
+         },
+         {
+          "Value": 1684.48,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 1684.48,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Mercado Credito",
+          "PaymentSystemGroupName": "MercadoCreditoPaymentGroup",
+          "Name": "Mercado Credito à vista"
+         },
+         {
+          "Value": 1684.48,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 1684.48,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "WH Google Pay",
+          "PaymentSystemGroupName": "WH Google PayPaymentGroup",
+          "Name": "WH Google Pay à vista"
+         }
+        ],
+        "Price": 1684.48,
+        "ListPrice": 2296.5,
+        "spotPrice": 1684.48,
+        "taxPercentage": 0,
+        "PriceWithoutDiscount": 1684.48,
+        "Tax": 0,
+        "GiftSkuIds": [],
+        "BuyTogether": [],
+        "ItemMetadataAttachment": [],
+        "RewardValue": 0,
+        "PriceValidUntil": "2027-10-15T16:29:06Z",
+        "GetInfoErrorMessage": null,
+        "CacheVersionUsedToCallCheckout": "",
+        "teasers": []
+       }
+      }
+     ],
+     "images": [
+      {
+       "imageId": "180241",
+       "cacheId": "180241",
+       "imageTag": "",
+       "imageLabel": "",
+       "imageText": "",
+       "imageUrl": "https://farmaciasklyns.vtexassets.com/arquivos/ids/180241/7501082243642.png.png?v=638793813672870000"
+      }
+     ],
+     "itemId": "10428",
+     "name": "Mounjaro Solucion Inyectable 5 mg / 0.5 mL 1 Ampula",
+     "nameComplete": "Mounjaro Solucion Inyectable 5 mg / 0.5 mL 1 Ampula",
+     "complementName": "Mounjaro Solucion Inyectable 5 mg / 0.5 mL 1 Ampula",
+     "referenceId": [
+      {
+       "Key": "RefId",
+       "Value": "100036227"
+      }
+     ],
+     "measurementUnit": "un",
+     "unitMultiplier": 1,
+     "variations": [],
+     "ean": "7501082243642",
+     "modalType": "",
+     "videos": [],
+     "attachments": [],
+     "isKit": false,
+     "attributes": []
+    }
+   ],
+   "categoriesIds": [
+    "/68/70/",
+    "/68/"
+   ],
+   "releaseDate": 1743724800000,
+   "metaTagDescription": "",
+   "origin": "intelligent-search",
+   "productTitle": ""
+  },
+  {
+   "cacheId": "sp-11760",
+   "productId": "11760",
+   "description": "Foundayz 0.8 mg 30 Tabletas",
+   "productName": "Foundayz 0.8 mg 30 Tabletas",
+   "productReference": "100039007",
+   "linkText": "foundayz-0-8-mg-30-tabletas",
+   "brand": "FOUNDAYZ",
+   "brandId": 2004747,
+   "link": "/foundayz-0-8-mg-30-tabletas/p",
+   "categories": [
+    "/Medicamentos de Patente/Antiácidos y Estomacales/",
+    "/Medicamentos de Patente/"
+   ],
+   "categoryId": "70",
+   "priceRange": {
+    "sellingPrice": {
+     "highPrice": 3669,
+     "lowPrice": 3669
+    },
+    "listPrice": {
+     "highPrice": 5225,
+     "lowPrice": 5225
+    }
+   },
+   "specificationGroups": [
+    {
+     "originalName": "allSpecifications",
+     "name": "allSpecifications",
+     "specifications": [
+      {
+       "originalName": "sellerId",
+       "name": "sellerId",
+       "values": [
+        "1"
+       ]
+      }
+     ]
+    }
+   ],
+   "skuSpecifications": [],
+   "productClusters": [
+    {
+     "id": "974",
+     "name": "Control de Peso"
+    },
+    {
+     "id": "1064",
+     "name": "Klyns: Sumando Contigo descuento adicional"
+    },
+    {
+     "id": "1176",
+     "name": "Precio Plan Lealtad: $2,099"
+    },
+    {
+     "id": "1178",
+     "name": "Foundayz"
+    },
+    {
+     "id": "1191",
+     "name": "Oferta"
+    }
+   ],
+   "clusterHighlights": [
+    {
+     "id": "1176",
+     "name": "Precio Plan Lealtad: $2,099"
+    }
+   ],
+   "properties": [
+    {
+     "name": "sellerId",
+     "originalName": "sellerId",
+     "values": [
+      "1"
+     ]
+    }
+   ],
+   "items": [
+    {
+     "sellers": [
+      {
+       "sellerId": "1",
+       "sellerName": "Farmacias Klyns",
+       "addToCartLink": "",
+       "sellerDefault": true,
+       "commertialOffer": {
+        "DeliverySlaSamplesPerRegion": {},
+        "DeliverySlaSamples": [],
+        "AvailableQuantity": 10000,
+        "discountHighlights": [],
+        "Installments": [
+         {
+          "Value": 3669,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 3669,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "American Express",
+          "PaymentSystemGroupName": "creditCardPaymentGroup",
+          "Name": "American Express à vista"
+         },
+         {
+          "Value": 3669,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 3669,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Visa",
+          "PaymentSystemGroupName": "creditCardPaymentGroup",
+          "Name": "Visa à vista"
+         },
+         {
+          "Value": 3669,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 3669,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Mastercard",
+          "PaymentSystemGroupName": "creditCardPaymentGroup",
+          "Name": "Mastercard à vista"
+         },
+         {
+          "Value": 3669,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 3669,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Visa Electron",
+          "PaymentSystemGroupName": "debitCardPaymentGroup",
+          "Name": "Visa Electron à vista"
+         },
+         {
+          "Value": 3669,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 3669,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Vale",
+          "PaymentSystemGroupName": "giftCardPaymentGroup",
+          "Name": "Vale à vista"
+         },
+         {
+          "Value": 3669,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 3669,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Mastercard Debit",
+          "PaymentSystemGroupName": "debitCardPaymentGroup",
+          "Name": "Mastercard Debit à vista"
+         },
+         {
+          "Value": 3669,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 3669,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "SPEI",
+          "PaymentSystemGroupName": "SPEIPaymentGroup",
+          "Name": "SPEI à vista"
+         },
+         {
+          "Value": 3669,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 3669,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "MercadoPagoPro",
+          "PaymentSystemGroupName": "MercadoPagoProPaymentGroup",
+          "Name": "MercadoPagoPro à vista"
+         },
+         {
+          "Value": 3669,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 3669,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Aplazo Payment",
+          "PaymentSystemGroupName": "aplazoPaymentGroup",
+          "Name": "Aplazo Payment à vista"
+         },
+         {
+          "Value": 3669,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 3669,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Contra entrega (Efectivo)",
+          "PaymentSystemGroupName": "custom202PaymentGroupPaymentGroup",
+          "Name": "Contra entrega (Efectivo) à vista"
+         },
+         {
+          "Value": 3669,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 3669,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Contra entrega (Tarjeta)",
+          "PaymentSystemGroupName": "custom203PaymentGroupPaymentGroup",
+          "Name": "Contra entrega (Tarjeta) à vista"
+         },
+         {
+          "Value": 3669,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 3669,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "KUESKI",
+          "PaymentSystemGroupName": "custom204PaymentGroupPaymentGroup",
+          "Name": "KUESKI à vista"
+         },
+         {
+          "Value": 3669,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 3669,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Mercado Credito",
+          "PaymentSystemGroupName": "MercadoCreditoPaymentGroup",
+          "Name": "Mercado Credito à vista"
+         },
+         {
+          "Value": 3669,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 3669,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "WH Google Pay",
+          "PaymentSystemGroupName": "WH Google PayPaymentGroup",
+          "Name": "WH Google Pay à vista"
+         }
+        ],
+        "Price": 3669,
+        "ListPrice": 5225,
+        "spotPrice": 3669,
+        "taxPercentage": 0,
+        "PriceWithoutDiscount": 3669,
+        "Tax": 0,
+        "GiftSkuIds": [],
+        "BuyTogether": [],
+        "ItemMetadataAttachment": [],
+        "RewardValue": 0,
+        "PriceValidUntil": "2027-10-15T16:32:37Z",
+        "GetInfoErrorMessage": null,
+        "CacheVersionUsedToCallCheckout": "",
+        "teasers": []
+       }
+      }
+     ],
+     "images": [
+      {
+       "imageId": "183912",
+       "cacheId": "183912",
+       "imageTag": "",
+       "imageLabel": "Foundayz 0.8 mg 30 Tabletas",
+       "imageText": "Foundayz 0.8 mg 30 Tabletas",
+       "imageUrl": "https://farmaciasklyns.vtexassets.com/arquivos/ids/183912/Foundayz-orforglipron-0.8 mg.png?v=639240496798130000"
+      }
+     ],
+     "itemId": "11760",
+     "name": "Foundayz 0.8 mg 30 Tabletas",
+     "nameComplete": "Foundayz 0.8 mg 30 Tabletas",
+     "complementName": "Foundayz 0.8 mg 30 Tabletas",
+     "referenceId": [
+      {
+       "Key": "RefId",
+       "Value": "100039007"
+      }
+     ],
+     "measurementUnit": "un",
+     "unitMultiplier": 1,
+     "variations": [],
+     "ean": "7501082243833",
+     "modalType": "",
+     "videos": [],
+     "attachments": [],
+     "isKit": false,
+     "attributes": []
+    }
+   ],
+   "categoriesIds": [
+    "/68/70/",
+    "/68/"
+   ],
+   "releaseDate": 1788393600000,
+   "metaTagDescription": "",
+   "origin": "intelligent-search",
+   "productTitle": ""
+  }
+ ],
+ "recordsFiltered": 3672,
+ "correction": {
+  "misspelled": true
+ },
+ "fuzzy": "0",
+ "operator": "and",
+ "translated": false,
+ "pagination": {
+  "count": 50,
+  "current": {
+   "index": 1,
+   "proxyUrl": "search/category-1/medicamentos-de-patente/trade-policy/1?an=farmaciasklyns&count=50&page=1&operator=and&fuzzy=0"
+  },
+  "before": [],
+  "after": [
+   {
+    "index": 2,
+    "proxyUrl": "search/category-1/medicamentos-de-patente/trade-policy/1?an=farmaciasklyns&count=50&page=2&operator=and&fuzzy=0"
+   },
+   {
+    "index": 3,
+    "proxyUrl": "search/category-1/medicamentos-de-patente/trade-policy/1?an=farmaciasklyns&count=50&page=3&operator=and&fuzzy=0"
+   },
+   {
+    "index": 4,
+    "proxyUrl": "search/category-1/medicamentos-de-patente/trade-policy/1?an=farmaciasklyns&count=50&page=4&operator=and&fuzzy=0"
+   },
+   {
+    "index": 5,
+    "proxyUrl": "search/category-1/medicamentos-de-patente/trade-policy/1?an=farmaciasklyns&count=50&page=5&operator=and&fuzzy=0"
+   }
+  ],
+  "perPage": 50,
+  "next": {
+   "index": 2,
+   "proxyUrl": "search/category-1/medicamentos-de-patente/trade-policy/1?an=farmaciasklyns&count=50&page=2&operator=and&fuzzy=0"
+  },
+  "previous": {
+   "index": 0
+  },
+  "first": {
+   "index": 0
+  },
+  "last": {
+   "index": 50,
+   "proxyUrl": "search/category-1/medicamentos-de-patente/trade-policy/1?an=farmaciasklyns&count=50&page=50&operator=and&fuzzy=0"
+  }
+ },
+ "options": {
+  "sorts": [],
+  "counts": [],
+  "deliveryPromisesEnabled": true,
+  "dpStatus": "missing_hash"
+ },
+ "searchId": "cf30e6efaab74d4c996b22af19243002"
+}
