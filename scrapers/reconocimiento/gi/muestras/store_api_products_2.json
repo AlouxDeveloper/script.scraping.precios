@@ -1,0 +1,216 @@
+[
+ {
+  "id": 53086,
+  "name": "BIC SOLEIL CLICK SENSITIVE C/5 REPUESTOS",
+  "slug": "bic-soleil-click-sensitive-c-5-repuestos",
+  "parent": 0,
+  "type": "simple",
+  "variation": "",
+  "permalink": "https://farmaciasgi.com.mx/catalogo-de-productos-en-linea/bic-soleil-click-sensitive-c-5-repuestos/",
+  "sku": "513693",
+  "short_description": "",
+  "description": "<p>paquete de 5 repuestos para afeitar</p>",
+  "on_sale": false,
+  "prices": {
+   "price": "11000",
+   "regular_price": "11000",
+   "sale_price": "11000",
+   "price_range": null,
+   "currency_code": "MXN",
+   "currency_symbol": "$",
+   "currency_minor_unit": 2,
+   "currency_decimal_separator": ".",
+   "currency_thousand_separator": ",",
+   "currency_prefix": "$",
+   "currency_suffix": ""
+  },
+  "price_html": "<span class=\"woocommerce-Price-amount amount\"><span class=\"woocommerce-Price-currencySymbol\">&#036;</span>110.00</span>",
+  "average_rating": "0",
+  "review_count": 0,
+  "images": [
+   {
+    "id": 53087,
+    "src": "https://farmaciasgi.com.mx/wp-content/uploads/2026/10/WhatsApp-Image-2026-10-02-at-18.26.30.jpeg",
+    "thumbnail": "https://farmaciasgi.com.mx/wp-content/uploads/2026/10/WhatsApp-Image-2026-10-02-at-18.26.30-300x300.jpeg",
+    "srcset": "https://farmaciasgi.com.mx/wp-content/uploads/2026/10/WhatsApp-Image-2026-10-02-at-18.26.30.jpeg 1000w, https://farmaciasgi.com.mx/wp-content/uploads/2026/10/WhatsApp-Image-2026-10-02-at-18.26.30-600x600.jpeg 600w, https://farmaciasgi.com.mx/wp-content/uploads/2026/10/WhatsApp-Image-2026-10-02-at-18.26.30-300x300.jpeg 300w, https://farmaciasgi.com.mx/wp-content/uploads/2026/10/WhatsApp-Image-2026-10-02-at-18.26.30-768x768.jpeg 768w, https://farmaciasgi.com.mx/wp-content/uploads/2026/10/WhatsApp-Image-2026-10-02-at-18.26.30-100x100.jpeg 100w, https://farmaciasgi.com.mx/wp-content/uploads/2026/10/WhatsApp-Image-2026-10-02-at-18.26.30-64x64.jpeg 64w",
+    "sizes": "(max-width: 1000px) 100vw, 1000px",
+    "thumbnail_srcset": "https://farmaciasgi.com.mx/wp-content/uploads/2026/10/WhatsApp-Image-2026-10-02-at-18.26.30-300x300.jpeg 300w, https://farmaciasgi.com.mx/wp-content/uploads/2026/10/WhatsApp-Image-2026-10-02-at-18.26.30-600x600.jpeg 600w, https://farmaciasgi.com.mx/wp-content/uploads/2026/10/WhatsApp-Image-2026-10-02-at-18.26.30-768x768.jpeg 768w, https://farmaciasgi.com.mx/wp-content/uploads/2026/10/WhatsApp-Image-2026-10-02-at-18.26.30-100x100.jpeg 100w, https://farmaciasgi.com.mx/wp-content/uploads/2026/10/WhatsApp-Image-2026-10-02-at-18.26.30-64x64.jpeg 64w, https://farmaciasgi.com.mx/wp-content/uploads/2026/10/WhatsApp-Image-2026-10-02-at-18.26.30.jpeg 1000w",
+    "thumbnail_sizes": "(max-width: 300px) 100vw, 300px",
+    "name": "WhatsApp Image 2026-10-02 at 18.26.30",
+    "alt": ""
+   }
+  ],
+  "categories": [
+   {
+    "id": 299,
+    "name": "OTROS",
+    "slug": "otros",
+    "link": "https://farmaciasgi.com.mx/categoria-producto/otros/"
+   }
+  ],
+  "tags": [],
+  "brands": [],
+  "attributes": [],
+  "variations": [],
+  "grouped_products": [],
+  "has_options": false,
+  "is_purchasable": true,
+  "is_in_stock": true,
+  "is_on_backorder": false,
+  "low_stock_remaining": null,
+  "stock_availability": {
+   "text": "",
+   "class": "in-stock"
+  },
+  "sold_individually": false,
+  "weight": "",
+  "dimensions": {
+   "length": "",
+   "width": "",
+   "height": ""
+  },
+  "formatted_weight": "N/D",
+  "formatted_dimensions": "N/D",
+  "add_to_cart": {
+   "text": "Añadir al carrito",
+   "description": "Add to cart: &ldquo;BIC SOLEIL CLICK SENSITIVE C/5 REPUESTOS&rdquo;",
+   "url": "/wp-json/wc/store/v1/products?per_page=100&#038;page=1&#038;add-to-cart=53086",
+   "single_text": "Añadir al carrito",
+   "minimum": 1,
+   "maximum": 9999,
+   "multiple_of": 1
+  },
+  "is_password_protected": false,
+  "extensions": {},
+  "_links": {
+   "self": [
+    {
+     "href": "https://farmaciasgi.com.mx/wp-json/wc/store/v1/products/53086",
+     "targetHints": {
+      "allow": [
+       "GET"
+      ]
+     }
+    }
+   ],
+   "collection": [
+    {
+     "href": "https://farmaciasgi.com.mx/wp-json/wc/store/v1/products"
+    }
+   ],
+   "related": [
+    {
+     "embeddable": true,
+     "href": "https://farmaciasgi.com.mx/wp-json/wc/store/v1/products?related=53086&per_page=10"
+    }
+   ]
+  }
+ },
+ {
+  "id": 52993,
+  "name": "Doraldent 4 estaciones",
+  "slug": "doraldent-4-estaciones",
+  "parent": 0,
+  "type": "simple",
+  "variation": "",
+  "permalink": "https://farmaciasgi.com.mx/catalogo-de-productos-en-linea/doraldent-4-estaciones/",
+  "sku": "513975",
+  "short_description": "",
+  "description": "<p>4 cepillos dentales mas protectores</p>",
+  "on_sale": false,
+  "prices": {
+   "price": "2500",
+   "regular_price": "2500",
+   "sale_price": "2500",
+   "price_range": null,
+   "currency_code": "MXN",
+   "currency_symbol": "$",
+   "currency_minor_unit": 2,
+   "currency_decimal_separator": ".",
+   "currency_thousand_separator": ",",
+   "currency_prefix": "$",
+   "currency_suffix": ""
+  },
+  "price_html": "<span class=\"woocommerce-Price-amount amount\"><span class=\"woocommerce-Price-currencySymbol\">&#036;</span>25.00</span>",
+  "average_rating": "0",
+  "review_count": 0,
+  "images": [
+   {
+    "id": 52997,
+    "src": "https://farmaciasgi.com.mx/wp-content/uploads/2026/08/7501061813118-Frente.jpg",
+    "thumbnail": "https://farmaciasgi.com.mx/wp-content/uploads/2026/08/7501061813118-Frente-300x300.jpg",
+    "srcset": "https://farmaciasgi.com.mx/wp-content/uploads/2026/08/7501061813118-Frente.jpg 1200w, https://farmaciasgi.com.mx/wp-content/uploads/2026/08/7501061813118-Frente-600x600.jpg 600w, https://farmaciasgi.com.mx/wp-content/uploads/2026/08/7501061813118-Frente-1024x1024.jpg 1024w, https://farmaciasgi.com.mx/wp-content/uploads/2026/08/7501061813118-Frente-300x300.jpg 300w, https://farmaciasgi.com.mx/wp-content/uploads/2026/08/7501061813118-Frente-768x768.jpg 768w, https://farmaciasgi.com.mx/wp-content/uploads/2026/08/7501061813118-Frente-100x100.jpg 100w, https://farmaciasgi.com.mx/wp-content/uploads/2026/08/7501061813118-Frente-64x64.jpg 64w",
+    "sizes": "(max-width: 1200px) 100vw, 1200px",
+    "thumbnail_srcset": "https://farmaciasgi.com.mx/wp-content/uploads/2026/08/7501061813118-Frente-300x300.jpg 300w, https://farmaciasgi.com.mx/wp-content/uploads/2026/08/7501061813118-Frente-600x600.jpg 600w, https://farmaciasgi.com.mx/wp-content/uploads/2026/08/7501061813118-Frente-1024x1024.jpg 1024w, https://farmaciasgi.com.mx/wp-content/uploads/2026/08/7501061813118-Frente-768x768.jpg 768w, https://farmaciasgi.com.mx/wp-content/uploads/2026/08/7501061813118-Frente-100x100.jpg 100w, https://farmaciasgi.com.mx/wp-content/uploads/2026/08/7501061813118-Frente-64x64.jpg 64w, https://farmaciasgi.com.mx/wp-content/uploads/2026/08/7501061813118-Frente.jpg 1200w",
+    "thumbnail_sizes": "(max-width: 300px) 100vw, 300px",
+    "name": "7501061813118-Frente",
+    "alt": ""
+   }
+  ],
+  "categories": [
+   {
+    "id": 114,
+    "name": "Higiene Bucal",
+    "slug": "higiene-bucal",
+    "link": "https://farmaciasgi.com.mx/categoria-producto/higiene-bucal/"
+   }
+  ],
+  "tags": [],
+  "brands": [],
+  "attributes": [],
+  "variations": [],
+  "grouped_products": [],
+  "has_options": false,
+  "is_purchasable": true,
+  "is_in_stock": true,
+  "is_on_backorder": false,
+  "low_stock_remaining": null,
+  "stock_availability": {
+   "text": "",
+   "class": "in-stock"
+  },
+  "sold_individually": false,
+  "weight": "",
+  "dimensions": {
+   "length": "",
+   "width": "",
+   "height": ""
+  },
+  "formatted_weight": "N/D",
+  "formatted_dimensions": "N/D",
+  "add_to_cart": {
+   "text": "Añadir al carrito",
+   "description": "Add to cart: &ldquo;Doraldent 4 estaciones&rdquo;",
+   "url": "/wp-json/wc/store/v1/products?per_page=100&#038;page=1&#038;add-to-cart=52993",
+   "single_text": "Añadir al carrito",
+   "minimum": 1,
+   "maximum": 9999,
+   "multiple_of": 1
+  },
+  "is_password_protected": false,
+  "extensions": {},
+  "_links": {
+   "self": [
+    {
+     "href": "https://farmaciasgi.com.mx/wp-json/wc/store/v1/products/52993",
+     "targetHints": {
+      "allow": [
+       "GET"
+      ]
+     }
+    }
+   ],
+   "collection": [
+    {
+     "href": "https://farmaciasgi.com.mx/wp-json/wc/store/v1/products"
+    }
+   ],
+   "related": [
+    {
+     "embeddable": true,
+     "href": "https://farmaciasgi.com.mx/wp-json/wc/store/v1/products?related=52993&per_page=10"
+    }
+   ]
+  }
+ }
+]

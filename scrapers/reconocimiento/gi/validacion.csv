@@ -1,0 +1,11 @@
+fecha,perfil,url,status,detalle,segundos,bytes
+2026-10-15T18:41:17.303597+00:00,sin_impersonar,https://farmaciasgi.com.mx/wp-json/wc/store/v1/products?per_page=100&page=1,200,,1.55,301640
+2026-10-15T18:41:21.053160+00:00,sin_impersonar,https://farmaciasgi.com.mx/wp-json/wc/store/v1/products?per_page=100&page=1,200,,1.73,301640
+2026-10-15T18:41:24.798985+00:00,sin_impersonar,https://farmaciasgi.com.mx/wp-json/wc/store/v1/products?per_page=100&page=1,200,,1.74,301640
+2026-10-15T18:41:28.486390+00:00,sin_impersonar,https://farmaciasgi.com.mx/wp-json/wc/store/v1/products?per_page=100&page=1,200,,1.69,301640
+2026-10-15T18:41:32.574433+00:00,sin_impersonar,https://farmaciasgi.com.mx/wp-json/wc/store/v1/products?per_page=100&page=1,200,,2.09,301640
+2026-10-15T18:41:36.577505+00:00,chrome,https://farmaciasgi.com.mx/wp-json/wc/store/v1/products?per_page=100&page=1,200,,2.0,301640
+2026-10-15T18:41:40.536547+00:00,chrome,https://farmaciasgi.com.mx/wp-json/wc/store/v1/products?per_page=100&page=1,200,,1.96,301640
+2026-10-15T18:41:44.347185+00:00,chrome,https://farmaciasgi.com.mx/wp-json/wc/store/v1/products?per_page=100&page=1,200,,1.81,301640
+2026-10-15T18:41:48.242899+00:00,chrome,https://farmaciasgi.com.mx/wp-json/wc/store/v1/products?per_page=100&page=1,200,,1.9,301640
+2026-10-15T18:41:52.109276+00:00,chrome,https://farmaciasgi.com.mx/wp-json/wc/store/v1/products?per_page=100&page=1,200,,1.87,301640

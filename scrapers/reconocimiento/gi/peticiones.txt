@@ -1,0 +1,24 @@
+# Peticiones mínimas a validar con validar_endpoint.py, en formato cURL.
+# Sin cookies ni headers de autorización. La validación desde la oficina
+# (2026-10-15) está en validacion.csv; el resultado va en cada comentario.
+# robots.txt solo prohíbe wp-admin, uploads de WooCommerce y add-to-cart:
+# la Store API está permitida.
+
+# Catálogo completo por la Store API de WooCommerce, con precio (f = 0).
+# Sin impersonar y con impersonación: 200 (5/5 cada uno), p50 1.73 s y 1.90 s.
+# Los headers x-wp-total y x-wp-totalpages traen el total (1,778 / 18).
+curl 'https://farmaciasgi.com.mx/wp-json/wc/store/v1/products?per_page=100&page=1'
+
+# Tope de per_page: 100. Con 101 responde 400.
+curl 'https://farmaciasgi.com.mx/wp-json/wc/store/v1/products?per_page=101'
+
+# Fin de la paginación: la página siguiente a la última responde 200 con [].
+curl 'https://farmaciasgi.com.mx/wp-json/wc/store/v1/products?per_page=100&page=19'
+
+# Categorías con conteo (48, planas en su mayoría).
+curl 'https://farmaciasgi.com.mx/wp-json/wc/store/v1/products/categories?per_page=100'
+
+# Filtro por categoría (Medicamentos A – Z = 53). No hace falta: se recorre todo.
+curl 'https://farmaciasgi.com.mx/wp-json/wc/store/v1/products?category=53&per_page=100'
+
+# NO USAR: ?add-to-cart= y /wp-admin/, prohibidas en robots.txt.
