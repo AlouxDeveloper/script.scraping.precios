@@ -1,0 +1,31 @@
+# Peticiones mínimas a validar con validar_endpoint.py, en formato cURL.
+# Sin cookies ni headers de autorización. La validación desde la oficina
+# (2026-10-15) está en validacion.csv; el resultado va en cada comentario.
+
+# RECOMENDADA. Listado de una categoría por catalog_system, permitida
+# explícitamente en robots.txt (Allow: /api/catalog_system/pub/products/search?fq=*).
+# Trae productId, productReference (EAN = SKU del legado), Price y ListPrice.
+# Sin impersonar y con impersonación: 206 (5/5 cada uno), p50 0.47 s y 0.17 s.
+# El total viene en el header resources (0-49/573).
+curl 'https://www.farmatodo.com.mx/api/catalog_system/pub/products/search?fq=C:/7/33/&_from=0&_to=49'
+
+# Departamento completo (fq=C:/{id}/). Medicamentos (7) tiene 3,559 y pasa el tope.
+curl 'https://www.farmatodo.com.mx/api/catalog_system/pub/products/search?fq=C:/7/&_from=0&_to=49'
+
+# Tope: _from=2500 responde 206; _from=3500 responde 400. _to - _from > 49 da 400.
+curl 'https://www.farmatodo.com.mx/api/catalog_system/pub/products/search?fq=C:/7/&_from=2500&_to=2549'
+
+# Árbol de categorías con IDs (incluye departamentos de súper que quedan fuera).
+curl 'https://www.farmatodo.com.mx/api/catalog_system/pub/category/tree/3'
+
+# regionId de un CP: una sola tienda por CP. Solo para comparar; el precio no
+# cambia por región y el spider corre sin ella.
+curl 'https://www.farmatodo.com.mx/api/checkout/pub/regions?country=MEX&postalCode=01000'
+
+# NO USAR: Intelligent Search. Funciona igual que en Chedraui (200 5/5 cada
+# perfil, p50 1.27 s y 0.96 s), pero robots.txt prohíbe toda URL con query
+# string (Disallow: /*? y /*&). Se usó solo para conteos del reconocimiento.
+# curl 'https://www.farmatodo.com.mx/api/io/_v/api/intelligent-search/product_search/category-1/medicamentos/category-2/cardiologia?count=50&page=1'
+# curl 'https://www.farmatodo.com.mx/api/io/_v/api/intelligent-search/facets/category-1/medicamentos'
+
+# NO USAR: búsqueda HTML, prohibida en robots.txt (Disallow: /busca/, /buscapagina).

@@ -1,0 +1,1338 @@
+{
+ "products": [
+  {
+   "cacheId": "sp-2736",
+   "productId": "2736",
+   "description": "Várices. Síndrome varicoso e insuficiencia venosa, flebalgias, pesantez en las piernas, edemas estáticos de piernas, secuelas posflebíticas, estados preulcerosos, hemorroides, hemorragias por fragilidad capilar.<br/><br/><strong>Si buscas más opciones, consulta nuestra categoría de </strong><a href=\"https://www.farmatodo.com.mx/medicamentos/cardiologia/vasoprotectores\" target=\"_blank\"><strong>Medicamentos para la circulación y várices</strong></a><strong>.</strong>",
+   "productName": "Mutirot 450/50 Mg Caja C/60 Tabletas",
+   "productReference": "7501125188923",
+   "linkText": "mutirot-450-50-mg-caja-c-60-tabletas",
+   "brand": "Pisa",
+   "brandId": 1239519,
+   "link": "/mutirot-450-50-mg-caja-c-60-tabletas/p",
+   "categories": [
+    "/Medicamentos/Cardiología/Vasoprotectores/",
+    "/Medicamentos/Cardiología/",
+    "/Medicamentos/"
+   ],
+   "categoryId": "503",
+   "priceRange": {
+    "sellingPrice": {
+     "highPrice": 586.5,
+     "lowPrice": 586.5
+    },
+    "listPrice": {
+     "highPrice": 658,
+     "lowPrice": 658
+    }
+   },
+   "specificationGroups": [
+    {
+     "originalName": "LoyaltyPlan",
+     "name": "LoyaltyPlan",
+     "specifications": [
+      {
+       "originalName": "CdsoPromotion",
+       "name": "CdsoPromotion",
+       "values": [
+        "{\"ean\":\"7501125188923\",\"tag\":\"3+1\",\"promoType\":3,\"buyX\":3,\"freeY\":1}"
+       ]
+      }
+     ]
+    },
+    {
+     "originalName": "STEP Specifications",
+     "name": "STEP Specifications",
+     "specifications": [
+      {
+       "originalName": "Controlado",
+       "name": "Controlado",
+       "values": [
+        "No"
+       ]
+      },
+      {
+       "originalName": "Antibiotico",
+       "name": "Antibiotico",
+       "values": [
+        "No"
+       ]
+      },
+      {
+       "originalName": "Refrigerado",
+       "name": "Refrigerado",
+       "values": [
+        "No"
+       ]
+      },
+      {
+       "originalName": "Hallazgo de laboratorio clínico",
+       "name": "Hallazgo de laboratorio clínico",
+       "values": [
+        "No modifica los resultados de exámenes de laboratorio, excepto algunos casos en los cuales ha disminuido la cifra de ácido úrico, lo cual se atribuye a una acción uricosúrica de la diosmina."
+       ]
+      },
+      {
+       "originalName": "Contraindicación",
+       "name": "Contraindicación",
+       "values": [
+        "Está contraindicado en pacientes con hipersensibilidad a cualquiera de los componentes de su fórmula."
+       ]
+      },
+      {
+       "originalName": "Prescripción y advertencias",
+       "name": "Prescripción y advertencias",
+       "values": [
+        "Crisis hemorroidal: Si los trastornos hemorroidales no desaparecen en 15 días, es indispensable consultar a su médico. La administración de este producto no excluye el tratamiento específico de otras enfermedades anales. El tratamiento debe ser de corta duración. Si los síntomas no desaparecen rápidamente, debe ser realizado un examen proctológico y el tratamiento revisado.\nTrastornos de la circulación venosa: Este medicamento demuestra toda su eficacia cuando va acompañado por una buena higiene. Evitar la exposición al sol, el calor, la posición de pie prolongada y el exceso de peso. La marcha y eventualmente el uso de medias adaptadas favorecen la circulación sanguínea.\nNo se recomienda su empleo en niños y adolescentes menores de 18 años."
+       ]
+      },
+      {
+       "originalName": "Restricción de uso",
+       "name": "Restricción de uso",
+       "values": [
+        "Embarazo: No se han demostrado efectos teratogénicos en estudios con animales. En humanos no se ha demostrado ningún efecto nocivo hasta el momento, sin embargo, se debe extremar la precaución si se prescribiera a mujeres embarazadas.\nLactancia: No se tiene constancia de que el medicamento pase a la leche materna, por lo que, en ausencia de datos, no se aconseja su uso durante la lactancia."
+       ]
+      },
+      {
+       "originalName": "Interacción medicamentosa",
+       "name": "Interacción medicamentosa",
+       "values": [
+        "Puede administrarse simultáneamente con cualquier otro medicamento. Sin embargo, con antiácidos o alimentos altamente alcalinos, puede disminuir su absorción."
+       ]
+      },
+      {
+       "originalName": "Reacciones adversas",
+       "name": "Reacciones adversas",
+       "values": [
+        "Aun cuando la tolerabilidad es buena, ocasionalmente se han reportado trastornos gastrointestinales (náuseas, vómitos, diarrea, dispepsia) en personas sensibles (menos del 2%). Se han señalado algunos casos de trastornos neurovegetativos leves (cefalea, sensación de malestar, vértigo) y trastornos cutáneos (erupción, prurito, urticaria) que no han obligado a suspender el tratamiento.\nPRECAUCIONES EN RELACIÓN CON EFECTOS DE CARCINOGÉNESIS, MUTAGÉNESIS, TERATOGÉNESIS Y SOBRE LA FERTILIDAD: Carece de poder mutágeno, clastogénico y no hay interacciones primarias del ADN. Estudios realizados demuestran la seguridad preclínica, no altera la fecundidad ni la función reproductora."
+       ]
+      },
+      {
+       "originalName": "Dosis y vía de administración",
+       "name": "Dosis y vía de administración",
+       "values": [
+        "Insuficiencia venosa: 2 tabletas por día; 1 por la mañana y 1 por la noche.\nMantenimiento de la enfermedad hemorroidal: 2 tabletas por día.\nCrisis hemorroidal: 6 tabletas diarias, durante los primeros 4 días, luego 4 tabletas diarias durante los 3 días siguientes."
+       ]
+      },
+      {
+       "originalName": "Composición",
+       "name": "Composición",
+       "values": [
+        "Cada TABLETA contiene: Diosmina micronizada 450 mg Hesperidina micronizada 50 mg\nExcipiente cbp 1 tableta"
+       ]
+      },
+      {
+       "originalName": "Manejo de sobredosificación",
+       "name": "Manejo de sobredosificación",
+       "values": [
+        "Hasta la fecha no existe reporte de accidente por sobredosis; en el caso de que esto sucediera deberá instituirse el tratamiento sintomático específico y vigilar los signos vitales."
+       ]
+      },
+      {
+       "originalName": "Leyendas de protección",
+       "name": "Leyendas de protección",
+       "values": [
+        "Vía de administración: Oral. Dosis: La que el médico señale. Su venta requiere receta médica. No se deje al alcance de los niños. No se use durante el embarazo y lactancia. Literatura exclusiva para médicos.\nReporte las sospechas de reacción adversa al correo: farmacovigilancia@cofepris.gob.mx"
+       ]
+      },
+      {
+       "originalName": "Indicacion terapeutica",
+       "name": "Indicacion terapeutica",
+       "values": [
+        "Várices. Síndrome varicoso e insuficiencia venosa, flebalgias, pesantez en las piernas, edemas estáticos de piernas, secuelas posflebíticas, estados preulcerosos, hemorroides, hemorragias por fragilidad capilar."
+       ]
+      },
+      {
+       "originalName": "Propiedad farmacéutica",
+       "name": "Propiedad farmacéutica",
+       "values": [
+        "N#A"
+       ]
+      },
+      {
+       "originalName": "Forma Farmacéutica",
+       "name": "Forma Farmacéutica",
+       "values": [
+        "Tabletas"
+       ]
+      },
+      {
+       "originalName": "Unidad de Medida Contenido",
+       "name": "Unidad de Medida Contenido",
+       "values": [
+        "PZ"
+       ]
+      },
+      {
+       "originalName": "Presentación",
+       "name": "Presentación",
+       "values": [
+        "Caja"
+       ]
+      },
+      {
+       "originalName": "Fracción de Salubridad",
+       "name": "Fracción de Salubridad",
+       "values": [
+        "Grupo IV"
+       ]
+      },
+      {
+       "originalName": "Cantidad / Contenido",
+       "name": "Cantidad / Contenido",
+       "values": [
+        "60"
+       ]
+      }
+     ]
+    },
+    {
+     "originalName": "allSpecifications",
+     "name": "allSpecifications",
+     "specifications": [
+      {
+       "originalName": "Controlado",
+       "name": "Controlado",
+       "values": [
+        "No"
+       ]
+      },
+      {
+       "originalName": "Antibiotico",
+       "name": "Antibiotico",
+       "values": [
+        "No"
+       ]
+      },
+      {
+       "originalName": "Refrigerado",
+       "name": "Refrigerado",
+       "values": [
+        "No"
+       ]
+      },
+      {
+       "originalName": "Hallazgo de laboratorio clínico",
+       "name": "Hallazgo de laboratorio clínico",
+       "values": [
+        "No modifica los resultados de exámenes de laboratorio, excepto algunos casos en los cuales ha disminuido la cifra de ácido úrico, lo cual se atribuye a una acción uricosúrica de la diosmina."
+       ]
+      },
+      {
+       "originalName": "Contraindicación",
+       "name": "Contraindicación",
+       "values": [
+        "Está contraindicado en pacientes con hipersensibilidad a cualquiera de los componentes de su fórmula."
+       ]
+      },
+      {
+       "originalName": "Prescripción y advertencias",
+       "name": "Prescripción y advertencias",
+       "values": [
+        "Crisis hemorroidal: Si los trastornos hemorroidales no desaparecen en 15 días, es indispensable consultar a su médico. La administración de este producto no excluye el tratamiento específico de otras enfermedades anales. El tratamiento debe ser de corta duración. Si los síntomas no desaparecen rápidamente, debe ser realizado un examen proctológico y el tratamiento revisado.\nTrastornos de la circulación venosa: Este medicamento demuestra toda su eficacia cuando va acompañado por una buena higiene. Evitar la exposición al sol, el calor, la posición de pie prolongada y el exceso de peso. La marcha y eventualmente el uso de medias adaptadas favorecen la circulación sanguínea.\nNo se recomienda su empleo en niños y adolescentes menores de 18 años."
+       ]
+      },
+      {
+       "originalName": "Restricción de uso",
+       "name": "Restricción de uso",
+       "values": [
+        "Embarazo: No se han demostrado efectos teratogénicos en estudios con animales. En humanos no se ha demostrado ningún efecto nocivo hasta el momento, sin embargo, se debe extremar la precaución si se prescribiera a mujeres embarazadas.\nLactancia: No se tiene constancia de que el medicamento pase a la leche materna, por lo que, en ausencia de datos, no se aconseja su uso durante la lactancia."
+       ]
+      },
+      {
+       "originalName": "Interacción medicamentosa",
+       "name": "Interacción medicamentosa",
+       "values": [
+        "Puede administrarse simultáneamente con cualquier otro medicamento. Sin embargo, con antiácidos o alimentos altamente alcalinos, puede disminuir su absorción."
+       ]
+      },
+      {
+       "originalName": "Reacciones adversas",
+       "name": "Reacciones adversas",
+       "values": [
+        "Aun cuando la tolerabilidad es buena, ocasionalmente se han reportado trastornos gastrointestinales (náuseas, vómitos, diarrea, dispepsia) en personas sensibles (menos del 2%). Se han señalado algunos casos de trastornos neurovegetativos leves (cefalea, sensación de malestar, vértigo) y trastornos cutáneos (erupción, prurito, urticaria) que no han obligado a suspender el tratamiento.\nPRECAUCIONES EN RELACIÓN CON EFECTOS DE CARCINOGÉNESIS, MUTAGÉNESIS, TERATOGÉNESIS Y SOBRE LA FERTILIDAD: Carece de poder mutágeno, clastogénico y no hay interacciones primarias del ADN. Estudios realizados demuestran la seguridad preclínica, no altera la fecundidad ni la función reproductora."
+       ]
+      },
+      {
+       "originalName": "Dosis y vía de administración",
+       "name": "Dosis y vía de administración",
+       "values": [
+        "Insuficiencia venosa: 2 tabletas por día; 1 por la mañana y 1 por la noche.\nMantenimiento de la enfermedad hemorroidal: 2 tabletas por día.\nCrisis hemorroidal: 6 tabletas diarias, durante los primeros 4 días, luego 4 tabletas diarias durante los 3 días siguientes."
+       ]
+      },
+      {
+       "originalName": "Composición",
+       "name": "Composición",
+       "values": [
+        "Cada TABLETA contiene: Diosmina micronizada 450 mg Hesperidina micronizada 50 mg\nExcipiente cbp 1 tableta"
+       ]
+      },
+      {
+       "originalName": "Manejo de sobredosificación",
+       "name": "Manejo de sobredosificación",
+       "values": [
+        "Hasta la fecha no existe reporte de accidente por sobredosis; en el caso de que esto sucediera deberá instituirse el tratamiento sintomático específico y vigilar los signos vitales."
+       ]
+      },
+      {
+       "originalName": "Leyendas de protección",
+       "name": "Leyendas de protección",
+       "values": [
+        "Vía de administración: Oral. Dosis: La que el médico señale. Su venta requiere receta médica. No se deje al alcance de los niños. No se use durante el embarazo y lactancia. Literatura exclusiva para médicos.\nReporte las sospechas de reacción adversa al correo: farmacovigilancia@cofepris.gob.mx"
+       ]
+      },
+      {
+       "originalName": "Indicacion terapeutica",
+       "name": "Indicacion terapeutica",
+       "values": [
+        "Várices. Síndrome varicoso e insuficiencia venosa, flebalgias, pesantez en las piernas, edemas estáticos de piernas, secuelas posflebíticas, estados preulcerosos, hemorroides, hemorragias por fragilidad capilar."
+       ]
+      },
+      {
+       "originalName": "Propiedad farmacéutica",
+       "name": "Propiedad farmacéutica",
+       "values": [
+        "N#A"
+       ]
+      },
+      {
+       "originalName": "Forma Farmacéutica",
+       "name": "Forma Farmacéutica",
+       "values": [
+        "Tabletas"
+       ]
+      },
+      {
+       "originalName": "Unidad de Medida Contenido",
+       "name": "Unidad de Medida Contenido",
+       "values": [
+        "PZ"
+       ]
+      },
+      {
+       "originalName": "Presentación",
+       "name": "Presentación",
+       "values": [
+        "Caja"
+       ]
+      },
+      {
+       "originalName": "Fracción de Salubridad",
+       "name": "Fracción de Salubridad",
+       "values": [
+        "Grupo IV"
+       ]
+      },
+      {
+       "originalName": "Cantidad / Contenido",
+       "name": "Cantidad / Contenido",
+       "values": [
+        "60"
+       ]
+      },
+      {
+       "originalName": "CdsoPromotion",
+       "name": "CdsoPromotion",
+       "values": [
+        "{\"ean\":\"7501125188923\",\"tag\":\"3+1\",\"promoType\":3,\"buyX\":3,\"freeY\":1}"
+       ]
+      },
+      {
+       "originalName": "sellerId",
+       "name": "sellerId",
+       "values": [
+        "1"
+       ]
+      }
+     ]
+    }
+   ],
+   "skuSpecifications": [],
+   "productClusters": [
+    {
+     "id": "176",
+     "name": "Home crónicos"
+    },
+    {
+     "id": "286",
+     "name": "SUPER PRECIOS Promociones"
+    },
+    {
+     "id": "498",
+     "name": "Todos los productos"
+    },
+    {
+     "id": "610",
+     "name": "Productos Circulo de la Salud"
+    }
+   ],
+   "clusterHighlights": [
+    {
+     "id": "610",
+     "name": "Productos Circulo de la Salud"
+    }
+   ],
+   "properties": [
+    {
+     "name": "Controlado",
+     "originalName": "Controlado",
+     "values": [
+      "No"
+     ]
+    },
+    {
+     "name": "Antibiotico",
+     "originalName": "Antibiotico",
+     "values": [
+      "No"
+     ]
+    },
+    {
+     "name": "Refrigerado",
+     "originalName": "Refrigerado",
+     "values": [
+      "No"
+     ]
+    },
+    {
+     "name": "Hallazgo de laboratorio clínico",
+     "originalName": "Hallazgo de laboratorio clínico",
+     "values": [
+      "No modifica los resultados de exámenes de laboratorio, excepto algunos casos en los cuales ha disminuido la cifra de ácido úrico, lo cual se atribuye a una acción uricosúrica de la diosmina."
+     ]
+    },
+    {
+     "name": "Contraindicación",
+     "originalName": "Contraindicación",
+     "values": [
+      "Está contraindicado en pacientes con hipersensibilidad a cualquiera de los componentes de su fórmula."
+     ]
+    },
+    {
+     "name": "Prescripción y advertencias",
+     "originalName": "Prescripción y advertencias",
+     "values": [
+      "Crisis hemorroidal: Si los trastornos hemorroidales no desaparecen en 15 días, es indispensable consultar a su médico. La administración de este producto no excluye el tratamiento específico de otras enfermedades anales. El tratamiento debe ser de corta duración. Si los síntomas no desaparecen rápidamente, debe ser realizado un examen proctológico y el tratamiento revisado.\nTrastornos de la circulación venosa: Este medicamento demuestra toda su eficacia cuando va acompañado por una buena higiene. Evitar la exposición al sol, el calor, la posición de pie prolongada y el exceso de peso. La marcha y eventualmente el uso de medias adaptadas favorecen la circulación sanguínea.\nNo se recomienda su empleo en niños y adolescentes menores de 18 años."
+     ]
+    },
+    {
+     "name": "Restricción de uso",
+     "originalName": "Restricción de uso",
+     "values": [
+      "Embarazo: No se han demostrado efectos teratogénicos en estudios con animales. En humanos no se ha demostrado ningún efecto nocivo hasta el momento, sin embargo, se debe extremar la precaución si se prescribiera a mujeres embarazadas.\nLactancia: No se tiene constancia de que el medicamento pase a la leche materna, por lo que, en ausencia de datos, no se aconseja su uso durante la lactancia."
+     ]
+    },
+    {
+     "name": "Interacción medicamentosa",
+     "originalName": "Interacción medicamentosa",
+     "values": [
+      "Puede administrarse simultáneamente con cualquier otro medicamento. Sin embargo, con antiácidos o alimentos altamente alcalinos, puede disminuir su absorción."
+     ]
+    },
+    {
+     "name": "Reacciones adversas",
+     "originalName": "Reacciones adversas",
+     "values": [
+      "Aun cuando la tolerabilidad es buena, ocasionalmente se han reportado trastornos gastrointestinales (náuseas, vómitos, diarrea, dispepsia) en personas sensibles (menos del 2%). Se han señalado algunos casos de trastornos neurovegetativos leves (cefalea, sensación de malestar, vértigo) y trastornos cutáneos (erupción, prurito, urticaria) que no han obligado a suspender el tratamiento.\nPRECAUCIONES EN RELACIÓN CON EFECTOS DE CARCINOGÉNESIS, MUTAGÉNESIS, TERATOGÉNESIS Y SOBRE LA FERTILIDAD: Carece de poder mutágeno, clastogénico y no hay interacciones primarias del ADN. Estudios realizados demuestran la seguridad preclínica, no altera la fecundidad ni la función reproductora."
+     ]
+    },
+    {
+     "name": "Dosis y vía de administración",
+     "originalName": "Dosis y vía de administración",
+     "values": [
+      "Insuficiencia venosa: 2 tabletas por día; 1 por la mañana y 1 por la noche.\nMantenimiento de la enfermedad hemorroidal: 2 tabletas por día.\nCrisis hemorroidal: 6 tabletas diarias, durante los primeros 4 días, luego 4 tabletas diarias durante los 3 días siguientes."
+     ]
+    },
+    {
+     "name": "Composición",
+     "originalName": "Composición",
+     "values": [
+      "Cada TABLETA contiene: Diosmina micronizada 450 mg Hesperidina micronizada 50 mg\nExcipiente cbp 1 tableta"
+     ]
+    },
+    {
+     "name": "Manejo de sobredosificación",
+     "originalName": "Manejo de sobredosificación",
+     "values": [
+      "Hasta la fecha no existe reporte de accidente por sobredosis; en el caso de que esto sucediera deberá instituirse el tratamiento sintomático específico y vigilar los signos vitales."
+     ]
+    },
+    {
+     "name": "Leyendas de protección",
+     "originalName": "Leyendas de protección",
+     "values": [
+      "Vía de administración: Oral. Dosis: La que el médico señale. Su venta requiere receta médica. No se deje al alcance de los niños. No se use durante el embarazo y lactancia. Literatura exclusiva para médicos.\nReporte las sospechas de reacción adversa al correo: farmacovigilancia@cofepris.gob.mx"
+     ]
+    },
+    {
+     "name": "Indicacion terapeutica",
+     "originalName": "Indicacion terapeutica",
+     "values": [
+      "Várices. Síndrome varicoso e insuficiencia venosa, flebalgias, pesantez en las piernas, edemas estáticos de piernas, secuelas posflebíticas, estados preulcerosos, hemorroides, hemorragias por fragilidad capilar."
+     ]
+    },
+    {
+     "name": "Propiedad farmacéutica",
+     "originalName": "Propiedad farmacéutica",
+     "values": [
+      "N#A"
+     ]
+    },
+    {
+     "name": "Forma Farmacéutica",
+     "originalName": "Forma Farmacéutica",
+     "values": [
+      "Tabletas"
+     ]
+    },
+    {
+     "name": "Unidad de Medida Contenido",
+     "originalName": "Unidad de Medida Contenido",
+     "values": [
+      "PZ"
+     ]
+    },
+    {
+     "name": "Presentación",
+     "originalName": "Presentación",
+     "values": [
+      "Caja"
+     ]
+    },
+    {
+     "name": "Fracción de Salubridad",
+     "originalName": "Fracción de Salubridad",
+     "values": [
+      "Grupo IV"
+     ]
+    },
+    {
+     "name": "Cantidad / Contenido",
+     "originalName": "Cantidad / Contenido",
+     "values": [
+      "60"
+     ]
+    },
+    {
+     "name": "CdsoPromotion",
+     "originalName": "CdsoPromotion",
+     "values": [
+      "{\"ean\":\"7501125188923\",\"tag\":\"3+1\",\"promoType\":3,\"buyX\":3,\"freeY\":1}"
+     ]
+    },
+    {
+     "name": "sellerId",
+     "originalName": "sellerId",
+     "values": [
+      "1"
+     ]
+    }
+   ],
+   "items": [
+    {
+     "sellers": [
+      {
+       "sellerId": "1",
+       "sellerName": "Farmatodo",
+       "addToCartLink": "",
+       "sellerDefault": true,
+       "commertialOffer": {
+        "DeliverySlaSamplesPerRegion": {},
+        "DeliverySlaSamples": [],
+        "AvailableQuantity": 10000,
+        "discountHighlights": [],
+        "Installments": [
+         {
+          "Value": 586.5,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 586.5,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "American Express",
+          "PaymentSystemGroupName": "creditCardPaymentGroup",
+          "Name": "American Express à vista"
+         },
+         {
+          "Value": 586.5,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 586.5,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Visa",
+          "PaymentSystemGroupName": "creditCardPaymentGroup",
+          "Name": "Visa à vista"
+         },
+         {
+          "Value": 586.5,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 586.5,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Mastercard",
+          "PaymentSystemGroupName": "creditCardPaymentGroup",
+          "Name": "Mastercard à vista"
+         },
+         {
+          "Value": 586.5,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 586.5,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Visa Electron",
+          "PaymentSystemGroupName": "debitCardPaymentGroup",
+          "Name": "Visa Electron à vista"
+         },
+         {
+          "Value": 586.5,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 586.5,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Mastercard Debit",
+          "PaymentSystemGroupName": "debitCardPaymentGroup",
+          "Name": "Mastercard Debit à vista"
+         },
+         {
+          "Value": 586.5,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 586.5,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Pago contra entrega",
+          "PaymentSystemGroupName": "custom203PaymentGroupPaymentGroup",
+          "Name": "Pago contra entrega à vista"
+         }
+        ],
+        "Price": 586.5,
+        "ListPrice": 658,
+        "spotPrice": 586.5,
+        "taxPercentage": 0,
+        "PriceWithoutDiscount": 586.5,
+        "Tax": 0,
+        "GiftSkuIds": [],
+        "BuyTogether": [],
+        "ItemMetadataAttachment": [],
+        "RewardValue": 0,
+        "PriceValidUntil": "2026-11-01T06:00:00Z",
+        "GetInfoErrorMessage": null,
+        "CacheVersionUsedToCallCheckout": "",
+        "teasers": []
+       }
+      }
+     ],
+     "images": [
+      {
+       "imageId": "7000883",
+       "cacheId": "7000883",
+       "imageTag": "",
+       "imageLabel": "7501125188923_01",
+       "imageText": "7501125188923_01",
+       "imageUrl": "https://gruporfp.vtexassets.com/arquivos/ids/7000883/7501125188923_01.jpg?v=639183619917100000"
+      }
+     ],
+     "itemId": "2736",
+     "name": "Mutirot 450/50 Mg Caja C/60 Tabletas",
+     "nameComplete": "Mutirot 450/50 Mg Caja C/60 Tabletas",
+     "complementName": "Mutirot 450/50 Mg Caja C/60 Tabletas",
+     "referenceId": [
+      {
+       "Key": "RefId",
+       "Value": "7501125188923"
+      }
+     ],
+     "measurementUnit": "un",
+     "unitMultiplier": 1,
+     "variations": [],
+     "ean": "7501125188923",
+     "modalType": "",
+     "videos": [],
+     "attachments": [],
+     "isKit": false,
+     "attributes": []
+    }
+   ],
+   "categoriesIds": [
+    "/7/33/503/",
+    "/7/33/",
+    "/7/"
+   ],
+   "releaseDate": 1791417600000,
+   "metaTagDescription": "",
+   "origin": "intelligent-search",
+   "productTitle": ""
+  },
+  {
+   "cacheId": "sp-10856",
+   "productId": "10856",
+   "description": "Indicado para tratamiento de segunda línea para alivio de los síntomas de la rinitis alérgica de moderada a grave y de tipo persistente, en mayores de 18 años.<br/><br/><strong>Si buscas más opciones, consulta nuestra categoría de </strong><a href=\"https://www.farmatodo.com.mx/medicamentos/respiratorios/antihistaminicos\" target=\"_blank\"><strong>Medicamentos para alergias</strong></a><strong>.</strong>",
+   "productName": "Everest Dx 10/5 Mg Caja C/30 Capsulas",
+   "productReference": "7501299310540",
+   "linkText": "everest-dx-10-5-mg-caja-c-30-capsulas",
+   "brand": "Disliomont",
+   "brandId": 1247271,
+   "link": "/everest-dx-10-5-mg-caja-c-30-capsulas/p",
+   "categories": [
+    "/Medicamentos/Respiratorios/Antihistamínicos/",
+    "/Medicamentos/Respiratorios/",
+    "/Medicamentos/"
+   ],
+   "categoryId": "500",
+   "priceRange": {
+    "sellingPrice": {
+     "highPrice": 875.5,
+     "lowPrice": 875.5
+    },
+    "listPrice": {
+     "highPrice": 975,
+     "lowPrice": 975
+    }
+   },
+   "specificationGroups": [
+    {
+     "originalName": "STEP Specifications",
+     "name": "STEP Specifications",
+     "specifications": [
+      {
+       "originalName": "Controlado",
+       "name": "Controlado",
+       "values": [
+        "No"
+       ]
+      },
+      {
+       "originalName": "Antibiotico",
+       "name": "Antibiotico",
+       "values": [
+        "No"
+       ]
+      },
+      {
+       "originalName": "Refrigerado",
+       "name": "Refrigerado",
+       "values": [
+        "No"
+       ]
+      },
+      {
+       "originalName": "Hallazgo de laboratorio clínico",
+       "name": "Hallazgo de laboratorio clínico",
+       "values": [
+        "N#A"
+       ]
+      },
+      {
+       "originalName": "Contraindicación",
+       "name": "Contraindicación",
+       "values": [
+        "Hipersensibilidad a los componentes de la fórmula."
+       ]
+      },
+      {
+       "originalName": "Prescripción y advertencias",
+       "name": "Prescripción y advertencias",
+       "values": [
+        "N#A"
+       ]
+      },
+      {
+       "originalName": "Restricción de uso",
+       "name": "Restricción de uso",
+       "values": [
+        "N#A"
+       ]
+      },
+      {
+       "originalName": "Interacción medicamentosa",
+       "name": "Interacción medicamentosa",
+       "values": [
+        "N#A"
+       ]
+      },
+      {
+       "originalName": "Reacciones adversas",
+       "name": "Reacciones adversas",
+       "values": [
+        "N#A"
+       ]
+      },
+      {
+       "originalName": "Dosis y vía de administración",
+       "name": "Dosis y vía de administración",
+       "values": [
+        "La que el médico indique."
+       ]
+      },
+      {
+       "originalName": "Composición",
+       "name": "Composición",
+       "values": [
+        "N#A"
+       ]
+      },
+      {
+       "originalName": "Manejo de sobredosificación",
+       "name": "Manejo de sobredosificación",
+       "values": [
+        "En caso de sobredosificación accidental, consulte a su médico."
+       ]
+      },
+      {
+       "originalName": "Leyendas de protección",
+       "name": "Leyendas de protección",
+       "values": [
+        "No se deje al alcance de los niños."
+       ]
+      },
+      {
+       "originalName": "Indicacion terapeutica",
+       "name": "Indicacion terapeutica",
+       "values": [
+        "Indicado para tratamiento de segunda línea para alivio de los síntomas de la rinitis alérgica de moderada a grave y de tipo persistente, en mayores de 18 años."
+       ]
+      },
+      {
+       "originalName": "Propiedad farmacéutica",
+       "name": "Propiedad farmacéutica",
+       "values": [
+        "N#A"
+       ]
+      },
+      {
+       "originalName": "Forma Farmacéutica",
+       "name": "Forma Farmacéutica",
+       "values": [
+        "Capsulas"
+       ]
+      },
+      {
+       "originalName": "Unidad de Medida Contenido",
+       "name": "Unidad de Medida Contenido",
+       "values": [
+        "CAPS"
+       ]
+      },
+      {
+       "originalName": "Presentación",
+       "name": "Presentación",
+       "values": [
+        "Caja"
+       ]
+      },
+      {
+       "originalName": "Fracción de Salubridad",
+       "name": "Fracción de Salubridad",
+       "values": [
+        "Grupo IV"
+       ]
+      },
+      {
+       "originalName": "Cantidad / Contenido",
+       "name": "Cantidad / Contenido",
+       "values": [
+        "30"
+       ]
+      }
+     ]
+    },
+    {
+     "originalName": "allSpecifications",
+     "name": "allSpecifications",
+     "specifications": [
+      {
+       "originalName": "Controlado",
+       "name": "Controlado",
+       "values": [
+        "No"
+       ]
+      },
+      {
+       "originalName": "Antibiotico",
+       "name": "Antibiotico",
+       "values": [
+        "No"
+       ]
+      },
+      {
+       "originalName": "Refrigerado",
+       "name": "Refrigerado",
+       "values": [
+        "No"
+       ]
+      },
+      {
+       "originalName": "Hallazgo de laboratorio clínico",
+       "name": "Hallazgo de laboratorio clínico",
+       "values": [
+        "N#A"
+       ]
+      },
+      {
+       "originalName": "Contraindicación",
+       "name": "Contraindicación",
+       "values": [
+        "Hipersensibilidad a los componentes de la fórmula."
+       ]
+      },
+      {
+       "originalName": "Prescripción y advertencias",
+       "name": "Prescripción y advertencias",
+       "values": [
+        "N#A"
+       ]
+      },
+      {
+       "originalName": "Restricción de uso",
+       "name": "Restricción de uso",
+       "values": [
+        "N#A"
+       ]
+      },
+      {
+       "originalName": "Interacción medicamentosa",
+       "name": "Interacción medicamentosa",
+       "values": [
+        "N#A"
+       ]
+      },
+      {
+       "originalName": "Reacciones adversas",
+       "name": "Reacciones adversas",
+       "values": [
+        "N#A"
+       ]
+      },
+      {
+       "originalName": "Dosis y vía de administración",
+       "name": "Dosis y vía de administración",
+       "values": [
+        "La que el médico indique."
+       ]
+      },
+      {
+       "originalName": "Composición",
+       "name": "Composición",
+       "values": [
+        "N#A"
+       ]
+      },
+      {
+       "originalName": "Manejo de sobredosificación",
+       "name": "Manejo de sobredosificación",
+       "values": [
+        "En caso de sobredosificación accidental, consulte a su médico."
+       ]
+      },
+      {
+       "originalName": "Leyendas de protección",
+       "name": "Leyendas de protección",
+       "values": [
+        "No se deje al alcance de los niños."
+       ]
+      },
+      {
+       "originalName": "Indicacion terapeutica",
+       "name": "Indicacion terapeutica",
+       "values": [
+        "Indicado para tratamiento de segunda línea para alivio de los síntomas de la rinitis alérgica de moderada a grave y de tipo persistente, en mayores de 18 años."
+       ]
+      },
+      {
+       "originalName": "Propiedad farmacéutica",
+       "name": "Propiedad farmacéutica",
+       "values": [
+        "N#A"
+       ]
+      },
+      {
+       "originalName": "Forma Farmacéutica",
+       "name": "Forma Farmacéutica",
+       "values": [
+        "Capsulas"
+       ]
+      },
+      {
+       "originalName": "Unidad de Medida Contenido",
+       "name": "Unidad de Medida Contenido",
+       "values": [
+        "CAPS"
+       ]
+      },
+      {
+       "originalName": "Presentación",
+       "name": "Presentación",
+       "values": [
+        "Caja"
+       ]
+      },
+      {
+       "originalName": "Fracción de Salubridad",
+       "name": "Fracción de Salubridad",
+       "values": [
+        "Grupo IV"
+       ]
+      },
+      {
+       "originalName": "Cantidad / Contenido",
+       "name": "Cantidad / Contenido",
+       "values": [
+        "30"
+       ]
+      },
+      {
+       "originalName": "sellerId",
+       "name": "sellerId",
+       "values": [
+        "1"
+       ]
+      }
+     ]
+    }
+   ],
+   "skuSpecifications": [],
+   "productClusters": [
+    {
+     "id": "286",
+     "name": "SUPER PRECIOS Promociones"
+    },
+    {
+     "id": "498",
+     "name": "Todos los productos"
+    },
+    {
+     "id": "610",
+     "name": "Productos Circulo de la Salud"
+    }
+   ],
+   "clusterHighlights": [
+    {
+     "id": "610",
+     "name": "Productos Circulo de la Salud"
+    }
+   ],
+   "properties": [
+    {
+     "name": "Controlado",
+     "originalName": "Controlado",
+     "values": [
+      "No"
+     ]
+    },
+    {
+     "name": "Antibiotico",
+     "originalName": "Antibiotico",
+     "values": [
+      "No"
+     ]
+    },
+    {
+     "name": "Refrigerado",
+     "originalName": "Refrigerado",
+     "values": [
+      "No"
+     ]
+    },
+    {
+     "name": "Hallazgo de laboratorio clínico",
+     "originalName": "Hallazgo de laboratorio clínico",
+     "values": [
+      "N#A"
+     ]
+    },
+    {
+     "name": "Contraindicación",
+     "originalName": "Contraindicación",
+     "values": [
+      "Hipersensibilidad a los componentes de la fórmula."
+     ]
+    },
+    {
+     "name": "Prescripción y advertencias",
+     "originalName": "Prescripción y advertencias",
+     "values": [
+      "N#A"
+     ]
+    },
+    {
+     "name": "Restricción de uso",
+     "originalName": "Restricción de uso",
+     "values": [
+      "N#A"
+     ]
+    },
+    {
+     "name": "Interacción medicamentosa",
+     "originalName": "Interacción medicamentosa",
+     "values": [
+      "N#A"
+     ]
+    },
+    {
+     "name": "Reacciones adversas",
+     "originalName": "Reacciones adversas",
+     "values": [
+      "N#A"
+     ]
+    },
+    {
+     "name": "Dosis y vía de administración",
+     "originalName": "Dosis y vía de administración",
+     "values": [
+      "La que el médico indique."
+     ]
+    },
+    {
+     "name": "Composición",
+     "originalName": "Composición",
+     "values": [
+      "N#A"
+     ]
+    },
+    {
+     "name": "Manejo de sobredosificación",
+     "originalName": "Manejo de sobredosificación",
+     "values": [
+      "En caso de sobredosificación accidental, consulte a su médico."
+     ]
+    },
+    {
+     "name": "Leyendas de protección",
+     "originalName": "Leyendas de protección",
+     "values": [
+      "No se deje al alcance de los niños."
+     ]
+    },
+    {
+     "name": "Indicacion terapeutica",
+     "originalName": "Indicacion terapeutica",
+     "values": [
+      "Indicado para tratamiento de segunda línea para alivio de los síntomas de la rinitis alérgica de moderada a grave y de tipo persistente, en mayores de 18 años."
+     ]
+    },
+    {
+     "name": "Propiedad farmacéutica",
+     "originalName": "Propiedad farmacéutica",
+     "values": [
+      "N#A"
+     ]
+    },
+    {
+     "name": "Forma Farmacéutica",
+     "originalName": "Forma Farmacéutica",
+     "values": [
+      "Capsulas"
+     ]
+    },
+    {
+     "name": "Unidad de Medida Contenido",
+     "originalName": "Unidad de Medida Contenido",
+     "values": [
+      "CAPS"
+     ]
+    },
+    {
+     "name": "Presentación",
+     "originalName": "Presentación",
+     "values": [
+      "Caja"
+     ]
+    },
+    {
+     "name": "Fracción de Salubridad",
+     "originalName": "Fracción de Salubridad",
+     "values": [
+      "Grupo IV"
+     ]
+    },
+    {
+     "name": "Cantidad / Contenido",
+     "originalName": "Cantidad / Contenido",
+     "values": [
+      "30"
+     ]
+    },
+    {
+     "name": "sellerId",
+     "originalName": "sellerId",
+     "values": [
+      "1"
+     ]
+    }
+   ],
+   "items": [
+    {
+     "sellers": [
+      {
+       "sellerId": "1",
+       "sellerName": "Farmatodo",
+       "addToCartLink": "",
+       "sellerDefault": true,
+       "commertialOffer": {
+        "DeliverySlaSamplesPerRegion": {},
+        "DeliverySlaSamples": [],
+        "AvailableQuantity": 10000,
+        "discountHighlights": [],
+        "Installments": [
+         {
+          "Value": 875.5,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 875.5,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "American Express",
+          "PaymentSystemGroupName": "creditCardPaymentGroup",
+          "Name": "American Express à vista"
+         },
+         {
+          "Value": 875.5,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 875.5,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Visa",
+          "PaymentSystemGroupName": "creditCardPaymentGroup",
+          "Name": "Visa à vista"
+         },
+         {
+          "Value": 875.5,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 875.5,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Mastercard",
+          "PaymentSystemGroupName": "creditCardPaymentGroup",
+          "Name": "Mastercard à vista"
+         },
+         {
+          "Value": 875.5,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 875.5,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Visa Electron",
+          "PaymentSystemGroupName": "debitCardPaymentGroup",
+          "Name": "Visa Electron à vista"
+         },
+         {
+          "Value": 875.5,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 875.5,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Mastercard Debit",
+          "PaymentSystemGroupName": "debitCardPaymentGroup",
+          "Name": "Mastercard Debit à vista"
+         },
+         {
+          "Value": 875.5,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 875.5,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Pago contra entrega",
+          "PaymentSystemGroupName": "custom203PaymentGroupPaymentGroup",
+          "Name": "Pago contra entrega à vista"
+         }
+        ],
+        "Price": 875.5,
+        "ListPrice": 975,
+        "spotPrice": 875.5,
+        "taxPercentage": 0,
+        "PriceWithoutDiscount": 875.5,
+        "Tax": 0,
+        "GiftSkuIds": [],
+        "BuyTogether": [],
+        "ItemMetadataAttachment": [],
+        "RewardValue": 0,
+        "PriceValidUntil": "2026-11-01T06:00:00Z",
+        "GetInfoErrorMessage": null,
+        "CacheVersionUsedToCallCheckout": "",
+        "teasers": []
+       }
+      }
+     ],
+     "images": [
+      {
+       "imageId": "7010896",
+       "cacheId": "7010896",
+       "imageTag": "",
+       "imageLabel": "7501299310540_01",
+       "imageText": "7501299310540_01",
+       "imageUrl": "https://gruporfp.vtexassets.com/arquivos/ids/7010896/7501299310540_01.jpg?v=639183724836500000"
+      }
+     ],
+     "itemId": "10856",
+     "name": "Everest Dx 10/5 Mg Caja C/30 Capsulas",
+     "nameComplete": "Everest Dx 10/5 Mg Caja C/30 Capsulas",
+     "complementName": "Everest Dx 10/5 Mg Caja C/30 Capsulas",
+     "referenceId": [
+      {
+       "Key": "RefId",
+       "Value": "7501299310540"
+      }
+     ],
+     "measurementUnit": "un",
+     "unitMultiplier": 1,
+     "variations": [],
+     "ean": "7501299310540",
+     "modalType": "",
+     "videos": [],
+     "attachments": [],
+     "isKit": false,
+     "attributes": []
+    }
+   ],
+   "categoriesIds": [
+    "/7/76/500/",
+    "/7/76/",
+    "/7/"
+   ],
+   "releaseDate": 1791417600000,
+   "metaTagDescription": "",
+   "origin": "intelligent-search",
+   "productTitle": ""
+  }
+ ],
+ "recordsFiltered": 3559,
+ "correction": {
+  "misspelled": true
+ },
+ "fuzzy": "0",
+ "operator": "and",
+ "translated": false,
+ "pagination": {
+  "count": 50,
+  "current": {
+   "index": 1,
+   "proxyUrl": "search/category-1/medicamentos/trade-policy/1?an=gruporfp&count=50&page=1&operator=and&fuzzy=0"
+  },
+  "before": [],
+  "after": [
+   {
+    "index": 2,
+    "proxyUrl": "search/category-1/medicamentos/trade-policy/1?an=gruporfp&count=50&page=2&operator=and&fuzzy=0"
+   },
+   {
+    "index": 3,
+    "proxyUrl": "search/category-1/medicamentos/trade-policy/1?an=gruporfp&count=50&page=3&operator=and&fuzzy=0"
+   },
+   {
+    "index": 4,
+    "proxyUrl": "search/category-1/medicamentos/trade-policy/1?an=gruporfp&count=50&page=4&operator=and&fuzzy=0"
+   },
+   {
+    "index": 5,
+    "proxyUrl": "search/category-1/medicamentos/trade-policy/1?an=gruporfp&count=50&page=5&operator=and&fuzzy=0"
+   }
+  ],
+  "perPage": 50,
+  "next": {
+   "index": 2,
+   "proxyUrl": "search/category-1/medicamentos/trade-policy/1?an=gruporfp&count=50&page=2&operator=and&fuzzy=0"
+  },
+  "previous": {
+   "index": 0
+  },
+  "first": {
+   "index": 0
+  },
+  "last": {
+   "index": 50,
+   "proxyUrl": "search/category-1/medicamentos/trade-policy/1?an=gruporfp&count=50&page=50&operator=and&fuzzy=0"
+  }
+ },
+ "options": {
+  "sorts": [],
+  "counts": [],
+  "deliveryPromisesEnabled": false,
+  "dpStatus": "not_requested"
+ },
+ "searchId": "535e3a9a10424e94ac22566ebc3dbe8f"
+}

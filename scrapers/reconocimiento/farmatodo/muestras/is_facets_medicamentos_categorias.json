@@ -1,0 +1,876 @@
+{
+ "facets": [
+  {
+   "values": [
+    {
+     "id": "7",
+     "quantity": 1,
+     "name": "Medicamentos",
+     "key": "category-1",
+     "value": "medicamentos",
+     "selected": true,
+     "href": "medicamentos/medicamentos?map=department"
+    }
+   ],
+   "type": "TEXT",
+   "name": "Department",
+   "hidden": true,
+   "key": "category-1",
+   "quantity": 1
+  },
+  {
+   "values": [
+    {
+     "id": "33",
+     "quantity": 573,
+     "name": "Cardiología",
+     "key": "category-2",
+     "value": "cardiologia",
+     "selected": false,
+     "href": "medicamentos/cardiologia?map=category"
+    },
+    {
+     "id": "66",
+     "quantity": 527,
+     "name": "Neurología",
+     "key": "category-2",
+     "value": "neurologia",
+     "selected": false,
+     "href": "medicamentos/neurologia?map=category"
+    },
+    {
+     "id": "43",
+     "quantity": 522,
+     "name": "Digestión y Estomacales",
+     "key": "category-2",
+     "value": "digestion-y-estomacales",
+     "selected": false,
+     "href": "medicamentos/digestion-y-estomacales?map=category"
+    },
+    {
+     "id": "76",
+     "quantity": 466,
+     "name": "Respiratorios",
+     "key": "category-2",
+     "value": "respiratorios",
+     "selected": false,
+     "href": "medicamentos/respiratorios?map=category"
+    },
+    {
+     "id": "62",
+     "quantity": 463,
+     "name": "Dolor",
+     "key": "category-2",
+     "value": "dolor",
+     "selected": false,
+     "href": "medicamentos/dolor?map=category"
+    },
+    {
+     "id": "8",
+     "quantity": 455,
+     "name": "Antiinfecciosos",
+     "key": "category-2",
+     "value": "antiinfecciosos",
+     "selected": false,
+     "href": "medicamentos/antiinfecciosos?map=category"
+    },
+    {
+     "id": "1135587",
+     "quantity": 193,
+     "name": "Dermatología",
+     "key": "category-2",
+     "value": "dermatologia",
+     "selected": false,
+     "href": "medicamentos/dermatologia?map=category"
+    },
+    {
+     "id": "23",
+     "quantity": 109,
+     "name": "Salud visual y Auditiva",
+     "key": "category-2",
+     "value": "salud-visual-y-auditiva",
+     "selected": false,
+     "href": "medicamentos/salud-visual-y-auditiva?map=category"
+    },
+    {
+     "id": "149",
+     "quantity": 91,
+     "name": "Endocrinología",
+     "key": "category-2",
+     "value": "endocrinologia",
+     "selected": false,
+     "href": "medicamentos/endocrinologia?map=category"
+    },
+    {
+     "id": "2347270",
+     "quantity": 62,
+     "name": "Urología",
+     "key": "category-2",
+     "value": "urologia",
+     "selected": false,
+     "href": "medicamentos/urologia?map=category"
+    },
+    {
+     "id": "56",
+     "quantity": 44,
+     "name": "Ginecología",
+     "key": "category-2",
+     "value": "ginecologia",
+     "selected": false,
+     "href": "medicamentos/ginecologia?map=category"
+    },
+    {
+     "id": "2347285",
+     "quantity": 33,
+     "name": "Sexualidad",
+     "key": "category-2",
+     "value": "sexualidad",
+     "selected": false,
+     "href": "medicamentos/sexualidad?map=category"
+    },
+    {
+     "id": "58",
+     "quantity": 7,
+     "name": "Sistema Óseo",
+     "key": "category-2",
+     "value": "sistema-oseo",
+     "selected": false,
+     "href": "medicamentos/sistema-oseo?map=category"
+    },
+    {
+     "id": "2347276",
+     "quantity": 7,
+     "name": "Sistema Articular",
+     "key": "category-2",
+     "value": "sistema-articular",
+     "selected": false,
+     "href": "medicamentos/sistema-articular?map=category"
+    },
+    {
+     "id": "1139075",
+     "quantity": 3,
+     "name": "Otras Terapias",
+     "key": "category-2",
+     "value": "otras-terapias",
+     "selected": false,
+     "href": "medicamentos/otras-terapias?map=category"
+    },
+    {
+     "id": "612",
+     "quantity": 3,
+     "name": "Control Metabólico",
+     "key": "category-2",
+     "value": "control-metabolico",
+     "selected": false,
+     "href": "medicamentos/control-metabolico?map=category"
+    },
+    {
+     "id": "616",
+     "quantity": 1,
+     "name": "Oncología",
+     "key": "category-2",
+     "value": "oncologia",
+     "selected": false,
+     "href": "medicamentos/oncologia?map=category"
+    }
+   ],
+   "type": "TEXT",
+   "name": "Category",
+   "hidden": false,
+   "key": "category-2",
+   "quantity": 17
+  },
+  {
+   "values": [
+    {
+     "id": "9",
+     "quantity": 323,
+     "name": "Antibióticos",
+     "key": "category-3",
+     "value": "antibioticos",
+     "selected": false,
+     "href": "medicamentos/antibioticos?map=subcategory"
+    },
+    {
+     "id": "624",
+     "quantity": 297,
+     "name": "Antihipertensivos",
+     "key": "category-3",
+     "value": "antihipertensivos",
+     "selected": false,
+     "href": "medicamentos/antihipertensivos?map=subcategory"
+    },
+    {
+     "id": "63",
+     "quantity": 214,
+     "name": "Analgésicos",
+     "key": "category-3",
+     "value": "analgesicos",
+     "selected": false,
+     "href": "medicamentos/analgesicos?map=subcategory"
+    },
+    {
+     "id": "69",
+     "quantity": 192,
+     "name": "Antidepresivos",
+     "key": "category-3",
+     "value": "antidepresivos",
+     "selected": false,
+     "href": "medicamentos/antidepresivos?map=subcategory"
+    },
+    {
+     "id": "500",
+     "quantity": 113,
+     "name": "Antihistamínicos",
+     "key": "category-3",
+     "value": "antihistaminicos",
+     "selected": false,
+     "href": "medicamentos/antihistaminicos?map=subcategory"
+    },
+    {
+     "id": "44",
+     "quantity": 105,
+     "name": "Antiácidos",
+     "key": "category-3",
+     "value": "antiacidos",
+     "selected": false,
+     "href": "medicamentos/antiacidos?map=subcategory"
+    },
+    {
+     "id": "75",
+     "quantity": 102,
+     "name": "Reactivadores Cerebrales",
+     "key": "category-3",
+     "value": "reactivadores-cerebrales",
+     "selected": false,
+     "href": "medicamentos/reactivadores-cerebrales?map=subcategory"
+    },
+    {
+     "id": "499",
+     "quantity": 97,
+     "name": "Antitusivos",
+     "key": "category-3",
+     "value": "antitusivos",
+     "selected": false,
+     "href": "medicamentos/antitusivos?map=subcategory"
+    },
+    {
+     "id": "70",
+     "quantity": 93,
+     "name": "Antiepilépticos",
+     "key": "category-3",
+     "value": "antiepilepticos",
+     "selected": false,
+     "href": "medicamentos/antiepilepticos?map=subcategory"
+    },
+    {
+     "id": "525",
+     "quantity": 92,
+     "name": "Otros",
+     "key": "category-3",
+     "value": "otros",
+     "selected": false,
+     "href": "medicamentos/otros?map=subcategory"
+    },
+    {
+     "id": "34",
+     "quantity": 89,
+     "name": "Anticolesterol",
+     "key": "category-3",
+     "value": "anticolesterol",
+     "selected": false,
+     "href": "medicamentos/anticolesterol?map=subcategory"
+    },
+    {
+     "id": "10",
+     "quantity": 88,
+     "name": "Antimicóticos",
+     "key": "category-3",
+     "value": "antimicoticos",
+     "selected": false,
+     "href": "medicamentos/antimicoticos?map=subcategory"
+    },
+    {
+     "id": "533",
+     "quantity": 83,
+     "name": "Antirreumáticos",
+     "key": "category-3",
+     "value": "antirreumaticos",
+     "selected": false,
+     "href": "medicamentos/antirreumaticos?map=subcategory"
+    },
+    {
+     "id": "529",
+     "quantity": 81,
+     "name": "Antiinflamatorios",
+     "key": "category-3",
+     "value": "antiinflamatorios",
+     "selected": false,
+     "href": "medicamentos/antiinflamatorios?map=subcategory"
+    },
+    {
+     "id": "50",
+     "quantity": 80,
+     "name": "Antiulcerosos",
+     "key": "category-3",
+     "value": "antiulcerosos",
+     "selected": false,
+     "href": "medicamentos/antiulcerosos?map=subcategory"
+    },
+    {
+     "id": "496",
+     "quantity": 79,
+     "name": "Antiasmáticos",
+     "key": "category-3",
+     "value": "antiasmaticos",
+     "selected": false,
+     "href": "medicamentos/antiasmaticos?map=subcategory"
+    },
+    {
+     "id": "2347328",
+     "quantity": 78,
+     "name": "Antigripales",
+     "key": "category-3",
+     "value": "antigripales",
+     "selected": false,
+     "href": "medicamentos/antigripales?map=subcategory"
+    },
+    {
+     "id": "502",
+     "quantity": 73,
+     "name": "Anticoagulantes",
+     "key": "category-3",
+     "value": "anticoagulantes",
+     "selected": false,
+     "href": "medicamentos/anticoagulantes?map=subcategory"
+    },
+    {
+     "id": "447",
+     "quantity": 71,
+     "name": "Terapia Hormonal",
+     "key": "category-3",
+     "value": "terapia-hormonal",
+     "selected": false,
+     "href": "medicamentos/terapia-hormonal?map=subcategory"
+    },
+    {
+     "id": "79",
+     "quantity": 68,
+     "name": "Descongestionantes Nasales",
+     "key": "category-3",
+     "value": "descongestionantes-nasales",
+     "selected": false,
+     "href": "medicamentos/descongestionantes-nasales?map=subcategory"
+    },
+    {
+     "id": "1139059",
+     "quantity": 57,
+     "name": "Musculares y Desinflamatorios",
+     "key": "category-3",
+     "value": "musculares-y-desinflamatorios",
+     "selected": false,
+     "href": "medicamentos/musculares-y-desinflamatorios?map=subcategory"
+    },
+    {
+     "id": "68",
+     "quantity": 54,
+     "name": "Anticonvulsivos",
+     "key": "category-3",
+     "value": "anticonvulsivos",
+     "selected": false,
+     "href": "medicamentos/anticonvulsivos?map=subcategory"
+    },
+    {
+     "id": "47",
+     "quantity": 53,
+     "name": "Antiespasmódicos",
+     "key": "category-3",
+     "value": "antiespasmodicos",
+     "selected": false,
+     "href": "medicamentos/antiespasmodicos?map=subcategory"
+    },
+    {
+     "id": "534",
+     "quantity": 50,
+     "name": "Lubricantes Oculares",
+     "key": "category-3",
+     "value": "lubricantes-oculares",
+     "selected": false,
+     "href": "medicamentos/lubricantes-oculares?map=subcategory"
+    },
+    {
+     "id": "2347273",
+     "quantity": 48,
+     "name": "Disfunción Eréctil",
+     "key": "category-3",
+     "value": "disfuncion-erectil",
+     "selected": false,
+     "href": "medicamentos/disfuncion-erectil?map=subcategory"
+    },
+    {
+     "id": "1135622",
+     "quantity": 47,
+     "name": "Antiacné",
+     "key": "category-3",
+     "value": "antiacne",
+     "selected": false,
+     "href": "medicamentos/antiacne?map=subcategory"
+    },
+    {
+     "id": "49",
+     "quantity": 46,
+     "name": "Antiparasitarios",
+     "key": "category-3",
+     "value": "antiparasitarios",
+     "selected": false,
+     "href": "medicamentos/antiparasitarios?map=subcategory"
+    },
+    {
+     "id": "52",
+     "quantity": 44,
+     "name": "Laxantes",
+     "key": "category-3",
+     "value": "laxantes",
+     "selected": false,
+     "href": "medicamentos/laxantes?map=subcategory"
+    },
+    {
+     "id": "1135609",
+     "quantity": 41,
+     "name": "Cicatrizante",
+     "key": "category-3",
+     "value": "cicatrizante",
+     "selected": false,
+     "href": "medicamentos/cicatrizante?map=subcategory"
+    },
+    {
+     "id": "12",
+     "quantity": 41,
+     "name": "Antivirales",
+     "key": "category-3",
+     "value": "antivirales",
+     "selected": false,
+     "href": "medicamentos/antivirales?map=subcategory"
+    },
+    {
+     "id": "71",
+     "quantity": 41,
+     "name": "Antiparkinsonianos",
+     "key": "category-3",
+     "value": "antiparkinsonianos",
+     "selected": false,
+     "href": "medicamentos/antiparkinsonianos?map=subcategory"
+    },
+    {
+     "id": "45",
+     "quantity": 40,
+     "name": "Antidiarreicos",
+     "key": "category-3",
+     "value": "antidiarreicos",
+     "selected": false,
+     "href": "medicamentos/antidiarreicos?map=subcategory"
+    },
+    {
+     "id": "1135607",
+     "quantity": 39,
+     "name": "Corticosteroides",
+     "key": "category-3",
+     "value": "corticosteroides",
+     "selected": false,
+     "href": "medicamentos/corticosteroides?map=subcategory"
+    },
+    {
+     "id": "26",
+     "quantity": 39,
+     "name": "Antibióticos Oculares",
+     "key": "category-3",
+     "value": "antibioticos-oculares",
+     "selected": false,
+     "href": "medicamentos/antibioticos-oculares?map=subcategory"
+    },
+    {
+     "id": "51",
+     "quantity": 38,
+     "name": "Flora Intestinal",
+     "key": "category-3",
+     "value": "flora-intestinal",
+     "selected": false,
+     "href": "medicamentos/flora-intestinal?map=subcategory"
+    },
+    {
+     "id": "2347269",
+     "quantity": 38,
+     "name": "Antianginosos",
+     "key": "category-3",
+     "value": "antianginosos",
+     "selected": false,
+     "href": "medicamentos/antianginosos?map=subcategory"
+    },
+    {
+     "id": "503",
+     "quantity": 35,
+     "name": "Vasoprotectores",
+     "key": "category-3",
+     "value": "vasoprotectores",
+     "selected": false,
+     "href": "medicamentos/vasoprotectores?map=subcategory"
+    },
+    {
+     "id": "2347286",
+     "quantity": 33,
+     "name": "Anticonceptivos",
+     "key": "category-3",
+     "value": "anticonceptivos",
+     "selected": false,
+     "href": "medicamentos/anticonceptivos?map=subcategory"
+    },
+    {
+     "id": "46",
+     "quantity": 32,
+     "name": "Antieméticos",
+     "key": "category-3",
+     "value": "antiemeticos",
+     "selected": false,
+     "href": "medicamentos/antiemeticos?map=subcategory"
+    },
+    {
+     "id": "2347268",
+     "quantity": 31,
+     "name": "Antianémico",
+     "key": "category-3",
+     "value": "antianemico",
+     "selected": false,
+     "href": "medicamentos/antianemico?map=subcategory"
+    },
+    {
+     "id": "2347280",
+     "quantity": 24,
+     "name": "Insomnio",
+     "key": "category-3",
+     "value": "insomnio",
+     "selected": false,
+     "href": "medicamentos/insomnio?map=subcategory"
+    },
+    {
+     "id": "528",
+     "quantity": 20,
+     "name": "Hormona de Crecimiento",
+     "key": "category-3",
+     "value": "hormona-de-crecimiento",
+     "selected": false,
+     "href": "medicamentos/hormona-de-crecimiento?map=subcategory"
+    },
+    {
+     "id": "2347281",
+     "quantity": 20,
+     "name": "Dolor de Garganta",
+     "key": "category-3",
+     "value": "dolor-de-garganta",
+     "selected": false,
+     "href": "medicamentos/dolor-de-garganta?map=subcategory"
+    },
+    {
+     "id": "73",
+     "quantity": 20,
+     "name": "Antivertiginoso",
+     "key": "category-3",
+     "value": "antivertiginoso",
+     "selected": false,
+     "href": "medicamentos/antivertiginoso?map=subcategory"
+    },
+    {
+     "id": "489",
+     "quantity": 19,
+     "name": "Incontinencia Urinaria",
+     "key": "category-3",
+     "value": "incontinencia-urinaria",
+     "selected": false,
+     "href": "medicamentos/incontinencia-urinaria?map=subcategory"
+    },
+    {
+     "id": "25",
+     "quantity": 16,
+     "name": "Antialérgicos Oculares",
+     "key": "category-3",
+     "value": "antialergicos-oculares",
+     "selected": false,
+     "href": "medicamentos/antialergicos-oculares?map=subcategory"
+    },
+    {
+     "id": "1135605",
+     "quantity": 14,
+     "name": "Dermatitis Atópica",
+     "key": "category-3",
+     "value": "dermatitis-atopica",
+     "selected": false,
+     "href": "medicamentos/dermatitis-atopica?map=subcategory"
+    },
+    {
+     "id": "524",
+     "quantity": 12,
+     "name": "Hepatoprotectores",
+     "key": "category-3",
+     "value": "hepatoprotectores",
+     "selected": false,
+     "href": "medicamentos/hepatoprotectores?map=subcategory"
+    },
+    {
+     "id": "1135621",
+     "quantity": 12,
+     "name": "Antipiojos",
+     "key": "category-3",
+     "value": "antipiojos",
+     "selected": false,
+     "href": "medicamentos/antipiojos?map=subcategory"
+    },
+    {
+     "id": "1135593",
+     "quantity": 11,
+     "name": "Psoriasis",
+     "key": "category-3",
+     "value": "psoriasis",
+     "selected": false,
+     "href": "medicamentos/psoriasis?map=subcategory"
+    },
+    {
+     "id": "80",
+     "quantity": 11,
+     "name": "Expectorantes",
+     "key": "category-3",
+     "value": "expectorantes",
+     "selected": false,
+     "href": "medicamentos/expectorantes?map=subcategory"
+    },
+    {
+     "id": "36",
+     "quantity": 10,
+     "name": "Diuréticos",
+     "key": "category-3",
+     "value": "diureticos",
+     "selected": false,
+     "href": "medicamentos/diureticos?map=subcategory"
+    },
+    {
+     "id": "1139060",
+     "quantity": 10,
+     "name": "Cólicos",
+     "key": "category-3",
+     "value": "colicos",
+     "selected": false,
+     "href": "medicamentos/colicos?map=subcategory"
+    },
+    {
+     "id": "64",
+     "quantity": 9,
+     "name": "Anestésicos",
+     "key": "category-3",
+     "value": "anestesicos",
+     "selected": false,
+     "href": "medicamentos/anestesicos?map=subcategory"
+    },
+    {
+     "id": "48",
+     "quantity": 8,
+     "name": "Antiflatulencias",
+     "key": "category-3",
+     "value": "antiflatulencias",
+     "selected": false,
+     "href": "medicamentos/antiflatulencias?map=subcategory"
+    },
+    {
+     "id": "2347277",
+     "quantity": 7,
+     "name": "Tratamiento de Gota",
+     "key": "category-3",
+     "value": "tratamiento-de-gota",
+     "selected": false,
+     "href": "medicamentos/tratamiento-de-gota?map=subcategory"
+    },
+    {
+     "id": "481",
+     "quantity": 7,
+     "name": "Osteoporosis",
+     "key": "category-3",
+     "value": "osteoporosis",
+     "selected": false,
+     "href": "medicamentos/osteoporosis?map=subcategory"
+    },
+    {
+     "id": "1135601",
+     "quantity": 7,
+     "name": "Despigmentante",
+     "key": "category-3",
+     "value": "despigmentante",
+     "selected": false,
+     "href": "medicamentos/despigmentante?map=subcategory"
+    },
+    {
+     "id": "1139053",
+     "quantity": 7,
+     "name": "Colitis",
+     "key": "category-3",
+     "value": "colitis",
+     "selected": false,
+     "href": "medicamentos/colitis?map=subcategory"
+    },
+    {
+     "id": "2347279",
+     "quantity": 6,
+     "name": "Antihemorroides",
+     "key": "category-3",
+     "value": "antihemorroides",
+     "selected": false,
+     "href": "medicamentos/antihemorroides?map=subcategory"
+    },
+    {
+     "id": "1135590",
+     "quantity": 4,
+     "name": "Rosacea",
+     "key": "category-3",
+     "value": "rosacea",
+     "selected": false,
+     "href": "medicamentos/rosacea?map=subcategory"
+    },
+    {
+     "id": "2348623",
+     "quantity": 4,
+     "name": "Insuficiencia Renal",
+     "key": "category-3",
+     "value": "insuficiencia-renal",
+     "selected": false,
+     "href": "medicamentos/insuficiencia-renal?map=subcategory"
+    },
+    {
+     "id": "2347284",
+     "quantity": 4,
+     "name": "Fuego Labial",
+     "key": "category-3",
+     "value": "fuego-labial",
+     "selected": false,
+     "href": "medicamentos/fuego-labial?map=subcategory"
+    },
+    {
+     "id": "1135603",
+     "quantity": 4,
+     "name": "Dermatitis Seborreica",
+     "key": "category-3",
+     "value": "dermatitis-seborreica",
+     "selected": false,
+     "href": "medicamentos/dermatitis-seborreica?map=subcategory"
+    },
+    {
+     "id": "536",
+     "quantity": 4,
+     "name": "Corticosteroides Oculares",
+     "key": "category-3",
+     "value": "corticosteroides-oculares",
+     "selected": false,
+     "href": "medicamentos/corticosteroides-oculares?map=subcategory"
+    },
+    {
+     "id": "1135611",
+     "quantity": 4,
+     "name": "Antiverrugas",
+     "key": "category-3",
+     "value": "antiverrugas",
+     "selected": false,
+     "href": "medicamentos/antiverrugas?map=subcategory"
+    },
+    {
+     "id": "1135589",
+     "quantity": 3,
+     "name": "Sudoración excesiva",
+     "key": "category-3",
+     "value": "sudoracion-excesiva",
+     "selected": false,
+     "href": "medicamentos/sudoracion-excesiva?map=subcategory"
+    },
+    {
+     "id": "2347278",
+     "quantity": 3,
+     "name": "Relajantes Musculares",
+     "key": "category-3",
+     "value": "relajantes-musculares",
+     "selected": false,
+     "href": "medicamentos/relajantes-musculares?map=subcategory"
+    },
+    {
+     "id": "1135602",
+     "quantity": 3,
+     "name": "Dermolimpiador",
+     "key": "category-3",
+     "value": "dermolimpiador",
+     "selected": false,
+     "href": "medicamentos/dermolimpiador?map=subcategory"
+    },
+    {
+     "id": "2347266",
+     "quantity": 3,
+     "name": "Antisepticos",
+     "key": "category-3",
+     "value": "antisepticos",
+     "selected": false,
+     "href": "medicamentos/antisepticos?map=subcategory"
+    },
+    {
+     "id": "1135625",
+     "quantity": 3,
+     "name": "Anticaída",
+     "key": "category-3",
+     "value": "anticaida",
+     "selected": false,
+     "href": "medicamentos/anticaida?map=subcategory"
+    },
+    {
+     "id": "613",
+     "quantity": 3,
+     "name": "Anorexigénicos",
+     "key": "category-3",
+     "value": "anorexigenicos",
+     "selected": false,
+     "href": "medicamentos/anorexigenicos?map=subcategory"
+    },
+    {
+     "id": "74",
+     "quantity": 1,
+     "name": "Sedantes e Hipnóticos",
+     "key": "category-3",
+     "value": "sedantes-e-hipnoticos",
+     "selected": false,
+     "href": "medicamentos/sedantes-e-hipnoticos?map=subcategory"
+    },
+    {
+     "id": "617",
+     "quantity": 1,
+     "name": "Agentes Antineoplásicos e Inmunomoduladores",
+     "key": "category-3",
+     "value": "agentes-antineoplasicos-e-inmunomoduladores",
+     "selected": false,
+     "href": "medicamentos/agentes-antineoplasicos-e-inmunomoduladores?map=subcategory"
+    }
+   ],
+   "type": "TEXT",
+   "name": "Subcategory",
+   "hidden": false,
+   "key": "category-3",
+   "quantity": 74
+  }
+ ],
+ "sampling": false,
+ "breadcrumb": [
+  {
+   "name": "Medicamentos",
+   "href": "/medicamentos"
+  }
+ ],
+ "queryArgs": {
+  "query": "",
+  "selectedFacets": [
+   {
+    "key": "category-1",
+    "value": "medicamentos"
+   }
+  ]
+ },
+ "translated": false
+}
