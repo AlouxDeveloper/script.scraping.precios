@@ -1,4 +1,4 @@
-"""Base VTEX de Scrapers 2.0 y spider de Chedraui (escalón a, solo listados).
+"""Base VTEX de Scrapers 2.0 y spiders de sus tiendas (escalón a, solo listados).
 
 Estrategia (reconocimiento en ``reconocimiento/chedraui/notas.md`` y los de
 Farmatodo, Klyns y Similares): todas las tiendas VTEX responden la API
@@ -26,6 +26,7 @@ campo que el legado guardaba como SKU, para que el histórico empate) y
 Uso, desde la raíz del repo:
     uv run --project scrapers scrapy crawl chedraui
     uv run --project scrapers scrapy crawl chedraui -s CLOSESPIDER_ITEMCOUNT=50
+    uv run --project scrapers scrapy crawl farmatodo
 """
 import re
 from datetime import datetime, timezone
@@ -205,3 +206,7 @@ def precio_venta(producto: dict) -> Decimal | None:
 
 class SpiderChedraui(SpiderVtex):
     name = "chedraui"
+
+
+class SpiderFarmatodo(SpiderVtex):
+    name = "farmatodo"

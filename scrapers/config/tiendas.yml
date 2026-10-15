@@ -140,3 +140,20 @@ chedraui:
   categorias:
     - /4/403/
   trafico: {concurrencia: 1, delay: 2.0, jitter: 0.5}
+
+farmatodo:
+  escalon: a
+  entornos_permitidos: [oficina]
+  dominio: https://www.farmatodo.com.mx
+  # El legado guardaba como SKU el EAN de la ficha, que es productReference
+  # (no productId como en Chedraui): así el histórico empata.
+  campo_sku: productReference
+  # El precio no cambia por región y sin ella el surtido es completo
+  # (reconocimiento/farmatodo/notas.md).
+  zona_precio: sin_region
+  # Rutas de IDs de fq=C:. Por ahora solo Medicamentos, la categoría de
+  # prueba (3,559 productos: pasa el tope y ejercita la partición). Los demás
+  # departamentos de salud los fija el Excel de alcance.
+  categorias:
+    - /7/
+  trafico: {concurrencia: 1, delay: 2.0, jitter: 0.5}

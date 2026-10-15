@@ -1,8 +1,9 @@
 """Pruebas offline de la base VTEX con el spider de Chedraui.
 
-Fixture de ``catalog_system`` sobre Medicamentos (``fq=C:/4/403/``,
-2026-10-15), recortado con ``fixtures/chedraui/recortar.py``: los 3 primeros
-productos y 2 con descuento. El total va en el header ``resources``, que cada
+Fixtures de ``catalog_system`` sobre Medicamentos de Chedraui
+(``fq=C:/4/403/``) y de Farmatodo (``fq=C:/7/``), 2026-10-15, recortados con
+``fixtures/chedraui/recortar.py``: los 3 primeros productos y 2 con
+descuento. El total va en el header ``resources``, que cada
 prueba pone según el caso.
 """
 import json
@@ -17,7 +18,8 @@ from scrapy.utils.test import get_crawler
 
 from precios_scrapers.contrato import CONTRATO_VERSION
 from precios_scrapers.pipelines.contrato import validar
-from precios_scrapers.spiders.vtex import TOPE, SpiderChedraui, SpiderVtex
+from precios_scrapers.spiders.vtex import (TOPE, SpiderChedraui,
+                                          SpiderFarmatodo, SpiderVtex)
 
 FIXTURES = Path(__file__).parent / "fixtures" / "chedraui"
 API = "https://www.chedraui.com.mx/api/catalog_system/pub/products/search"
@@ -154,3 +156,29 @@ def test_ultima_pagina_alcanzable_respeta_el_tope(spider):
         inicio=0))
     assert max(p.cb_kwargs["inicio"] for p in peticiones) == TOPE - 50
     assert spider.crawler.stats.get_value("chedraui/rangos_recortados") == 1
+
+
+def test_farmatodo_usa_productreference_y_su_dominio():
+    crawler = get_crawler(SpiderFarmatodo, {"AXIOM_ENTORNO": "oficina"})
+    spider = crawler.spider = SpiderFarmatodo.from_crawler(crawler)
+    spider.por_categoria["/7/"] = {"total_reportado": 5, "skus": set()}
+    cuerpo = json.loads(
+        (Path(__file__).parent / "fixtures" / "farmatodo"
+         / "medicamentos_p1.json").read_text())
+    url = ("https://www.farmatodo.com.mx/api/catalog_system/pub/products/"
+           "search?fq=C:/7/&_from=0&_to=49")
+    filas, _ = separar(spider.parse(respuesta(url, 5, cuerpo),
+                                    categoria="/7/", rango=None, inicio=0))
+    assert len(filas) == 5
+    for fila in filas:
+        completa = {**fila, "contrato_version": CONTRATO_VERSION,
+                    "corrida_id": spider.corrida_id, "tienda": "farmatodo",
+                    "escalon": "a"}
+        assert validar(completa, "farmatodo") is None, fila["sku_tienda"]
+    # El SKU del legado es el EAN (productReference), no el productId.
+    assert filas[0]["sku_tienda"] == "7501159580021" == filas[0]["ean"]
+    assert filas[0]["url_producto"].startswith("https://www.farmatodo.com.mx/")
+    assert any(f["precio_oferta"] for f in filas)
+    assert spider.pedir("/7/", None, 0).url.startswith(
+        "https://www.farmatodo.com.mx/api/catalog_system/pub/products/search"
+        "?fq=C:/7/")

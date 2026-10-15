@@ -1,0 +1,192 @@
+[
+ {
+  "productId": "5608",
+  "productName": "Pulmonarom Solucion C/20 Ampolletas de 3 Ml C/U",
+  "productReference": "7501159580021",
+  "brand": "Sanofi Mex",
+  "link": "https://www.farmatodo.com.mx/pulmonar-om-solucion-c-20-ampolletas-de-3-ml-c-u-v1/p",
+  "categories": [
+   "/Medicamentos/Antiinfecciosos/Antivirales/",
+   "/Medicamentos/Antiinfecciosos/",
+   "/Medicamentos/"
+  ],
+  "items": [
+   {
+    "itemId": "5608",
+    "ean": "7501159580021",
+    "images": [
+     {
+      "imageId": "7005984",
+      "imageLabel": "7501159580021_01",
+      "imageTag": "<img src=\"~/arquivos/ids/7005984-#width#-#height#/7501159580021_01.jpg?v=639183671445770000\" width=\"#width#\" height=\"#height#\" alt=\"7501159580021_01\" id=\"\" />",
+      "imageUrl": "https://gruporfp.vteximg.com.br/arquivos/ids/7005984/7501159580021_01.jpg?v=639183671445770000",
+      "imageText": "7501159580021_01",
+      "imageLastModified": "2026-06-29T21:59:04.5770000Z"
+     }
+    ],
+    "sellers": [
+     {
+      "sellerId": "1",
+      "commertialOffer": {
+       "Price": 1046.0,
+       "ListPrice": 1395.0,
+       "IsAvailable": true
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "productId": "3646",
+  "productName": "Postday 0.75mg C/2 Comprimidos",
+  "productReference": "7501249605634",
+  "brand": "Ifa",
+  "link": "https://www.farmatodo.com.mx/postday-075-mg-caja-c-2-comprimidos/p",
+  "categories": [
+   "/Medicamentos/Sexualidad/Anticonceptivos/",
+   "/Medicamentos/Sexualidad/",
+   "/Medicamentos/"
+  ],
+  "items": [
+   {
+    "itemId": "3646",
+    "ean": "7501249605634",
+    "images": [
+     {
+      "imageId": "7002489",
+      "imageLabel": "7501249605634_01",
+      "imageTag": "<img src=\"~/arquivos/ids/7002489-#width#-#height#/7501249605634_01.jpg?v=639183635608570000\" width=\"#width#\" height=\"#height#\" alt=\"7501249605634_01\" id=\"\" />",
+      "imageUrl": "https://gruporfp.vteximg.com.br/arquivos/ids/7002489/7501249605634_01.jpg?v=639183635608570000",
+      "imageText": "7501249605634_01",
+      "imageLastModified": "2026-06-29T20:59:20.8570000Z"
+     }
+    ],
+    "sellers": [
+     {
+      "sellerId": "1",
+      "commertialOffer": {
+       "Price": 85.0,
+       "ListPrice": 85.0,
+       "IsAvailable": true
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "productId": "3408",
+  "productName": "Eutirox 75 Mcg Caja C/50 Tabletas",
+  "productReference": "7501298234700",
+  "brand": "Merck",
+  "link": "https://www.farmatodo.com.mx/eutirox-75-mcg-caja-c-50-tabletas/p",
+  "categories": [
+   "/Medicamentos/Endocrinología/Hormona de Crecimiento/",
+   "/Medicamentos/Endocrinología/",
+   "/Medicamentos/"
+  ],
+  "items": [
+   {
+    "itemId": "3408",
+    "ean": "7501298234700",
+    "images": [
+     {
+      "imageId": "7002093",
+      "imageLabel": "7501298234700_01",
+      "imageTag": "<img src=\"~/arquivos/ids/7002093-#width#-#height#/7501298234700_01.jpg?v=639183631784200000\" width=\"#width#\" height=\"#height#\" alt=\"7501298234700_01\" id=\"\" />",
+      "imageUrl": "https://gruporfp.vteximg.com.br/arquivos/ids/7002093/7501298234700_01.jpg?v=639183631784200000",
+      "imageText": "7501298234700_01",
+      "imageLastModified": "2026-06-29T20:52:58.4200000Z"
+     }
+    ],
+    "sellers": [
+     {
+      "sellerId": "1",
+      "commertialOffer": {
+       "Price": 275.0,
+       "ListPrice": 497.5,
+       "IsAvailable": true
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "productId": "8529",
+  "productName": "Lurmivi 500/312.5/37.5 Mg Caja C/4 Tabletas",
+  "productReference": "7501314705573",
+  "brand": "Senosiain",
+  "link": "https://www.farmatodo.com.mx/lurmivi-500-3125-375-mg-caja-c-4-tabletas/p",
+  "categories": [
+   "/Medicamentos/Antiinfecciosos/Antibióticos/",
+   "/Medicamentos/Antiinfecciosos/",
+   "/Medicamentos/"
+  ],
+  "items": [
+   {
+    "itemId": "8529",
+    "ean": "7501314705573",
+    "images": [
+     {
+      "imageId": "6999823",
+      "imageLabel": "7501314705573_01",
+      "imageTag": "<img src=\"~/arquivos/ids/6999823-#width#-#height#/7501314705573_01.jpg?v=639183609570100000\" width=\"#width#\" height=\"#height#\" alt=\"7501314705573_01\" id=\"\" />",
+      "imageUrl": "https://gruporfp.vteximg.com.br/arquivos/ids/6999823/7501314705573_01.jpg?v=639183609570100000",
+      "imageText": "7501314705573_01",
+      "imageLastModified": "2026-06-29T20:15:57.0100000Z"
+     }
+    ],
+    "sellers": [
+     {
+      "sellerId": "1",
+      "commertialOffer": {
+       "Price": 544.5,
+       "ListPrice": 911.0,
+       "IsAvailable": true
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "productId": "7044",
+  "productName": "Nuntera 2 Mg Caja C/28 Tabletas",
+  "productReference": "7501249600516",
+  "brand": "Ifa",
+  "link": "https://www.farmatodo.com.mx/nuntera-2-mg-caja-c-28-tabletas/p",
+  "categories": [
+   "/Medicamentos/Endocrinología/Terapia Hormonal/",
+   "/Medicamentos/Endocrinología/",
+   "/Medicamentos/"
+  ],
+  "items": [
+   {
+    "itemId": "7044",
+    "ean": "7501249600516",
+    "images": [
+     {
+      "imageId": "7009547",
+      "imageLabel": "7501249600516_01",
+      "imageTag": "<img src=\"~/arquivos/ids/7009547-#width#-#height#/7501249600516_01.jpg?v=639183710045630000\" width=\"#width#\" height=\"#height#\" alt=\"7501249600516_01\" id=\"\" />",
+      "imageUrl": "https://gruporfp.vteximg.com.br/arquivos/ids/7009547/7501249600516_01.jpg?v=639183710045630000",
+      "imageText": "7501249600516_01",
+      "imageLastModified": "2026-06-29T23:03:24.5630000Z"
+     }
+    ],
+    "sellers": [
+     {
+      "sellerId": "1",
+      "commertialOffer": {
+       "Price": 851.5,
+       "ListPrice": 1142.0,
+       "IsAvailable": true
+      }
+     }
+    ]
+   }
+  ]
+ }
+]

@@ -1,4 +1,7 @@
-"""Recorta una página de ``catalog_system`` de Chedraui a un fixture de pruebas.
+"""Recorta una página de ``catalog_system`` de VTEX a un fixture de pruebas.
+
+Sirve para todas las tiendas de la base VTEX (Chedraui, Farmatodo…): la
+respuesta tiene la misma forma.
 
 Deja solo los campos que lee el spider y las primeras ``n`` filas más las que
 traen descuento (``ListPrice`` mayor que ``Price``) o precio 0, que son los
@@ -8,7 +11,7 @@ especificaciones y descripciones.
 Uso, con una página guardada por una sonda (fuera de git):
     uv run --project scrapers python \\
         scrapers/tests/fixtures/chedraui/recortar.py pagina.json \\
-        scrapers/tests/fixtures/chedraui/<nombre>.json [n]
+        scrapers/tests/fixtures/<tienda>/<nombre>.json [n]
 """
 import json
 import sys
