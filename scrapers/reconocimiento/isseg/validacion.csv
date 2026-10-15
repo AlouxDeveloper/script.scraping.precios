@@ -1,0 +1,16 @@
+fecha,perfil,url,status,detalle,segundos,bytes
+2026-10-15T19:03:13.561234+00:00,sin_impersonar,https://sapipedidossissegp.farmaciasisseg.com.mx/sapipedidossisseg/api/categorias/15,468,,0.09,13941
+2026-10-15T19:03:15.678241+00:00,sin_impersonar,https://sapipedidossissegp.farmaciasisseg.com.mx/sapipedidossisseg/api/categorias/15,468,,0.12,13941
+2026-10-15T19:03:17.784847+00:00,sin_impersonar,https://sapipedidossissegp.farmaciasisseg.com.mx/sapipedidossisseg/api/categorias/15,468,,0.11,13941
+2026-10-15T19:03:19.869708+00:00,sin_impersonar,https://sapipedidossissegp.farmaciasisseg.com.mx/sapipedidossisseg/api/categorias/15,468,,0.08,13941
+2026-10-15T19:03:21.973330+00:00,sin_impersonar,https://sapipedidossissegp.farmaciasisseg.com.mx/sapipedidossisseg/api/categorias/15,468,,0.1,13941
+2026-10-15T19:03:24.077729+00:00,chrome,https://sapipedidossissegp.farmaciasisseg.com.mx/sapipedidossisseg/api/categorias/15,468,,0.1,13941
+2026-10-15T19:03:26.181650+00:00,chrome,https://sapipedidossissegp.farmaciasisseg.com.mx/sapipedidossisseg/api/categorias/15,468,,0.1,13941
+2026-10-15T19:03:28.286630+00:00,chrome,https://sapipedidossissegp.farmaciasisseg.com.mx/sapipedidossisseg/api/categorias/15,468,,0.1,13941
+2026-10-15T19:03:30.383642+00:00,chrome,https://sapipedidossissegp.farmaciasisseg.com.mx/sapipedidossisseg/api/categorias/15,468,,0.1,13941
+2026-10-15T19:03:32.516436+00:00,chrome,https://sapipedidossissegp.farmaciasisseg.com.mx/sapipedidossisseg/api/categorias/15,468,,0.13,13941
+2026-10-15T19:03:42.428967+00:00,chrome_referer,https://sapipedidossissegp.farmaciasisseg.com.mx/sapipedidossisseg/api/categorias/15,200,,0.39,382981
+2026-10-15T19:03:44.816455+00:00,chrome_referer,https://sapipedidossissegp.farmaciasisseg.com.mx/sapipedidossisseg/api/categorias/15,200,,0.39,382981
+2026-10-15T19:03:47.199844+00:00,chrome_referer,https://sapipedidossissegp.farmaciasisseg.com.mx/sapipedidossisseg/api/categorias/15,200,,0.38,382981
+2026-10-15T19:03:49.580726+00:00,chrome_referer,https://sapipedidossissegp.farmaciasisseg.com.mx/sapipedidossisseg/api/categorias/15,200,,0.38,382981
+2026-10-15T19:03:51.977690+00:00,chrome_referer,https://sapipedidossissegp.farmaciasisseg.com.mx/sapipedidossisseg/api/categorias/15,200,,0.4,382981

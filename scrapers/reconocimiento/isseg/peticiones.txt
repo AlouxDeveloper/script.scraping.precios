@@ -1,0 +1,26 @@
+# Peticiones mínimas a validar con validar_endpoint.py, en formato cURL.
+# Sin cookies ni headers de autorización. La validación desde la oficina
+# (2026-10-15) está en validacion.csv; el resultado va en cada comentario.
+# Todas requieren impersonación de Chrome, Referer del sitio y
+# Accept: application/json (sin él, la API ASP.NET responde XML).
+# validar_endpoint.py no manda Referer: con él, sus dos perfiles dan 468.
+
+# Productos de una categoría con precio (f = 0). TOPE FIJO DE 50: ignora
+# pagina, page, skip, offset y top. Sin impersonar o sin Referer: 468 de
+# SafeLine (5/5 cada perfil). Impersonando con Referer (perfil
+# chrome_referer): 200 (5/5), p50 0.39 s. Trae la imagen en base64.
+curl 'https://sapipedidossissegp.farmaciasisseg.com.mx/sapipedidossisseg/api/categorias/1' -H 'Referer: https://farmaciasisseg.com.mx/' -H 'Accept: application/json'
+
+# Árbol de categorías (15 departamentos, un solo nivel, sin conteo).
+curl 'https://sapipedidossissegp.farmaciasisseg.com.mx/sapipedidossisseg/api/categorias' -H 'Referer: https://farmaciasisseg.com.mx/' -H 'Accept: application/json'
+
+# Búsqueda por texto (nombre y principio activo). Tope de 100 resultados;
+# sin resultados responde 404 con cuerpo vacío (no es bloqueo). Unos 128 KB
+# por producto por la imagen en base64. p50 1.6 s.
+curl 'https://sapipedidossissegp.farmaciasisseg.com.mx/sapipedidossisseg/api/productos/busqueda' -X POST -H 'Referer: https://farmaciasisseg.com.mx/' -H 'Accept: application/json' -H 'Content-Type: application/json' --data-raw '{"descripcion":"losartan","idcliente":0}'
+
+# Ficha (no hace falta para la corrida; 260 KB por las imágenes).
+curl 'https://sapipedidossissegp.farmaciasisseg.com.mx/sapipedidossisseg/api/productos/detalle/008400000248' -H 'Referer: https://farmaciasisseg.com.mx/' -H 'Accept: application/json'
+
+# NO USAR: carritos, clientes, pedidos, facturas, openpay y apiissegventalinea
+# (cuenta y pago).
