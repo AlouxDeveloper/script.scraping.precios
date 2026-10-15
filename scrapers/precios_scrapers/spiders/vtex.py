@@ -21,12 +21,14 @@ subcategoría que así se perderían (6 en Farmacia de Chedraui).
 
 Lo propio de cada tienda va en tiendas.yml: ``dominio``, ``campo_sku`` (el
 campo que el legado guardaba como SKU, para que el histórico empate) y
-``zona_precio``. Una tienda nueva solo necesita una subclase con su ``name``.
+``zona_precio``; si el SKU no es ``productReference``, este va en
+``atributos_tienda``. Una tienda nueva solo necesita una subclase con su ``name``.
 
 Uso, desde la raíz del repo:
     uv run --project scrapers scrapy crawl chedraui
     uv run --project scrapers scrapy crawl chedraui -s CLOSESPIDER_ITEMCOUNT=50
     uv run --project scrapers scrapy crawl farmatodo
+    uv run --project scrapers scrapy crawl klyns
 """
 import re
 from datetime import datetime, timezone
@@ -178,10 +180,16 @@ class SpiderVtex(SpiderTienda):
         # categories trae la ruta de cada nivel ("/Farmacia/Medicamentos/");
         # la más larga es la miga completa.
         ruta = max(producto.get("categories") or ["/"], key=len)
+        sku = self.sku(producto)
+        # Klyns usa el EAN como SKU, pero el legado guardó 360 series con el
+        # RefId (productReference): se conserva para poder reconciliarlas.
+        referencia = producto.get("productReference")
+        atributos = ({"product_reference": referencia}
+                     if referencia and referencia != sku else {})
         return {
             "capturado_en": ahora,
             "url_producto": producto["link"],
-            "sku_tienda": self.sku(producto),
+            "sku_tienda": sku,
             "producto": producto["productName"],
             "marca": producto.get("brand") or None,
             "ean": ean if ean and ean.isdigit() else None,
@@ -194,7 +202,7 @@ class SpiderVtex(SpiderTienda):
             "url_imagen": imagen.split("?")[0] if imagen else None,
             "zona_precio": self.zona,
             "url_fuente": url_fuente,
-            "atributos_tienda": {},
+            "atributos_tienda": atributos,
         }
 
 
@@ -210,3 +218,7 @@ class SpiderChedraui(SpiderVtex):
 
 class SpiderFarmatodo(SpiderVtex):
     name = "farmatodo"
+
+
+class SpiderKlyns(SpiderVtex):
+    name = "klyns"

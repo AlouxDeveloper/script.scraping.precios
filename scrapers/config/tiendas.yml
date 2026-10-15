@@ -157,3 +157,20 @@ farmatodo:
   categorias:
     - /7/
   trafico: {concurrencia: 1, delay: 2.0, jitter: 0.5}
+
+klyns:
+  escalon: a
+  entornos_permitidos: [oficina]
+  dominio: https://www.klyns.mx
+  # El legado guardaba el EAN como SKU (6,380 de 6,740 filas en septiembre);
+  # las 360 con RefId se reconcilian con atributos_tienda.product_reference.
+  campo_sku: ean
+  # Klyns no regionaliza: mismo regionId para todos los CP y sin sellers
+  # (reconocimiento/klyns/notas.md).
+  zona_precio: sin_region
+  # Rutas de IDs de fq=C:. Por ahora solo Medicamentos de patente, la
+  # categoría de prueba (3,674 productos: pasa el tope y ejercita la
+  # partición). Los demás departamentos los fija el Excel de alcance.
+  categorias:
+    - /68/
+  trafico: {concurrencia: 1, delay: 2.0, jitter: 0.5}

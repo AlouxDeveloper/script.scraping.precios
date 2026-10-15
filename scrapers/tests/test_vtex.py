@@ -1,7 +1,8 @@
 """Pruebas offline de la base VTEX con el spider de Chedraui.
 
 Fixtures de ``catalog_system`` sobre Medicamentos de Chedraui
-(``fq=C:/4/403/``) y de Farmatodo (``fq=C:/7/``), 2026-10-15, recortados con
+(``fq=C:/4/403/``), de Farmatodo (``fq=C:/7/``) y Patente de Klyns
+(``fq=C:/68/``), 2026-10-15, recortados con
 ``fixtures/chedraui/recortar.py``: los 3 primeros productos y 2 con
 descuento. El total va en el header ``resources``, que cada
 prueba pone según el caso.
@@ -19,7 +20,8 @@ from scrapy.utils.test import get_crawler
 from precios_scrapers.contrato import CONTRATO_VERSION
 from precios_scrapers.pipelines.contrato import validar
 from precios_scrapers.spiders.vtex import (TOPE, SpiderChedraui,
-                                          SpiderFarmatodo, SpiderVtex)
+                                          SpiderFarmatodo, SpiderKlyns,
+                                          SpiderVtex)
 
 FIXTURES = Path(__file__).parent / "fixtures" / "chedraui"
 API = "https://www.chedraui.com.mx/api/catalog_system/pub/products/search"
@@ -182,3 +184,35 @@ def test_farmatodo_usa_productreference_y_su_dominio():
     assert spider.pedir("/7/", None, 0).url.startswith(
         "https://www.farmatodo.com.mx/api/catalog_system/pub/products/search"
         "?fq=C:/7/")
+
+
+def test_klyns_usa_el_ean_y_guarda_el_refid():
+    crawler = get_crawler(SpiderKlyns, {"AXIOM_ENTORNO": "oficina"})
+    spider = crawler.spider = SpiderKlyns.from_crawler(crawler)
+    spider.por_categoria["/68/"] = {"total_reportado": 5, "skus": set()}
+    cuerpo = json.loads((Path(__file__).parent / "fixtures" / "klyns"
+                         / "patente_p1.json").read_text())
+    url = ("https://www.klyns.mx/api/catalog_system/pub/products/search"
+           "?fq=C:/68/&_from=0&_to=49")
+    filas, _ = separar(spider.parse(respuesta(url, 5, cuerpo),
+                                    categoria="/68/", rango=None, inicio=0))
+    assert len(filas) == 5
+    for fila in filas:
+        completa = {**fila, "contrato_version": CONTRATO_VERSION,
+                    "corrida_id": spider.corrida_id, "tienda": "klyns",
+                    "escalon": "a"}
+        assert validar(completa, "klyns") is None, fila["sku_tienda"]
+    fila = filas[0]
+    # SKU = items[0].ean; el RefId del legado queda en atributos_tienda.
+    assert fila["sku_tienda"] == "7501125100116" == fila["ean"]
+    assert fila["atributos_tienda"] == {"product_reference": "100009121"}
+    # Descuento permanente de Klyns: lista y oferta en todas.
+    assert (fila["precio_lista"], fila["precio_oferta"]) == (
+        Decimal("38.43"), Decimal("28.44"))
+    assert all(f["precio_oferta"] for f in filas)
+
+
+def test_sin_refid_distinto_no_hay_atributos(spider):
+    # En Chedraui productReference = productId = SKU: no se repite.
+    fila = spider.fila(productos()[0], None, "")
+    assert fila["atributos_tienda"] == {}
