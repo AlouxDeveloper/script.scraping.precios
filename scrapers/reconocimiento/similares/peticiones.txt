@@ -1,0 +1,22 @@
+# Peticiones mínimas a validar con validar_endpoint.py, en formato cURL.
+# Sin cookies ni headers de autorización. La validación desde la oficina
+# (2026-10-15) está en validacion.csv; el resultado va en cada comentario.
+# robots.txt no menciona /api/ ni query strings: las dos APIs están permitidas.
+
+# Listado de un departamento por Intelligent Search. Trae productId,
+# productReference (SKU del legado), Price y ListPrice (f = 0). Sin impersonar
+# y con impersonación: 200 (5/5 cada uno), p50 0.30 s y 0.43 s.
+curl 'https://www.farmaciasdesimilares.com/api/io/_v/api/intelligent-search/product_search/category-1/medicamentos?count=50&page=1'
+
+# Mismo listado por catalog_system (Medicamentos = 29). 206 (5/5 cada perfil),
+# p50 0.33 s y 0.21 s. El total viene en el header resources.
+curl 'https://www.farmaciasdesimilares.com/api/catalog_system/pub/products/search?fq=C:/29/&_from=0&_to=49'
+
+# Árbol de categorías con IDs (muchas hojas de relleno llamadas "-").
+curl 'https://www.farmaciasdesimilares.com/api/catalog_system/pub/category/tree/2'
+
+# Región: regionId con varios sellers, pero no cambia precio ni surtido.
+# Solo para documentar; el spider corre sin región.
+curl 'https://www.farmaciasdesimilares.com/api/checkout/pub/regions?country=MEX&postalCode=01000'
+
+# NO USAR: búsqueda HTML, prohibida en robots.txt (Disallow: /busca/ y /buscapagina/).

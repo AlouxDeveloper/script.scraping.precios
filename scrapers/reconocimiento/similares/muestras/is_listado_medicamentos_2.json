@@ -1,0 +1,557 @@
+{
+ "products": [
+  {
+   "cacheId": "sp-842-none",
+   "productId": "842",
+   "description": "-",
+   "productName": "AMOXICILINA / ACIDO CLAVULANICO 875MG 10 TABLETAS",
+   "productReference": "522",
+   "linkText": "amoxicilina_ac_cla_875mg_10tab",
+   "brand": "PICK UP",
+   "brandId": 2000001,
+   "link": "/amoxicilina_ac_cla_875mg_10tab/p",
+   "categories": [
+    "/Medicamentos/Antibiótico/",
+    "/Medicamentos/"
+   ],
+   "categoryId": "34",
+   "priceRange": {
+    "sellingPrice": {
+     "highPrice": 99,
+     "lowPrice": 99
+    },
+    "listPrice": {
+     "highPrice": 99,
+     "lowPrice": 99
+    }
+   },
+   "specificationGroups": [
+    {
+     "originalName": "Requiere Receta",
+     "name": "Requiere Receta",
+     "specifications": [
+      {
+       "originalName": "Requiere Receta",
+       "name": "Requiere Receta",
+       "values": [
+        "Si"
+       ]
+      }
+     ]
+    },
+    {
+     "originalName": "allSpecifications",
+     "name": "allSpecifications",
+     "specifications": [
+      {
+       "originalName": "Requiere Receta",
+       "name": "Requiere Receta",
+       "values": [
+        "Si"
+       ]
+      },
+      {
+       "originalName": "sellerId",
+       "name": "sellerId",
+       "values": [
+        "1"
+       ]
+      }
+     ]
+    }
+   ],
+   "skuSpecifications": [],
+   "productClusters": [
+    {
+     "id": "161",
+     "name": "Buen Fin"
+    },
+    {
+     "id": "182",
+     "name": "APARATO RESPIRATORIO"
+    },
+    {
+     "id": "192",
+     "name": "AppSales"
+    },
+    {
+     "id": "196",
+     "name": "BUEN LUNES"
+    },
+    {
+     "id": "197",
+     "name": "SIMI FRIDAY"
+    }
+   ],
+   "clusterHighlights": [],
+   "properties": [
+    {
+     "name": "Requiere Receta",
+     "originalName": "Requiere Receta",
+     "values": [
+      "Si"
+     ]
+    },
+    {
+     "name": "sellerId",
+     "originalName": "sellerId",
+     "values": [
+      "1"
+     ]
+    }
+   ],
+   "items": [
+    {
+     "sellers": [
+      {
+       "sellerId": "1",
+       "sellerName": "Farmacias Similares",
+       "addToCartLink": "",
+       "sellerDefault": true,
+       "commertialOffer": {
+        "DeliverySlaSamplesPerRegion": {},
+        "DeliverySlaSamples": [],
+        "AvailableQuantity": 10000,
+        "discountHighlights": [],
+        "Installments": [
+         {
+          "Value": 99,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 99,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "American Express",
+          "PaymentSystemGroupName": "creditCardPaymentGroup",
+          "Name": "American Express à vista"
+         },
+         {
+          "Value": 99,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 99,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Visa",
+          "PaymentSystemGroupName": "creditCardPaymentGroup",
+          "Name": "Visa à vista"
+         },
+         {
+          "Value": 99,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 99,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Mastercard",
+          "PaymentSystemGroupName": "creditCardPaymentGroup",
+          "Name": "Mastercard à vista"
+         },
+         {
+          "Value": 99,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 99,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Visa Electron",
+          "PaymentSystemGroupName": "debitCardPaymentGroup",
+          "Name": "Visa Electron à vista"
+         },
+         {
+          "Value": 99,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 99,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Maestro",
+          "PaymentSystemGroupName": "debitCardPaymentGroup",
+          "Name": "Maestro à vista"
+         },
+         {
+          "Value": 99,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 99,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Mastercard Debit",
+          "PaymentSystemGroupName": "debitCardPaymentGroup",
+          "Name": "Mastercard Debit à vista"
+         },
+         {
+          "Value": 99,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 99,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "WH Google Pay",
+          "PaymentSystemGroupName": "WH Google PayPaymentGroup",
+          "Name": "WH Google Pay à vista"
+         }
+        ],
+        "Price": 99,
+        "ListPrice": 99,
+        "spotPrice": 99,
+        "taxPercentage": 0,
+        "PriceWithoutDiscount": 99,
+        "Tax": 0,
+        "GiftSkuIds": [],
+        "BuyTogether": [],
+        "ItemMetadataAttachment": [],
+        "RewardValue": 0,
+        "PriceValidUntil": "2027-10-15T16:36:14Z",
+        "GetInfoErrorMessage": null,
+        "CacheVersionUsedToCallCheckout": "",
+        "teasers": []
+       }
+      }
+     ],
+     "images": [
+      {
+       "imageId": "159747",
+       "cacheId": "159747",
+       "imageTag": "",
+       "imageLabel": "522",
+       "imageText": "522",
+       "imageUrl": "https://farmaciassimilaresmx.vtexassets.com/arquivos/ids/159747/522.png?v=638494159994130000"
+      },
+      {
+       "imageId": "159748",
+       "cacheId": "159748",
+       "imageTag": "",
+       "imageLabel": "522",
+       "imageText": "522",
+       "imageUrl": "https://farmaciassimilaresmx.vtexassets.com/arquivos/ids/159748/522.png?v=638889354221070000"
+      },
+      {
+       "imageId": "159749",
+       "cacheId": "159749",
+       "imageTag": "",
+       "imageLabel": "522",
+       "imageText": "522",
+       "imageUrl": "https://farmaciassimilaresmx.vtexassets.com/arquivos/ids/159749/522.png?v=638889354221200000"
+      }
+     ],
+     "itemId": "842",
+     "name": "AMOXICILINA/AC CLA 875MG 10TAB",
+     "nameComplete": "AMOXICILINA / ACIDO CLAVULANICO 875MG 10 TABLETAS AMOXICILINA/AC CLA 875MG 10TAB",
+     "complementName": "Su venta requiere receta médica. El uso incorrecto de este producto puede causar resistencia bacteriana.",
+     "referenceId": [
+      {
+       "Key": "RefId",
+       "Value": "522"
+      }
+     ],
+     "measurementUnit": "un",
+     "unitMultiplier": 1,
+     "variations": [],
+     "ean": "522",
+     "modalType": "",
+     "videos": [],
+     "attachments": [],
+     "isKit": false,
+     "attributes": []
+    }
+   ],
+   "categoriesIds": [
+    "/29/34/",
+    "/29/"
+   ],
+   "rule": {
+    "id": "G0--AJIB1Pu_JpgXcT1o",
+    "action": "promote"
+   },
+   "releaseDate": 1768739460000,
+   "metaTagDescription": "",
+   "origin": "intelligent-search",
+   "productTitle": ""
+  },
+  {
+   "cacheId": "sp-825-none",
+   "productId": "825",
+   "description": "-",
+   "productName": "AMOXICILINA / ACIDO CLAVULANICO 500 MG 10 TABLETAS",
+   "productReference": "482",
+   "linkText": "amoxicilina_ac_cla_500mg_10tab",
+   "brand": "PICK UP",
+   "brandId": 2000001,
+   "link": "/amoxicilina_ac_cla_500mg_10tab/p",
+   "categories": [
+    "/Medicamentos/Antibiótico/",
+    "/Medicamentos/"
+   ],
+   "categoryId": "34",
+   "priceRange": {
+    "sellingPrice": {
+     "highPrice": 95,
+     "lowPrice": 95
+    },
+    "listPrice": {
+     "highPrice": 95,
+     "lowPrice": 95
+    }
+   },
+   "specificationGroups": [
+    {
+     "originalName": "Requiere Receta",
+     "name": "Requiere Receta",
+     "specifications": [
+      {
+       "originalName": "Requiere Receta",
+       "name": "Requiere Receta",
+       "values": [
+        "Si"
+       ]
+      }
+     ]
+    },
+    {
+     "originalName": "allSpecifications",
+     "name": "allSpecifications",
+     "specifications": [
+      {
+       "originalName": "Requiere Receta",
+       "name": "Requiere Receta",
+       "values": [
+        "Si"
+       ]
+      },
+      {
+       "originalName": "sellerId",
+       "name": "sellerId",
+       "values": [
+        "1"
+       ]
+      }
+     ]
+    }
+   ],
+   "skuSpecifications": [],
+   "productClusters": [
+    {
+     "id": "161",
+     "name": "Buen Fin"
+    },
+    {
+     "id": "192",
+     "name": "AppSales"
+    }
+   ],
+   "clusterHighlights": [],
+   "properties": [
+    {
+     "name": "Requiere Receta",
+     "originalName": "Requiere Receta",
+     "values": [
+      "Si"
+     ]
+    },
+    {
+     "name": "sellerId",
+     "originalName": "sellerId",
+     "values": [
+      "1"
+     ]
+    }
+   ],
+   "items": [
+    {
+     "sellers": [
+      {
+       "sellerId": "1",
+       "sellerName": "Farmacias Similares",
+       "addToCartLink": "",
+       "sellerDefault": true,
+       "commertialOffer": {
+        "DeliverySlaSamplesPerRegion": {},
+        "DeliverySlaSamples": [],
+        "AvailableQuantity": 10000,
+        "discountHighlights": [],
+        "Installments": [
+         {
+          "Value": 95,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 95,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "American Express",
+          "PaymentSystemGroupName": "creditCardPaymentGroup",
+          "Name": "American Express à vista"
+         },
+         {
+          "Value": 95,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 95,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Visa",
+          "PaymentSystemGroupName": "creditCardPaymentGroup",
+          "Name": "Visa à vista"
+         },
+         {
+          "Value": 95,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 95,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Mastercard",
+          "PaymentSystemGroupName": "creditCardPaymentGroup",
+          "Name": "Mastercard à vista"
+         },
+         {
+          "Value": 95,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 95,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Visa Electron",
+          "PaymentSystemGroupName": "debitCardPaymentGroup",
+          "Name": "Visa Electron à vista"
+         },
+         {
+          "Value": 95,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 95,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Maestro",
+          "PaymentSystemGroupName": "debitCardPaymentGroup",
+          "Name": "Maestro à vista"
+         },
+         {
+          "Value": 95,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 95,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Mastercard Debit",
+          "PaymentSystemGroupName": "debitCardPaymentGroup",
+          "Name": "Mastercard Debit à vista"
+         },
+         {
+          "Value": 95,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 95,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "WH Google Pay",
+          "PaymentSystemGroupName": "WH Google PayPaymentGroup",
+          "Name": "WH Google Pay à vista"
+         }
+        ],
+        "Price": 95,
+        "ListPrice": 95,
+        "spotPrice": 95,
+        "taxPercentage": 0,
+        "PriceWithoutDiscount": 95,
+        "Tax": 0,
+        "GiftSkuIds": [],
+        "BuyTogether": [],
+        "ItemMetadataAttachment": [],
+        "RewardValue": 0,
+        "PriceValidUntil": "2027-10-15T16:38:16Z",
+        "GetInfoErrorMessage": null,
+        "CacheVersionUsedToCallCheckout": "",
+        "teasers": []
+       }
+      }
+     ],
+     "images": [
+      {
+       "imageId": "158346",
+       "cacheId": "158346",
+       "imageTag": "",
+       "imageLabel": "482",
+       "imageText": "482",
+       "imageUrl": "https://farmaciassimilaresmx.vtexassets.com/arquivos/ids/158346/482.png?v=638152102073100000"
+      },
+      {
+       "imageId": "158347",
+       "cacheId": "158347",
+       "imageTag": "",
+       "imageLabel": "482",
+       "imageText": "482",
+       "imageUrl": "https://farmaciassimilaresmx.vtexassets.com/arquivos/ids/158347/482.png?v=638889559179170000"
+      },
+      {
+       "imageId": "158348",
+       "cacheId": "158348",
+       "imageTag": "",
+       "imageLabel": "482",
+       "imageText": "482",
+       "imageUrl": "https://farmaciassimilaresmx.vtexassets.com/arquivos/ids/158348/482.png?v=638889559179600000"
+      }
+     ],
+     "itemId": "825",
+     "name": "AMOXICILINA/AC CLA 500MG 10TAB",
+     "nameComplete": "AMOXICILINA / ACIDO CLAVULANICO 500 MG 10 TABLETAS AMOXICILINA/AC CLA 500MG 10TAB",
+     "complementName": "Su venta requiere receta médica. El uso incorrecto de este producto puede causar resistencia bacteriana.",
+     "referenceId": [
+      {
+       "Key": "RefId",
+       "Value": "482"
+      }
+     ],
+     "measurementUnit": "un",
+     "unitMultiplier": 1,
+     "variations": [],
+     "ean": "482",
+     "modalType": "",
+     "videos": [],
+     "attachments": [],
+     "isKit": false,
+     "attributes": []
+    }
+   ],
+   "categoriesIds": [
+    "/29/34/",
+    "/29/"
+   ],
+   "rule": {
+    "id": "G0--AJIB1Pu_JpgXcT1o",
+    "action": "promote"
+   },
+   "releaseDate": 1768739460000,
+   "metaTagDescription": "",
+   "origin": "intelligent-search",
+   "productTitle": ""
+  }
+ ],
+ "recordsFiltered": 621,
+ "correction": {
+  "misspelled": true
+ },
+ "fuzzy": "0",
+ "operator": "and",
+ "translated": false,
+ "pagination": {
+  "count": 13,
+  "current": {
+   "index": 1,
+   "proxyUrl": "search/category-1/medicamentos/trade-policy/1?an=farmaciassimilaresmx&count=50&page=1&operator=and&fuzzy=0"
+  },
+  "before": [],
+  "after": [
+   {
+    "index": 2,
+    "proxyUrl": "search/category-1/medicamentos/trade-policy/1?an=farmaciassimilaresmx&count=50&page=2&operator=and&fuzzy=0"
+   },
+   {
+    "index": 3,
+    "proxyUrl": "search/category-1/medicamentos/trade-policy/1?an=farmaciassimilaresmx&count=50&page=3&operator=and&fuzzy=0"
+   },
+   {
+    "index": 4,
+    "proxyUrl": "search/category-1/medicamentos/trade-policy/1?an=farmaciassimilaresmx&count=50&page=4&operator=and&fuzzy=0"
+   },
+   {
+    "index": 5,
+    "proxyUrl": "search/category-1/medicamentos/trade-policy/1?an=farmaciassimilaresmx&count=50&page=5&operator=and&fuzzy=0"
+   }
+  ],
+  "perPage": 50,
+  "next": {
+   "index": 2,
+   "proxyUrl": "search/category-1/medicamentos/trade-policy/1?an=farmaciassimilaresmx&count=50&page=2&operator=and&fuzzy=0"
+  },
+  "previous": {
+   "index": 0
+  },
+  "first": {
+   "index": 0
+  },
+  "last": {
+   "index": 13,
+   "proxyUrl": "search/category-1/medicamentos/trade-policy/1?an=farmaciassimilaresmx&count=50&page=13&operator=and&fuzzy=0"
+  }
+ },
+ "options": {
+  "sorts": [],
+  "counts": [],
+  "deliveryPromisesEnabled": false,
+  "dpStatus": "not_requested"
+ },
+ "searchId": "e8891c0f77f34d588fe23c4b3f470f36"
+}
