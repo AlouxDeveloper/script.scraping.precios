@@ -124,3 +124,19 @@ guadalajara:
   # Delay de 10 s y no 1.5: Akamai reseteó la conexión tras ~12 peticiones
   # seguidas a 3 s y ninguna a 10 s (reconocimiento, 2026-10-07).
   trafico: {concurrencia: 1, delay: 10.0, jitter: 0.5}
+
+chedraui:
+  escalon: a
+  entornos_permitidos: [oficina]
+  dominio: https://www.chedraui.com.mx
+  # productId es el SKU que guardaba el legado: el histórico empata.
+  campo_sku: productId
+  # Sin región: el precio genérico del canal 1, el mismo del legado
+  # (decisión de Aldo, 2026-10-15; reconocimiento/chedraui/notas.md).
+  zona_precio: sin_region
+  # Rutas de IDs de fq=C:. Por ahora solo Medicamentos, la categoría de
+  # prueba (3,384 productos: pasa el tope de 2,550 y ejercita la partición
+  # por precio). El resto de Farmacia (/4/) lo fija el Excel de alcance.
+  categorias:
+    - /4/403/
+  trafico: {concurrencia: 1, delay: 2.0, jitter: 0.5}

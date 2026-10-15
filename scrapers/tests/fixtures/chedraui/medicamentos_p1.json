@@ -1,0 +1,192 @@
+[
+ {
+  "productId": "3347259",
+  "productName": "Suero Rehidratante Oral Electrolit Sabor Uva 625ml",
+  "productReference": "3347259",
+  "brand": "Electrolit",
+  "link": "https://www.chedraui.com.mx/suero-rehidratante-oral-electrolit-sabor-uva-625ml-3347259/p",
+  "categories": [
+   "/Farmacia/Medicamentos/Estomacales/",
+   "/Farmacia/Medicamentos/",
+   "/Farmacia/"
+  ],
+  "items": [
+   {
+    "itemId": "3347259",
+    "ean": "7501125144851",
+    "images": [
+     {
+      "imageId": "78794684",
+      "imageLabel": "7501125144851_00",
+      "imageTag": "<img src=\"~/arquivos/ids/78794684-#width#-#height#/7501125144851_00.jpg?v=639274292887700000\" width=\"#width#\" height=\"#height#\" alt=\"7501125144851_00\" id=\"\" />",
+      "imageUrl": "https://chedrauimx.vteximg.com.br/arquivos/ids/78794684/7501125144851_00.jpg?v=639274292887700000",
+      "imageText": "7501125144851_00",
+      "imageLastModified": "2026-10-12T19:14:48.7700000Z"
+     }
+    ],
+    "sellers": [
+     {
+      "sellerId": "1",
+      "commertialOffer": {
+       "Price": 26.0,
+       "ListPrice": 26.0,
+       "IsAvailable": true
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "productId": "3821273",
+  "productName": "Suero Electrolit Coco 355ml",
+  "productReference": "3821273",
+  "brand": "Electrolit",
+  "link": "https://www.chedraui.com.mx/suero-electrolit-coco-355ml-3821273/p",
+  "categories": [
+   "/Farmacia/Medicamentos/Estomacales/",
+   "/Farmacia/Medicamentos/",
+   "/Farmacia/"
+  ],
+  "items": [
+   {
+    "itemId": "3821273",
+    "ean": "750304164027",
+    "images": [
+     {
+      "imageId": "78476254",
+      "imageLabel": "7503041640271_00",
+      "imageTag": "<img src=\"~/arquivos/ids/78476254-#width#-#height#/7503041640271_00.jpg?v=639268218208570000\" width=\"#width#\" height=\"#height#\" alt=\"7503041640271_00\" id=\"\" />",
+      "imageUrl": "https://chedrauimx.vteximg.com.br/arquivos/ids/78476254/7503041640271_00.jpg?v=639268218208570000",
+      "imageText": "7503041640271_00",
+      "imageLastModified": "2026-10-05T18:30:20.8570000Z"
+     }
+    ],
+    "sellers": [
+     {
+      "sellerId": "1",
+      "commertialOffer": {
+       "Price": 18.0,
+       "ListPrice": 18.0,
+       "IsAvailable": true
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "productId": "3491681",
+  "productName": "Suero Rehidratante Oral Electrolit Sabor Mora azul 625ml",
+  "productReference": "3491681",
+  "brand": "Electrolit",
+  "link": "https://www.chedraui.com.mx/suero-rehidratante-oral-electrolit-sabor-mora-azul-625ml-3491681/p",
+  "categories": [
+   "/Farmacia/Medicamentos/Estomacales/",
+   "/Farmacia/Medicamentos/",
+   "/Farmacia/"
+  ],
+  "items": [
+   {
+    "itemId": "3491681",
+    "ean": "7501125174797",
+    "images": [
+     {
+      "imageId": "78784346",
+      "imageLabel": "7501125174797_00",
+      "imageTag": "<img src=\"~/arquivos/ids/78784346-#width#-#height#/7501125174797_00.jpg?v=639274260695800000\" width=\"#width#\" height=\"#height#\" alt=\"7501125174797_00\" id=\"\" />",
+      "imageUrl": "https://chedrauimx.vteximg.com.br/arquivos/ids/78784346/7501125174797_00.jpg?v=639274260695800000",
+      "imageText": "7501125174797_00",
+      "imageLastModified": "2026-10-12T18:21:09.5800000Z"
+     }
+    ],
+    "sellers": [
+     {
+      "sellerId": "1",
+      "commertialOffer": {
+       "Price": 26.0,
+       "ListPrice": 26.0,
+       "IsAvailable": true
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "productId": "3821128",
+  "productName": "Suero Electrolit Ponche de Frutas 625ml",
+  "productReference": "3821128",
+  "brand": "Electrolit",
+  "link": "https://www.chedraui.com.mx/suero-electrolit-ponche-de-frutas-625ml-3821128/p",
+  "categories": [
+   "/Farmacia/Medicamentos/Estomacales/",
+   "/Farmacia/Medicamentos/",
+   "/Farmacia/"
+  ],
+  "items": [
+   {
+    "itemId": "3821128",
+    "ean": "7503046131224",
+    "images": [
+     {
+      "imageId": "78476256",
+      "imageLabel": "7503046131224_00",
+      "imageTag": "<img src=\"~/arquivos/ids/78476256-#width#-#height#/7503046131224_00.jpg?v=639268218220030000\" width=\"#width#\" height=\"#height#\" alt=\"7503046131224_00\" id=\"\" />",
+      "imageUrl": "https://chedrauimx.vteximg.com.br/arquivos/ids/78476256/7503046131224_00.jpg?v=639268218220030000",
+      "imageText": "7503046131224_00",
+      "imageLastModified": "2026-10-05T18:30:22.0030000Z"
+     }
+    ],
+    "sellers": [
+     {
+      "sellerId": "1",
+      "commertialOffer": {
+       "Price": 25.0,
+       "ListPrice": 26.0,
+       "IsAvailable": true
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "productId": "3751615",
+  "productName": "Bebida con Electrolitos Suerox Adulto Fresa-Frutos Rojos 630ml",
+  "productReference": "3751615",
+  "brand": "Suerox",
+  "link": "https://www.chedraui.com.mx/bebida-con-electrolitos-suerox-adulto-fresa-frutos-rojos-630ml-3751615/p",
+  "categories": [
+   "/Farmacia/Medicamentos/Estomacales/",
+   "/Farmacia/Medicamentos/",
+   "/Farmacia/"
+  ],
+  "items": [
+   {
+    "itemId": "3751615",
+    "ean": "650240066139",
+    "images": [
+     {
+      "imageId": "77986116",
+      "imageLabel": "650240066139_00",
+      "imageTag": "<img src=\"~/arquivos/ids/77986116-#width#-#height#/650240066139_00.jpg?v=639259663051100000\" width=\"#width#\" height=\"#height#\" alt=\"650240066139_00\" id=\"\" />",
+      "imageUrl": "https://chedrauimx.vteximg.com.br/arquivos/ids/77986116/650240066139_00.jpg?v=639259663051100000",
+      "imageText": "650240066139_00",
+      "imageLastModified": "2026-09-25T20:51:45.1100000Z"
+     }
+    ],
+    "sellers": [
+     {
+      "sellerId": "1",
+      "commertialOffer": {
+       "Price": 20.0,
+       "ListPrice": 22.0,
+       "IsAvailable": true
+      }
+     }
+    ]
+   }
+  ]
+ }
+]
