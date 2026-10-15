@@ -218,3 +218,14 @@ alsuper:
   # productos sin departamento los fija el Excel de alcance.
   categorias: [18]
   trafico: {concurrencia: 1, delay: 2.0, jitter: 0.5}
+
+gi:
+  escalon: a
+  entornos_permitidos: [oficina, gcp]
+  # "todo" recorre el catálogo completo sin filtro (1,778 productos, 18
+  # páginas): 216 productos no tienen categoría y 101 de ellos parecen
+  # medicamentos (reconocimiento/gi/notas.md). Un ID numérico filtra por esa
+  # categoría de WooCommerce.
+  categorias: [todo]
+  # WordPress compartido (~2 s por página de 300 KB): no hay que apretarlo.
+  trafico: {concurrencia: 1, delay: 2.0, jitter: 0.5}

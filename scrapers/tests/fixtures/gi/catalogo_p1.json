@@ -1,0 +1,188 @@
+[
+ {
+  "id": 53086,
+  "name": "BIC SOLEIL CLICK SENSITIVE C/5 REPUESTOS",
+  "permalink": "https://farmaciasgi.com.mx/catalogo-de-productos-en-linea/bic-soleil-click-sensitive-c-5-repuestos/",
+  "sku": "513693",
+  "prices": {
+   "price": "11000",
+   "regular_price": "11000",
+   "sale_price": "11000",
+   "price_range": null,
+   "currency_code": "MXN",
+   "currency_symbol": "$",
+   "currency_minor_unit": 2,
+   "currency_decimal_separator": ".",
+   "currency_thousand_separator": ",",
+   "currency_prefix": "$",
+   "currency_suffix": ""
+  },
+  "images": [
+   {
+    "src": "https://farmaciasgi.com.mx/wp-content/uploads/2026/10/WhatsApp-Image-2026-10-02-at-18.26.30.jpeg"
+   }
+  ],
+  "categories": [
+   {
+    "id": 299,
+    "name": "OTROS"
+   }
+  ],
+  "brands": [],
+  "is_in_stock": true
+ },
+ {
+  "id": 52993,
+  "name": "Doraldent 4 estaciones",
+  "permalink": "https://farmaciasgi.com.mx/catalogo-de-productos-en-linea/doraldent-4-estaciones/",
+  "sku": "513975",
+  "prices": {
+   "price": "2500",
+   "regular_price": "2500",
+   "sale_price": "2500",
+   "price_range": null,
+   "currency_code": "MXN",
+   "currency_symbol": "$",
+   "currency_minor_unit": 2,
+   "currency_decimal_separator": ".",
+   "currency_thousand_separator": ",",
+   "currency_prefix": "$",
+   "currency_suffix": ""
+  },
+  "images": [
+   {
+    "src": "https://farmaciasgi.com.mx/wp-content/uploads/2026/08/7501061813118-Frente.jpg"
+   }
+  ],
+  "categories": [
+   {
+    "id": 114,
+    "name": "Higiene Bucal"
+   }
+  ],
+  "brands": [],
+  "is_in_stock": true
+ },
+ {
+  "id": 53069,
+  "name": "Doraldent cepillo encías delicadas",
+  "permalink": "https://farmaciasgi.com.mx/catalogo-de-productos-en-linea/doraldent-cepillo-encias-delicadas/",
+  "sku": "513982",
+  "prices": {
+   "price": "2000",
+   "regular_price": "2000",
+   "sale_price": "2000",
+   "price_range": null,
+   "currency_code": "MXN",
+   "currency_symbol": "$",
+   "currency_minor_unit": 2,
+   "currency_decimal_separator": ".",
+   "currency_thousand_separator": ",",
+   "currency_prefix": "$",
+   "currency_suffix": ""
+  },
+  "images": [
+   {
+    "src": "https://farmaciasgi.com.mx/wp-content/uploads/2026/08/7501061813361-frente.jpg"
+   }
+  ],
+  "categories": [
+   {
+    "id": 114,
+    "name": "Higiene Bucal"
+   }
+  ],
+  "brands": [],
+  "is_in_stock": true
+ },
+ {
+  "id": 52950,
+  "name": "PORTEM AS 500/50 MG C/20 TAB",
+  "permalink": "https://farmaciasgi.com.mx/catalogo-de-productos-en-linea/portem-as-500-50-mg-c-20-tab/",
+  "sku": "",
+  "prices": {
+   "price": "2600",
+   "regular_price": "2600",
+   "sale_price": "2600",
+   "price_range": null,
+   "currency_code": "MXN",
+   "currency_symbol": "$",
+   "currency_minor_unit": 2,
+   "currency_decimal_separator": ".",
+   "currency_thousand_separator": ",",
+   "currency_prefix": "$",
+   "currency_suffix": ""
+  },
+  "images": [
+   {
+    "src": "https://farmaciasgi.com.mx/wp-content/uploads/2026/07/PORTEM-AS-b-1200.png"
+   }
+  ],
+  "categories": [],
+  "brands": [],
+  "is_in_stock": true
+ },
+ {
+  "id": 48172,
+  "name": "Flanax 275 mg 20 Tabletas",
+  "permalink": "https://farmaciasgi.com.mx/catalogo-de-productos-en-linea/flanax-275-mg-20-tabletas/",
+  "sku": "510219",
+  "prices": {
+   "price": "0",
+   "regular_price": "17900",
+   "sale_price": "0",
+   "price_range": null,
+   "currency_code": "MXN",
+   "currency_symbol": "$",
+   "currency_minor_unit": 2,
+   "currency_decimal_separator": ".",
+   "currency_thousand_separator": ",",
+   "currency_prefix": "$",
+   "currency_suffix": ""
+  },
+  "images": [
+   {
+    "src": "https://farmaciasgi.com.mx/wp-content/uploads/2024/12/510219.webp"
+   }
+  ],
+  "categories": [],
+  "brands": [],
+  "is_in_stock": true
+ },
+ {
+  "id": 52736,
+  "name": "PLAYBOY CONDOMS MIX &#038; PLAY",
+  "permalink": "https://farmaciasgi.com.mx/catalogo-de-productos-en-linea/playboy-condoms-mix-play/",
+  "sku": "513274",
+  "prices": {
+   "price": "1000",
+   "regular_price": "1000",
+   "sale_price": "1000",
+   "price_range": null,
+   "currency_code": "MXN",
+   "currency_symbol": "$",
+   "currency_minor_unit": 2,
+   "currency_decimal_separator": ".",
+   "currency_thousand_separator": ",",
+   "currency_prefix": "$",
+   "currency_suffix": ""
+  },
+  "images": [
+   {
+    "src": "https://farmaciasgi.com.mx/wp-content/uploads/2026/02/7503014377173_1-scaled.jpg"
+   }
+  ],
+  "categories": [
+   {
+    "id": 98,
+    "name": "Condones"
+   },
+   {
+    "id": 96,
+    "name": "Pareja"
+   }
+  ],
+  "brands": [],
+  "is_in_stock": true
+ }
+]
