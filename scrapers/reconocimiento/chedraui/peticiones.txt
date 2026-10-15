@@ -1,0 +1,27 @@
+# Peticiones mínimas a validar con validar_endpoint.py, en formato cURL.
+# Sin cookies ni headers de autorización. La validación desde la oficina
+# (2026-10-15) está en validacion.csv; el resultado va en cada comentario.
+
+# Listado de una categoría por Intelligent Search. Trae productId, nombre,
+# marca, EAN, categorías, Price y ListPrice (f = 0). Sin impersonar y con
+# impersonación: 200 (5/5 cada uno), p50 0.31 s y 0.35 s.
+curl 'https://www.chedraui.com.mx/api/io/_v/api/intelligent-search/product_search/category-1/farmacia/category-2/medicamentos?count=50&page=1'
+
+# Mismo listado partido por subcategoría (Medicamentos pasa el tope de 2,500).
+curl 'https://www.chedraui.com.mx/api/io/_v/api/intelligent-search/product_search/category-1/farmacia/category-2/medicamentos/category-3/diabeticos?count=50&page=1'
+
+# Tope: con count=50, la página 50 responde 200 y la 51 responde 400.
+curl 'https://www.chedraui.com.mx/api/io/_v/api/intelligent-search/product_search/category-1/farmacia?count=50&page=51'
+
+# Árbol de categorías con conteos (facetas category-2 y category-3).
+curl 'https://www.chedraui.com.mx/api/io/_v/api/intelligent-search/facets/category-1/farmacia'
+
+# regionId de un CP (solo para comparar; el spider corre sin región).
+curl 'https://www.chedraui.com.mx/api/checkout/pub/regions?country=MEX&postalCode=01000'
+
+# Listado con región: mismo endpoint más &regionId={id}. Cambia precio y surtido.
+curl 'https://www.chedraui.com.mx/api/io/_v/api/intelligent-search/product_search/category-1/farmacia/category-2/medicamentos?count=50&page=1&regionId={regionId}'
+
+# NO USAR: páginas HTML de categoría y búsqueda, prohibidas en robots.txt
+# (Disallow: /Farmacia/ y /search?*).
+# curl 'https://www.chedraui.com.mx/Farmacia/Medicamentos'

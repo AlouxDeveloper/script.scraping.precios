@@ -1,0 +1,11 @@
+fecha,perfil,url,status,detalle,segundos,bytes
+2026-10-15T16:10:18.588111+00:00,sin_impersonar,https://www.chedraui.com.mx/api/io/_v/api/intelligent-search/product_search/category-1/farmacia/category-2/medicamentos?count=50&page=1,200,,0.27,452046
+2026-10-15T16:10:20.898979+00:00,sin_impersonar,https://www.chedraui.com.mx/api/io/_v/api/intelligent-search/product_search/category-1/farmacia/category-2/medicamentos?count=50&page=1,200,,0.31,452046
+2026-10-15T16:10:23.472870+00:00,sin_impersonar,https://www.chedraui.com.mx/api/io/_v/api/intelligent-search/product_search/category-1/farmacia/category-2/medicamentos?count=50&page=1,200,,0.57,452046
+2026-10-15T16:10:25.852929+00:00,sin_impersonar,https://www.chedraui.com.mx/api/io/_v/api/intelligent-search/product_search/category-1/farmacia/category-2/medicamentos?count=50&page=1,200,,0.38,452046
+2026-10-15T16:10:28.130164+00:00,sin_impersonar,https://www.chedraui.com.mx/api/io/_v/api/intelligent-search/product_search/category-1/farmacia/category-2/medicamentos?count=50&page=1,200,,0.28,452046
+2026-10-15T16:10:30.517261+00:00,chrome,https://www.chedraui.com.mx/api/io/_v/api/intelligent-search/product_search/category-1/farmacia/category-2/medicamentos?count=50&page=1,200,,0.39,452046
+2026-10-15T16:10:32.756938+00:00,chrome,https://www.chedraui.com.mx/api/io/_v/api/intelligent-search/product_search/category-1/farmacia/category-2/medicamentos?count=50&page=1,200,,0.24,452046
+2026-10-15T16:10:35.218086+00:00,chrome,https://www.chedraui.com.mx/api/io/_v/api/intelligent-search/product_search/category-1/farmacia/category-2/medicamentos?count=50&page=1,200,,0.46,452046
+2026-10-15T16:10:37.543887+00:00,chrome,https://www.chedraui.com.mx/api/io/_v/api/intelligent-search/product_search/category-1/farmacia/category-2/medicamentos?count=50&page=1,200,,0.33,452046
+2026-10-15T16:10:39.893271+00:00,chrome,https://www.chedraui.com.mx/api/io/_v/api/intelligent-search/product_search/category-1/farmacia/category-2/medicamentos?count=50&page=1,200,,0.35,452046

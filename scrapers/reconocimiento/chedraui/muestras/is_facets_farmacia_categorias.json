@@ -1,0 +1,546 @@
+{
+ "facets": [
+  {
+   "values": [
+    {
+     "id": "4",
+     "quantity": 1,
+     "name": "Farmacia",
+     "key": "category-1",
+     "value": "farmacia",
+     "selected": true,
+     "href": "farmacia/farmacia?map=departamento"
+    }
+   ],
+   "type": "TEXT",
+   "name": "Departamento",
+   "hidden": true,
+   "key": "category-1",
+   "quantity": 1
+  },
+  {
+   "values": [
+    {
+     "id": "403",
+     "quantity": 3384,
+     "name": "Medicamentos",
+     "key": "category-2",
+     "value": "medicamentos",
+     "selected": false,
+     "href": "farmacia/medicamentos?map=categoria"
+    },
+    {
+     "id": "401",
+     "quantity": 616,
+     "name": "Equipo y botiquin medico",
+     "key": "category-2",
+     "value": "equipo-y-botiquin-medico",
+     "selected": false,
+     "href": "farmacia/equipo-y-botiquin-medico?map=categoria"
+    },
+    {
+     "id": "405",
+     "quantity": 421,
+     "name": "Vitaminas y suplementos",
+     "key": "category-2",
+     "value": "vitaminas-y-suplementos",
+     "selected": false,
+     "href": "farmacia/vitaminas-y-suplementos?map=categoria"
+    },
+    {
+     "id": "404",
+     "quantity": 158,
+     "name": "Salud sexual",
+     "key": "category-2",
+     "value": "salud-sexual",
+     "selected": false,
+     "href": "farmacia/salud-sexual?map=categoria"
+    },
+    {
+     "id": "402",
+     "quantity": 99,
+     "name": "Incontinencia",
+     "key": "category-2",
+     "value": "incontinencia",
+     "selected": false,
+     "href": "farmacia/incontinencia?map=categoria"
+    },
+    {
+     "id": "406",
+     "quantity": 78,
+     "name": "Naturistas",
+     "key": "category-2",
+     "value": "naturistas",
+     "selected": false,
+     "href": "farmacia/naturistas?map=categoria"
+    },
+    {
+     "id": "906",
+     "quantity": 2,
+     "name": "Farmacia",
+     "key": "category-2",
+     "value": "farmacia",
+     "selected": false,
+     "href": "farmacia/farmacia?map=categoria"
+    }
+   ],
+   "type": "TEXT",
+   "name": "Categoría",
+   "hidden": false,
+   "key": "category-2",
+   "quantity": 7
+  },
+  {
+   "values": [
+    {
+     "id": "40308",
+     "quantity": 1111,
+     "name": "Diabeticos",
+     "key": "category-3",
+     "value": "diabeticos",
+     "selected": false,
+     "href": "farmacia/diabeticos?map=sub-categoria"
+    },
+    {
+     "id": "40302",
+     "quantity": 569,
+     "name": "Estomacales",
+     "key": "category-3",
+     "value": "estomacales",
+     "selected": false,
+     "href": "farmacia/estomacales?map=sub-categoria"
+    },
+    {
+     "id": "40301",
+     "quantity": 540,
+     "name": "Analgesicos y anestesicos",
+     "key": "category-3",
+     "value": "analgesicos-y-anestesicos",
+     "selected": false,
+     "href": "farmacia/analgesicos-y-anestesicos?map=sub-categoria"
+    },
+    {
+     "id": "40305",
+     "quantity": 376,
+     "name": "Dermatológicos",
+     "key": "category-3",
+     "value": "dermatologicos",
+     "selected": false,
+     "href": "farmacia/dermatologicos?map=sub-categoria"
+    },
+    {
+     "id": "40303",
+     "quantity": 299,
+     "name": "Respiratorios",
+     "key": "category-3",
+     "value": "respiratorios",
+     "selected": false,
+     "href": "farmacia/respiratorios?map=sub-categoria"
+    },
+    {
+     "id": "40312",
+     "quantity": 268,
+     "name": "Genéricos",
+     "key": "category-3",
+     "value": "genericos",
+     "selected": false,
+     "href": "farmacia/genericos?map=sub-categoria"
+    },
+    {
+     "id": "40108",
+     "quantity": 242,
+     "name": "Material de curacion",
+     "key": "category-3",
+     "value": "material-de-curacion",
+     "selected": false,
+     "href": "farmacia/material-de-curacion?map=sub-categoria"
+    },
+    {
+     "id": "40502",
+     "quantity": 241,
+     "name": "Suplementos alimenticios",
+     "key": "category-3",
+     "value": "suplementos-alimenticios",
+     "selected": false,
+     "href": "farmacia/suplementos-alimenticios?map=sub-categoria"
+    },
+    {
+     "id": "40501",
+     "quantity": 157,
+     "name": "Vitaminas",
+     "key": "category-3",
+     "value": "vitaminas",
+     "selected": false,
+     "href": "farmacia/vitaminas?map=sub-categoria"
+    },
+    {
+     "id": "40304",
+     "quantity": 142,
+     "name": "Oftalmicos y oticos",
+     "key": "category-3",
+     "value": "oftalmicos-y-oticos",
+     "selected": false,
+     "href": "farmacia/oftalmicos-y-oticos?map=sub-categoria"
+    },
+    {
+     "id": "40401",
+     "quantity": 112,
+     "name": "Condones y lubricantes",
+     "key": "category-3",
+     "value": "condones-y-lubricantes",
+     "selected": false,
+     "href": "farmacia/condones-y-lubricantes?map=sub-categoria"
+    },
+    {
+     "id": "40115",
+     "quantity": 95,
+     "name": "Equipo medico",
+     "key": "category-3",
+     "value": "equipo-medico",
+     "selected": false,
+     "href": "farmacia/equipo-medico?map=sub-categoria"
+    },
+    {
+     "id": "40201",
+     "quantity": 63,
+     "name": "Pañales para incontinencia",
+     "key": "category-3",
+     "value": "panales-para-incontinencia",
+     "selected": false,
+     "href": "farmacia/panales-para-incontinencia?map=sub-categoria"
+    },
+    {
+     "id": "40114",
+     "quantity": 62,
+     "name": "Ópticos",
+     "key": "category-3",
+     "value": "opticos",
+     "selected": false,
+     "href": "farmacia/opticos?map=sub-categoria"
+    },
+    {
+     "id": "40107",
+     "quantity": 54,
+     "name": "Aparatos de medicion",
+     "key": "category-3",
+     "value": "aparatos-de-medicion",
+     "selected": false,
+     "href": "farmacia/aparatos-de-medicion?map=sub-categoria"
+    },
+    {
+     "id": "40601",
+     "quantity": 38,
+     "name": "Suplementos naturistas",
+     "key": "category-3",
+     "value": "suplementos-naturistas",
+     "selected": false,
+     "href": "farmacia/suplementos-naturistas?map=sub-categoria"
+    },
+    {
+     "id": "40113",
+     "quantity": 36,
+     "name": "Otros accesorios",
+     "key": "category-3",
+     "value": "otros-accesorios",
+     "selected": false,
+     "href": "farmacia/otros-accesorios?map=sub-categoria"
+    },
+    {
+     "id": "40311",
+     "quantity": 33,
+     "name": "Antimicoticos",
+     "key": "category-3",
+     "value": "antimicoticos",
+     "selected": false,
+     "href": "farmacia/antimicoticos?map=sub-categoria"
+    },
+    {
+     "id": "40203",
+     "quantity": 32,
+     "name": "Toallas y pantiprotectores para incontinencia",
+     "key": "category-3",
+     "value": "toallas-y-pantiprotectores-para-incontinencia",
+     "selected": false,
+     "href": "farmacia/toallas-y-pantiprotectores-para-incontinencia?map=sub-categoria"
+    },
+    {
+     "id": "40104",
+     "quantity": 32,
+     "name": "Algodones",
+     "key": "category-3",
+     "value": "algodones",
+     "selected": false,
+     "href": "farmacia/algodones?map=sub-categoria"
+    },
+    {
+     "id": "40309",
+     "quantity": 29,
+     "name": "Naturistas y herbolarios",
+     "key": "category-3",
+     "value": "naturistas-y-herbolarios",
+     "selected": false,
+     "href": "farmacia/naturistas-y-herbolarios?map=sub-categoria"
+    },
+    {
+     "id": "40102",
+     "quantity": 23,
+     "name": "Gel y toallitas antibacteriales",
+     "key": "category-3",
+     "value": "gel-y-toallitas-antibacteriales",
+     "selected": false,
+     "href": "farmacia/gel-y-toallitas-antibacteriales?map=sub-categoria"
+    },
+    {
+     "id": "40404",
+     "quantity": 22,
+     "name": "Otros productos de salud sexual",
+     "key": "category-3",
+     "value": "otros-productos-de-salud-sexual",
+     "selected": false,
+     "href": "farmacia/otros-productos-de-salud-sexual?map=sub-categoria"
+    },
+    {
+     "id": "40103",
+     "quantity": 20,
+     "name": "Antiséptico",
+     "key": "category-3",
+     "value": "antiseptico",
+     "selected": false,
+     "href": "farmacia/antiseptico?map=sub-categoria"
+    },
+    {
+     "id": "40603",
+     "quantity": 18,
+     "name": "Balsamos y cremas",
+     "key": "category-3",
+     "value": "balsamos-y-cremas",
+     "selected": false,
+     "href": "farmacia/balsamos-y-cremas?map=sub-categoria"
+    },
+    {
+     "id": "40109",
+     "quantity": 16,
+     "name": "Ortopedia y ferulas",
+     "key": "category-3",
+     "value": "ortopedia-y-ferulas",
+     "selected": false,
+     "href": "farmacia/ortopedia-y-ferulas?map=sub-categoria"
+    },
+    {
+     "id": "40403",
+     "quantity": 14,
+     "name": "Vigorizantes",
+     "key": "category-3",
+     "value": "vigorizantes",
+     "selected": false,
+     "href": "farmacia/vigorizantes?map=sub-categoria"
+    },
+    {
+     "id": "40110",
+     "quantity": 12,
+     "name": "Repelente de mosquitos",
+     "key": "category-3",
+     "value": "repelente-de-mosquitos",
+     "selected": false,
+     "href": "farmacia/repelente-de-mosquitos?map=sub-categoria"
+    },
+    {
+     "id": "40602",
+     "quantity": 12,
+     "name": "Aceites corporales",
+     "key": "category-3",
+     "value": "aceites-corporales",
+     "selected": false,
+     "href": "farmacia/aceites-corporales?map=sub-categoria"
+    },
+    {
+     "id": "40310",
+     "quantity": 10,
+     "name": "Sueros orales",
+     "key": "category-3",
+     "value": "sueros-orales",
+     "selected": false,
+     "href": "farmacia/sueros-orales?map=sub-categoria"
+    },
+    {
+     "id": "40604",
+     "quantity": 10,
+     "name": "Caramelos de miel y propoleo",
+     "key": "category-3",
+     "value": "caramelos-de-miel-y-propoleo",
+     "selected": false,
+     "href": "farmacia/caramelos-de-miel-y-propoleo?map=sub-categoria"
+    },
+    {
+     "id": "40105",
+     "quantity": 9,
+     "name": "Parches y telas adhesivas",
+     "key": "category-3",
+     "value": "parches-y-telas-adhesivas",
+     "selected": false,
+     "href": "farmacia/parches-y-telas-adhesivas?map=sub-categoria"
+    },
+    {
+     "id": "40503",
+     "quantity": 9,
+     "name": "Nutrición deportiva",
+     "key": "category-3",
+     "value": "nutricion-deportiva",
+     "selected": false,
+     "href": "farmacia/nutricion-deportiva?map=sub-categoria"
+    },
+    {
+     "id": "40111",
+     "quantity": 9,
+     "name": "Hisopos",
+     "key": "category-3",
+     "value": "hisopos",
+     "selected": false,
+     "href": "farmacia/hisopos?map=sub-categoria"
+    },
+    {
+     "id": "40402",
+     "quantity": 8,
+     "name": "Lubricantes",
+     "key": "category-3",
+     "value": "lubricantes",
+     "selected": false,
+     "href": "farmacia/lubricantes?map=sub-categoria"
+    },
+    {
+     "id": "40306",
+     "quantity": 7,
+     "name": "Gripe y tos",
+     "key": "category-3",
+     "value": "gripe-y-tos",
+     "selected": false,
+     "href": "farmacia/gripe-y-tos?map=sub-categoria"
+    },
+    {
+     "id": "40504",
+     "quantity": 6,
+     "name": "Productos naturistas",
+     "key": "category-3",
+     "value": "productos-naturistas",
+     "selected": false,
+     "href": "farmacia/productos-naturistas?map=sub-categoria"
+    },
+    {
+     "id": "40202",
+     "quantity": 4,
+     "name": "Protectores de cama para incontinencia",
+     "key": "category-3",
+     "value": "protectores-de-cama-para-incontinencia",
+     "selected": false,
+     "href": "farmacia/protectores-de-cama-para-incontinencia?map=sub-categoria"
+    },
+    {
+     "id": "40101",
+     "quantity": 4,
+     "name": "Cubrebocas",
+     "key": "category-3",
+     "value": "cubrebocas",
+     "selected": false,
+     "href": "farmacia/cubrebocas?map=sub-categoria"
+    },
+    {
+     "id": "40405",
+     "quantity": 2,
+     "name": "Pruebas de embarazo",
+     "key": "category-3",
+     "value": "pruebas-de-embarazo",
+     "selected": false,
+     "href": "farmacia/pruebas-de-embarazo?map=sub-categoria"
+    },
+    {
+     "id": "90604",
+     "quantity": 2,
+     "name": "Equipo y botiquín médico",
+     "key": "category-3",
+     "value": "equipo-y-botiquin-medico",
+     "selected": false,
+     "href": "farmacia/equipo-y-botiquin-medico?map=sub-categoria"
+    },
+    {
+     "id": "40106",
+     "quantity": 1,
+     "name": "Jeringas y agujas",
+     "key": "category-3",
+     "value": "jeringas-y-agujas",
+     "selected": false,
+     "href": "farmacia/jeringas-y-agujas?map=sub-categoria"
+    },
+    {
+     "id": "40112",
+     "quantity": 1,
+     "name": "Guantes",
+     "key": "category-3",
+     "value": "guantes",
+     "selected": false,
+     "href": "farmacia/guantes?map=sub-categoria"
+    }
+   ],
+   "type": "TEXT",
+   "name": "Sub-Categoría",
+   "hidden": false,
+   "key": "category-3",
+   "quantity": 43
+  },
+  {
+   "values": [
+    {
+     "quantity": 1679,
+     "name": "",
+     "key": "price",
+     "selected": false,
+     "range": {
+      "from": 1.9,
+      "to": 160
+     }
+    },
+    {
+     "quantity": 1554,
+     "name": "",
+     "key": "price",
+     "selected": false,
+     "range": {
+      "from": 510,
+      "to": 12999
+     }
+    },
+    {
+     "quantity": 1520,
+     "name": "",
+     "key": "price",
+     "selected": false,
+     "range": {
+      "from": 160,
+      "to": 510
+     }
+    }
+   ],
+   "type": "PRICERANGE",
+   "name": "Precio",
+   "hidden": false,
+   "key": "price",
+   "quantity": 3
+  }
+ ],
+ "sampling": false,
+ "breadcrumb": [
+  {
+   "name": "Farmacia",
+   "href": "/farmacia"
+  }
+ ],
+ "queryArgs": {
+  "query": "",
+  "selectedFacets": [
+   {
+    "key": "category-1",
+    "value": "farmacia"
+   }
+  ]
+ },
+ "translated": false
+}

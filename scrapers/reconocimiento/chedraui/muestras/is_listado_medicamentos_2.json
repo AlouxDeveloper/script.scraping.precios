@@ -1,0 +1,1075 @@
+{
+ "products": [
+  {
+   "cacheId": "sp-3347286-7501125118562",
+   "productId": "3347286",
+   "description": "Electrolit 625ml suero rehidratante de electrolitos orales que te ayudan a recuperar los líquidos y electrolitos perdidos.<div><br><b>Las imágenes del producto son únicamente de referencia, el diseño de etiquetas y el contenido (ml, L, Kg, g, piezas, etc) pueden cambiar y/o variar sin previo aviso.</b></div>",
+   "productName": "Suero Rehidratante Oral Electrolit Sabor Lima Limón 625ml",
+   "productReference": "3347286",
+   "linkText": "suero-rehidratante-oral-electrolit-sabor-lima-limon-625ml-3347286",
+   "brand": "Electrolit",
+   "brandId": 2183,
+   "link": "/suero-rehidratante-oral-electrolit-sabor-lima-limon-625ml-3347286/p",
+   "categories": [
+    "/Farmacia/Medicamentos/Estomacales/",
+    "/Farmacia/Medicamentos/",
+    "/Farmacia/"
+   ],
+   "categoryId": "40302",
+   "priceRange": {
+    "sellingPrice": {
+     "highPrice": 26.5,
+     "lowPrice": 26.5
+    },
+    "listPrice": {
+     "highPrice": 26.5,
+     "lowPrice": 26.5
+    }
+   },
+   "specificationGroups": [
+    {
+     "originalName": "Atributos de Especificación",
+     "name": "Atributos de Especificación",
+     "specifications": [
+      {
+       "originalName": "Benefits",
+       "name": "Benefits",
+       "values": [
+        "Alivia la deshidratación"
+       ]
+      },
+      {
+       "originalName": "Benefits 3",
+       "name": "Benefits 3",
+       "values": [
+        "Recupera los líquidos y electrolitos perdidos."
+       ]
+      },
+      {
+       "originalName": "Benefits 2",
+       "name": "Benefits 2",
+       "values": [
+        "Tiene agradable sabor"
+       ]
+      },
+      {
+       "originalName": "Identificador Externo de Categoría",
+       "name": "Identificador Externo de Categoría",
+       "values": [
+        "112001008"
+       ]
+      },
+      {
+       "originalName": "Fraud Check",
+       "name": "Fraud Check",
+       "values": [
+        "FALSO"
+       ]
+      },
+      {
+       "originalName": "Máximo de venta",
+       "name": "Máximo de venta",
+       "values": [
+        "6"
+       ]
+      },
+      {
+       "originalName": "Descripción, Larga",
+       "name": "Descripción, Larga",
+       "values": [
+        "Electrolit 625ml suero rehidratante de electrolitos orales indicada para prevenir o tratar la deshidratación causada exceso de calor, ejercicio físico intenso, insolación, resaca, vómito y diarrea."
+       ]
+      },
+      {
+       "originalName": "Tipo de envío",
+       "name": "Tipo de envío",
+       "values": [
+        "Restringido"
+       ]
+      },
+      {
+       "originalName": "Tipo de producto",
+       "name": "Tipo de producto",
+       "values": [
+        "Medicamento"
+       ]
+      },
+      {
+       "originalName": "MultiEan",
+       "name": "MultiEan",
+       "values": [
+        "7501125118562"
+       ]
+      },
+      {
+       "originalName": "Contenido del empaque",
+       "name": "Contenido del empaque",
+       "values": [
+        "1 pz de 625ml"
+       ]
+      }
+     ]
+    },
+    {
+     "originalName": "allSpecifications",
+     "name": "allSpecifications",
+     "specifications": [
+      {
+       "originalName": "Benefits",
+       "name": "Benefits",
+       "values": [
+        "Alivia la deshidratación"
+       ]
+      },
+      {
+       "originalName": "Benefits 3",
+       "name": "Benefits 3",
+       "values": [
+        "Recupera los líquidos y electrolitos perdidos."
+       ]
+      },
+      {
+       "originalName": "Benefits 2",
+       "name": "Benefits 2",
+       "values": [
+        "Tiene agradable sabor"
+       ]
+      },
+      {
+       "originalName": "Identificador Externo de Categoría",
+       "name": "Identificador Externo de Categoría",
+       "values": [
+        "112001008"
+       ]
+      },
+      {
+       "originalName": "Fraud Check",
+       "name": "Fraud Check",
+       "values": [
+        "FALSO"
+       ]
+      },
+      {
+       "originalName": "Máximo de venta",
+       "name": "Máximo de venta",
+       "values": [
+        "6"
+       ]
+      },
+      {
+       "originalName": "Descripción, Larga",
+       "name": "Descripción, Larga",
+       "values": [
+        "Electrolit 625ml suero rehidratante de electrolitos orales indicada para prevenir o tratar la deshidratación causada exceso de calor, ejercicio físico intenso, insolación, resaca, vómito y diarrea."
+       ]
+      },
+      {
+       "originalName": "Tipo de envío",
+       "name": "Tipo de envío",
+       "values": [
+        "Restringido"
+       ]
+      },
+      {
+       "originalName": "Tipo de producto",
+       "name": "Tipo de producto",
+       "values": [
+        "Medicamento"
+       ]
+      },
+      {
+       "originalName": "MultiEan",
+       "name": "MultiEan",
+       "values": [
+        "7501125118562"
+       ]
+      },
+      {
+       "originalName": "Contenido del empaque",
+       "name": "Contenido del empaque",
+       "values": [
+        "1 pz de 625ml"
+       ]
+      },
+      {
+       "originalName": "sellerId",
+       "name": "sellerId",
+       "values": [
+        "1"
+       ]
+      }
+     ]
+    }
+   ],
+   "skuSpecifications": [],
+   "productClusters": [
+    {
+     "id": "10145",
+     "name": "C_landingpage_farmacia_02"
+    },
+    {
+     "id": "16645",
+     "name": "APP vitrina Farmacia__03"
+    },
+    {
+     "id": "20498",
+     "name": "AppHome__Farmacia"
+    }
+   ],
+   "clusterHighlights": [],
+   "properties": [
+    {
+     "name": "Benefits",
+     "originalName": "Benefits",
+     "values": [
+      "Alivia la deshidratación"
+     ]
+    },
+    {
+     "name": "Benefits 3",
+     "originalName": "Benefits 3",
+     "values": [
+      "Recupera los líquidos y electrolitos perdidos."
+     ]
+    },
+    {
+     "name": "Benefits 2",
+     "originalName": "Benefits 2",
+     "values": [
+      "Tiene agradable sabor"
+     ]
+    },
+    {
+     "name": "Identificador Externo de Categoría",
+     "originalName": "Identificador Externo de Categoría",
+     "values": [
+      "112001008"
+     ]
+    },
+    {
+     "name": "Fraud Check",
+     "originalName": "Fraud Check",
+     "values": [
+      "FALSO"
+     ]
+    },
+    {
+     "name": "Máximo de venta",
+     "originalName": "Máximo de venta",
+     "values": [
+      "6"
+     ]
+    },
+    {
+     "name": "Descripción, Larga",
+     "originalName": "Descripción, Larga",
+     "values": [
+      "Electrolit 625ml suero rehidratante de electrolitos orales indicada para prevenir o tratar la deshidratación causada exceso de calor, ejercicio físico intenso, insolación, resaca, vómito y diarrea."
+     ]
+    },
+    {
+     "name": "Tipo de envío",
+     "originalName": "Tipo de envío",
+     "values": [
+      "Restringido"
+     ]
+    },
+    {
+     "name": "Tipo de producto",
+     "originalName": "Tipo de producto",
+     "values": [
+      "Medicamento"
+     ]
+    },
+    {
+     "name": "MultiEan",
+     "originalName": "MultiEan",
+     "values": [
+      "7501125118562"
+     ]
+    },
+    {
+     "name": "Contenido del empaque",
+     "originalName": "Contenido del empaque",
+     "values": [
+      "1 pz de 625ml"
+     ]
+    },
+    {
+     "name": "sellerId",
+     "originalName": "sellerId",
+     "values": [
+      "1"
+     ]
+    }
+   ],
+   "items": [
+    {
+     "sellers": [
+      {
+       "sellerId": "1",
+       "sellerName": "Chedraui",
+       "addToCartLink": "",
+       "sellerDefault": true,
+       "commertialOffer": {
+        "DeliverySlaSamplesPerRegion": {},
+        "DeliverySlaSamples": [],
+        "AvailableQuantity": 10000,
+        "discountHighlights": [],
+        "Installments": [
+         {
+          "Value": 26.5,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 26.5,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "American Express",
+          "PaymentSystemGroupName": "creditCardPaymentGroup",
+          "Name": "American Express à vista"
+         },
+         {
+          "Value": 26.5,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 26.5,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Visa",
+          "PaymentSystemGroupName": "creditCardPaymentGroup",
+          "Name": "Visa à vista"
+         },
+         {
+          "Value": 26.5,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 26.5,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Mastercard",
+          "PaymentSystemGroupName": "creditCardPaymentGroup",
+          "Name": "Mastercard à vista"
+         },
+         {
+          "Value": 26.5,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 26.5,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Vale",
+          "PaymentSystemGroupName": "giftCardPaymentGroup",
+          "Name": "Vale à vista"
+         },
+         {
+          "Value": 26.5,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 26.5,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "MercadoPagoPro",
+          "PaymentSystemGroupName": "MercadoPagoProPaymentGroup",
+          "Name": "MercadoPagoPro à vista"
+         },
+         {
+          "Value": 26.5,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 26.5,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Aplazo Payment",
+          "PaymentSystemGroupName": "aplazoPaymentGroup",
+          "Name": "Aplazo Payment à vista"
+         },
+         {
+          "Value": 26.5,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 26.5,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Pago contra entrega",
+          "PaymentSystemGroupName": "custom201PaymentGroupPaymentGroup",
+          "Name": "Pago contra entrega à vista"
+         },
+         {
+          "Value": 26.5,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 26.5,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "KUESKI",
+          "PaymentSystemGroupName": "custom204PaymentGroupPaymentGroup",
+          "Name": "KUESKI à vista"
+         },
+         {
+          "Value": 26.5,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 26.5,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Puntos BBVA",
+          "PaymentSystemGroupName": "customPrivate_501PaymentGroup",
+          "Name": "Puntos BBVA à vista"
+         },
+         {
+          "Value": 26.5,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 26.5,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Vales",
+          "PaymentSystemGroupName": "customPrivate_502PaymentGroup",
+          "Name": "Vales à vista"
+         },
+         {
+          "Value": 26.5,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 26.5,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Mercado Credito",
+          "PaymentSystemGroupName": "MercadoCreditoPaymentGroup",
+          "Name": "Mercado Credito à vista"
+         },
+         {
+          "Value": 26.5,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 26.5,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "PayPalCheckout",
+          "PaymentSystemGroupName": "PayPalCheckoutPaymentGroup",
+          "Name": "PayPalCheckout à vista"
+         }
+        ],
+        "Price": 26.5,
+        "ListPrice": 26.5,
+        "spotPrice": 26.5,
+        "taxPercentage": 0,
+        "PriceWithoutDiscount": 26.5,
+        "Tax": 0,
+        "GiftSkuIds": [],
+        "BuyTogether": [],
+        "ItemMetadataAttachment": [],
+        "RewardValue": 0,
+        "PriceValidUntil": "2027-10-15T16:09:01Z",
+        "GetInfoErrorMessage": null,
+        "CacheVersionUsedToCallCheckout": "",
+        "teasers": []
+       }
+      }
+     ],
+     "images": [
+      {
+       "imageId": "78787377",
+       "cacheId": "78787377",
+       "imageTag": "",
+       "imageLabel": "7501125118562_00",
+       "imageText": "7501125118562_00",
+       "imageUrl": "https://chedrauimx.vtexassets.com/arquivos/ids/78787377/7501125118562_00.jpg?v=639274270241100000"
+      },
+      {
+       "imageId": "78787378",
+       "cacheId": "78787378",
+       "imageTag": "",
+       "imageLabel": "7501125118562_01",
+       "imageText": "7501125118562_01",
+       "imageUrl": "https://chedrauimx.vtexassets.com/arquivos/ids/78787378/7501125118562_01.jpg?v=639274270242030000"
+      },
+      {
+       "imageId": "78787379",
+       "cacheId": "78787379",
+       "imageTag": "",
+       "imageLabel": "7501125118562_02",
+       "imageText": "7501125118562_02",
+       "imageUrl": "https://chedrauimx.vtexassets.com/arquivos/ids/78787379/7501125118562_02.jpg?v=639274270242800000"
+      },
+      {
+       "imageId": "78787380",
+       "cacheId": "78787380",
+       "imageTag": "",
+       "imageLabel": "7501125118562_03",
+       "imageText": "7501125118562_03",
+       "imageUrl": "https://chedrauimx.vtexassets.com/arquivos/ids/78787380/7501125118562_03.jpg?v=639274270243730000"
+      }
+     ],
+     "itemId": "3347286",
+     "name": "Suero Rehidratante Oral Electrolit Sabor Lima Limón 625ml",
+     "nameComplete": "Suero Rehidratante Oral Electrolit Sabor Lima Limón 625ml",
+     "complementName": "",
+     "referenceId": [
+      {
+       "Key": "RefId",
+       "Value": "3347286"
+      }
+     ],
+     "measurementUnit": "un",
+     "unitMultiplier": 1,
+     "variations": [],
+     "ean": "750112511856",
+     "modalType": "",
+     "videos": [],
+     "attachments": [],
+     "isKit": false,
+     "attributes": []
+    }
+   ],
+   "categoriesIds": [
+    "/4/403/40302/",
+    "/4/403/",
+    "/4/"
+   ],
+   "releaseDate": 1787011200000,
+   "metaTagDescription": "",
+   "origin": "intelligent-search",
+   "productTitle": ""
+  },
+  {
+   "cacheId": "sp-3347259-7501125144851",
+   "productId": "3347259",
+   "description": "Electrolit 625ml suero rehidratante de electrolitos orales que te ayudan a recuperar los líquidos y electrolitos perdidos.<div><br><b>Las imágenes del producto son únicamente de referencia, el diseño de etiquetas y el contenido (ml, L, Kg, g, piezas, etc) pueden cambiar y/o variar sin previo aviso.</b></div>",
+   "productName": "Suero Rehidratante Oral Electrolit Sabor Uva 625ml",
+   "productReference": "3347259",
+   "linkText": "suero-rehidratante-oral-electrolit-sabor-uva-625ml-3347259",
+   "brand": "Electrolit",
+   "brandId": 2183,
+   "link": "/suero-rehidratante-oral-electrolit-sabor-uva-625ml-3347259/p",
+   "categories": [
+    "/Farmacia/Medicamentos/Estomacales/",
+    "/Farmacia/Medicamentos/",
+    "/Farmacia/"
+   ],
+   "categoryId": "40302",
+   "priceRange": {
+    "sellingPrice": {
+     "highPrice": 26,
+     "lowPrice": 26
+    },
+    "listPrice": {
+     "highPrice": 26,
+     "lowPrice": 26
+    }
+   },
+   "specificationGroups": [
+    {
+     "originalName": "Atributos de Especificación",
+     "name": "Atributos de Especificación",
+     "specifications": [
+      {
+       "originalName": "Benefits",
+       "name": "Benefits",
+       "values": [
+        "Alivia la deshidratación"
+       ]
+      },
+      {
+       "originalName": "Benefits 3",
+       "name": "Benefits 3",
+       "values": [
+        "Recupera los líquidos y electrolitos perdidos."
+       ]
+      },
+      {
+       "originalName": "Benefits 2",
+       "name": "Benefits 2",
+       "values": [
+        "Tiene agradable sabor"
+       ]
+      },
+      {
+       "originalName": "Identificador Externo de Categoría",
+       "name": "Identificador Externo de Categoría",
+       "values": [
+        "112001008"
+       ]
+      },
+      {
+       "originalName": "Fraud Check",
+       "name": "Fraud Check",
+       "values": [
+        "FALSO"
+       ]
+      },
+      {
+       "originalName": "Máximo de venta",
+       "name": "Máximo de venta",
+       "values": [
+        "6"
+       ]
+      },
+      {
+       "originalName": "Descripción, Larga",
+       "name": "Descripción, Larga",
+       "values": [
+        "Electrolit 625ml suero rehidratante de electrolitos orales indicada para prevenir o tratar la deshidratación causada exceso de calor, ejercicio físico intenso, insolación, resaca, vómito y diarrea."
+       ]
+      },
+      {
+       "originalName": "Tipo de envío",
+       "name": "Tipo de envío",
+       "values": [
+        "Restringido"
+       ]
+      },
+      {
+       "originalName": "Tipo de producto",
+       "name": "Tipo de producto",
+       "values": [
+        "Medicamento"
+       ]
+      },
+      {
+       "originalName": "MultiEan",
+       "name": "MultiEan",
+       "values": [
+        "7501125144851"
+       ]
+      },
+      {
+       "originalName": "Contenido del empaque",
+       "name": "Contenido del empaque",
+       "values": [
+        "1 pz de 625ml"
+       ]
+      }
+     ]
+    },
+    {
+     "originalName": "allSpecifications",
+     "name": "allSpecifications",
+     "specifications": [
+      {
+       "originalName": "Benefits",
+       "name": "Benefits",
+       "values": [
+        "Alivia la deshidratación"
+       ]
+      },
+      {
+       "originalName": "Benefits 3",
+       "name": "Benefits 3",
+       "values": [
+        "Recupera los líquidos y electrolitos perdidos."
+       ]
+      },
+      {
+       "originalName": "Benefits 2",
+       "name": "Benefits 2",
+       "values": [
+        "Tiene agradable sabor"
+       ]
+      },
+      {
+       "originalName": "Identificador Externo de Categoría",
+       "name": "Identificador Externo de Categoría",
+       "values": [
+        "112001008"
+       ]
+      },
+      {
+       "originalName": "Fraud Check",
+       "name": "Fraud Check",
+       "values": [
+        "FALSO"
+       ]
+      },
+      {
+       "originalName": "Máximo de venta",
+       "name": "Máximo de venta",
+       "values": [
+        "6"
+       ]
+      },
+      {
+       "originalName": "Descripción, Larga",
+       "name": "Descripción, Larga",
+       "values": [
+        "Electrolit 625ml suero rehidratante de electrolitos orales indicada para prevenir o tratar la deshidratación causada exceso de calor, ejercicio físico intenso, insolación, resaca, vómito y diarrea."
+       ]
+      },
+      {
+       "originalName": "Tipo de envío",
+       "name": "Tipo de envío",
+       "values": [
+        "Restringido"
+       ]
+      },
+      {
+       "originalName": "Tipo de producto",
+       "name": "Tipo de producto",
+       "values": [
+        "Medicamento"
+       ]
+      },
+      {
+       "originalName": "MultiEan",
+       "name": "MultiEan",
+       "values": [
+        "7501125144851"
+       ]
+      },
+      {
+       "originalName": "Contenido del empaque",
+       "name": "Contenido del empaque",
+       "values": [
+        "1 pz de 625ml"
+       ]
+      },
+      {
+       "originalName": "sellerId",
+       "name": "sellerId",
+       "values": [
+        "1"
+       ]
+      }
+     ]
+    }
+   ],
+   "skuSpecifications": [],
+   "productClusters": [
+    {
+     "id": "10145",
+     "name": "C_landingpage_farmacia_02"
+    },
+    {
+     "id": "16645",
+     "name": "APP vitrina Farmacia__03"
+    },
+    {
+     "id": "20498",
+     "name": "AppHome__Farmacia"
+    }
+   ],
+   "clusterHighlights": [],
+   "properties": [
+    {
+     "name": "Benefits",
+     "originalName": "Benefits",
+     "values": [
+      "Alivia la deshidratación"
+     ]
+    },
+    {
+     "name": "Benefits 3",
+     "originalName": "Benefits 3",
+     "values": [
+      "Recupera los líquidos y electrolitos perdidos."
+     ]
+    },
+    {
+     "name": "Benefits 2",
+     "originalName": "Benefits 2",
+     "values": [
+      "Tiene agradable sabor"
+     ]
+    },
+    {
+     "name": "Identificador Externo de Categoría",
+     "originalName": "Identificador Externo de Categoría",
+     "values": [
+      "112001008"
+     ]
+    },
+    {
+     "name": "Fraud Check",
+     "originalName": "Fraud Check",
+     "values": [
+      "FALSO"
+     ]
+    },
+    {
+     "name": "Máximo de venta",
+     "originalName": "Máximo de venta",
+     "values": [
+      "6"
+     ]
+    },
+    {
+     "name": "Descripción, Larga",
+     "originalName": "Descripción, Larga",
+     "values": [
+      "Electrolit 625ml suero rehidratante de electrolitos orales indicada para prevenir o tratar la deshidratación causada exceso de calor, ejercicio físico intenso, insolación, resaca, vómito y diarrea."
+     ]
+    },
+    {
+     "name": "Tipo de envío",
+     "originalName": "Tipo de envío",
+     "values": [
+      "Restringido"
+     ]
+    },
+    {
+     "name": "Tipo de producto",
+     "originalName": "Tipo de producto",
+     "values": [
+      "Medicamento"
+     ]
+    },
+    {
+     "name": "MultiEan",
+     "originalName": "MultiEan",
+     "values": [
+      "7501125144851"
+     ]
+    },
+    {
+     "name": "Contenido del empaque",
+     "originalName": "Contenido del empaque",
+     "values": [
+      "1 pz de 625ml"
+     ]
+    },
+    {
+     "name": "sellerId",
+     "originalName": "sellerId",
+     "values": [
+      "1"
+     ]
+    }
+   ],
+   "items": [
+    {
+     "sellers": [
+      {
+       "sellerId": "1",
+       "sellerName": "Chedraui",
+       "addToCartLink": "",
+       "sellerDefault": true,
+       "commertialOffer": {
+        "DeliverySlaSamplesPerRegion": {},
+        "DeliverySlaSamples": [],
+        "AvailableQuantity": 10000,
+        "discountHighlights": [],
+        "Installments": [
+         {
+          "Value": 26,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 26,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "American Express",
+          "PaymentSystemGroupName": "creditCardPaymentGroup",
+          "Name": "American Express à vista"
+         },
+         {
+          "Value": 26,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 26,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Visa",
+          "PaymentSystemGroupName": "creditCardPaymentGroup",
+          "Name": "Visa à vista"
+         },
+         {
+          "Value": 26,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 26,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Mastercard",
+          "PaymentSystemGroupName": "creditCardPaymentGroup",
+          "Name": "Mastercard à vista"
+         },
+         {
+          "Value": 26,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 26,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Vale",
+          "PaymentSystemGroupName": "giftCardPaymentGroup",
+          "Name": "Vale à vista"
+         },
+         {
+          "Value": 26,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 26,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "MercadoPagoPro",
+          "PaymentSystemGroupName": "MercadoPagoProPaymentGroup",
+          "Name": "MercadoPagoPro à vista"
+         },
+         {
+          "Value": 26,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 26,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Aplazo Payment",
+          "PaymentSystemGroupName": "aplazoPaymentGroup",
+          "Name": "Aplazo Payment à vista"
+         },
+         {
+          "Value": 26,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 26,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Pago contra entrega",
+          "PaymentSystemGroupName": "custom201PaymentGroupPaymentGroup",
+          "Name": "Pago contra entrega à vista"
+         },
+         {
+          "Value": 26,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 26,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "KUESKI",
+          "PaymentSystemGroupName": "custom204PaymentGroupPaymentGroup",
+          "Name": "KUESKI à vista"
+         },
+         {
+          "Value": 26,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 26,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Puntos BBVA",
+          "PaymentSystemGroupName": "customPrivate_501PaymentGroup",
+          "Name": "Puntos BBVA à vista"
+         },
+         {
+          "Value": 26,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 26,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Vales",
+          "PaymentSystemGroupName": "customPrivate_502PaymentGroup",
+          "Name": "Vales à vista"
+         },
+         {
+          "Value": 26,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 26,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "Mercado Credito",
+          "PaymentSystemGroupName": "MercadoCreditoPaymentGroup",
+          "Name": "Mercado Credito à vista"
+         },
+         {
+          "Value": 26,
+          "InterestRate": 0,
+          "TotalValuePlusInterestRate": 26,
+          "NumberOfInstallments": 1,
+          "PaymentSystemName": "PayPalCheckout",
+          "PaymentSystemGroupName": "PayPalCheckoutPaymentGroup",
+          "Name": "PayPalCheckout à vista"
+         }
+        ],
+        "Price": 26,
+        "ListPrice": 26,
+        "spotPrice": 26,
+        "taxPercentage": 0,
+        "PriceWithoutDiscount": 26,
+        "Tax": 0,
+        "GiftSkuIds": [],
+        "BuyTogether": [],
+        "ItemMetadataAttachment": [],
+        "RewardValue": 0,
+        "PriceValidUntil": "2027-10-15T16:09:01Z",
+        "GetInfoErrorMessage": null,
+        "CacheVersionUsedToCallCheckout": "",
+        "teasers": []
+       }
+      }
+     ],
+     "images": [
+      {
+       "imageId": "78794684",
+       "cacheId": "78794684",
+       "imageTag": "",
+       "imageLabel": "7501125144851_00",
+       "imageText": "7501125144851_00",
+       "imageUrl": "https://chedrauimx.vtexassets.com/arquivos/ids/78794684/7501125144851_00.jpg?v=639274292887700000"
+      },
+      {
+       "imageId": "78794685",
+       "cacheId": "78794685",
+       "imageTag": "",
+       "imageLabel": "7501125144851_01",
+       "imageText": "7501125144851_01",
+       "imageUrl": "https://chedrauimx.vtexassets.com/arquivos/ids/78794685/7501125144851_01.jpg?v=639274292889130000"
+      },
+      {
+       "imageId": "78794686",
+       "cacheId": "78794686",
+       "imageTag": "",
+       "imageLabel": "7501125144851_02",
+       "imageText": "7501125144851_02",
+       "imageUrl": "https://chedrauimx.vtexassets.com/arquivos/ids/78794686/7501125144851_02.jpg?v=639274292890100000"
+      },
+      {
+       "imageId": "78794687",
+       "cacheId": "78794687",
+       "imageTag": "",
+       "imageLabel": "7501125144851_03",
+       "imageText": "7501125144851_03",
+       "imageUrl": "https://chedrauimx.vtexassets.com/arquivos/ids/78794687/7501125144851_03.jpg?v=639274292891970000"
+      }
+     ],
+     "itemId": "3347259",
+     "name": "Suero Rehidratante Oral Electrolit Sabor Uva 625ml",
+     "nameComplete": "Suero Rehidratante Oral Electrolit Sabor Uva 625ml",
+     "complementName": "",
+     "referenceId": [
+      {
+       "Key": "RefId",
+       "Value": "3347259"
+      }
+     ],
+     "measurementUnit": "un",
+     "unitMultiplier": 1,
+     "variations": [],
+     "ean": "7501125144851",
+     "modalType": "",
+     "videos": [],
+     "attachments": [],
+     "isKit": false,
+     "attributes": []
+    }
+   ],
+   "categoriesIds": [
+    "/4/403/40302/",
+    "/4/403/",
+    "/4/"
+   ],
+   "releaseDate": 1778025600000,
+   "metaTagDescription": "",
+   "origin": "intelligent-search",
+   "productTitle": ""
+  }
+ ],
+ "recordsFiltered": 3384,
+ "correction": {
+  "misspelled": true
+ },
+ "fuzzy": "0",
+ "operator": "and",
+ "translated": false,
+ "pagination": {
+  "count": 50,
+  "current": {
+   "index": 1,
+   "proxyUrl": "search/category-1/farmacia/category-2/medicamentos/trade-policy/1?an=chedrauimx&count=2&page=1&operator=and&fuzzy=0"
+  },
+  "before": [],
+  "after": [
+   {
+    "index": 2,
+    "proxyUrl": "search/category-1/farmacia/category-2/medicamentos/trade-policy/1?an=chedrauimx&count=2&page=2&operator=and&fuzzy=0"
+   },
+   {
+    "index": 3,
+    "proxyUrl": "search/category-1/farmacia/category-2/medicamentos/trade-policy/1?an=chedrauimx&count=2&page=3&operator=and&fuzzy=0"
+   },
+   {
+    "index": 4,
+    "proxyUrl": "search/category-1/farmacia/category-2/medicamentos/trade-policy/1?an=chedrauimx&count=2&page=4&operator=and&fuzzy=0"
+   },
+   {
+    "index": 5,
+    "proxyUrl": "search/category-1/farmacia/category-2/medicamentos/trade-policy/1?an=chedrauimx&count=2&page=5&operator=and&fuzzy=0"
+   }
+  ],
+  "perPage": 2,
+  "next": {
+   "index": 2,
+   "proxyUrl": "search/category-1/farmacia/category-2/medicamentos/trade-policy/1?an=chedrauimx&count=2&page=2&operator=and&fuzzy=0"
+  },
+  "previous": {
+   "index": 0
+  },
+  "first": {
+   "index": 0
+  },
+  "last": {
+   "index": 50,
+   "proxyUrl": "search/category-1/farmacia/category-2/medicamentos/trade-policy/1?an=chedrauimx&count=2&page=50&operator=and&fuzzy=0"
+  }
+ },
+ "options": {
+  "sorts": [],
+  "counts": [],
+  "deliveryPromisesEnabled": false,
+  "dpStatus": "not_requested"
+ },
+ "searchId": "bf73960c7bc24e55a2c5567c955ca191"
+}
