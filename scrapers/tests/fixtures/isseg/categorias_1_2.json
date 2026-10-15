@@ -1,0 +1,26 @@
+[
+ {
+  "nombre": "008400000248.jpg",
+  "idCategoria": 1,
+  "codigoBarras": "008400000248",
+  "descripcionCorta": "ALERCROM 4% SOLUCION NASAL 10 ML",
+  "descripcionLarga": "NO APARATO RESPIRATORIO TOS RESFRIADO",
+  "precioOriginal": 411.0,
+  "precioPublico": 411.0,
+  "imagen": "/9j/4AAQSkZJRgABAQEASABIAAD/7gAOQWRvYmUAZAAAAAAB/+EOjkV4aWYA…(recortada)",
+  "orden": 6651,
+  "url": null
+ },
+ {
+  "nombre": "008400001337.jpg",
+  "idCategoria": 1,
+  "codigoBarras": "008400001337",
+  "descripcionCorta": "AFAZOL GRIN SOLUCION NASAL 15 ML",
+  "descripcionLarga": "NAFAZOLINA APARATO RESPIRATORIO TOS RESFRIADO",
+  "precioOriginal": 181.0,
+  "precioPublico": 181.0,
+  "imagen": "iVBORw0KGgoAAAANSUhEUgAAASwAAAEsCAMAAABOo35HAAAAGXRFWHRTb2Z0…(recortada)",
+  "orden": 7118,
+  "url": null
+ }
+]

@@ -229,3 +229,22 @@ gi:
   categorias: [todo]
   # WordPress compartido (~2 s por página de 300 KB): no hay que apretarlo.
   trafico: {concurrencia: 1, delay: 2.0, jitter: 0.5}
+
+isseg:
+  escalon: b
+  entornos_permitidos: [oficina]
+  # SafeLine (Chaitin): el 468 ya es status de bloqueo; la firma cubre su
+  # página de CAPTCHA si llegara con otro status. Va el <title> (byte 202) y
+  # no "SafeLineChallenge", que cae en el byte 13,517, fuera de los 5,000
+  # que revisa el middleware (antes hay un favicon en base64).
+  firmas_bloqueo: ["de seguridad isseg"]
+  # categorias/{id} trae como máximo 50 (lo del legado); la cobertura real
+  # sale de las búsquedas por molécula. Prueba: Medicamentos (1) y unas
+  # moléculas. El alcance (612 contra ~13,000 y ~2 GB por corrida) es
+  # decisión de Aldo (reconocimiento/isseg/notas.md).
+  categorias: [1]
+  busquedas: [paracetamol, amoxicilina, losartan, omeprazol, metformina,
+              ibuprofeno, naproxeno, loratadina, sildenafil, atorvastatina]
+  # El WAF no limitó por ritmo, pero cada búsqueda baja varios MB de un
+  # sitio de una institución pública.
+  trafico: {concurrencia: 1, delay: 2.0, jitter: 0.5}

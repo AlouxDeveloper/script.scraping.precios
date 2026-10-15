@@ -1,0 +1,30 @@
+[
+ {
+  "codigoBarras": "7501101600586",
+  "descripcion": "LODARTA 5/100/20 MG CJA 30 TAB VT",
+  "precioVenta": 1545.0,
+  "componenteActivo": "ROSUVASTATINA, LOSARTAN, AMLODIPINO",
+  "imagen": "UklGRtZKAABXRUJQVlA4WAoAAAAQAAAA5wMA5wMAQUxQSPgXAAABylHYtm0j…(recortada)",
+  "antibiotico": false,
+  "disponibilidad": "ALTA",
+  "existencia": 0,
+  "descuento": 125.0,
+  "precioFinal": 1420.0,
+  "descripcionCombo": "",
+  "estatusDescuento": true
+ },
+ {
+  "codigoBarras": "7501101600579",
+  "descripcion": "LODARTA 5/100/10 MG CJA 30 TAB VT",
+  "precioVenta": 1545.0,
+  "componenteActivo": "ROSUVASTATINA, LOSARTAN, AMLODIPINO",
+  "imagen": "UklGRtZKAABXRUJQVlA4WAoAAAAQAAAA5wMA5wMAQUxQSPgXAAABylHYtm0j…(recortada)",
+  "antibiotico": false,
+  "disponibilidad": "ALTA",
+  "existencia": 0,
+  "descuento": 125.0,
+  "precioFinal": 1420.0,
+  "descripcionCombo": "",
+  "estatusDescuento": true
+ }
+]
