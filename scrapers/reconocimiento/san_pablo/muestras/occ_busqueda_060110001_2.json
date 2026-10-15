@@ -1,0 +1,155 @@
+{
+ "type": "productCategorySearchPageWsDTO",
+ "algoliaSearch": {
+  "algoliaIndex": "PROD_Products",
+  "algoliaQueryID": "f712e08d2acfb5faa66572ab7f6b0871"
+ },
+ "algoliaUser": {},
+ "currentQuery": {
+  "query": {
+   "value": "::category:060110001"
+  },
+  "url": "/search?q=%3A%3Acategory%3A060110001"
+ },
+ "freeTextSearch": "",
+ "pagination": {
+  "currentPage": 0,
+  "pageSize": 100,
+  "sort": "",
+  "totalPages": 7,
+  "totalResults": 676
+ },
+ "products": [
+  {
+   "additionalDescription": "Ácido acetilsalicílico 100 MG",
+   "availableForPickup": false,
+   "availableForPurchase": true,
+   "basePrice": {
+    "currencyIso": "MXN",
+    "formattedValue": "$367.00",
+    "priceType": "BUY",
+    "value": 367.0
+   },
+   "categories": [
+    {
+     "code": "APEGO-001",
+     "name": "LOCAL"
+    },
+    {
+     "code": "060110001",
+     "name": "A - B - C"
+    },
+    {
+     "code": "excludeBBY",
+     "name": "excludeBBY"
+    }
+   ],
+   "code": "000000000000430294",
+   "images": [
+    {
+     "format": "thumbnail",
+     "imageType": "PRIMARY",
+     "url": "https://hfprod.farmaciasanpablo.com.mx/sys-master-azureproductimages/h8b/h6e/30422341779486/Fsp100Wx100H_Fsp800Wx800H_430294_1hbnc4314.jpg"
+    },
+    {
+     "format": "product",
+     "imageType": "PRIMARY",
+     "url": "https://hfprod.farmaciasanpablo.com.mx/sys-master-azureproductimages/hdd/h6d/30422341713950/Fsp275Wx275H_Fsp800Wx800H_430294_1hbnc4314.jpg"
+    }
+   ],
+   "isApegoProduct": false,
+   "isGeneric": false,
+   "isLabProduct": false,
+   "name": "Aspirina Protect 84 Tabletas Caja",
+   "naturalHealth": false,
+   "price": {
+    "currencyIso": "MXN",
+    "formattedValue": "$367.00",
+    "priceType": "BUY",
+    "value": 367.0
+   },
+   "productoNuevo": false,
+   "showWithoutApegoBadge": true,
+   "url": "/medicamentos/supervision-medica/a---b---c/aspirina-protect-84-tabletas-caja/p/000000000000430294"
+  },
+  {
+   "additionalDescription": "Ácido acetilsalicílico 100 MG",
+   "availableForPickup": false,
+   "availableForPurchase": true,
+   "basePrice": {
+    "currencyIso": "MXN",
+    "formattedValue": "$153.00",
+    "priceType": "BUY",
+    "value": 153.0
+   },
+   "categories": [
+    {
+     "code": "APEGO-001",
+     "name": "LOCAL"
+    },
+    {
+     "code": "060110001",
+     "name": "A - B - C"
+    },
+    {
+     "code": "excludeBBY",
+     "name": "excludeBBY"
+    }
+   ],
+   "code": "000000000000430287",
+   "images": [
+    {
+     "format": "thumbnail",
+     "imageType": "PRIMARY",
+     "url": "https://hfprod.farmaciasanpablo.com.mx/sys-master-azureproductimages/hf8/h6b/30422344073246/Fsp100Wx100H_Fsp800Wx800H_430287_1hbnc4314.jpg"
+    },
+    {
+     "format": "product",
+     "imageType": "PRIMARY",
+     "url": "https://hfprod.farmaciasanpablo.com.mx/sys-master-azureproductimages/hb9/h6c/30422344007710/Fsp275Wx275H_Fsp800Wx800H_430287_1hbnc4314.jpg"
+    }
+   ],
+   "isApegoProduct": false,
+   "isGeneric": false,
+   "isLabProduct": false,
+   "name": "Aspirina Protect 28 Tableta Caja",
+   "naturalHealth": false,
+   "price": {
+    "currencyIso": "MXN",
+    "formattedValue": "$153.00",
+    "priceType": "BUY",
+    "value": 153.0
+   },
+   "productoNuevo": false,
+   "showWithoutApegoBadge": true,
+   "url": "/medicamentos/supervision-medica/a---b---c/aspirina-protect-28-tableta-caja/p/000000000000430287"
+  }
+ ],
+ "sorts": [
+  {
+   "code": "name-asc",
+   "name": "Nombre (ascendente)",
+   "selected": false
+  },
+  {
+   "code": "name-desc",
+   "name": "Nombre (descendente)",
+   "selected": false
+  },
+  {
+   "code": "price-desc",
+   "name": "Precio (mayor primero)",
+   "selected": false
+  },
+  {
+   "code": "price-asc",
+   "name": "Precio (menor primero)",
+   "selected": false
+  },
+  {
+   "code": "relevance",
+   "name": "Relevancia",
+   "selected": false
+  }
+ ]
+}

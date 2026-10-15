@@ -1,0 +1,25 @@
+# Peticiones mínimas a validar con validar_endpoint.py, en formato cURL.
+# Sin cookies ni headers de autorización. La validación desde la oficina
+# (2026-10-15) está en validacion.csv; el resultado va en cada comentario.
+# Todas requieren impersonación de Chrome (Akamai) y Accept: application/json
+# (sin él, OCC responde XML).
+
+# Búsqueda por categoría con precio (f = 0). Sin impersonar: 403 "Access
+# Denied" de Akamai (5/5). Con impersonación: 200 (5/5), p50 0.26 s.
+curl 'https://api.farmaciasanpablo.com.mx/rest/v2/fsp/products/search?query=:relevance:category:060110001&pageSize=100&currentPage=0&fields=DEFAULT&lang=es_MX&curr=MXN' -H 'Accept: application/json'
+
+# Facetas de un departamento (códigos de 5 y 9 dígitos con su conteo).
+curl 'https://api.farmaciasanpablo.com.mx/rest/v2/fsp/products/search?query=:relevance:category:06&pageSize=20&currentPage=0&fields=FULL&lang=es_MX&curr=MXN' -H 'Accept: application/json'
+
+# Tope silencioso: con pageSize=100, currentPage=9 trae 100 y currentPage=10
+# responde 200 con totalResults=0 (Medicamentos tiene 5,419).
+curl 'https://api.farmaciasanpablo.com.mx/rest/v2/fsp/products/search?query=:relevance:category:06&pageSize=100&currentPage=10&fields=DEFAULT&lang=es_MX&curr=MXN' -H 'Accept: application/json'
+
+# Ficha (lo que usa el legado). Mismos price y basePrice que la búsqueda.
+curl 'https://api.farmaciasanpablo.com.mx/rest/v2/fsp/products/000000000070007232?fields=code,name,price(FULL),basePrice(FULL)&lang=es_MX&curr=MXN' -H 'Accept: application/json'
+
+# Términos de uso desde la API de contenido (la página es una SPA).
+curl 'https://api.farmaciasanpablo.com.mx/rest/v2/fsp/cms/pages?pageType=ContentPage&pageLabelOrId=/terminos-y-condiciones/generales&lang=es_MX&curr=MXN' -H 'Accept: application/json'
+
+# NO USAR: rutas del sitio con query string o bajo /api/, prohibidas en
+# robots.txt de www (Disallow: /*? y /api/). El host api. no publica robots.txt.
