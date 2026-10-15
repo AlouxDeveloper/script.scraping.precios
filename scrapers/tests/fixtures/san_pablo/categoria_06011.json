@@ -1,0 +1,1222 @@
+{
+ "pagination": {
+  "currentPage": 0,
+  "pageSize": 100,
+  "sort": "",
+  "totalPages": 10,
+  "totalResults": 3107
+ },
+ "facets": [
+  {
+   "values": [
+    {
+     "count": 3107,
+     "name": "06",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 3107,
+     "name": "06011",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 880,
+     "name": "APEGO-001",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 676,
+     "name": "060110001",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 543,
+     "name": "060110002",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 459,
+     "name": "060110007",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 366,
+     "name": "TYPE-ZANTIBIOTIC",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 346,
+     "name": "060110005",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 320,
+     "name": "060110006",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 285,
+     "name": "060110004",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 238,
+     "name": "060110003",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 205,
+     "name": "EXCLUSIONLIST-002",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 158,
+     "name": "060110008",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 107,
+     "name": "TYPE-Z006",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 106,
+     "name": "TYPE-Z018",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 82,
+     "name": "060110009",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 53,
+     "name": "APEGO-008",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 50,
+     "name": "con-receta",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 50,
+     "name": "san-pablo-mix",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 41,
+     "name": "medicinal-ofertas",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 37,
+     "name": "TYPE-Z002",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 36,
+     "name": "APEGO-005",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 33,
+     "name": "TYPE-Z001",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 26,
+     "name": "TYPE-ZHIGHSPECIALITY-CC",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 26,
+     "name": "mix-cuidado-medicinal",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 25,
+     "name": "APEGO-004",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 24,
+     "name": "TYPE-ZHIGHSPECIALITY",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 23,
+     "name": "medicamentos-cardiovasculares",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 22,
+     "name": "mix-medicinal-cuidados",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 21,
+     "name": "ofertas-medicamentos",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 20,
+     "name": "APEGO-006",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 20,
+     "name": "TYPE-Z022",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 15,
+     "name": "descuentos-medicinal",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 14,
+     "name": "12",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 14,
+     "name": "12001",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 12,
+     "name": "boehringer-promo",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 12,
+     "name": "medicinal-cuidados-mix",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 10,
+     "name": "eli-lilly-promo",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 10,
+     "name": "glp-1-mixtos",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 10,
+     "name": "glp1-mixtos",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 9,
+     "name": "APEGO-017",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 9,
+     "name": "medicinales-mixtos",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 9,
+     "name": "promo-medicamentos",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 8,
+     "name": "120010003",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 8,
+     "name": "medicamentos-descuentos",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 7,
+     "name": "20-descuentos",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 7,
+     "name": "promo-25",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 6,
+     "name": "APEGO-013",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 6,
+     "name": "TYPE-Z003",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 6,
+     "name": "TYPE-Z005",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 6,
+     "name": "TYPE-Z026",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 6,
+     "name": "adium-medicinal",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 6,
+     "name": "descuentos-15",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 6,
+     "name": "descuentos-25",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 6,
+     "name": "mix-medicinales",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 5,
+     "name": "APEGO-022",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 5,
+     "name": "bajas-club-salud",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 5,
+     "name": "club-salud-bajas",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 5,
+     "name": "jardianz-y-trayenta",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 5,
+     "name": "medicamentos-glp1",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 5,
+     "name": "promo-20",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 5,
+     "name": "promo-boehringer",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 5,
+     "name": "wegovy-glp-1",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 5,
+     "name": "wegovy-mix",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 4,
+     "name": "120010001",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 4,
+     "name": "TYPE-Z004",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 4,
+     "name": "TYPE-Z023",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 4,
+     "name": "aprovasc-promo",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 4,
+     "name": "astra-cuidados",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 4,
+     "name": "cuidado-medicinal-mixto",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 4,
+     "name": "descuentos-organon",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 4,
+     "name": "elicuis-promo",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 4,
+     "name": "gsk-mix",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 4,
+     "name": "klaricid-y-synthroid",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 4,
+     "name": "liomont-promo",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 4,
+     "name": "medicamentos-nuevos",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 4,
+     "name": "medicinal-mix-cuidados",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 4,
+     "name": "mix-adimod-medicinal",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 4,
+     "name": "promo-organon",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 4,
+     "name": "wegony-cuidados",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 3,
+     "name": "25-descuentos",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 3,
+     "name": "APEGO-014",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 3,
+     "name": "APEGO-020",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 3,
+     "name": "ahorra-en-medicamentos",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 3,
+     "name": "anticonceptivos-mixtos",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 3,
+     "name": "besins-promo",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 3,
+     "name": "club-salud",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 3,
+     "name": "club-salud-medicinal",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 3,
+     "name": "creon-medicinal",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 3,
+     "name": "descuentos-20",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 3,
+     "name": "flexakocs-promo",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 3,
+     "name": "glp1-mounjaro",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 3,
+     "name": "loventrax-cuidados",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 3,
+     "name": "mailing-dos",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    },
+    {
+     "count": 3,
+     "name": "mix-cuidados-medicinal",
+     "query": {
+      "query": {
+       "value": "::category:06011"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06011"
+     },
+     "selected": false
+    }
+   ]
+  }
+ ],
+ "products": [
+  {
+   "code": "000000000003860369",
+   "name": "Spiolto Respimat Solución Cartucho de 4ML 30 Solución Cartucho",
+   "brandName": "Spiolto",
+   "url": "/medicamentos/supervision-medica/s---t---u/spiolto-respimat-solucion-cartucho-de-4ml-30-solucion-cartucho/p/000000000003860369",
+   "price": {
+    "currencyIso": "MXN",
+    "formattedValue": "$2,072.00",
+    "priceType": "BUY",
+    "value": 2072.0
+   },
+   "basePrice": {
+    "currencyIso": "MXN",
+    "formattedValue": "$2,072.00",
+    "priceType": "BUY",
+    "value": 2072.0
+   },
+   "images": [
+    {
+     "format": "thumbnail",
+     "imageType": "PRIMARY",
+     "url": "https://hfprod.farmaciasanpablo.com.mx/sys-master-azureproductimages/hbe/h1f/9150722768926/Fsp100Wx100H_Fsp800Wx800H_3860369_1fnc524qs"
+    },
+    {
+     "format": "product",
+     "imageType": "PRIMARY",
+     "url": "https://hfprod.farmaciasanpablo.com.mx/sys-master-azureproductimages/h10/h1f/9150722703390/Fsp275Wx275H_Fsp800Wx800H_3860369_1fnc524qs"
+    }
+   ],
+   "additionalDescription": "Tiotropio 0.226 MG Clorhidrato de olodaterol 0.226 MG",
+   "availableForPurchase": true
+  },
+  {
+   "code": "000000000070002291",
+   "name": "Panbio COVID19 AG NASAL 1 Tiras Paquete",
+   "brandName": "Panbio",
+   "url": "/medicamentos/supervision-medica/p---q---r/panbio-covid19-ag-nasal-1-tiras-paquete/p/000000000070002291",
+   "price": {
+    "currencyIso": "MXN",
+    "formattedValue": "$338.00",
+    "priceType": "BUY",
+    "value": 338.0
+   },
+   "basePrice": {
+    "currencyIso": "MXN",
+    "formattedValue": "$338.00",
+    "priceType": "BUY",
+    "value": 338.0
+   },
+   "images": [
+    {
+     "format": "thumbnail",
+     "imageType": "PRIMARY",
+     "url": "https://hfprod.farmaciasanpablo.com.mx/sys-master-azureproductimages/h41/h40/66212740071454/Fsp100Wx100H_Fsp800Wx800H_70002291_1ja318ttm.jpg"
+    },
+    {
+     "format": "product",
+     "imageType": "PRIMARY",
+     "url": "https://hfprod.farmaciasanpablo.com.mx/sys-master-azureproductimages/h02/h41/66212740005918/Fsp275Wx275H_Fsp800Wx800H_70002291_1ja318ttm.jpg"
+    }
+   ],
+   "additionalDescription": "",
+   "availableForPurchase": false
+  },
+  {
+   "code": "000000000070001776",
+   "name": "Ribotripsin 30 Tableta Caja",
+   "brandName": "Ribotripsin",
+   "url": "/medicamentos/supervision-medica/p---q---r/ribotripsin-30-tableta-caja/p/000000000070001776",
+   "price": {
+    "currencyIso": "MXN",
+    "formattedValue": "$434.00",
+    "priceType": "BUY",
+    "value": 434.0
+   },
+   "basePrice": {
+    "currencyIso": "MXN",
+    "formattedValue": "$434.00",
+    "priceType": "BUY",
+    "value": 434.0
+   },
+   "images": [
+    {
+     "format": "thumbnail",
+     "imageType": "PRIMARY",
+     "url": "https://hfprod.farmaciasanpablo.com.mx/sys-master-azureproductimages/h4a/hac/83143951843358/Fsp100Wx100H_Fsp800Wx800H_70001776_1k354v4lv.jpg"
+    },
+    {
+     "format": "product",
+     "imageType": "PRIMARY",
+     "url": "https://hfprod.farmaciasanpablo.com.mx/sys-master-azureproductimages/h39/ha9/83143951777822/Fsp275Wx275H_Fsp800Wx800H_70001776_1k354v4lv.jpg"
+    }
+   ],
+   "additionalDescription": "Tripsina 45000.0  Quimotripsina 9000.0 ",
+   "availableForPurchase": true
+  },
+  {
+   "code": "000000000070010969",
+   "name": "Rebagit 90 Tabletas Caja",
+   "brandName": "Rebagit",
+   "url": "/medicamentos/supervision-medica/p---q---r/rebagit-90-tabletas-caja/p/000000000070010969",
+   "price": {
+    "currencyIso": "MXN",
+    "formattedValue": "$1,506.00",
+    "priceType": "BUY",
+    "value": 1506.0
+   },
+   "basePrice": {
+    "currencyIso": "MXN",
+    "formattedValue": "$1,355.00",
+    "priceType": "BUY",
+    "value": 1355.0
+   },
+   "images": [
+    {
+     "format": "thumbnail",
+     "imageType": "PRIMARY",
+     "url": "https://hfprod.farmaciasanpablo.com.mx/sys-master-azureproductimages/he5/h61/80995630317598/Fsp100Wx100H_Fsp800Wx800H_70010969_1jt7oo8n2.jpg"
+    },
+    {
+     "format": "product",
+     "imageType": "PRIMARY",
+     "url": "https://hfprod.farmaciasanpablo.com.mx/sys-master-azureproductimages/he3/h64/80995630252062/Fsp275Wx275H_Fsp800Wx800H_70010969_1jt7oo8n2.jpg"
+    }
+   ],
+   "additionalDescription": "Rebamipida 100.0 MG",
+   "availableForPurchase": true
+  },
+  {
+   "code": "000000000070010887",
+   "name": "Somazina 30 Comprimidos Caja",
+   "brandName": "Somazina",
+   "url": "/medicamentos/supervision-medica/s---t---u/somazina-30-comprimidos-caja/p/000000000070010887",
+   "price": {
+    "currencyIso": "MXN",
+    "formattedValue": "$1,324.00",
+    "priceType": "BUY",
+    "value": 1324.0
+   },
+   "basePrice": {
+    "currencyIso": "MXN",
+    "formattedValue": "$1,191.50",
+    "priceType": "BUY",
+    "value": 1191.5
+   },
+   "images": [
+    {
+     "format": "thumbnail",
+     "imageType": "PRIMARY",
+     "url": "https://hfprod.farmaciasanpablo.com.mx/sys-master-azureproductimages/he9/hb8/83438255407134/Fsp100Wx100H_Fsp800Wx800H_70010887_1k3s461vk.jpg"
+    },
+    {
+     "format": "product",
+     "imageType": "PRIMARY",
+     "url": "https://hfprod.farmaciasanpablo.com.mx/sys-master-azureproductimages/heb/hb5/83438255341598/Fsp275Wx275H_Fsp800Wx800H_70010887_1k3s461vk.jpg"
+    }
+   ],
+   "additionalDescription": "Citicolina 500.0 MG",
+   "availableForPurchase": true
+  }
+ ]
+}

@@ -1,0 +1,1211 @@
+{
+ "pagination": {
+  "currentPage": 0,
+  "pageSize": 100,
+  "sort": "",
+  "totalPages": 10,
+  "totalResults": 5419
+ },
+ "facets": [
+  {
+   "values": [
+    {
+     "count": 5419,
+     "name": "06",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 3107,
+     "name": "06011",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 1297,
+     "name": "APEGO-001",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 746,
+     "name": "06006",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 676,
+     "name": "060110001",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 543,
+     "name": "060110002",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 493,
+     "name": "06004",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 481,
+     "name": "TYPE-ZANTIBIOTIC",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 459,
+     "name": "060110007",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 346,
+     "name": "060110005",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 320,
+     "name": "060110006",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 285,
+     "name": "06005",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 285,
+     "name": "060110004",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 272,
+     "name": "TYPE-ZHIGHSPECIALITY-CC",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 265,
+     "name": "060060001",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 265,
+     "name": "EXCLUSIONLIST-002",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 256,
+     "name": "06007",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 238,
+     "name": "060110003",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 181,
+     "name": "06003",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 165,
+     "name": "TYPE-ZHIGHSPECIALITY",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 161,
+     "name": "060060004",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 158,
+     "name": "060110008",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 147,
+     "name": "06008",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 147,
+     "name": "TYPE-Z006",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 140,
+     "name": "medicinal-ofertas",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 126,
+     "name": "06002",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 118,
+     "name": "060060003",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 111,
+     "name": "TYPE-Z018",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 97,
+     "name": "060060005",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 85,
+     "name": "mix-cuidado-medicinal",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 83,
+     "name": "060060002",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 82,
+     "name": "060110009",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 80,
+     "name": "060030001",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 77,
+     "name": "060070009",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 75,
+     "name": "medicamentos-descuentos",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 73,
+     "name": "060050010",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 73,
+     "name": "con-receta",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 73,
+     "name": "san-pablo-mix",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 72,
+     "name": "060030006",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 72,
+     "name": "060040010",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 70,
+     "name": "mix-medicinal-cuidados",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 68,
+     "name": "060070002",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 68,
+     "name": "medicinal-cuidados-mix",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 66,
+     "name": "APEGO-005",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 66,
+     "name": "ofertas-medicamentos",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 65,
+     "name": "060020007",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 65,
+     "name": "060040001",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 64,
+     "name": "060040002",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 62,
+     "name": "060050001",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 55,
+     "name": "APEGO-008",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 54,
+     "name": "TYPE-Z001",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 54,
+     "name": "TYPE-Z005",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 52,
+     "name": "060070004",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 51,
+     "name": "060040008",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 50,
+     "name": "060040007",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 50,
+     "name": "060050002",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 45,
+     "name": "sistema-nervioso",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 43,
+     "name": "TYPE-Z002",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 41,
+     "name": "06001",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 41,
+     "name": "060080005",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 39,
+     "name": "060040003",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 39,
+     "name": "060080004",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 37,
+     "name": "digestivos-metabolicos",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 36,
+     "name": "060050007",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 36,
+     "name": "060070001",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 34,
+     "name": "descuentos-20",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 32,
+     "name": "060040006",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 32,
+     "name": "promo-25",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 30,
+     "name": "060040012",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 29,
+     "name": "descuentos-25",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 28,
+     "name": "medicamentos-cardiovasculares",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 26,
+     "name": "060040009",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 26,
+     "name": "060080006",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 26,
+     "name": "20-descuentos",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 26,
+     "name": "APEGO-004",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 25,
+     "name": "promo-20",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 24,
+     "name": "060040004",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 24,
+     "name": "060040005",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 24,
+     "name": "060050005",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 24,
+     "name": "TYPE-Z022",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 23,
+     "name": "06010",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 23,
+     "name": "060100002",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 22,
+     "name": "060060006",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 22,
+     "name": "060070005",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 22,
+     "name": "25-descuentos",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 22,
+     "name": "APEGO-006",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 21,
+     "name": "TYPE-Z017",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 20,
+     "name": "060050008",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 19,
+     "name": "060010002",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 18,
+     "name": "060020006",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 17,
+     "name": "060080001",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 17,
+     "name": "descuentos-15",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 17,
+     "name": "promo-30",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    },
+    {
+     "count": 16,
+     "name": "060040011",
+     "query": {
+      "query": {
+       "value": "::category:06"
+      },
+      "url": "/search?q=%3A%3Acategory%3A06"
+     },
+     "selected": false
+    }
+   ]
+  }
+ ],
+ "products": [
+  {
+   "code": "000000000003860369",
+   "name": "Spiolto Respimat Solución Cartucho de 4ML 30 Solución Cartucho",
+   "brandName": "Spiolto",
+   "url": "/medicamentos/supervision-medica/s---t---u/spiolto-respimat-solucion-cartucho-de-4ml-30-solucion-cartucho/p/000000000003860369",
+   "price": {
+    "currencyIso": "MXN",
+    "formattedValue": "$2,072.00",
+    "priceType": "BUY",
+    "value": 2072.0
+   },
+   "basePrice": {
+    "currencyIso": "MXN",
+    "formattedValue": "$2,072.00",
+    "priceType": "BUY",
+    "value": 2072.0
+   },
+   "images": [
+    {
+     "format": "thumbnail",
+     "imageType": "PRIMARY",
+     "url": "https://hfprod.farmaciasanpablo.com.mx/sys-master-azureproductimages/hbe/h1f/9150722768926/Fsp100Wx100H_Fsp800Wx800H_3860369_1fnc524qs"
+    },
+    {
+     "format": "product",
+     "imageType": "PRIMARY",
+     "url": "https://hfprod.farmaciasanpablo.com.mx/sys-master-azureproductimages/h10/h1f/9150722703390/Fsp275Wx275H_Fsp800Wx800H_3860369_1fnc524qs"
+    }
+   ],
+   "additionalDescription": "Tiotropio 0.226 MG Clorhidrato de olodaterol 0.226 MG",
+   "availableForPurchase": true
+  },
+  {
+   "code": "000000000070002291",
+   "name": "Panbio COVID19 AG NASAL 1 Tiras Paquete",
+   "brandName": "Panbio",
+   "url": "/medicamentos/supervision-medica/p---q---r/panbio-covid19-ag-nasal-1-tiras-paquete/p/000000000070002291",
+   "price": {
+    "currencyIso": "MXN",
+    "formattedValue": "$338.00",
+    "priceType": "BUY",
+    "value": 338.0
+   },
+   "basePrice": {
+    "currencyIso": "MXN",
+    "formattedValue": "$338.00",
+    "priceType": "BUY",
+    "value": 338.0
+   },
+   "images": [
+    {
+     "format": "thumbnail",
+     "imageType": "PRIMARY",
+     "url": "https://hfprod.farmaciasanpablo.com.mx/sys-master-azureproductimages/h41/h40/66212740071454/Fsp100Wx100H_Fsp800Wx800H_70002291_1ja318ttm.jpg"
+    },
+    {
+     "format": "product",
+     "imageType": "PRIMARY",
+     "url": "https://hfprod.farmaciasanpablo.com.mx/sys-master-azureproductimages/h02/h41/66212740005918/Fsp275Wx275H_Fsp800Wx800H_70002291_1ja318ttm.jpg"
+    }
+   ],
+   "additionalDescription": "",
+   "availableForPurchase": false
+  },
+  {
+   "code": "000000000030230006",
+   "name": "Invanz Inyección 1 Solución Frasco Ámpula",
+   "brandName": "Invanz",
+   "url": "/medicamentos/especialidades-medicas/i---j/invanz-inyeccion-1-solucion-frasco-ampula/p/000000000030230006",
+   "price": {
+    "currencyIso": "MXN",
+    "formattedValue": "$2,308.00",
+    "priceType": "BUY",
+    "value": 2308.0
+   },
+   "basePrice": {
+    "currencyIso": "MXN",
+    "formattedValue": "$2,308.00",
+    "priceType": "BUY",
+    "value": 2308.0
+   },
+   "images": [
+    {
+     "format": "thumbnail",
+     "imageType": "PRIMARY",
+     "url": "https://hfprod.farmaciasanpablo.com.mx/sys-master-azureproductimages/h2f/ha6/9144732319774/Fsp100Wx100H_Fsp800Wx800H_30230006_1fnc524qs"
+    },
+    {
+     "format": "product",
+     "imageType": "PRIMARY",
+     "url": "https://hfprod.farmaciasanpablo.com.mx/sys-master-azureproductimages/h2d/ha9/9144732254238/Fsp275Wx275H_Fsp800Wx800H_30230006_1fnc524qs"
+    }
+   ],
+   "additionalDescription": "Ertapenem sódico 1 G",
+   "availableForPurchase": true
+  },
+  {
+   "code": "000000000070011292",
+   "name": "Zofran 1 Solución Ampolletas",
+   "brandName": "Zofran",
+   "url": "/medicamentos/especialidades-medicas/x---y---z/zofran-1-solucion-ampolletas/p/000000000070011292",
+   "price": {
+    "currencyIso": "MXN",
+    "formattedValue": "$415.00",
+    "priceType": "BUY",
+    "value": 415.0
+   },
+   "basePrice": {
+    "currencyIso": "MXN",
+    "formattedValue": "$145.00",
+    "priceType": "BUY",
+    "value": 145.0
+   },
+   "images": [
+    {
+     "format": "thumbnail",
+     "imageType": "PRIMARY",
+     "url": "https://hfprod.farmaciasanpablo.com.mx/sys-master-azureproductimages/hb7/hde/82735372533790/Fsp100Wx100H_Fsp800Wx800H_70011292_1k1vm6lva.jpg"
+    },
+    {
+     "format": "product",
+     "imageType": "PRIMARY",
+     "url": "https://hfprod.farmaciasanpablo.com.mx/sys-master-azureproductimages/ha6/hdb/82735372468254/Fsp275Wx275H_Fsp800Wx800H_70011292_1k1vm6lva.jpg"
+    }
+   ],
+   "additionalDescription": "Ondansetrón 4.0 MG",
+   "availableForPurchase": true
+  },
+  {
+   "code": "000000000070011188",
+   "name": "Zofran 3 Solución Ampolletas",
+   "brandName": "Zofran",
+   "url": "/medicamentos/especialidades-medicas/x---y---z/zofran-3-solucion-ampolletas/p/000000000070011188",
+   "price": {
+    "currencyIso": "MXN",
+    "formattedValue": "$1,485.00",
+    "priceType": "BUY",
+    "value": 1485.0
+   },
+   "basePrice": {
+    "currencyIso": "MXN",
+    "formattedValue": "$519.50",
+    "priceType": "BUY",
+    "value": 519.5
+   },
+   "images": [
+    {
+     "format": "thumbnail",
+     "imageType": "PRIMARY",
+     "url": "https://hfprod.farmaciasanpablo.com.mx/sys-master-azureproductimages/h1f/h78/82735371616286/Fsp100Wx100H_Fsp800Wx800H_70011188_1k1vm6lva.jpg"
+    },
+    {
+     "format": "product",
+     "imageType": "PRIMARY",
+     "url": "https://hfprod.farmaciasanpablo.com.mx/sys-master-azureproductimages/h20/h75/82735371550750/Fsp275Wx275H_Fsp800Wx800H_70011188_1k1vm6lva.jpg"
+    }
+   ],
+   "additionalDescription": "Ondansetrón 8.0 MG",
+   "availableForPurchase": true
+  }
+ ]
+}

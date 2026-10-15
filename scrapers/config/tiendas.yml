@@ -192,3 +192,15 @@ similares:
   categorias:
     - /29/
   trafico: {concurrencia: 1, delay: 2.0, jitter: 0.5}
+
+# Slug sanpablo (sin guion bajo), el de load/config/archivos.yml.
+sanpablo:
+  escalon: b
+  entornos_permitidos: [oficina]
+  # Códigos de categoría OCC (2 dígitos el departamento). Por ahora solo
+  # Medicamentos, la categoría de prueba (5,419 productos: pasa el tope de
+  # 1,000 y baja dos niveles). El resto lo fija el Excel de alcance.
+  categorias:
+    - "06"
+  # Akamai ya mostró que vigila (reconocimiento): 1 petición cada 2 s.
+  trafico: {concurrencia: 1, delay: 2.0, jitter: 0.5}
