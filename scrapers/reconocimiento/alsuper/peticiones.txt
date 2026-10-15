@@ -1,0 +1,28 @@
+# Peticiones mínimas a validar con validar_endpoint.py, en formato cURL.
+# Sin cookies ni headers de autorización. La validación desde la oficina
+# (2026-10-15) está en validacion.csv; el resultado va en cada comentario.
+# Todas requieren un User-Agent de navegador: sin él, la API responde 403
+# {"message":"Forbidden"}. No hace falta impersonar.
+
+# Listado de Farmacia en la sucursal 6 (la del sitio y la del legado), con
+# precio, precio regular y EAN (f = 0). validar_endpoint.py no manda
+# User-Agent: sin impersonar 403 (5/5); con impersonación 200 (5/5), p50 0.59 s.
+curl 'https://prod.alsuperapi.com/ms-products/branch/6?department=farmacia-18&page=1&limit=500' -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36'
+
+# Solo lo que se vende en línea (1,619 contra 2,504). El spider NO debe mandarlo.
+curl 'https://prod.alsuperapi.com/ms-products/branch/6?department=farmacia-18&page=1&limit=500&ecommerce=true' -H 'User-Agent: Mozilla/5.0 …'
+
+# Fin de la paginación: la página siguiente a la última responde 404 {"data":[]}.
+curl 'https://prod.alsuperapi.com/ms-products/branch/6?department=farmacia-18&page=34&limit=50&ecommerce=true' -H 'User-Agent: Mozilla/5.0 …'
+
+# Productos sin departamento (disfunción eréctil), solo por palabra clave.
+curl 'https://prod.alsuperapi.com/ms-products/branch/6?keyword=sildenafil&page=1&limit=50' -H 'User-Agent: Mozilla/5.0 …'
+
+# Departamentos (para armar el slug descripción-id) y sucursales.
+curl 'https://prod.alsuperapi.com/departments/web?branch=6' -H 'User-Agent: Mozilla/5.0 …'
+curl 'https://prod.alsuperapi.com/stores?ecommerce=true' -H 'User-Agent: Mozilla/5.0 …'
+
+# Ficha (no hace falta para la corrida).
+curl 'https://prod.alsuperapi.com/products/391551/branch/6' -H 'User-Agent: Mozilla/5.0 …'
+
+# NO USAR: rutas de cuenta y /webview-tyc, prohibidas en robots.txt de www.

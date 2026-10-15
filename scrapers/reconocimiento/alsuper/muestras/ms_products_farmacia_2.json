@@ -1,0 +1,2138 @@
+{
+ "promotion": [
+  {
+   "promotion": "OFERTA",
+   "count": 709
+  }
+ ],
+ "departments": [
+  {
+   "department": "Farmacia",
+   "count": 2504
+  }
+ ],
+ "categories": [
+  {
+   "category": "Curación y Rehabilitación",
+   "results": 304
+  },
+  {
+   "category": "Incontinencia",
+   "results": 88
+  },
+  {
+   "category": "Medicamentos",
+   "results": 509
+  },
+  {
+   "category": "Medicamentos de patente",
+   "results": 778
+  },
+  {
+   "category": "Salud Sexual",
+   "results": 82
+  },
+  {
+   "category": "Vitaminas y suplementos",
+   "results": 743
+  }
+ ],
+ "subcategories": [
+  {
+   "subcategory": "Alcohol",
+   "results": 36
+  },
+  {
+   "subcategory": "Algodón",
+   "results": 48
+  },
+  {
+   "subcategory": "Antimicóticos",
+   "results": 63
+  },
+  {
+   "subcategory": "Dolor e Inflamación",
+   "results": 52
+  },
+  {
+   "subcategory": "Estomacales",
+   "results": 68
+  },
+  {
+   "subcategory": "Gel Antibacterial",
+   "results": 36
+  },
+  {
+   "subcategory": "Gripe y tos",
+   "results": 289
+  },
+  {
+   "subcategory": "Lubricantes",
+   "results": 23
+  },
+  {
+   "subcategory": "Material y accesorios",
+   "results": 184
+  },
+  {
+   "subcategory": "Ojos",
+   "results": 37
+  },
+  {
+   "subcategory": "Otros",
+   "results": 42
+  },
+  {
+   "subcategory": "Pañales",
+   "results": 20
+  },
+  {
+   "subcategory": "Preservativos",
+   "results": 53
+  },
+  {
+   "subcategory": "Pruebas de embarazo",
+   "results": 6
+  },
+  {
+   "subcategory": "SALUD ANALGESICA",
+   "results": 223
+  },
+  {
+   "subcategory": "SALUD ANTIINFECCIOSA",
+   "results": 131
+  },
+  {
+   "subcategory": "SALUD CARDIOVASCULAR",
+   "results": 81
+  },
+  {
+   "subcategory": "SALUD DERMATOLOGICA",
+   "results": 45
+  },
+  {
+   "subcategory": "SALUD GASTROINTESTINAL",
+   "results": 66
+  },
+  {
+   "subcategory": "SALUD MENTAL Y NEUROLOGICA",
+   "results": 32
+  },
+  {
+   "subcategory": "SALUD METABOLICA",
+   "results": 55
+  },
+  {
+   "subcategory": "SALUD OFTALMICA Y OTICA",
+   "results": 18
+  },
+  {
+   "subcategory": "SALUD RESPIRATORIA",
+   "results": 76
+  },
+  {
+   "subcategory": "SALUD SEXUAL Y HORMONAL",
+   "results": 47
+  },
+  {
+   "subcategory": "SUEROS Y SOLUCIONES CLINICAS",
+   "results": 4
+  },
+  {
+   "subcategory": "Toallas Sanitarias",
+   "results": 19
+  },
+  {
+   "subcategory": "Toallitas húmedas",
+   "results": 7
+  },
+  {
+   "subcategory": "Vitaminas y Suplementos",
+   "results": 743
+  }
+ ],
+ "brands": [
+  {
+   "brand": ".",
+   "results": 4
+  },
+  {
+   "brand": "3M",
+   "results": 1
+  },
+  {
+   "brand": "4 DIAS",
+   "results": 1
+  },
+  {
+   "brand": "4E",
+   "results": 3
+  },
+  {
+   "brand": "5H8 BASIC",
+   "results": 1
+  },
+  {
+   "brand": "ABBOTT",
+   "results": 31
+  },
+  {
+   "brand": "ABBOTT DIABETES",
+   "results": 3
+  },
+  {
+   "brand": "ABEJITA LAG",
+   "results": 2
+  },
+  {
+   "brand": "ACCU-CHEK",
+   "results": 6
+  },
+  {
+   "brand": "ADEROGYL",
+   "results": 1
+  },
+  {
+   "brand": "AFFECTIVE",
+   "results": 3
+  },
+  {
+   "brand": "ALLEGRA",
+   "results": 1
+  },
+  {
+   "brand": "ALLIVIAX",
+   "results": 1
+  },
+  {
+   "brand": "ALLNAT",
+   "results": 1
+  },
+  {
+   "brand": "APOTEX",
+   "results": 2
+  },
+  {
+   "brand": "ARAMBULA",
+   "results": 1
+  },
+  {
+   "brand": "ARFAT",
+   "results": 3
+  },
+  {
+   "brand": "ARIADNE",
+   "results": 1
+  },
+  {
+   "brand": "ASOFARMA",
+   "results": 12
+  },
+  {
+   "brand": "ASTRA",
+   "results": 13
+  },
+  {
+   "brand": "ASTRAZENECA",
+   "results": 5
+  },
+  {
+   "brand": "ATORLIP",
+   "results": 1
+  },
+  {
+   "brand": "AZTURAL LAB",
+   "results": 1
+  },
+  {
+   "brand": "Afrin",
+   "results": 1
+  },
+  {
+   "brand": "Alcon",
+   "results": 2
+  },
+  {
+   "brand": "Alcon Clc",
+   "results": 2
+  },
+  {
+   "brand": "Alfasigma",
+   "results": 4
+  },
+  {
+   "brand": "Alka Seltzer",
+   "results": 1
+  },
+  {
+   "brand": "Allergan",
+   "results": 1
+  },
+  {
+   "brand": "Alpharma",
+   "results": 6
+  },
+  {
+   "brand": "Alsuper",
+   "results": 2
+  },
+  {
+   "brand": "Amenarinip",
+   "results": 2
+  },
+  {
+   "brand": "Amsa",
+   "results": 27
+  },
+  {
+   "brand": "Ancalmo",
+   "results": 1
+  },
+  {
+   "brand": "Armstrong",
+   "results": 25
+  },
+  {
+   "brand": "Aspen",
+   "results": 6
+  },
+  {
+   "brand": "Aspirina",
+   "results": 1
+  },
+  {
+   "brand": "Astra Zeneca",
+   "results": 3
+  },
+  {
+   "brand": "Az",
+   "results": 6
+  },
+  {
+   "brand": "BAYER INTEN",
+   "results": 2
+  },
+  {
+   "brand": "BBTIPS",
+   "results": 1
+  },
+  {
+   "brand": "BDF ",
+   "results": 13
+  },
+  {
+   "brand": "BELACAPS",
+   "results": 3
+  },
+  {
+   "brand": "BETTER&BEST",
+   "results": 2
+  },
+  {
+   "brand": "BIOCODEX",
+   "results": 2
+  },
+  {
+   "brand": "BIOPHARMA",
+   "results": 19
+  },
+  {
+   "brand": "BIRDMAN",
+   "results": 42
+  },
+  {
+   "brand": "BLINLAB",
+   "results": 2
+  },
+  {
+   "brand": "BOEHRINGER",
+   "results": 7
+  },
+  {
+   "brand": "BOOST",
+   "results": 2
+  },
+  {
+   "brand": "BRAGG",
+   "results": 2
+  },
+  {
+   "brand": "BRONCOLIN",
+   "results": 9
+  },
+  {
+   "brand": "BRULUAG",
+   "results": 6
+  },
+  {
+   "brand": "BSTN",
+   "results": 4
+  },
+  {
+   "brand": "BYK GULDEN",
+   "results": 1
+  },
+  {
+   "brand": "Bausch & L G",
+   "results": 9
+  },
+  {
+   "brand": "Bausch L",
+   "results": 4
+  },
+  {
+   "brand": "Bay Cons",
+   "results": 1
+  },
+  {
+   "brand": "Bay Consum",
+   "results": 41
+  },
+  {
+   "brand": "Bayer",
+   "results": 40
+  },
+  {
+   "brand": "Belabear",
+   "results": 12
+  },
+  {
+   "brand": "Belskin",
+   "results": 3
+  },
+  {
+   "brand": "Benzal",
+   "results": 1
+  },
+  {
+   "brand": "Beramana",
+   "results": 2
+  },
+  {
+   "brand": "Biodesa",
+   "results": 3
+  },
+  {
+   "brand": "Biomep",
+   "results": 16
+  },
+  {
+   "brand": "Biomiral",
+   "results": 2
+  },
+  {
+   "brand": "Bioresearch",
+   "results": 2
+  },
+  {
+   "brand": "Biosyntec",
+   "results": 1
+  },
+  {
+   "brand": "Bloom",
+   "results": 6
+  },
+  {
+   "brand": "Boehringer I",
+   "results": 2
+  },
+  {
+   "brand": "Bomuca",
+   "results": 2
+  },
+  {
+   "brand": "Boston",
+   "results": 3
+  },
+  {
+   "brand": "Bristol",
+   "results": 15
+  },
+  {
+   "brand": "Bruluagsa",
+   "results": 1
+  },
+  {
+   "brand": "Bruluart",
+   "results": 13
+  },
+  {
+   "brand": "By Nfk",
+   "results": 11
+  },
+  {
+   "brand": "C Boost",
+   "results": 3
+  },
+  {
+   "brand": "C-BOOST",
+   "results": 3
+  },
+  {
+   "brand": "CALCIGENOL",
+   "results": 1
+  },
+  {
+   "brand": "CALM BY SIMPLEX",
+   "results": 1
+  },
+  {
+   "brand": "CARMEX",
+   "results": 1
+  },
+  {
+   "brand": "CARNOT",
+   "results": 10
+  },
+  {
+   "brand": "CARNOT LAB",
+   "results": 1
+  },
+  {
+   "brand": "CASEC",
+   "results": 1
+  },
+  {
+   "brand": "CENTRUM",
+   "results": 3
+  },
+  {
+   "brand": "CHURCH & D",
+   "results": 4
+  },
+  {
+   "brand": "CITRACAL",
+   "results": 1
+  },
+  {
+   "brand": "CLES",
+   "results": 6
+  },
+  {
+   "brand": "CLORALEX",
+   "results": 4
+  },
+  {
+   "brand": "COLLINS",
+   "results": 22
+  },
+  {
+   "brand": "COMFORT STAR ",
+   "results": 25
+  },
+  {
+   "brand": "COMMONS",
+   "results": 6
+  },
+  {
+   "brand": "COTIDIAN",
+   "results": 3
+  },
+  {
+   "brand": "COTTONI",
+   "results": 3
+  },
+  {
+   "brand": "COYOACAN",
+   "results": 1
+  },
+  {
+   "brand": "CUREMEX",
+   "results": 28
+  },
+  {
+   "brand": "Capsiflu",
+   "results": 1
+  },
+  {
+   "brand": "Cbd Life",
+   "results": 4
+  },
+  {
+   "brand": "Chinoin",
+   "results": 35
+  },
+  {
+   "brand": "Church &Dwight",
+   "results": 1
+  },
+  {
+   "brand": "Com De La Salud",
+   "results": 3
+  },
+  {
+   "brand": "Cuo Protect",
+   "results": 1
+  },
+  {
+   "brand": "Cure Band",
+   "results": 4
+  },
+  {
+   "brand": "Curitas",
+   "results": 10
+  },
+  {
+   "brand": "DALAY",
+   "results": 1
+  },
+  {
+   "brand": "DALUX",
+   "results": 4
+  },
+  {
+   "brand": "DARIER S",
+   "results": 2
+  },
+  {
+   "brand": "DEGORTS",
+   "results": 3
+  },
+  {
+   "brand": "DIAPRO",
+   "results": 5
+  },
+  {
+   "brand": "DIBEN HPC",
+   "results": 1
+  },
+  {
+   "brand": "DKT MEXICO",
+   "results": 1
+  },
+  {
+   "brand": "DR ALIVIA",
+   "results": 4
+  },
+  {
+   "brand": "DR HEALTH",
+   "results": 4
+  },
+  {
+   "brand": "Degasa",
+   "results": 7
+  },
+  {
+   "brand": "Degort",
+   "results": 3
+  },
+  {
+   "brand": "Denti-Lab",
+   "results": 1
+  },
+  {
+   "brand": "Depend",
+   "results": 19
+  },
+  {
+   "brand": "Digrifar",
+   "results": 2
+  },
+  {
+   "brand": "Disliomont",
+   "results": 3
+  },
+  {
+   "brand": "Distliomon",
+   "results": 8
+  },
+  {
+   "brand": "Distliomont",
+   "results": 3
+  },
+  {
+   "brand": "Dl",
+   "results": 13
+  },
+  {
+   "brand": "Dlactase",
+   "results": 1
+  },
+  {
+   "brand": "Dm",
+   "results": 2
+  },
+  {
+   "brand": "Dodys",
+   "results": 1
+  },
+  {
+   "brand": "Dolo-Neurobion",
+   "results": 3
+  },
+  {
+   "brand": "Dr Montfort",
+   "results": 1
+  },
+  {
+   "brand": "ELI LILLY",
+   "results": 1
+  },
+  {
+   "brand": "EMERGEN-C",
+   "results": 1
+  },
+  {
+   "brand": "ENSURE",
+   "results": 3
+  },
+  {
+   "brand": "ENSURE ADVANCE",
+   "results": 1
+  },
+  {
+   "brand": "EUROFARMA",
+   "results": 4
+  },
+  {
+   "brand": "EUROFARMA OTC",
+   "results": 5
+  },
+  {
+   "brand": "EXCELSIOR",
+   "results": 1
+  },
+  {
+   "brand": "EXMICROR",
+   "results": 1
+  },
+  {
+   "brand": "EYPRO",
+   "results": 1
+  },
+  {
+   "brand": "Efficient",
+   "results": 2
+  },
+  {
+   "brand": "Enfagrow",
+   "results": 1
+  },
+  {
+   "brand": "Escudo",
+   "results": 3
+  },
+  {
+   "brand": "Esteripharma",
+   "results": 1
+  },
+  {
+   "brand": "Evervital",
+   "results": 3
+  },
+  {
+   "brand": "Exeltis",
+   "results": 7
+  },
+  {
+   "brand": "Exgerm",
+   "results": 3
+  },
+  {
+   "brand": "Expanscience",
+   "results": 1
+  },
+  {
+   "brand": "FABREFARMA",
+   "results": 1
+  },
+  {
+   "brand": "FEMENINE",
+   "results": 3
+  },
+  {
+   "brand": "FREESTYLE",
+   "results": 2
+  },
+  {
+   "brand": "FRESUBIN",
+   "results": 1
+  },
+  {
+   "brand": "Farmamedica",
+   "results": 1
+  },
+  {
+   "brand": "Farmasa",
+   "results": 1
+  },
+  {
+   "brand": "Ferre Ther",
+   "results": 3
+  },
+  {
+   "brand": "Futurella",
+   "results": 4
+  },
+  {
+   "brand": "GARDEN HOUSE",
+   "results": 1
+  },
+  {
+   "brand": "GELPHARMA",
+   "results": 5
+  },
+  {
+   "brand": "GENETICA",
+   "results": 1
+  },
+  {
+   "brand": "GENOPRAZOL",
+   "results": 1
+  },
+  {
+   "brand": "GINGER",
+   "results": 1
+  },
+  {
+   "brand": "GLASS VISION",
+   "results": 1
+  },
+  {
+   "brand": "GLAXO",
+   "results": 38
+  },
+  {
+   "brand": "GLAXO SK B OTC",
+   "results": 6
+  },
+  {
+   "brand": "GLUCERNA",
+   "results": 1
+  },
+  {
+   "brand": "GO MERAKI",
+   "results": 4
+  },
+  {
+   "brand": "GOLI",
+   "results": 2
+  },
+  {
+   "brand": "GRANEODIN F",
+   "results": 1
+  },
+  {
+   "brand": "GREEN LIFE",
+   "results": 3
+  },
+  {
+   "brand": "GRUPO ERLA",
+   "results": 2
+  },
+  {
+   "brand": "GURU NANDA",
+   "results": 4
+  },
+  {
+   "brand": "Galderma",
+   "results": 3
+  },
+  {
+   "brand": "Gedeon Richter",
+   "results": 1
+  },
+  {
+   "brand": "Gelcaps",
+   "results": 1
+  },
+  {
+   "brand": "Genomma Lab",
+   "results": 15
+  },
+  {
+   "brand": "Genommalab",
+   "results": 34
+  },
+  {
+   "brand": "Gft",
+   "results": 3
+  },
+  {
+   "brand": "Glaxo Skb Otc",
+   "results": 2
+  },
+  {
+   "brand": "Gn+Vida",
+   "results": 3
+  },
+  {
+   "brand": "Goli Nutrition",
+   "results": 3
+  },
+  {
+   "brand": "Graneodin B",
+   "results": 2
+  },
+  {
+   "brand": "Greenside",
+   "results": 4
+  },
+  {
+   "brand": "Grin",
+   "results": 4
+  },
+  {
+   "brand": "Grisi",
+   "results": 1
+  },
+  {
+   "brand": "Grunenthal",
+   "results": 1
+  },
+  {
+   "brand": "Gsk",
+   "results": 2
+  },
+  {
+   "brand": "Gsk Ch",
+   "results": 5
+  },
+  {
+   "brand": "Gsk Consumo",
+   "results": 1
+  },
+  {
+   "brand": "HABITS",
+   "results": 5
+  },
+  {
+   "brand": "HALEON OTC",
+   "results": 14
+  },
+  {
+   "brand": "HEALTH HACK",
+   "results": 10
+  },
+  {
+   "brand": "HERBACIL",
+   "results": 6
+  },
+  {
+   "brand": "HERBAMEDIC",
+   "results": 1
+  },
+  {
+   "brand": "HIGIENIX",
+   "results": 1
+  },
+  {
+   "brand": "HISPANOAMERIC",
+   "results": 1
+  },
+  {
+   "brand": "HOLIHERB",
+   "results": 1
+  },
+  {
+   "brand": "HORMONA",
+   "results": 11
+  },
+  {
+   "brand": "HORMONA OTC",
+   "results": 1
+  },
+  {
+   "brand": "HUMAN",
+   "results": 2
+  },
+  {
+   "brand": "HUMBLE",
+   "results": 5
+  },
+  {
+   "brand": "HUMMAN",
+   "results": 4
+  },
+  {
+   "brand": "Heally",
+   "results": 8
+  },
+  {
+   "brand": "Holand",
+   "results": 1
+  },
+  {
+   "brand": "Huichol ",
+   "results": 7
+  },
+  {
+   "brand": "ICEBERG",
+   "results": 1
+  },
+  {
+   "brand": "ILIADIN",
+   "results": 1
+  },
+  {
+   "brand": "INBIZ",
+   "results": 1
+  },
+  {
+   "brand": "IRWIN NATURA",
+   "results": 1
+  },
+  {
+   "brand": "ISOPURE",
+   "results": 19
+  },
+  {
+   "brand": "Ifa",
+   "results": 8
+  },
+  {
+   "brand": "Ifa Celtics",
+   "results": 1
+  },
+  {
+   "brand": "Italmex",
+   "results": 5
+  },
+  {
+   "brand": "JASON",
+   "results": 1
+  },
+  {
+   "brand": "JAYLOR",
+   "results": 1
+  },
+  {
+   "brand": "JAYOR",
+   "results": 1
+  },
+  {
+   "brand": "Jaloma",
+   "results": 33
+  },
+  {
+   "brand": "Janssen",
+   "results": 15
+  },
+  {
+   "brand": "Johnson",
+   "results": 2
+  },
+  {
+   "brand": "Jyjconsum",
+   "results": 11
+  },
+  {
+   "brand": "KENVUE",
+   "results": 7
+  },
+  {
+   "brand": "KIDDI PHARMATON",
+   "results": 2
+  },
+  {
+   "brand": "KLEENEX",
+   "results": 3
+  },
+  {
+   "brand": "Kal",
+   "results": 9
+  },
+  {
+   "brand": "Kaopectate",
+   "results": 1
+  },
+  {
+   "brand": "Kener",
+   "results": 4
+  },
+  {
+   "brand": "Kole",
+   "results": 1
+  },
+  {
+   "brand": "Kps",
+   "results": 1
+  },
+  {
+   "brand": "Ksk",
+   "results": 4
+  },
+  {
+   "brand": "LABELLO",
+   "results": 1
+  },
+  {
+   "brand": "LACTACYD",
+   "results": 1
+  },
+  {
+   "brand": "LAKESIA",
+   "results": 1
+  },
+  {
+   "brand": "LAKESIDE",
+   "results": 1
+  },
+  {
+   "brand": "LANDSTEINER",
+   "results": 1
+  },
+  {
+   "brand": "LARITOL",
+   "results": 1
+  },
+  {
+   "brand": "LAZZER CARE ",
+   "results": 5
+  },
+  {
+   "brand": "LEO PHARMA",
+   "results": 3
+  },
+  {
+   "brand": "LEO PHARMA-BAYE",
+   "results": 2
+  },
+  {
+   "brand": "LEXITO",
+   "results": 1
+  },
+  {
+   "brand": "LGEN",
+   "results": 1
+  },
+  {
+   "brand": "LIBERTY",
+   "results": 1
+  },
+  {
+   "brand": "LIFERPAL",
+   "results": 3
+  },
+  {
+   "brand": "LILLY",
+   "results": 6
+  },
+  {
+   "brand": "LIOMONT",
+   "results": 15
+  },
+  {
+   "brand": "LOS RANCHEROS",
+   "results": 2
+  },
+  {
+   "brand": "LOTRIMIN",
+   "results": 5
+  },
+  {
+   "brand": "LOV",
+   "results": 5
+  },
+  {
+   "brand": "LOVARIN",
+   "results": 1
+  },
+  {
+   "brand": "LYSOL",
+   "results": 1
+  },
+  {
+   "brand": "Le Roy",
+   "results": 12
+  },
+  {
+   "brand": "Liomont Otc",
+   "results": 18
+  },
+  {
+   "brand": "Loeffler",
+   "results": 2
+  },
+  {
+   "brand": "Logvaleant",
+   "results": 5
+  },
+  {
+   "brand": "Lysi",
+   "results": 5
+  },
+  {
+   "brand": "M Force",
+   "results": 1
+  },
+  {
+   "brand": "MARY RUTH'S",
+   "results": 11
+  },
+  {
+   "brand": "MAVER",
+   "results": 34
+  },
+  {
+   "brand": "MAXICLORURO",
+   "results": 2
+  },
+  {
+   "brand": "MDR",
+   "results": 1
+  },
+  {
+   "brand": "MEDICLEAN",
+   "results": 2
+  },
+  {
+   "brand": "MEDIKAVA",
+   "results": 1
+  },
+  {
+   "brand": "MEGALABS",
+   "results": 2
+  },
+  {
+   "brand": "MELOX",
+   "results": 1
+  },
+  {
+   "brand": "MERCK",
+   "results": 1
+  },
+  {
+   "brand": "MERCK GM",
+   "results": 1
+  },
+  {
+   "brand": "MICROBIOT",
+   "results": 1
+  },
+  {
+   "brand": "MOKSHA8",
+   "results": 2
+  },
+  {
+   "brand": "MRM",
+   "results": 1
+  },
+  {
+   "brand": "Mavi",
+   "results": 9
+  },
+  {
+   "brand": "Mayolispin",
+   "results": 2
+  },
+  {
+   "brand": "Md",
+   "results": 1
+  },
+  {
+   "brand": "Mdr Pharma",
+   "results": 1
+  },
+  {
+   "brand": "Medicare",
+   "results": 18
+  },
+  {
+   "brand": "Medix",
+   "results": 4
+  },
+  {
+   "brand": "Merck Biopharma",
+   "results": 1
+  },
+  {
+   "brand": "Merck S & D",
+   "results": 1
+  },
+  {
+   "brand": "Merck Sacv",
+   "results": 15
+  },
+  {
+   "brand": "Metamucil",
+   "results": 2
+  },
+  {
+   "brand": "Moon Bliss",
+   "results": 2
+  },
+  {
+   "brand": "Multiblue",
+   "results": 6
+  },
+  {
+   "brand": "NAT VITALITY",
+   "results": 4
+  },
+  {
+   "brand": "NATURACASTLE",
+   "results": 2
+  },
+  {
+   "brand": "NATURAMEX",
+   "results": 1
+  },
+  {
+   "brand": "NATURES HEART",
+   "results": 2
+  },
+  {
+   "brand": "NATURE`S HEART",
+   "results": 2
+  },
+  {
+   "brand": "NEOCELL",
+   "results": 5
+  },
+  {
+   "brand": "NESTLE",
+   "results": 14
+  },
+  {
+   "brand": "NOOVE",
+   "results": 1
+  },
+  {
+   "brand": "NORDIC NATURALS",
+   "results": 1
+  },
+  {
+   "brand": "NOVAL WELLNESS",
+   "results": 3
+  },
+  {
+   "brand": "NOVARTIS ",
+   "results": 4
+  },
+  {
+   "brand": "NOVO NORDISK",
+   "results": 3
+  },
+  {
+   "brand": "NUVION GLASS",
+   "results": 18
+  },
+  {
+   "brand": "Nahol",
+   "results": 4
+  },
+  {
+   "brand": "Nartex",
+   "results": 13
+  },
+  {
+   "brand": "Natural Wisdom",
+   "results": 13
+  },
+  {
+   "brand": "Natures Life",
+   "results": 4
+  },
+  {
+   "brand": "Neilmed ",
+   "results": 1
+  },
+  {
+   "brand": "Neurobion",
+   "results": 2
+  },
+  {
+   "brand": "Nexcare",
+   "results": 9
+  },
+  {
+   "brand": "Next",
+   "results": 1
+  },
+  {
+   "brand": "Novag",
+   "results": 12
+  },
+  {
+   "brand": "Novag Inf",
+   "results": 1
+  },
+  {
+   "brand": "Now",
+   "results": 33
+  },
+  {
+   "brand": "Nutravia",
+   "results": 4
+  },
+  {
+   "brand": "Nyquilz",
+   "results": 1
+  },
+  {
+   "brand": "O-DOLEX",
+   "results": 8
+  },
+  {
+   "brand": "OKKO",
+   "results": 2
+  },
+  {
+   "brand": "OLORMAX",
+   "results": 4
+  },
+  {
+   "brand": "OMARS",
+   "results": 1
+  },
+  {
+   "brand": "OMRON",
+   "results": 2
+  },
+  {
+   "brand": "ONA STICK",
+   "results": 1
+  },
+  {
+   "brand": "OPTIMUM NUTRITI",
+   "results": 1
+  },
+  {
+   "brand": "ORTHOWORLD ",
+   "results": 3
+  },
+  {
+   "brand": "Oculustech",
+   "results": 1
+  },
+  {
+   "brand": "Offenbach",
+   "results": 2
+  },
+  {
+   "brand": "Ol",
+   "results": 2
+  },
+  {
+   "brand": "Ol Natural",
+   "results": 1
+  },
+  {
+   "brand": "Olorex",
+   "results": 7
+  },
+  {
+   "brand": "On",
+   "results": 20
+  },
+  {
+   "brand": "Opko",
+   "results": 1
+  },
+  {
+   "brand": "Ore",
+   "results": 5
+  },
+  {
+   "brand": "Organon",
+   "results": 7
+  },
+  {
+   "brand": "Otro",
+   "results": 5
+  },
+  {
+   "brand": "P GAMBLE",
+   "results": 7
+  },
+  {
+   "brand": "P&G-Chd Otc ",
+   "results": 4
+  },
+  {
+   "brand": "P&G-Chd Rx",
+   "results": 6
+  },
+  {
+   "brand": "PABLO ZENETI",
+   "results": 1
+  },
+  {
+   "brand": "PANALIA",
+   "results": 3
+  },
+  {
+   "brand": "PEDIASURE",
+   "results": 10
+  },
+  {
+   "brand": "PHARMATON",
+   "results": 2
+  },
+  {
+   "brand": "PIELUX",
+   "results": 1
+  },
+  {
+   "brand": "PIERRE FABRE",
+   "results": 3
+  },
+  {
+   "brand": "PLAZA SESAMO",
+   "results": 1
+  },
+  {
+   "brand": "PROGELA",
+   "results": 2
+  },
+  {
+   "brand": "PRONAT",
+   "results": 12
+  },
+  {
+   "brand": "PROTEC",
+   "results": 8
+  },
+  {
+   "brand": "PROWINNER",
+   "results": 3
+  },
+  {
+   "brand": "Pfizer",
+   "results": 11
+  },
+  {
+   "brand": "Pisa",
+   "results": 35
+  },
+  {
+   "brand": "Pisa Nc",
+   "results": 1
+  },
+  {
+   "brand": "Prebian",
+   "results": 2
+  },
+  {
+   "brand": "Pro-Ventas",
+   "results": 2
+  },
+  {
+   "brand": "Probvioptal",
+   "results": 1
+  },
+  {
+   "brand": "Pronasur",
+   "results": 2
+  },
+  {
+   "brand": "Pronat Ultra",
+   "results": 4
+  },
+  {
+   "brand": "Prosana",
+   "results": 4
+  },
+  {
+   "brand": "Prudence",
+   "results": 26
+  },
+  {
+   "brand": "Psicofarma",
+   "results": 3
+  },
+  {
+   "brand": "Psyllium",
+   "results": 2
+  },
+  {
+   "brand": "Pysillium",
+   "results": 1
+  },
+  {
+   "brand": "QUIMA FINA",
+   "results": 1
+  },
+  {
+   "brand": "Quimpharma",
+   "results": 1
+  },
+  {
+   "brand": "RAAM",
+   "results": 8
+  },
+  {
+   "brand": "RAICES ZEN",
+   "results": 2
+  },
+  {
+   "brand": "RAINBOW",
+   "results": 2
+  },
+  {
+   "brand": "RANDALL",
+   "results": 1
+  },
+  {
+   "brand": "RAPIDFRUIT",
+   "results": 1
+  },
+  {
+   "brand": "RAYERE",
+   "results": 5
+  },
+  {
+   "brand": "REALY",
+   "results": 1
+  },
+  {
+   "brand": "REDDY",
+   "results": 2
+  },
+  {
+   "brand": "REDOXON",
+   "results": 1
+  },
+  {
+   "brand": "REGENESIS",
+   "results": 1
+  },
+  {
+   "brand": "REXONA",
+   "results": 5
+  },
+  {
+   "brand": "RICOLA",
+   "results": 1
+  },
+  {
+   "brand": "ROHTO",
+   "results": 2
+  },
+  {
+   "brand": "Racel",
+   "results": 1
+  },
+  {
+   "brand": "Raices Verdes",
+   "results": 8
+  },
+  {
+   "brand": "Reck-Ben",
+   "results": 5
+  },
+  {
+   "brand": "Reckitt",
+   "results": 6
+  },
+  {
+   "brand": "Reivax",
+   "results": 8
+  },
+  {
+   "brand": "SABA",
+   "results": 2
+  },
+  {
+   "brand": "SANAX",
+   "results": 1
+  },
+  {
+   "brand": "SANDOZ",
+   "results": 3
+  },
+  {
+   "brand": "SANFER NOVARTIS",
+   "results": 4
+  },
+  {
+   "brand": "SANFER POPULAR",
+   "results": 2
+  },
+  {
+   "brand": "SANJING",
+   "results": 2
+  },
+  {
+   "brand": "SANOFI",
+   "results": 16
+  },
+  {
+   "brand": "SANOFI BI ",
+   "results": 4
+  },
+  {
+   "brand": "SANOFI BI OTC",
+   "results": 2
+  },
+  {
+   "brand": "SANOFI WTP ",
+   "results": 17
+  },
+  {
+   "brand": "SAWAVENTIS",
+   "results": 1
+  },
+  {
+   "brand": "SCHEPLOUGH",
+   "results": 17
+  },
+  {
+   "brand": "SCHERING-PLOUGH",
+   "results": 1
+  },
+  {
+   "brand": "SCOTT",
+   "results": 1
+  },
+  {
+   "brand": "SELTZ",
+   "results": 18
+  },
+  {
+   "brand": "SENSUAL ZISEN",
+   "results": 1
+  },
+  {
+   "brand": "SERVI BOCA",
+   "results": 2
+  },
+  {
+   "brand": "SICO",
+   "results": 10
+  },
+  {
+   "brand": "SIEGFRIED",
+   "results": 27
+  },
+  {
+   "brand": "SIEMPRE NATURAL",
+   "results": 2
+  },
+  {
+   "brand": "SILKA",
+   "results": 1
+  },
+  {
+   "brand": "SLIM FAST",
+   "results": 4
+  },
+  {
+   "brand": "SNUBY",
+   "results": 1
+  },
+  {
+   "brand": "SOLANUM",
+   "results": 47
+  },
+  {
+   "brand": "SOPHIA",
+   "results": 13
+  },
+  {
+   "brand": "SORRENTO",
+   "results": 1
+  },
+  {
+   "brand": "SPLENDA",
+   "results": 3
+  },
+  {
+   "brand": "SUKUNAI",
+   "results": 1
+  },
+  {
+   "brand": "SUPPORTAN",
+   "results": 1
+  },
+  {
+   "brand": "SWANSON",
+   "results": 2
+  },
+  {
+   "brand": "SXO",
+   "results": 5
+  },
+  {
+   "brand": "Salud Nat",
+   "results": 1
+  },
+  {
+   "brand": "Salud Natural",
+   "results": 1
+  },
+  {
+   "brand": "Sandozsacv",
+   "results": 4
+  },
+  {
+   "brand": "Sanfer",
+   "results": 20
+  },
+  {
+   "brand": "Sanfer Mp",
+   "results": 1
+  },
+  {
+   "brand": "Sanfer Sanofi",
+   "results": 1
+  },
+  {
+   "brand": "Sanfer-Msd",
+   "results": 2
+  },
+  {
+   "brand": "Sanofi Wtp Otc",
+   "results": 3
+  },
+  {
+   "brand": "Schoen",
+   "results": 1
+  },
+  {
+   "brand": "Semilla Aromati",
+   "results": 2
+  },
+  {
+   "brand": "Senosiain",
+   "results": 31
+  },
+  {
+   "brand": "Serral",
+   "results": 12
+  },
+  {
+   "brand": "Siegfried R",
+   "results": 4
+  },
+  {
+   "brand": "Siegfried Rhein",
+   "results": 5
+  },
+  {
+   "brand": "Siegfriedr",
+   "results": 2
+  },
+  {
+   "brand": "Silanes",
+   "results": 5
+  },
+  {
+   "brand": "Sinax",
+   "results": 3
+  },
+  {
+   "brand": "Sinuberase",
+   "results": 4
+  },
+  {
+   "brand": "Sm",
+   "results": 1
+  },
+  {
+   "brand": "Smn",
+   "results": 2
+  },
+  {
+   "brand": "Solaray",
+   "results": 7
+  },
+  {
+   "brand": "Sons",
+   "results": 12
+  },
+  {
+   "brand": "Sport Feet",
+   "results": 1
+  },
+  {
+   "brand": "Sterimar",
+   "results": 2
+  },
+  {
+   "brand": "Stetrimar",
+   "results": 1
+  },
+  {
+   "brand": "TECNOFARMA",
+   "results": 2
+  },
+  {
+   "brand": "TESALON",
+   "results": 1
+  },
+  {
+   "brand": "THE SUPER FOOD",
+   "results": 4
+  },
+  {
+   "brand": "TOCOGINO",
+   "results": 2
+  },
+  {
+   "brand": "Takeda",
+   "results": 7
+  },
+  {
+   "brand": "Tempra",
+   "results": 1
+  },
+  {
+   "brand": "Tempra Fen",
+   "results": 1
+  },
+  {
+   "brand": "Tena",
+   "results": 32
+  },
+  {
+   "brand": "Tena Lady ",
+   "results": 6
+  },
+  {
+   "brand": "Tena Men",
+   "results": 1
+  },
+  {
+   "brand": "Therbal",
+   "results": 7
+  },
+  {
+   "brand": "Trojan",
+   "results": 8
+  },
+  {
+   "brand": "Tukol",
+   "results": 1
+  },
+  {
+   "brand": "U.C.B.",
+   "results": 5
+  },
+  {
+   "brand": "ULTRA",
+   "results": 13
+  },
+  {
+   "brand": "ULTRA FOOT",
+   "results": 4
+  },
+  {
+   "brand": "ULTRABABY TESTP",
+   "results": 1
+  },
+  {
+   "brand": "UPJOHN",
+   "results": 1
+  },
+  {
+   "brand": "Ultra Lab",
+   "results": 35
+  },
+  {
+   "brand": "Up Pharma",
+   "results": 2
+  },
+  {
+   "brand": "VIATRIS",
+   "results": 5
+  },
+  {
+   "brand": "VICK",
+   "results": 3
+  },
+  {
+   "brand": "VICTOR",
+   "results": 3
+  },
+  {
+   "brand": "VICTORY",
+   "results": 6
+  },
+  {
+   "brand": "VIVENAT",
+   "results": 1
+  },
+  {
+   "brand": "Valdecasas",
+   "results": 3
+  },
+  {
+   "brand": "Vidanat",
+   "results": 5
+  },
+  {
+   "brand": "Vital Proteins",
+   "results": 2
+  },
+  {
+   "brand": "WALFORT",
+   "results": 2
+  },
+  {
+   "brand": "WANDEL",
+   "results": 3
+  },
+  {
+   "brand": "WE KIDS",
+   "results": 2
+  },
+  {
+   "brand": "WU NUTRITION",
+   "results": 6
+  },
+  {
+   "brand": "Wermar",
+   "results": 6
+  },
+  {
+   "brand": "Weser Pharma",
+   "results": 9
+  },
+  {
+   "brand": "Wu",
+   "results": 8
+  },
+  {
+   "brand": "YERBO VITAL",
+   "results": 7
+  },
+  {
+   "brand": "ZENNATURA",
+   "results": 1
+  },
+  {
+   "brand": "ZUUM",
+   "results": 18
+  },
+  {
+   "brand": "ZUUM MODD ",
+   "results": 1
+  },
+  {
+   "brand": "Zen Natura",
+   "results": 14
+  },
+  {
+   "brand": "Zumm",
+   "results": 2
+  },
+  {
+   "brand": "nivea",
+   "results": 1
+  },
+  {
+   "brand": "preservativo",
+   "results": 1
+  }
+ ],
+ "total_items": 2504,
+ "keywordsHistory": [
+  ""
+ ],
+ "data": [
+  {
+   "description": "Almohadilla de algodón Medicare 100 Pza",
+   "name": "Almohadilla de algodón Medicare 100 Pza",
+   "brand": "Medicare",
+   "keywords": "limpieza y suavidad",
+   "long_description": "productos hechos de la mejor calidad , almohadillas de algodon suve para desmaquillar,almohadilla absorbentes para higiene personal y para aplicar  cremas ,locioes, tratamientos facilaes retiro de el maquillaje conservar en un lugar fresco su vida util es de 5 años almohadilla grabada en base panal  dando una sensacion de suavidad ala hora su aplicacion",
+   "characteristics": "(Biodegradable)+(Limpieza e higiene)+(Suavidad y fácil retiro en maquillajes)",
+   "department": "Farmacia",
+   "objectID": 473209,
+   "id": 473209,
+   "sku": 473209,
+   "short_description": "ALMOHADILLA ALGODON",
+   "nutritional_information": null,
+   "department_id": 1033,
+   "id_department": 1033,
+   "_key": 44,
+   "family": 4033,
+   "_group": 173,
+   "promotion": "OFERTA",
+   "price": 39.9,
+   "regular_price": 39.9,
+   "club_price": 0,
+   "price_per_pcs": 39.9,
+   "attributes": null,
+   "format": "100 PZ",
+   "stock": 52,
+   "status": "Activo",
+   "image_url": "https://cdn.alsuper.com/products/473209.png",
+   "packing": "100 PZ",
+   "_order": "0",
+   "ean": "7502258102374",
+   "weight": null,
+   "unit": null,
+   "variant": null,
+   "diferenciado": 0,
+   "ecommerce": true,
+   "sub_brand": null,
+   "feature_1": "Biodegradable",
+   "feature_2": "Limpieza e higiene",
+   "feature_3": "Suavidad y fácil retiro en maquillajes",
+   "category_name": "Curación y Rehabilitación",
+   "subcategory_name": "Algodón",
+   "sells": 770,
+   "smart_offer": "70",
+   "restriction": 2,
+   "offer_type": 2,
+   "fecha_inicio_oferta": "2026-10-01",
+   "fecha_fin_oferta": "2026-10-31",
+   "comodin": 473209,
+   "planograma": "0060440785A  ",
+   "pasillo": "PASILLO J",
+   "prioridad": 1,
+   "tope_smart_offer": 3,
+   "sell_limit": 0,
+   "share_url": "https://alsuper.com/producto/almohadilla-algodon-473209"
+  },
+  {
+   "description": "Hisopos Medicare 150 Pza",
+   "name": "Hisopos Medicare 150 Pza",
+   "brand": "Medicare",
+   "keywords": "hisopos,limpieza,higiene,aplicador",
+   "long_description": "productos hechos de la mejor calidad ,puntas 1005 algodón y palillo para sujetar materiales absorbentes higiene personal y para aplicar o delinear el maquillaje conservar en un lugar fresco su vida util es de 5 años no introducir el aplicador en dentro del canal auditivo o nariz uselos solamente en la superficie exterior del oido o nariz",
+   "characteristics": "(Biodegradable)+(Limpieza e higiene)+(Suavidad y fácil aplicación)",
+   "department": "Farmacia",
+   "objectID": 472660,
+   "id": 472660,
+   "sku": 472660,
+   "short_description": "HISOPOS",
+   "nutritional_information": null,
+   "department_id": 1033,
+   "id_department": 1033,
+   "_key": 44,
+   "family": 4033,
+   "_group": 173,
+   "promotion": "OFERTA",
+   "price": 22.9,
+   "regular_price": 24.9,
+   "club_price": 0,
+   "price_per_pcs": 24.9,
+   "attributes": null,
+   "format": "150 PZ",
+   "stock": 60,
+   "status": "Activo",
+   "image_url": "https://cdn.alsuper.com/products/472660.png",
+   "packing": "150 PZ",
+   "_order": "0",
+   "ean": "7502258102497",
+   "weight": null,
+   "unit": null,
+   "variant": null,
+   "diferenciado": 0,
+   "ecommerce": true,
+   "sub_brand": null,
+   "feature_1": "Biodegradable",
+   "feature_2": "Limpieza e higiene",
+   "feature_3": "Suavidad y fácil aplicación",
+   "category_name": "Curación y Rehabilitación",
+   "subcategory_name": "Algodón",
+   "sells": 733,
+   "smart_offer": "0",
+   "restriction": 0,
+   "offer_type": 0,
+   "fecha_inicio_oferta": "2026-10-01",
+   "fecha_fin_oferta": "2026-10-31",
+   "comodin": 0,
+   "planograma": "0060440785A  ",
+   "pasillo": "PASILLO J",
+   "prioridad": 1,
+   "tope_smart_offer": 0,
+   "sell_limit": 0,
+   "share_url": "https://alsuper.com/producto/hisopos-472660"
+  }
+ ]
+}
