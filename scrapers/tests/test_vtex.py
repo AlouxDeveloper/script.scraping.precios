@@ -36,7 +36,7 @@ def spider():
 
 
 def productos() -> list[dict]:
-    return json.loads((FIXTURES / "medicamentos_p1.json").read_text())
+    return json.loads((FIXTURES / "medicamentos_p1.json").read_text(encoding="utf-8"))
 
 
 def respuesta(url: str, total: int | None, cuerpo=None) -> TextResponse:
@@ -166,7 +166,7 @@ def test_farmatodo_usa_productreference_y_su_dominio():
     spider.por_categoria["/7/"] = {"total_reportado": 5, "skus": set()}
     cuerpo = json.loads(
         (Path(__file__).parent / "fixtures" / "farmatodo"
-         / "medicamentos_p1.json").read_text())
+         / "medicamentos_p1.json").read_text(encoding="utf-8"))
     url = ("https://www.farmatodo.com.mx/api/catalog_system/pub/products/"
            "search?fq=C:/7/&_from=0&_to=49")
     filas, _ = separar(spider.parse(respuesta(url, 5, cuerpo),
@@ -191,7 +191,7 @@ def test_klyns_usa_el_ean_y_guarda_el_refid():
     spider = crawler.spider = SpiderKlyns.from_crawler(crawler)
     spider.por_categoria["/68/"] = {"total_reportado": 5, "skus": set()}
     cuerpo = json.loads((Path(__file__).parent / "fixtures" / "klyns"
-                         / "patente_p1.json").read_text())
+                         / "patente_p1.json").read_text(encoding="utf-8"))
     url = ("https://www.klyns.mx/api/catalog_system/pub/products/search"
            "?fq=C:/68/&_from=0&_to=49")
     filas, _ = separar(spider.parse(respuesta(url, 5, cuerpo),
@@ -223,7 +223,7 @@ def test_similares_sin_ean_y_sku_interno():
     spider = crawler.spider = SpiderSimilares.from_crawler(crawler)
     spider.por_categoria["/29/"] = {"total_reportado": 3, "skus": set()}
     cuerpo = json.loads((Path(__file__).parent / "fixtures" / "similares"
-                         / "medicamentos_p1.json").read_text())
+                         / "medicamentos_p1.json").read_text(encoding="utf-8"))
     url = ("https://www.farmaciasdesimilares.com/api/catalog_system/pub/"
            "products/search?fq=C:/29/&_from=0&_to=49")
     filas, peticiones = separar(spider.parse(

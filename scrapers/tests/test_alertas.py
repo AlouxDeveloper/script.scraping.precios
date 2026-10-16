@@ -209,7 +209,7 @@ def test_json_a_archivo_por_corrida(tmp_path):
         handler.flush()
     assert archivo == (tmp_path / "tienda=walmart"
                        / "walmart_20261008T1700Z.jsonl")
-    linea = json.loads(archivo.read_text().splitlines()[-1])
+    linea = json.loads(archivo.read_text(encoding="utf-8").splitlines()[-1])
     assert linea["message"] == "Navigating to x"
     assert linea["corrida_id"] == "walmart_20261008T1700Z"
     assert linea["alerta"] is False

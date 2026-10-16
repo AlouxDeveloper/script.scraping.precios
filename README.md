@@ -138,6 +138,9 @@ uv run --project scrapers scrapy crawl prueba      # spider de prueba: 1 petici�
 uv run --project scrapers pytest scrapers
 ```
 
+En Windows, el Control inteligente de aplicaciones bloquea `scrapy.exe` (el lanzador sin firma
+que crea uv en el venv): ahí se usa `uv run --project scrapers python -m scrapy crawl <tienda>`.
+
 `load/` y los comandos dbt abortan o escriben en el lugar equivocado si no se corren
 desde la raíz del repo.
 

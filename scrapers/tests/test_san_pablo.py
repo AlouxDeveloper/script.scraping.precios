@@ -29,7 +29,7 @@ def spider():
 
 
 def pagina(codigo: str) -> dict:
-    return json.loads((FIXTURES / f"categoria_{codigo}.json").read_text())
+    return json.loads((FIXTURES / f"categoria_{codigo}.json").read_text(encoding="utf-8"))
 
 
 def respuesta(datos, codigo: str, numero: int = 0) -> TextResponse:

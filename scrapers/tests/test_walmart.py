@@ -198,7 +198,7 @@ def test_pagina_sin_datos_no_rompe(spider):
 
 def test_pagina_sin_sucursal_se_pide_otra_vez(spider):
     # ALD-123: una página de Aurrera llegó sin stores; no es otra sucursal.
-    cuerpo = (FIXTURES / "analgesicos_p1.html").read_text()
+    cuerpo = (FIXTURES / "analgesicos_p1.html").read_text(encoding="utf-8")
     cuerpo = cuerpo.replace(', "stores": "3864"', "")
     pagina = HtmlResponse(ANALGESICOS, body=cuerpo.encode(),
                           request=Request(ANALGESICOS))
