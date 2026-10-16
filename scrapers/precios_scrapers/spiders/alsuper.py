@@ -62,20 +62,28 @@ class SpiderAlsuper(SpiderTienda):
         slugs = {d["department_id"]: f"{d['description']}-{d['department_id']}"
                  for d in response.json()["data"]}
         for ident in self.tienda["categorias"]:
-            if ident not in slugs:
+            # "4:Sueros" es una sola categoría del departamento 4: el alcance
+            # v1 toma Sueros sin el resto de Jugos y Bebidas.
+            depto, _, categoria = str(ident).partition(":")
+            if int(depto) not in slugs:
                 # Queda en sin_datos y la alerta de cierre lo reporta.
-                self.logger.error("El departamento %s ya no existe", ident)
+                self.logger.error("El departamento %s ya no existe", depto)
                 continue
-            yield self.pagina(ident, slugs[ident], 1)
+            slug = slugs[int(depto)]
+            if categoria:
+                slug += f"&category={categoria}"
+            yield self.pagina(ident, slug, 1)
 
-    def pagina(self, ident: int, slug: str, numero: int) -> scrapy.Request:
+    def pagina(self, ident: int | str, slug: str,
+               numero: int) -> scrapy.Request:
+        """``slug`` es el filtro: departamento y, si va, categoría."""
         return scrapy.Request(
             f"{API}/ms-products/branch/{self.sucursal}?department={slug}"
             f"&page={numero}&limit={POR_PAGINA}",
             callback=self.parse,
             cb_kwargs={"ident": ident, "slug": slug, "numero": numero})
 
-    def parse(self, response, ident: int, slug: str, numero: int):
+    def parse(self, response, ident: int | str, slug: str, numero: int):
         """Una página; la primera pide las demás."""
         try:
             datos = response.json()["data"]

@@ -134,11 +134,26 @@ chedraui:
   # Sin región: el precio genérico del canal 1, el mismo del legado
   # (decisión de Aldo, 2026-10-15; reconocimiento/chedraui/notas.md).
   zona_precio: sin_region
-  # Rutas de IDs de fq=C:. Por ahora solo Medicamentos, la categoría de
-  # prueba (3,384 productos: pasa el tope de 2,550 y ejercita la partición
-  # por precio). El resto de Farmacia (/4/) lo fija el Excel de alcance.
+  # Rutas de IDs de fq=C:. Alcance v1 (Excel de alcance, 2026-10-16): las
+  # ramas de nivel 2 entran completas; ~11,200 productos en total.
   categorias:
-    - /4/403/
+    # Farmacia
+    - /4/401/  # Equipo y botiquín médico
+    - /4/402/  # Incontinencia
+    - /4/403/  # Medicamentos
+    - /4/404/  # Salud sexual
+    - /4/405/  # Vitaminas y suplementos
+    # Cuidado e higiene personal
+    - /11/1101/  # Cuidado capilar
+    - /11/1102/  # Higiene bucal
+    - /11/1103/  # Cuidado corporal
+    - /11/1104/  # Cuidado facial
+    - /11/1105/  # Cuidado femenino
+    - /11/1106/  # Dermocosmética
+    # Bebés
+    - /3/301/  # Fórmulas y alimentos infantiles
+    - /3/302/  # Higiene y cuidado del bebé
+    - /3/307/  # Pañales
   trafico: {concurrencia: 1, delay: 2.0, jitter: 0.5}
 
 farmatodo:
@@ -151,11 +166,19 @@ farmatodo:
   # El precio no cambia por región y sin ella el surtido es completo
   # (reconocimiento/farmatodo/notas.md).
   zona_precio: sin_region
-  # Rutas de IDs de fq=C:. Por ahora solo Medicamentos, la categoría de
-  # prueba (3,559 productos: pasa el tope y ejercita la partición). Los demás
-  # departamentos de salud los fija el Excel de alcance.
+  # Rutas de IDs de fq=C:. Alcance v1 (Excel de alcance, 2026-10-16):
+  # departamentos completos; ~7,500 productos en total.
   categorias:
-    - /7/
+    - /7/  # Medicamentos
+    - /81/  # Genéricos
+    - /254/  # Farmacia
+    - /366/  # Dermocosmética
+    - /223/  # Suplementos y Vitamínicos
+    - /431/  # Diabetes
+    - /1/  # Especialidades
+    - /208/  # Dermatología
+    - /315/  # Cuidado Personal y Belleza
+    - /163/  # Bebés
   trafico: {concurrencia: 1, delay: 2.0, jitter: 0.5}
 
 klyns:
@@ -168,11 +191,21 @@ klyns:
   # Klyns no regionaliza: mismo regionId para todos los CP y sin sellers
   # (reconocimiento/klyns/notas.md).
   zona_precio: sin_region
-  # Rutas de IDs de fq=C:. Por ahora solo Medicamentos de patente, la
-  # categoría de prueba (3,674 productos: pasa el tope y ejercita la
-  # partición). Los demás departamentos los fija el Excel de alcance.
+  # Rutas de IDs de fq=C:. Alcance v1 (Excel de alcance, 2026-10-16):
+  # departamentos completos; ~8,100 productos en total.
   categorias:
-    - /68/
+    - /68/  # Medicamentos de Patente
+    - /78/  # Medicamentos Genéricos y OTC
+    - /1/  # Bebés
+    - /8/  # Cuidado Personal
+    - /50/  # Dermatología
+    - /51/  # Salud Sexual
+    - /52/  # Incontinencia
+    - /53/  # Vitaminas y Suplementos
+    - /64/  # Equipo y Botiquín
+    # Sin productos en la sonda; entra por si Klyns lo vuelve a surtir, y
+    # mientras siga vacío aparece en categorias_sin_datos.
+    - /93/  # Cuidado de la Piel
   trafico: {concurrencia: 1, delay: 2.0, jitter: 0.5}
 
 similares:
@@ -186,22 +219,72 @@ similares:
   ean_real: false
   # El precio no cambia por región (reconocimiento/similares/notas.md).
   zona_precio: sin_region
-  # Rutas de IDs de fq=C:. Por ahora solo Medicamentos, la categoría de
-  # prueba (621 productos, sin partición: ningún departamento llega al
-  # tope). Los demás los fija el Excel de alcance.
+  # Rutas de IDs de fq=C:. Alcance v1 (Excel de alcance, 2026-10-16):
+  # todo menos Souvenirs e Inactivo; ~1,300 productos, sin partición.
   categorias:
-    - /29/
+    - /29/  # Medicamentos
+    - /5/  # Bebés
+    - /6/  # Cuidado de la piel y belleza
+    - /7/  # Deportistas
+    - /8/  # Analgesia
+    - /13/  # Diabetes
+    - /17/  # Funcionamiento gastrointestinal
+    - /24/  # Higiene, curación y diagnóstico
+    - /62/  # Rehidratantes
+    - /63/  # Aparato respiratorio
+    - /70/  # Salud sexual
+    - /71/  # Suplementos y multivitamínicos
+    - /379/  # Peso y metabolismo
   trafico: {concurrencia: 1, delay: 2.0, jitter: 0.5}
 
 # Slug sanpablo (sin guion bajo), el de load/config/archivos.yml.
 sanpablo:
   escalon: b
   entornos_permitidos: [oficina]
-  # Códigos de categoría OCC (2 dígitos el departamento). Por ahora solo
-  # Medicamentos, la categoría de prueba (5,419 productos: pasa el tope de
-  # 1,000 y baja dos niveles). El resto lo fija el Excel de alcance.
+  # Códigos de categoría OCC (2 dígitos el departamento, 5 la
+  # subcategoría). Alcance v1 (Excel de alcance, 2026-10-16), ~12,000
+  # productos: departamentos completos y, donde Aldo dejó fuera alguna
+  # subcategoría (revista, baterías, alimentos), las demás sueltas.
   categorias:
-    - "06"
+    - "06"  # Medicamentos
+    - "04"  # Dermocosméticos
+    - "08"  # Salud sexual
+    - "09"  # Vitaminas y Suplementos
+    # Bebés, sin Revista (02007)
+    - "02001"
+    - "02002"
+    - "02003"
+    - "02004"
+    - "02005"
+    - "02006"
+    - "02008"
+    - "02009"
+    # Cuidado personal y belleza, sin Perfumería, Minis ni Cuidado del Hogar
+    - "03001"
+    - "03002"
+    - "03003"
+    - "03004"
+    - "03005"
+    - "03006"
+    - "03007"
+    - "03008"
+    - "03009"
+    - "03010"
+    - "03011"
+    - "03014"
+    - "03016"
+    - "03017"
+    # Equipo y botiquín, sin Baterías alcalinas (05002)
+    - "05001"
+    - "05003"
+    - "05004"
+    - "05005"
+    - "05006"
+    - "05007"
+    # San Pablo Natural, sin Alimentos y Bebidas (07001)
+    - "07002"
+    - "07003"
+    - "07004"
   # Akamai ya mostró que vigila (reconocimiento): 1 petición cada 2 s.
   trafico: {concurrencia: 1, delay: 2.0, jitter: 0.5}
 
@@ -213,10 +296,14 @@ alsuper:
   # coincide entre plazas; las ofertas pueden ser locales
   # (reconocimiento/alsuper/notas.md).
   sucursal: 6
-  # IDs de departamento; el spider arma el slug con /departments/web. Por
-  # ahora solo Farmacia (18), la categoría de prueba. Bebés (15) y los
-  # productos sin departamento los fija el Excel de alcance.
-  categorias: [18]
+  # IDs de departamento; el spider arma el slug con /departments/web.
+  # "depto:Categoría" toma una sola categoría del departamento. Alcance v1
+  # (Excel de alcance, 2026-10-16), ~9,300 productos.
+  categorias:
+    - 18  # Farmacia
+    - 15  # Bebés
+    - 11  # Higiene personal y belleza
+    - "4:Sueros"  # de Jugos y Bebidas, solo Sueros
   trafico: {concurrencia: 1, delay: 2.0, jitter: 0.5}
 
 gi:
@@ -238,13 +325,11 @@ isseg:
   # no "SafeLineChallenge", que cae en el byte 13,517, fuera de los 5,000
   # que revisa el middleware (antes hay un favicon en base64).
   firmas_bloqueo: ["de seguridad isseg"]
-  # categorias/{id} trae como máximo 50 (lo del legado); la cobertura real
-  # sale de las búsquedas por molécula. Prueba: Medicamentos (1) y unas
-  # moléculas. El alcance (612 contra ~13,000 y ~2 GB por corrida) es
-  # decisión de Aldo (reconocimiento/isseg/notas.md).
-  categorias: [1]
-  busquedas: [paracetamol, amoxicilina, losartan, omeprazol, metformina,
-              ibuprofeno, naproxeno, loratadina, sildenafil, atorvastatina]
+  # categorias/{id} trae como máximo 50, lo mismo que el legado. Alcance v1
+  # (Excel de alcance, 2026-10-16): todas menos Mascotas (15), ~610
+  # productos, y sin búsquedas por molécula (decisión de Aldo: términos de
+  # uso y ~2 GB por corrida; reconocimiento/isseg/notas.md).
+  categorias: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
   # El WAF no limitó por ritmo, pero cada búsqueda baja varios MB de un
   # sitio de una institución pública.
   trafico: {concurrencia: 1, delay: 2.0, jitter: 0.5}

@@ -47,10 +47,19 @@ def primera(spider) -> tuple[list[dict], list[Request]]:
 
 
 def test_departamentos_arman_el_slug_con_la_descripcion(spider):
+    spider.tienda["categorias"] = [18]
     [peticion] = spider.parse_departamentos(respuesta(
         "departamentos", f"{API}/departments/web?branch=6"))
     assert peticion.url == URL
     assert peticion.cb_kwargs["ident"] == 18
+
+
+def test_categoria_dentro_de_un_departamento(spider):
+    spider.tienda["categorias"] = ["4:Sueros"]
+    [peticion] = spider.parse_departamentos(respuesta(
+        "departamentos", f"{API}/departments/web?branch=6"))
+    assert "department=Jugos%20y%20Bebidas-4&category=Sueros&" in peticion.url
+    assert peticion.cb_kwargs["ident"] == "4:Sueros"
 
 
 def test_departamento_que_ya_no_existe_queda_sin_datos(spider):

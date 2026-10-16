@@ -53,6 +53,9 @@ def peticiones(spider) -> list[Request]:
 
 
 def test_start_pide_categorias_y_busquedas_con_referer(spider):
+    # El alcance v1 no lleva búsquedas: se fijan aquí para probarlas.
+    spider.tienda["categorias"] = [1]
+    spider.tienda["busquedas"] = ["paracetamol", "losartan"]
     salida = peticiones(spider)
     categoria, *busquedas = salida
     assert categoria.url == CATEGORIA
